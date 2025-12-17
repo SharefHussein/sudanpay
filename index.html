@@ -6,7 +6,7 @@
   <title>Sudan Pay</title>
 
   <link rel="manifest" href="manifest.json">
-
+<link rel="icon" href="icon-192.png">
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -33,6 +33,12 @@
   <button onclick="alert('قريباً نظام الدفع')">
     ابدأ
   </button>
-
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js')
+      .then(() => console.log('Service Worker Registered'))
+      .catch(err => console.log('SW failed', err));
+  }
+  </script>
 </body>
   </html>
