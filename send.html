@@ -4,93 +4,74 @@
   <meta charset="UTF-8">
   <title>إرسال أموال</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    body {
-      font-family: Arial;
-      background: #f1f5f9;
-      padding: 20px;
-      text-align: center;
-    }
-    input, button {
-      width: 90%;
-      padding: 12px;
-      margin: 10px 0;
-      font-size: 16px;
-    }
-    button {
-      background: #007bff;
-      color: white;
-      border: none;
-      border-radius: 6px;
-    }
-  </style>
 </head>
 <body>
 
-  <h2>إرسال أموال</h2>
+<h2>إرسال أموال</h2>
 
-  <input id="to" type="text" placeholder="رقم / إيميل المستلم">
-  <input id="amount" type="number" placeholder="المبلغ">
-  <button id="sendBtn">إرسال</button>
+<input id="to" placeholder="إيميل المستلم"><br>
+<input id="amount" type="number" placeholder="المبلغ"><br>
+<button id="send">إرسال</button>
 
-  <br><br>
-  <a href="index.html">⬅ الرجوع للرئيسية</a>
+<br><br>
+<a href="index.html">⬅ رجوع</a>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
-    import {
-      getFirestore,
-      collection,
-      addDoc,
-      serverTimestamp
-    } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+import { getAuth } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  updateDoc,
+  addDoc,
+  collection,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
-    // 🔹 إعدادات Firebase
-    const firebaseConfig = {
-      apiKey: "AIzaSyB3vxJu_et-P80ek30I3MRdC_lGhooCCsc",
-      authDomain: "sudanpay-e332a.firebaseapp.com",
-      projectId: "sudanpay-e332a",
-      storageBucket: "sudanpay-e332a.appspot.com",
-      messagingSenderId: "699809447272",
-      appId: "1:699809447272:web:90f3780ed6c768c4322add"
-    };
+const firebaseConfig = {
+  apiKey: "AIzaSyB3vxJu_et-P80ek30I3MRdC_lGhooCCsc",
+  authDomain: "sudanpay-e332a.firebaseapp.com",
+  projectId: "sudanpay-e332a",
+  storageBucket: "sudanpay-e332a.appspot.com",
+  messagingSenderId: "699809447272",
+  appId: "1:699809447272:web:90f3780ed6c768c4322add"
+};
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
-    // 🔐 حماية الصفحة
-    onAuthStateChanged(auth, (user) => {
-      if (!user) {
-        window.location.href = "login.html";
-      }
-    });
+document.getElementById("send").onclick = async () => {
+  const to = to.value;
+  const amount = Number(document.getElementById("amount").value);
+  const sender = auth.currentUser;
 
-    // 📤 إرسال الأموال
-    document.getElementById("sendBtn").addEventListener("click", async () => {
-      const to = document.getElementById("to").value;
-      const amount = document.getElementById("amount").value;
-      const user = auth.currentUser;
+  if (!to || amount <= 0) return alert("بيانات ناقصة");
 
-      if (!to || !amount) {
-        alert("املأ كل الحقول");
-        return;
-      }
+  const senderRef = doc(db, "users", sender.uid);
+  const senderSnap = await getDoc(senderRef);
 
-      await addDoc(collection(db, "transactions"), {
-        from: user.email,
-        to: to,
-        amount: Number(amount),
-        type: "out",
-        date: serverTimestamp()
-      });
+  if ((senderSnap.data()?.balance || 0) < amount)
+    return alert("رصيد غير كافي");
 
-      alert("تم إرسال العملية");
-      document.getElementById("to").value = "";
-      document.getElementById("amount").value = "";
-    });
-  </script>
+  // خصم من المرسل
+  await updateDoc(senderRef, {
+    balance: senderSnap.data().balance - amount
+  });
+
+  // إضافة العملية
+  await addDoc(collection(db, "transactions"), {
+    from: sender.email,
+    to: to,
+    amount,
+    users: [sender.email, to],
+    date: serverTimestamp()
+  });
+
+  alert("تم الإرسال");
+};
+</script>
 
 </body>
   </html>
