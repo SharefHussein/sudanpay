@@ -1,112 +1,64 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <title>SudanPay</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #1e3c72, #2a5298);
-      color: white;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .container {
-      background: white;
-      color: #333;
-      width: 100%;
-      max-width: 380px;
-      padding: 30px 25px;
-      border-radius: 16px;
-      box-shadow: 0 10px 30px rgba(0,0,0,.3);
-      text-align: center;
-      animation: fadeIn 0.8s ease;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .logo {
-      font-size: 32px;
-      font-weight: bold;
-      color: #2a5298;
-      margin-bottom: 10px;
-    }
-
-    .tagline {
-      font-size: 14px;
-      color: #777;
-      margin-bottom: 25px;
-    }
-
-    .features {
-      text-align: right;
-      font-size: 14px;
-      margin-bottom: 25px;
-    }
-
-    .features div {
-      margin-bottom: 8px;
-    }
-
-    .start-btn {
-      width: 100%;
-      padding: 14px;
-      font-size: 16px;
-      background: linear-gradient(135deg, #1e3c72, #2a5298);
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: transform .2s, box-shadow .2s;
-    }
-
-    .start-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 15px rgba(0,0,0,.3);
-    }
-
-    .footer {
-      margin-top: 20px;
-      font-size: 12px;
-      color: #aaa;
-    }
-  </style>
+<meta charset="UTF-8">
+<title>SudanPay | تسجيل الدخول</title>
+<style>
+body{
+margin:0;
+font-family:Tahoma;
+background:linear-gradient(135deg,#0f172a,#020617);
+color:white;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+}
+.card{
+background:#020617;
+padding:30px;
+width:90%;
+max-width:350px;
+border-radius:15px;
+box-shadow:0 10px 30px rgba(0,0,0,.5);
+}
+h2{text-align:center;margin-bottom:20px}
+input{
+width:100%;
+padding:12px;
+margin-bottom:15px;
+border:none;
+border-radius:8px;
+font-size:16px;
+}
+button{
+width:100%;
+padding:12px;
+background:#22c55e;
+border:none;
+border-radius:10px;
+font-size:18px;
+font-weight:bold;
+cursor:pointer;
+}
+a{
+display:block;
+margin-top:10px;
+color:#22c55e;
+text-align:center;
+text-decoration:none;
+}
+</style>
 </head>
-
 <body>
 
-  <div class="container">
-    <div class="logo">SudanPay</div>
-    <div class="tagline">أسهل طريقة لإدارة أموالك بثقة</div>
-
-    <div class="features">
-      <div>✔️ إرسال واستلام الأموال</div>
-      <div>✔️ كشف حساب واضح</div>
-      <div>✔️ أمان باستخدام Firebase</div>
-      <div>✔️ واجهة بسيطة وسريعة</div>
-    </div>
-
-    <button class="start-btn" onclick="goLogin()">ابدأ الآن</button>
-
-    <div class="footer">
-      © 2025 SudanPay
-    </div>
-  </div>
-
-<script>
-  function goLogin() {
-    window.location.href = "login.html";
-  }
-</script>
+<div class="card">
+<h2>تسجيل الدخول</h2>
+<input type="email" placeholder="البريد الإلكتروني">
+<input type="password" placeholder="كلمة المرور">
+<button onclick="location.href='dashboard.html'">دخول</button>
+<a href="#">إنشاء حساب جديد</a>
+</div>
 
 </body>
   </html>
