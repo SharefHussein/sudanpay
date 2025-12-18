@@ -4,21 +4,32 @@
   <meta charset="UTF-8">
   <title>كشف الحساب</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <style>
     body {
       font-family: Arial;
       background: #f4f5f7;
       padding: 20px;
     }
+    h2 {
+      text-align: center;
+    }
     .item {
       background: white;
-      padding: 10px;
+      padding: 12px;
       margin-bottom: 10px;
       border-radius: 6px;
       box-shadow: 0 0 5px rgba(0,0,0,.1);
     }
+    .send {
+      border-right: 5px solid #e74c3c;
+    }
+    .receive {
+      border-right: 5px solid #2ecc71;
+    }
   </style>
 </head>
+
 <body>
 
 <script>
@@ -28,12 +39,20 @@
 </script>
 
 <h2>كشف الحساب</h2>
-<div id="list"></div>
-<a href="dashboard.html">رجوع</a>
+
+<div id="list">جاري تحميل العمليات...</div>
+
+<a href="dashboard.html">⬅ رجوع</a>
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-  import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+  import {
+    getFirestore,
+    collection,
+    getDocs,
+    orderBy,
+    query
+  } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyB3vxJu_et-P80ek30I3MRdC_lGhooCCsc",
@@ -47,19 +66,31 @@
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
-  const q = query(collection(db, "transactions"), orderBy("date", "desc"));
+  const list = document.getElementById("list");
+  list.innerHTML = "";
+
+  const q = query(
+    collection(db, "transactions"),
+    orderBy("date", "desc")
+  );
+
   const snapshot = await getDocs(q);
 
-  const list = document.getElementById("list");
+  if (snapshot.empty) {
+    list.innerHTML = "ما في عمليات لحد الآن";
+  }
 
   snapshot.forEach(doc => {
     const d = doc.data();
+
     const div = document.createElement("div");
-    div.className = "item";
+    div.className = "item " + (d.type === "send" ? "send" : "receive");
+
     div.innerHTML = `
-      <strong>${d.type === "send" ? "إرسال" : "استلام"}</strong><br>
+      <strong>${d.type === "send" ? "إرسال أموال" : "استلام أموال"}</strong><br>
       المبلغ: ${d.amount}
     `;
+
     list.appendChild(div);
   });
 </script>
