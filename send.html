@@ -2,12 +2,12 @@
 <html lang="ar">
 <head>
   <meta charset="UTF-8">
-  <title>تسجيل الدخول</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>إرسال أموال</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
       font-family: Arial;
-      background: #eef1f5;
+      background: #f4f5f7;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -17,7 +17,7 @@
       background: white;
       padding: 20px;
       width: 100%;
-      max-width: 320px;
+      max-width: 350px;
       border-radius: 8px;
       box-shadow: 0 0 10px rgba(0,0,0,.1);
       text-align: center;
@@ -37,40 +37,57 @@
 </head>
 <body>
 
+<script>
+  if (localStorage.getItem("loggedIn") !== "true") {
+    window.location.href = "index.html";
+  }
+</script>
+
 <div class="card">
-  <h3>تسجيل الدخول</h3>
-  <input type="email" id="email" placeholder="البريد الإلكتروني">
-  <input type="password" id="password" placeholder="كلمة المرور">
-  <button onclick="login()">دخول</button>
+  <h3>إرسال أموال</h3>
+  <input type="text" id="to" placeholder="رقم المستلم">
+  <input type="number" id="amount" placeholder="المبلغ">
+  <button onclick="sendMoney()">إرسال</button>
+  <br><br>
+  <a href="dashboard.html">رجوع</a>
 </div>
 
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword } 
-from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+  import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyB3vxJu_et-P80ek30I3MRdC_lGhooCCsc",
-  authDomain: "sudanpay-e332a.firebaseapp.com",
-  projectId: "sudanpay-e332a",
-  storageBucket: "sudanpay-e332a.firebasestorage.app",
-  messagingSenderId: "699809447272",
-  appId: "1:699809447272:web:90f3780ed6c768c4322add"
-};
+  const firebaseConfig = {
+    apiKey: "AIzaSyB3vxJu_et-P80ek30I3MRdC_lGhooCCsc",
+    authDomain: "sudanpay-e332a.firebaseapp.com",
+    projectId: "sudanpay-e332a",
+    storageBucket: "sudanpay-e332a.firebasestorage.app",
+    messagingSenderId: "699809447272",
+    appId: "1:699809447272:web:90f3780ed6c768c4322add"
+  };
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
 
-window.login = function () {
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
+  window.sendMoney = async function () {
+    const to = document.getElementById("to").value;
+    const amount = document.getElementById("amount").value;
 
-  signInWithEmailAndPassword(auth, email, password)
-    .then(() => {
-      window.location.href = "dashboard.html";
-    })
-    .catch(err => alert(err.message));
-};
+    if (!to || !amount) {
+      alert("أدخل كل البيانات");
+      return;
+    }
+
+    await addDoc(collection(db, "transactions"), {
+      type: "send",
+      to,
+      amount: Number(amount),
+      date: serverTimestamp()
+    });
+
+    alert("تم الإرسال");
+    document.getElementById("to").value = "";
+    document.getElementById("amount").value = "";
+  }
 </script>
 
 </body>
