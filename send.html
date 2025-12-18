@@ -1,75 +1,158 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-  <meta charset="UTF-8">
-  <title>إرسال أموال</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8">
+<title>إرسال أموال</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+body{
+  font-family: Arial;
+  background: linear-gradient(135deg,#0d6efd,#6f42c1);
+  margin:0;
+  padding:0;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+}
+
+.card{
+  background:#fff;
+  width:90%;
+  max-width:400px;
+  padding:20px;
+  border-radius:12px;
+  box-shadow:0 10px 25px rgba(0,0,0,.2);
+  text-align:right;
+}
+
+h2{
+  text-align:center;
+  color:#333;
+}
+
+.balance{
+  background:#f1f3f5;
+  padding:10px;
+  border-radius:8px;
+  margin-bottom:15px;
+  font-weight:bold;
+}
+
+input{
+  width:100%;
+  padding:12px;
+  margin:8px 0;
+  border-radius:8px;
+  border:1px solid #ccc;
+  font-size:16px;
+}
+
+button{
+  width:100%;
+  padding:12px;
+  background:#0d6efd;
+  color:#fff;
+  border:none;
+  border-radius:8px;
+  font-size:18px;
+  cursor:pointer;
+}
+
+button:active{
+  opacity:.8;
+}
+
+a{
+  display:block;
+  text-align:center;
+  margin-top:15px;
+  text-decoration:none;
+  color:#0d6efd;
+}
+</style>
 </head>
+
 <body>
 
-<h2>إرسال أموال</h2>
+<div class="card">
+  <h2>إرسال أموال</h2>
 
-<input id="to" placeholder="إيميل المستلم"><br>
-<input id="amount" type="number" placeholder="المبلغ"><br>
-<button id="send">إرسال</button>
+  <div class="balance">
+    الرصيد: <span id="balance">0</span> SDG
+  </div>
 
-<br><br>
-<a href="index.html">⬅ رجوع</a>
+  <input id="to" type="email" placeholder="إيميل المستلم">
+  <input id="amount" type="number" placeholder="المبلغ">
+
+  <button id="sendBtn">إرسال</button>
+
+  <a href="index.html">⬅ الرجوع للرئيسية</a>
+</div>
 
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-import { getAuth } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
-import {
-  getFirestore,
-  doc,
-  getDoc,
-  updateDoc,
-  addDoc,
-  collection,
-  serverTimestamp
-} from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getFirestore, doc, getDoc, updateDoc, addDoc, collection, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyB3vxJu_et-P80ek30I3MRdC_lGhooCCsc",
-  authDomain: "sudanpay-e332a.firebaseapp.com",
-  projectId: "sudanpay-e332a",
-  storageBucket: "sudanpay-e332a.appspot.com",
-  messagingSenderId: "699809447272",
-  appId: "1:699809447272:web:90f3780ed6c768c4322add"
+  apiKey: "API_KEY",
+  authDomain: "PROJECT.firebaseapp.com",
+  projectId: "PROJECT",
 };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-document.getElementById("send").onclick = async () => {
-  const to = to.value;
+let currentUser;
+let currentBalance = 0;
+
+onAuthStateChanged(auth, async (user)=>{
+  if(!user){
+    location.href="login.html";
+    return;
+  }
+
+  currentUser = user;
+  const ref = doc(db,"users",user.uid);
+  const snap = await getDoc(ref);
+
+  if(snap.exists()){
+    currentBalance = snap.data().balance;
+    document.getElementById("balance").innerText = currentBalance;
+  }
+});
+
+document.getElementById("sendBtn").onclick = async ()=>{
+  const to = document.getElementById("to").value;
   const amount = Number(document.getElementById("amount").value);
-  const sender = auth.currentUser;
 
-  if (!to || amount <= 0) return alert("بيانات ناقصة");
+  if(!to || amount<=0){
+    alert("بيانات غير صحيحة");
+    return;
+  }
 
-  const senderRef = doc(db, "users", sender.uid);
-  const senderSnap = await getDoc(senderRef);
+  if(amount > currentBalance){
+    alert("رصيد غير كافي");
+    return;
+  }
 
-  if ((senderSnap.data()?.balance || 0) < amount)
-    return alert("رصيد غير كافي");
-
-  // خصم من المرسل
-  await updateDoc(senderRef, {
-    balance: senderSnap.data().balance - amount
+  await updateDoc(doc(db,"users",currentUser.uid),{
+    balance: currentBalance - amount
   });
 
-  // إضافة العملية
-  await addDoc(collection(db, "transactions"), {
-    from: sender.email,
-    to: to,
+  await addDoc(collection(db,"transactions"),{
+    from: currentUser.email,
+    to,
     amount,
-    users: [sender.email, to],
-    date: serverTimestamp()
+    type:"out",
+    createdAt: serverTimestamp()
   });
 
-  alert("تم الإرسال");
+  alert("تم الإرسال بنجاح");
+  location.reload();
 };
 </script>
 
