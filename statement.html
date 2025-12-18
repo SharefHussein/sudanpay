@@ -3,107 +3,68 @@
 <head>
   <meta charset="UTF-8">
   <title>كشف الحساب</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
   <style>
     body {
       font-family: Arial;
-      background: #f1f5f9;
+      background: #f2f2f2;
       padding: 20px;
-      text-align: center;
     }
-    .card {
+    .item {
       background: white;
-      padding: 15px;
+      padding: 10px;
       margin-bottom: 10px;
-      border-radius: 6px;
-      text-align: right;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      border-radius: 8px;
     }
     .in { color: green; }
     .out { color: red; }
-    .balance {
-      background: #007bff;
-      color: white;
-      padding: 15px;
-      border-radius: 8px;
-      margin-bottom: 15px;
-      font-size: 18px;
-    }
   </style>
 </head>
+
 <body>
 
-  <h2>كشف الحساب</h2>
-  <div id="balance" class="balance">الرصيد: ...</div>
-  <div id="statement"></div>
+<h2>كشف الحساب</h2>
+<div id="list"></div>
 
-  <br>
-  <a href="index.html">⬅ الرجوع</a>
+<script>
+  var firebaseConfig = {
+    apiKey: "AIzaSyB3vxJu_et-P80ek30I3MRdC_lGhooCCsc",
+    authDomain: "sudanpay-e332a.firebaseapp.com",
+    projectId: "sudanpay-e332a"
+  };
+  firebase.initializeApp(firebaseConfig);
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
-    import {
-      getFirestore,
-      collection,
-      query,
-      where,
-      orderBy,
-      getDocs,
-      doc,
-      getDoc
-    } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+  var auth = firebase.auth();
+  var db = firebase.firestore();
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyB3vxJu_et-P80ek30I3MRdC_lGhooCCsc",
-      authDomain: "sudanpay-e332a.firebaseapp.com",
-      projectId: "sudanpay-e332a",
-      storageBucket: "sudanpay-e332a.appspot.com",
-      messagingSenderId: "699809447272",
-      appId: "1:699809447272:web:90f3780ed6c768c4322add"
-    };
+  auth.onAuthStateChanged(user => {
+    if (!user) {
+      window.location.href = "index.html";
+    } else {
+      loadTransactions(user.uid);
+    }
+  });
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-
-    onAuthStateChanged(auth, async (user) => {
-      if (!user) {
-        location.href = "login.html";
-        return;
-      }
-
-      // 🔹 جلب الرصيد
-      const userRef = doc(db, "users", user.uid);
-      const userSnap = await getDoc(userRef);
-      document.getElementById("balance").innerText =
-        "الرصيد: " + (userSnap.data()?.balance || 0) + " SDG";
-
-      // 🔹 جلب العمليات
-      const q = query(
-        collection(db, "transactions"),
-        where("users", "array-contains", user.email),
-        orderBy("date", "desc")
-      );
-
-      const snapshot = await getDocs(q);
-      const box = document.getElementById("statement");
-      box.innerHTML = "";
-
-      snapshot.forEach(doc => {
-        const d = doc.data();
-        const div = document.createElement("div");
-        const type = d.to === user.email ? "in" : "out";
-
-        div.className = `card ${type}`;
-        div.innerHTML = `
-          ${type === "in" ? "استلام" : "إرسال"}: ${d.amount} SDG
-          <br><small>${d.date?.toDate().toLocaleString()}</small>
-        `;
-        box.appendChild(div);
+  function loadTransactions(uid) {
+    db.collection("transactions")
+      .where("from", "==", uid)
+      .orderBy("date", "desc")
+      .get()
+      .then(snapshot => {
+        snapshot.forEach(doc => {
+          var d = doc.data();
+          var div = document.createElement("div");
+          div.className = "item out";
+          div.innerText = `- ${d.amount} SDG`;
+          document.getElementById("list").appendChild(div);
+        });
       });
-    });
-  </script>
+  }
+</script>
 
 </body>
-  </html>
+</html>
