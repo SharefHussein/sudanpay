@@ -3,41 +3,61 @@
 <head>
 <meta charset="UTF-8">
 <title>SudanPay | الرئيسية</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
 body{
 margin:0;
-font-family:Tahoma;
 background:linear-gradient(180deg,#020617,#0f172a);
+font-family:'Segoe UI',Tahoma;
 color:white;
+}
+.header{
+padding:30px 20px;
 text-align:center;
 }
-.container{padding:40px 20px}
-h1{margin-bottom:30px}
+.header h1{margin:0;font-size:26px}
+.balance{
+margin-top:10px;
+font-size:18px;
+color:#22c55e;
+}
+.menu{
+margin-top:40px;
+}
 .btn{
-display:block;
-width:100%;
-max-width:300px;
-margin:15px auto;
-padding:18px;
-background:#22c55e;
+width:90%;
+max-width:340px;
+margin:18px auto;
+padding:20px;
+background:linear-gradient(135deg,#22c55e,#16a34a);
 color:black;
-border-radius:14px;
 font-size:20px;
 font-weight:bold;
+border-radius:18px;
+text-align:center;
 text-decoration:none;
+display:block;
+box-shadow:0 10px 25px rgba(34,197,94,.4);
+}
+.btn.dark{
+background:#020617;
+color:white;
+border:1px solid #1e293b;
 }
 </style>
 </head>
 <body>
 
-<div class="container">
-<h1>اختر الخدمة</h1>
+<div class="header">
+<h1>مرحباً بك</h1>
+<div class="balance">الرصيد: 15,000 SDG</div>
+</div>
 
-<a class="btn" href="#">إرسال أموال</a>
-<a class="btn" href="#">استلام أموال</a>
-<a class="btn" href="statement.html">كشف حساب</a>
-<a class="btn" href="index.html">تسجيل خروج</a>
-
+<div class="menu">
+<a class="btn" href="send.html">إرسال أموال</a>
+<a class="btn" href="receive.html">استلام أموال</a>
+<a class="btn dark" href="statement.html">كشف حساب</a>
+<a class="btn dark" href="index.html">تسجيل خروج</a>
 </div>
 
 </body>
