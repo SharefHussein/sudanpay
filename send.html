@@ -1,94 +1,47 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <title>إرسال أموال</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body {
-      font-family: Arial;
-      background: #f4f5f7;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-    .card {
-      background: white;
-      padding: 20px;
-      width: 100%;
-      max-width: 350px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,.1);
-      text-align: center;
-    }
-    input, button {
-      width: 100%;
-      padding: 10px;
-      margin-top: 10px;
-    }
-    button {
-      background: #2c7be5;
-      color: white;
-      border: none;
-      border-radius: 5px;
-    }
-  </style>
+<meta charset="UTF-8">
+<title>إرسال أموال</title>
+<style>
+body{
+margin:0;
+background:#020617;
+font-family:Tahoma;
+color:white;
+padding:20px;
+}
+h2{text-align:center}
+input,button{
+width:100%;
+padding:14px;
+margin-top:15px;
+border:none;
+border-radius:12px;
+font-size:16px;
+}
+button{
+background:#22c55e;
+font-weight:bold;
+}
+a{
+display:block;
+margin-top:20px;
+color:#22c55e;
+text-align:center;
+text-decoration:none;
+}
+</style>
 </head>
 <body>
 
-<script>
-  if (localStorage.getItem("loggedIn") !== "true") {
-    window.location.href = "index.html";
-  }
-</script>
+<h2>إرسال أموال</h2>
 
-<div class="card">
-  <h3>إرسال أموال</h3>
-  <input type="text" id="to" placeholder="رقم المستلم">
-  <input type="number" id="amount" placeholder="المبلغ">
-  <button onclick="sendMoney()">إرسال</button>
-  <br><br>
-  <a href="dashboard.html">رجوع</a>
-</div>
+<input placeholder="رقم المستلم">
+<input placeholder="المبلغ">
+<button>إرسال</button>
 
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-  import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyB3vxJu_et-P80ek30I3MRdC_lGhooCCsc",
-    authDomain: "sudanpay-e332a.firebaseapp.com",
-    projectId: "sudanpay-e332a",
-    storageBucket: "sudanpay-e332a.firebasestorage.app",
-    messagingSenderId: "699809447272",
-    appId: "1:699809447272:web:90f3780ed6c768c4322add"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-
-  window.sendMoney = async function () {
-    const to = document.getElementById("to").value;
-    const amount = document.getElementById("amount").value;
-
-    if (!to || !amount) {
-      alert("أدخل كل البيانات");
-      return;
-    }
-
-    await addDoc(collection(db, "transactions"), {
-      type: "send",
-      to,
-      amount: Number(amount),
-      date: serverTimestamp()
-    });
-
-    alert("تم الإرسال");
-    document.getElementById("to").value = "";
-    document.getElementById("amount").value = "";
-  }
-</script>
+<a href="dashboard.html">رجوع</a>
 
 </body>
 </html>
