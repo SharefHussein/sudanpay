@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>تسجيل الدخول - Sudan Pay</title>
+  <style>
+    body {
+      background:#0b132b;
+      color:white;
+      font-family:Arial;
+      text-align:center;
+      padding-top:100px;
+    }
+    input, button {
+      width:80%;
+      padding:12px;
+      margin:10px;
+      border-radius:8px;
+      border:none;
+      font-size:16px;
+    }
+    button {
+      background:#22c55e;
+      cursor:pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Sudan Pay</h2>
+
+  <input id="email" type="email" placeholder="الإيميل">
+  <input id="password" type="password" placeholder="كلمة المرور">
+
+  <button onclick="login()">تسجيل دخول</button>
+  <button onclick="register()">إنشاء حساب</button>
+
+  <!-- Firebase v8 -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+
+  <script>
+    var firebaseConfig = {
+      apiKey: "AIzaSyB3vxJu_et-P80ek30I3MRdC_lGhooCCsc",
+      authDomain: "sudanpay-e332a.firebaseapp.com",
+      projectId: "sudanpay-e332a",
+      storageBucket: "sudanpay-e332a.appspot.com",
+      messagingSenderId: "699809447272",
+      appId: "1:699809447272:web:90f3780ed6c768c4322add"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+
+    function login() {
+      var email = document.getElementById("email").value;
+      var password = document.getElementById("password").value;
+
+      firebase.auth().signInWithEmailAndPassword(email, password)
+        .then(() => {
+          alert("تم تسجيل الدخول");
+          window.location.href = "home.html";
+        })
+        .catch(err => alert(err.message));
+    }
+
+    function register() {
+      var email = document.getElementById("email").value;
+      var password = document.getElementById("password").value;
+
+      firebase.auth().createUserWithEmailAndPassword(email, password)
+        .then(() => alert("تم إنشاء الحساب"))
+        .catch(err => alert(err.message));
+    }
+  </script>
+
+</body>
+</html>
