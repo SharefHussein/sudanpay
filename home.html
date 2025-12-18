@@ -1,63 +1,35 @@
-<script type="module">
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-
-const firebaseConfig = {
-  apiKey: "API_KEY",
-  authDomain: "PROJECT_ID.firebaseapp.com",
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-
-onAuthStateChanged(auth,(user)=>{
-  if(!user){
-    location.href="login.html";
-  }
-});
-  </script><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ar">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sudan Pay - الرئيسية</title>
+  <title>الرئيسية</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     body {
-      font-family: Arial, sans-serif;
       background: #0f172a;
       color: white;
+      font-family: Arial;
       text-align: center;
-      padding: 40px;
-    }
-    .card {
-      background: #111827;
-      padding: 20px;
-      border-radius: 12px;
-      margin: 20px auto;
-      max-width: 400px;
+      padding-top: 80px;
     }
     button {
+      width: 85%;
       background: #22c55e;
+      padding: 15px;
+      margin: 10px;
+      border-radius: 10px;
+      font-size: 18px;
       border: none;
-      padding: 12px 20px;
-      font-size: 16px;
-      border-radius: 8px;
-      cursor: pointer;
-      margin-top: 10px;
-      width: 100%;
     }
   </style>
 </head>
 <body>
 
-  <h2>مرحباً بك في Sudan Pay</h2>
+  <h2>اختر الخدمة</h2>
 
-  <div class="card">
-    <p>اختَر الخدمة</p>
- <button onclick="location.href='send.html'">إرسال أموال</button>
-<button onclick="location.href='receive.html'">استلام أموال</button>
-<button onclick="location.href='statement.html'">كشف حساب</button> 
-  </div>
+  <button onclick="location.href='send.html'">إرسال أموال</button>
+  <button onclick="location.href='receive.html'">استلام أموال</button>
+  <button onclick="location.href='statement.html'">كشف حساب</button>
 
 </body>
 </html>
