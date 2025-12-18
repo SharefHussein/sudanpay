@@ -1,95 +1,147 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-  <meta charset="UTF-8">
-  <title>Sudan Pay</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <title>Sudan Pay - Dashboard</title>
+
+  <!-- Firebase v8 -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
   <style>
     body {
       font-family: Arial;
-      background: #f4f6f9;
+      background: #f5f5f5;
       padding: 20px;
     }
-    .card {
+    .box {
       background: white;
-      padding: 15px;
-      border-radius: 8px;
-      margin-bottom: 15px;
-      box-shadow: 0 0 8px rgba(0,0,0,.1);
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 400px;
+      margin: auto;
+    }
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
     }
     button {
-      padding: 10px;
-      width: 100%;
-      background: #28a745;
+      background: #0a7cff;
       color: white;
       border: none;
-      border-radius: 5px;
-      margin-top: 10px;
+      cursor: pointer;
+    }
+    h2 {
+      text-align: center;
     }
   </style>
 </head>
+
 <body>
 
-<div class="card">
-  <h3>مرحبا 👋</h3>
-  <p>رصيدك: <strong id="balance">0</strong> SDG</p>
-</div>
+<div class="box">
+  <h2>لوحة التحكم</h2>
 
-<div class="card">
-  <h4>إرسال أموال</h4>
-  <input id="amount" placeholder="المبلغ">
+  <p><strong>الرصيد:</strong> <span id="balance">0</span> SDG</p>
+
+  <h3>إرسال أموال</h3>
+  <input id="toUser" placeholder="اسم المستخدم" />
+  <input id="amount" type="number" placeholder="المبلغ" />
   <button onclick="sendMoney()">إرسال</button>
+
+  <br><br>
+  <button onclick="logout()">تسجيل خروج</button>
 </div>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-import { getAuth, onAuthStateChanged } 
-from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
-import { 
-  getFirestore, 
-  doc, 
-  getDoc, 
-  setDoc 
-} from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+<script>
+  // 🔹 إعداد Firebase (غير القيم بقيم مشروعك لو مختلفة)
+  var firebaseConfig = {
+    apiKey: "AIzaSyB3vxJu_et-P80ek30I3MRdC_lGhooCCsc",
+    authDomain: "sudanpay-e332a.firebaseapp.com",
+    projectId: "sudanpay-e332a"
+  };
+  firebase.initializeApp(firebaseConfig);
 
-const firebaseConfig = {
-  apiKey: "AIzaSyB3vxJu_et-P80ek30I3MRdC_lGhooCCsc",
-  authDomain: "sudanpay-e332a.firebaseapp.com",
-  projectId: "sudanpay-e332a",
-  storageBucket: "sudanpay-e332a.firebasestorage.app",
-  messagingSenderId: "699809447272",
-  appId: "1:699809447272:web:90f3780ed6c768c4322add"
-};
+  var auth = firebase.auth();
+  var db = firebase.firestore();
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+  var currentUser;
 
-onAuthStateChanged(auth, async (user) => {
-  if (!user) {
-    window.location.href = "index.html";
-    return;
-  }
+  auth.onAuthStateChanged(user => {
+    if (!user) {
+      window.location.href = "index.html";
+    } else {
+      currentUser = user;
+      loadBalance();
+    }
+  });
 
-  const ref = doc(db, "users", user.uid);
-  const snap = await getDoc(ref);
-
-  // 🔥 لو المستخدم ما عندو حساب → نعملو تلقائي
-  if (!snap.exists()) {
-    await setDoc(ref, {
-      email: user.email,
-      balance: 0
+  function loadBalance() {
+    db.collection("users").doc(currentUser.uid).get().then(doc => {
+      document.getElementById("balance").innerText = doc.data().balance;
     });
-    document.getElementById("balance").innerText = 0;
-  } else {
-    document.getElementById("balance").innerText = snap.data().balance;
   }
-});
 
-window.sendMoney = function () {
-  alert("إرسال الأموال حيتفعل بعد شوية 🔜");
-};
+  function sendMoney() {
+    var username = document.getElementById("toUser").value;
+    var amount = Number(document.getElementById("amount").value);
+
+    if (!username || amount <= 0) {
+      alert("أدخل البيانات صح");
+      return;
+    }
+
+    var senderRef = db.collection("users").doc(currentUser.uid);
+
+    senderRef.get().then(senderDoc => {
+      var senderBalance = senderDoc.data().balance;
+
+      if (senderBalance < amount) {
+        alert("رصيدك غير كافي");
+        return;
+      }
+
+      db.collection("users")
+        .where("username", "==", username)
+        .get()
+        .then(snapshot => {
+          if (snapshot.empty) {
+            alert("المستخدم غير موجود");
+            return;
+          }
+
+          var receiverDoc = snapshot.docs[0];
+          var receiverRef = receiverDoc.ref;
+
+          db.runTransaction(tx => {
+            tx.update(senderRef, {
+              balance: senderBalance - amount
+            });
+            tx.update(receiverRef, {
+              balance: receiverDoc.data().balance + amount
+            });
+
+            tx.set(db.collection("transactions").doc(), {
+              from: currentUser.uid,
+              to: receiverDoc.id,
+              amount: amount,
+              type: "out",
+              date: new Date()
+            });
+          }).then(() => {
+            alert("تم الإرسال");
+            loadBalance();
+          });
+        });
+    });
+  }
+
+  function logout() {
+    auth.signOut();
+  }
 </script>
 
 </body>
-  </html>
+</html>
