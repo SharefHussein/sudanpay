@@ -2,80 +2,20 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>SudanPay</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<style>
-*{box-sizing:border-box;font-family:'Segoe UI',Tahoma}
-body{
-margin:0;
-height:100vh;
-background:radial-gradient(circle at top,#0f172a,#020617);
-display:flex;
-justify-content:center;
-align-items:center;
-color:white;
-}
-.login-box{
-width:90%;
-max-width:360px;
-background:rgba(2,6,23,.85);
-backdrop-filter:blur(10px);
-padding:30px;
-border-radius:20px;
-box-shadow:0 25px 60px rgba(0,0,0,.7);
-}
-.logo{
-text-align:center;
-font-size:26px;
-font-weight:bold;
-margin-bottom:25px;
-color:#22c55e;
-}
-input{
-width:100%;
-padding:14px;
-margin-bottom:15px;
-border:none;
-border-radius:12px;
-font-size:16px;
-}
-button{
-width:100%;
-padding:14px;
-background:linear-gradient(135deg,#22c55e,#16a34a);
-border:none;
-border-radius:14px;
-font-size:18px;
-font-weight:bold;
-color:black;
-cursor:pointer;
-}
-button:hover{opacity:.9}
-.link{
-margin-top:15px;
-text-align:center;
-}
-.link a{
-color:#22c55e;
-text-decoration:none;
-font-size:14px;
-}
-</style>
+<title>SudanPay | دخول</title>
+<link rel="stylesheet" href="style.css">
 </head>
+
 <body>
+<div class="card">
+<h2>تسجيل الدخول</h2>
 
-<div class="login-box">
-<div class="logo">SudanPay</div>
-
-<input type="email" placeholder="البريد الإلكتروني">
+<input placeholder="البريد الإلكتروني">
 <input type="password" placeholder="كلمة المرور">
 
-<button onclick="location.href='dashboard.html'">تسجيل الدخول</button>
+<button class="btn" onclick="location.href='dashboard.html'">دخول</button>
 
-<div class="link">
-<a href="#">إنشاء حساب جديد</a>
+<a class="link" href="#">إنشاء حساب جديد</a>
 </div>
-</div>
-
 </body>
-  </html>
+</html>
