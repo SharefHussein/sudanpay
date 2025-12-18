@@ -1,90 +1,43 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <title>استلام أموال</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body {
-      font-family: Arial;
-      background: #f5f5f5;
-      padding: 20px;
-      text-align: center;
-    }
-    .box {
-      background: white;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    button {
-      margin-top: 15px;
-      padding: 12px;
-      width: 90%;
-      background: #28a745;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      font-size: 16px;
-    }
-  </style>
+<meta charset="UTF-8">
+<title>استلام أموال</title>
+<style>
+body{
+margin:0;
+background:#020617;
+font-family:Tahoma;
+color:white;
+padding:20px;
+}
+h2{text-align:center}
+.box{
+background:#0f172a;
+padding:20px;
+border-radius:15px;
+text-align:center;
+margin-top:30px;
+}
+a{
+display:block;
+margin-top:30px;
+color:#22c55e;
+text-align:center;
+text-decoration:none;
+}
+</style>
 </head>
 <body>
 
-  <h2>استلام أموال</h2>
+<h2>استلام أموال</h2>
 
-  <div class="box">
-    <p>شارك رقمك مع المرسل لاستلام الأموال</p>
-    <h3>رقمك: 249900000000</h3>
-    <button>نسخ الرقم</button>
-  </div>
+<div class="box">
+رقم حسابك:<br><br>
+<strong>SP-458796</strong>
+</div>
 
-  <br>
-  <a href="index.html">⬅ الرجوع للرئيسية</a>
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
-import {
-  getFirestore,
-  collection,
-  addDoc,
-  serverTimestamp
-} from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+<a href="dashboard.html">رجوع</a>
 
-const firebaseConfig = {
-  apiKey: "AIzaSyB3vxJu_et-P80ek30I3MRdC_lGhooCCsc",
-  authDomain: "sudanpay-e332a.firebaseapp.com",
-  projectId: "sudanpay-e332a",
-  storageBucket: "sudanpay-e332a.appspot.com",
-  messagingSenderId: "699809447272",
-  appId: "1:699809447272:web:90f3780ed6c768c4322add"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-
-onAuthStateChanged(auth, (user) => {
-  if (!user) {
-    window.location.href = "login.html";
-  }
-});
-
-const button = document.querySelector("button");
-
-button.addEventListener("click", async () => {
-  const user = auth.currentUser;
-
-  await addDoc(collection(db, "transactions"), {
-    type: "receive",
-    user: user.email,
-    amount: "تم الاستلام",
-    date: serverTimestamp()
-  });
-
-  alert("تم تسجيل عملية الاستلام");
-});
-  </script>
-</script>
 </body>
-  </html>
+</html>
