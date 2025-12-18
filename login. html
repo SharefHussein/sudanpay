@@ -1,38 +1,14 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html>
 <head>
   <meta charset="UTF-8">
-  <title>تسجيل الدخول</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    body {
-      background: #0f172a;
-      color: white;
-      font-family: Arial;
-      text-align: center;
-      padding-top: 80px;
-    }
-    input, button {
-      width: 80%;
-      padding: 12px;
-      margin: 10px;
-      border-radius: 8px;
-      border: none;
-    }
-    button {
-      background: #22c55e;
-      font-size: 16px;
-    }
-  </style>
+  <title>SudanPay Test</title>
 </head>
 <body>
+  <h1>SudanPay شغال ✅</h1>
 
-  <h2>تسجيل الدخول</h2>
-
-  <input type="email" placeholder="البريد الإلكتروني">
-  <input type="password" placeholder="كلمة المرور">
-
-  <button onclick="location.href='home.html'">دخول</button>
-
+  <a href="login.html">تسجيل دخول</a><br>
+  <a href="send.html">إرسال</a><br>
+  <a href="receive.html">استلام</a>
 </body>
-</html>
+</html> 
