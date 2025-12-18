@@ -3,69 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <title>إرسال أموال</title>
-
-<style>
-body{
-margin:0;
-height:100vh;
-background:linear-gradient(180deg,#020617,#0f172a);
-font-family:Tahoma;
-color:white;
-display:flex;
-justify-content:center;
-align-items:center;
-}
-
-.card{
-width:90%;
-max-width:360px;
-background:#020617;
-padding:25px;
-border-radius:20px;
-box-shadow:0 20px 50px rgba(0,0,0,.6);
-animation:pop .6s ease;
-}
-
-@keyframes pop{
-from{transform:scale(.8);opacity:0}
-to{transform:scale(1);opacity:1}
-}
-
-input,button{
-width:100%;
-padding:14px;
-margin-top:15px;
-border:none;
-border-radius:12px;
-font-size:16px;
-}
-
-button{
-background:linear-gradient(135deg,#22c55e,#16a34a);
-font-weight:bold;
-}
-
-button:active{transform:scale(.95)}
-
-a{
-display:block;
-margin-top:20px;
-text-align:center;
-color:#22c55e;
-text-decoration:none;
-}
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 <div class="card">
-<h2 style="text-align:center">إرسال أموال</h2>
+<h2>إرسال أموال</h2>
 
 <input placeholder="رقم المستلم">
 <input placeholder="المبلغ">
-<button>إرسال</button>
 
-<a href="dashboard.html">رجوع</a>
+<button class="btn">إرسال</button>
+<a class="link" href="dashboard.html">رجوع</a>
 </div>
 </body>
 </html>
