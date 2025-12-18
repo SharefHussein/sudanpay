@@ -1,86 +1,38 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-<meta charset="UTF-8">
-<title>تسجيل الدخول - Sudan Pay</title>
-<style>
-body{
-  background:#0f172a;
-  color:white;
-  font-family:Arial;
-  text-align:center;
-  padding:40px;
-}
-input,button{
-  width:90%;
-  padding:15px;
-  margin:10px 0;
-  border-radius:10px;
-  border:none;
-  font-size:16px;
-}
-button{
-  background:#22c55e;
-  color:white;
-}
-</style>
+  <meta charset="UTF-8">
+  <title>تسجيل الدخول</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      background: #0f172a;
+      color: white;
+      font-family: Arial;
+      text-align: center;
+      padding-top: 80px;
+    }
+    input, button {
+      width: 80%;
+      padding: 12px;
+      margin: 10px;
+      border-radius: 8px;
+      border: none;
+    }
+    button {
+      background: #22c55e;
+      font-size: 16px;
+    }
+  </style>
 </head>
 <body>
 
-<h2>تسجيل الدخول</h2>
+  <h2>تسجيل الدخول</h2>
 
-<input type="email" id="email" placeholder="الإيميل">
-<input type="password" id="password" placeholder="كلمة المرور">
+  <input type="email" placeholder="البريد الإلكتروني">
+  <input type="password" placeholder="كلمة المرور">
 
-<button onclick="login()">دخول</button>
-<button onclick="signup()">إنشاء حساب</button>
+  <button onclick="location.href='home.html'">دخول</button>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-
-const firebaseConfig = {
-  apiKey: "API_KEY",
-  authDomain: "PROJECT_ID.firebaseapp.com",
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-
-window.login = () => {
-  signInWithEmailAndPassword(auth,
-    email.value, password.value
-  ).then(()=>{
-    location.href="home.html";
-  }).catch(e=>alert(e.message));
-}
-
-window.signup = () => {
-  createUserWithEmailAndPassword(auth,
-    email.value, password.value
-  ).then(()=>{
-    location.href="home.html";
-  }).catch(e=>alert(e.message));
-}
-</script>
-<!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-
-<script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyB3vxJu_et-P80ek30I3MRdC_lGhooCCsc",
-    authDomain: "sudanpay-e332a.firebaseapp.com",
-    projectId: "sudanpay-e332a",
-    storageBucket: "sudanpay-e332a.firebasestorage.app",
-    messagingSenderId: "699809447272",
-    appId: "1:699809447272:web:90f3780ed6c768c4322add"
-  };
-
-  firebase.initializeApp(firebaseConfig);
-  const auth = firebase.auth();
-
-  console.log("Firebase شغال تمام ✅");
-</script>
 </body>
 </html>
