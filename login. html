@@ -2,76 +2,91 @@
 <html lang="ar">
 <head>
   <meta charset="UTF-8">
-  <title>تسجيل الدخول - Sudan Pay</title>
+  <title>Sudan Pay - تسجيل الدخول</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Firebase v8 -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+
   <style>
     body {
-      background:#0b132b;
+      background:#0b1220;
       color:white;
-      font-family:Arial;
+      font-family: Arial;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      height:100vh;
+    }
+    .box {
+      width:300px;
       text-align:center;
-      padding-top:100px;
     }
     input, button {
-      width:80%;
+      width:100%;
       padding:12px;
-      margin:10px;
+      margin:8px 0;
       border-radius:8px;
       border:none;
-      font-size:16px;
     }
     button {
       background:#22c55e;
+      font-size:16px;
       cursor:pointer;
     }
   </style>
 </head>
 <body>
 
+<div class="box">
   <h2>Sudan Pay</h2>
 
-  <input id="email" type="email" placeholder="الإيميل">
-  <input id="password" type="password" placeholder="كلمة المرور">
+  <input type="email" id="email" placeholder="البريد الإلكتروني">
+  <input type="password" id="password" placeholder="كلمة المرور">
 
-  <button onclick="login()">تسجيل دخول</button>
   <button onclick="register()">إنشاء حساب</button>
+  <button onclick="login()">تسجيل دخول</button>
 
-  <!-- Firebase v8 -->
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <p id="msg"></p>
+</div>
 
-  <script>
-    var firebaseConfig = {
-      apiKey: "AIzaSyB3vxJu_et-P80ek30I3MRdC_lGhooCCsc",
-      authDomain: "sudanpay-e332a.firebaseapp.com",
-      projectId: "sudanpay-e332a",
-      storageBucket: "sudanpay-e332a.appspot.com",
-      messagingSenderId: "699809447272",
-      appId: "1:699809447272:web:90f3780ed6c768c4322add"
-    };
+<script>
+  var firebaseConfig = {
+    apiKey: "AIzaSyB3vxJu_et-P80ek30I3MRdC_lGhooCCsc",
+    authDomain: "sudanpay-e332a.firebaseapp.com",
+    projectId: "sudanpay-e332a",
+    appId: "1:699809447272:web:90f3780ed6c768c4322add"
+  };
 
-    firebase.initializeApp(firebaseConfig);
+  firebase.initializeApp(firebaseConfig);
 
-    function login() {
-      var email = document.getElementById("email").value;
-      var password = document.getElementById("password").value;
+  function register() {
+    var email = document.getElementById("email").value;
+    var password = document.getElementById("password").value;
 
-      firebase.auth().signInWithEmailAndPassword(email, password)
-        .then(() => {
-          alert("تم تسجيل الدخول");
-          window.location.href = "home.html";
-        })
-        .catch(err => alert(err.message));
-    }
+    firebase.auth().createUserWithEmailAndPassword(email, password)
+      .then(() => {
+        document.getElementById("msg").innerText = "تم إنشاء الحساب بنجاح";
+      })
+      .catch(e => {
+        document.getElementById("msg").innerText = e.message;
+      });
+  }
 
-    function register() {
-      var email = document.getElementById("email").value;
-      var password = document.getElementById("password").value;
+  function login() {
+    var email = document.getElementById("email").value;
+    var password = document.getElementById("password").value;
 
-      firebase.auth().createUserWithEmailAndPassword(email, password)
-        .then(() => alert("تم إنشاء الحساب"))
-        .catch(err => alert(err.message));
-    }
-  </script>
+    firebase.auth().signInWithEmailAndPassword(email, password)
+      .then(() => {
+        window.location.href = "index.html";
+      })
+      .catch(e => {
+        document.getElementById("msg").innerText = e.message;
+      });
+  }
+</script>
 
 </body>
 </html>
