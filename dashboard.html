@@ -3,120 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <title>SudanPay | الرئيسية</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<style>
-*{box-sizing:border-box;font-family:'Segoe UI',Tahoma}
-
-body{
-margin:0;
-height:100vh;
-background:linear-gradient(180deg,#020617,#0f172a);
-color:white;
-overflow:hidden;
-}
-
-/* دخول الصفحة */
-.app{
-animation:fadeIn 1s ease forwards;
-opacity:0;
-}
-
-@keyframes fadeIn{
-to{opacity:1}
-}
-
-.header{
-padding:30px 20px;
-text-align:center;
-animation:slideDown 1s ease;
-}
-
-@keyframes slideDown{
-from{transform:translateY(-40px);opacity:0}
-to{transform:translateY(0);opacity:1}
-}
-
-.balance{
-margin-top:10px;
-font-size:18px;
-color:#22c55e;
-}
-
-.menu{
-margin-top:30px;
-}
-
-.btn{
-width:90%;
-max-width:340px;
-margin:18px auto;
-padding:20px;
-border-radius:18px;
-text-align:center;
-font-size:20px;
-font-weight:bold;
-text-decoration:none;
-display:block;
-background:linear-gradient(135deg,#22c55e,#16a34a);
-color:black;
-box-shadow:0 15px 30px rgba(34,197,94,.35);
-transform:translateY(40px);
-opacity:0;
-animation:btnIn .8s ease forwards;
-}
-
-.btn:nth-child(1){animation-delay:.3s}
-.btn:nth-child(2){animation-delay:.5s}
-.btn:nth-child(3){animation-delay:.7s}
-.btn:nth-child(4){animation-delay:.9s}
-
-@keyframes btnIn{
-to{transform:translateY(0);opacity:1}
-}
-
-.btn.dark{
-background:#020617;
-color:white;
-border:1px solid #1e293b;
-box-shadow:none;
-}
-
-/* تأثير الضغط */
-.btn:active{
-transform:scale(.96);
-}
-
-/* Ripple */
-.btn::after{
-content:"";
-position:absolute;
-width:0;
-height:0;
-background:rgba(255,255,255,.4);
-border-radius:50%;
-opacity:0;
-pointer-events:none;
-}
-
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-<div class="app">
+<div class="card">
+<h1>SudanPay</h1>
+<p style="text-align:center;color:#22c55e">الرصيد: 15,000 SDG</p>
 
-<div class="header">
-<h1>مرحباً بك 👋</h1>
-<div class="balance">الرصيد: 15,000 SDG</div>
-</div>
-
-<div class="menu">
-<a class="btn" href="send.html">إرسال أموال</a>
-<a class="btn" href="receive.html">استلام أموال</a>
-<a class="btn dark" href="statement.html">كشف حساب</a>
-<a class="btn dark" href="index.html">تسجيل خروج</a>
-</div>
-
+<a class="menu-btn" href="send.html">إرسال أموال</a>
+<a class="menu-btn" href="receive.html">استلام أموال</a>
+<a class="menu-btn dark" href="statement.html">كشف حساب</a>
+<a class="menu-btn dark" href="index.html">تسجيل خروج</a>
 </div>
 </body>
   </html>
