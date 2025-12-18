@@ -45,8 +45,12 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
 import { getAuth, onAuthStateChanged } 
 from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
-import { getFirestore, doc, getDoc } 
-from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+import { 
+  getFirestore, 
+  doc, 
+  getDoc, 
+  setDoc 
+} from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyB3vxJu_et-P80ek30I3MRdC_lGhooCCsc",
@@ -69,15 +73,23 @@ onAuthStateChanged(auth, async (user) => {
 
   const ref = doc(db, "users", user.uid);
   const snap = await getDoc(ref);
-  if (snap.exists()) {
+
+  // 🔥 لو المستخدم ما عندو حساب → نعملو تلقائي
+  if (!snap.exists()) {
+    await setDoc(ref, {
+      email: user.email,
+      balance: 0
+    });
+    document.getElementById("balance").innerText = 0;
+  } else {
     document.getElementById("balance").innerText = snap.data().balance;
   }
 });
 
 window.sendMoney = function () {
-  alert("إرسال الأموال حيتفعل لاحقاً 🔒");
+  alert("إرسال الأموال حيتفعل بعد شوية 🔜");
 };
 </script>
 
 </body>
-</html>
+  </html>
