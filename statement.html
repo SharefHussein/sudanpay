@@ -21,16 +21,24 @@
     }
     .in { color: green; }
     .out { color: red; }
+    .balance {
+      background: #007bff;
+      color: white;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      font-size: 18px;
+    }
   </style>
 </head>
 <body>
 
   <h2>كشف الحساب</h2>
-
+  <div id="balance" class="balance">الرصيد: ...</div>
   <div id="statement"></div>
 
   <br>
-  <a href="index.html">⬅ الرجوع للرئيسية</a>
+  <a href="index.html">⬅ الرجوع</a>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
@@ -41,10 +49,11 @@
       query,
       where,
       orderBy,
-      getDocs
+      getDocs,
+      doc,
+      getDoc
     } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
-    // 🔹 إعدادات Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyB3vxJu_et-P80ek30I3MRdC_lGhooCCsc",
       authDomain: "sudanpay-e332a.firebaseapp.com",
@@ -60,38 +69,41 @@
 
     onAuthStateChanged(auth, async (user) => {
       if (!user) {
-        window.location.href = "login.html";
+        location.href = "login.html";
         return;
       }
 
-      const container = document.getElementById("statement");
-      container.innerHTML = "";
+      // 🔹 جلب الرصيد
+      const userRef = doc(db, "users", user.uid);
+      const userSnap = await getDoc(userRef);
+      document.getElementById("balance").innerText =
+        "الرصيد: " + (userSnap.data()?.balance || 0) + " SDG";
 
+      // 🔹 جلب العمليات
       const q = query(
         collection(db, "transactions"),
-        where("from", "==", user.email),
+        where("users", "array-contains", user.email),
         orderBy("date", "desc")
       );
 
       const snapshot = await getDocs(q);
-
-      if (snapshot.empty) {
-        container.innerHTML = "<p>لا توجد عمليات</p>";
-        return;
-      }
+      const box = document.getElementById("statement");
+      box.innerHTML = "";
 
       snapshot.forEach(doc => {
         const d = doc.data();
         const div = document.createElement("div");
-        div.className = "card out";
+        const type = d.to === user.email ? "in" : "out";
+
+        div.className = `card ${type}`;
         div.innerHTML = `
-          - ${d.amount} SDG
-          <br><small>${d.date?.toDate().toLocaleDateString()}</small>
+          ${type === "in" ? "استلام" : "إرسال"}: ${d.amount} SDG
+          <br><small>${d.date?.toDate().toLocaleString()}</small>
         `;
-        container.appendChild(div);
+        box.appendChild(div);
       });
     });
   </script>
 
 </body>
-</html>
+  </html>
