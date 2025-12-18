@@ -39,6 +39,7 @@
 
       signInWithEmailAndPassword(auth, email, password)
         .then(() => {
+          localStorage.setItem("loggedIn", "true");
           window.location.href = "home.html";
         })
         .catch((error) => {
