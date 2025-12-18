@@ -1,97 +1,44 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>Sudan Pay</title>
-
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-
+<title>SudanPay | الرئيسية</title>
 <style>
-body {
-  background:#eef2f7;
-  font-family: Arial;
+body{
+margin:0;
+font-family:Tahoma;
+background:linear-gradient(180deg,#020617,#0f172a);
+color:white;
+text-align:center;
 }
-.card {
-  background:white;
-  max-width:420px;
-  margin:40px auto;
-  padding:20px;
-  border-radius:15px;
-  box-shadow:0 4px 10px rgba(0,0,0,0.1);
-}
-h2 {
-  text-align:center;
-  color:#0a7cff;
-}
-.balance {
-  font-size:26px;
-  text-align:center;
-  margin:20px 0;
-}
-input, button {
-  width:100%;
-  padding:12px;
-  margin-top:10px;
-  border-radius:8px;
-  border:1px solid #ddd;
-}
-button {
-  background:#0a7cff;
-  color:white;
-  font-size:16px;
-  border:none;
-}
-button.secondary {
-  background:#eee;
-  color:#333;
+.container{padding:40px 20px}
+h1{margin-bottom:30px}
+.btn{
+display:block;
+width:100%;
+max-width:300px;
+margin:15px auto;
+padding:18px;
+background:#22c55e;
+color:black;
+border-radius:14px;
+font-size:20px;
+font-weight:bold;
+text-decoration:none;
 }
 </style>
 </head>
-
 <body>
 
-<div class="card">
-  <h2>Sudan Pay</h2>
+<div class="container">
+<h1>اختر الخدمة</h1>
 
-  <div class="balance">
-    <span id="balance">0</span> SDG
-  </div>
+<a class="btn" href="#">إرسال أموال</a>
+<a class="btn" href="#">استلام أموال</a>
+<a class="btn" href="statement.html">كشف حساب</a>
+<a class="btn" href="index.html">تسجيل خروج</a>
 
-  <input id="toUser" placeholder="اسم المستخدم">
-  <input id="amount" type="number" placeholder="المبلغ">
-  <button onclick="sendMoney()">إرسال أموال</button>
-
-  <br>
-  <button class="secondary" onclick="logout()">تسجيل خروج</button>
 </div>
 
-<script>
-var firebaseConfig = {
-  apiKey: "AIzaSyB3vxJu_et-P80ek30I3MRdC_lGhooCCsc",
-  authDomain: "sudanpay-e332a.firebaseapp.com",
-  projectId: "sudanpay-e332a"
-};
-firebase.initializeApp(firebaseConfig);
-
-var auth = firebase.auth();
-var db = firebase.firestore();
-var currentUser;
-
-auth.onAuthStateChanged(user=>{
-  if(!user){ location.href="index.html"; }
-  currentUser=user;
-  db.collection("users").doc(user.uid).get().then(d=>{
-    document.getElementById("balance").innerText=d.data().balance;
-  });
-});
-
-function sendMoney(){
-  alert("الواجهة جاهزة – منطق الإرسال شغال");
-}
-function logout(){ auth.signOut(); }
-</script>
-
 </body>
-  </html>
+</html>
