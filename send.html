@@ -37,15 +37,50 @@
   <br><br>
   <a href="index.html">⬅ الرجوع للرئيسية</a>
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+import { getFirestore, collection, addDoc, serverTimestamp }
+from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
   const firebaseConfig = {
     apiKey: "AIzaSyB3vxJu_et-P80ek30I3MRdC_lGhooCCsc",
     authDomain: "sudanpay-e332a.firebaseapp.com",
     projectId: "sudanpay-e332a",
     storageBucket: "sudanpay-e332a.firebasestorage.app",
     messagingSenderId: "699809447272",
+    const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+onAuthStateChanged(auth, (user) => {
+  if (!user) {
+    window.location.href = "login.html";
+  }
+});
+
+const sendBtn = document.querySelector("button");
+const inputs = document.querySelectorAll("input");
+
+sendBtn.addEventListener("click", async () => {
+  const to = inputs[0].value;
+  const amount = inputs[1].value;
+  const user = auth.currentUser;
+
+  if (!to || !amount) {
+    alert("املأ كل الحقول");
+    return;
+  }
+
+  await addDoc(collection(db, "transactions"), {
+    type: "send",
+    from: user.email,
+    to: to,
+    amount: amount,
+    date: serverTimestamp()
+  });
+
+  alert("تم إرسال الأموال");
+});
+</script>
     appId: "1:699809447272:web:90f3780ed6c768c4322add"
   };
 
