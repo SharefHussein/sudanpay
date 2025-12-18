@@ -3,67 +3,65 @@
 <head>
   <meta charset="UTF-8">
   <title>كشف الحساب</title>
-
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
       font-family: Arial;
-      background: #f2f2f2;
+      background: #f4f5f7;
       padding: 20px;
     }
     .item {
       background: white;
       padding: 10px;
       margin-bottom: 10px;
-      border-radius: 8px;
+      border-radius: 6px;
+      box-shadow: 0 0 5px rgba(0,0,0,.1);
     }
-    .in { color: green; }
-    .out { color: red; }
   </style>
 </head>
-
 <body>
+
+<script>
+  if (localStorage.getItem("loggedIn") !== "true") {
+    window.location.href = "index.html";
+  }
+</script>
 
 <h2>كشف الحساب</h2>
 <div id="list"></div>
+<a href="dashboard.html">رجوع</a>
 
-<script>
-  var firebaseConfig = {
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+  import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
+  const firebaseConfig = {
     apiKey: "AIzaSyB3vxJu_et-P80ek30I3MRdC_lGhooCCsc",
     authDomain: "sudanpay-e332a.firebaseapp.com",
-    projectId: "sudanpay-e332a"
+    projectId: "sudanpay-e332a",
+    storageBucket: "sudanpay-e332a.firebasestorage.app",
+    messagingSenderId: "699809447272",
+    appId: "1:699809447272:web:90f3780ed6c768c4322add"
   };
-  firebase.initializeApp(firebaseConfig);
 
-  var auth = firebase.auth();
-  var db = firebase.firestore();
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
 
-  auth.onAuthStateChanged(user => {
-    if (!user) {
-      window.location.href = "index.html";
-    } else {
-      loadTransactions(user.uid);
-    }
+  const q = query(collection(db, "transactions"), orderBy("date", "desc"));
+  const snapshot = await getDocs(q);
+
+  const list = document.getElementById("list");
+
+  snapshot.forEach(doc => {
+    const d = doc.data();
+    const div = document.createElement("div");
+    div.className = "item";
+    div.innerHTML = `
+      <strong>${d.type === "send" ? "إرسال" : "استلام"}</strong><br>
+      المبلغ: ${d.amount}
+    `;
+    list.appendChild(div);
   });
-
-  function loadTransactions(uid) {
-    db.collection("transactions")
-      .where("from", "==", uid)
-      .orderBy("date", "desc")
-      .get()
-      .then(snapshot => {
-        snapshot.forEach(doc => {
-          var d = doc.data();
-          var div = document.createElement("div");
-          div.className = "item out";
-          div.innerText = `- ${d.amount} SDG`;
-          document.getElementById("list").appendChild(div);
-        });
-      });
-  }
 </script>
 
 </body>
