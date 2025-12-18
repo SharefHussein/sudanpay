@@ -1,15 +1,50 @@
-<h1>صفحة تسجيل الدخول</h1>
 <!DOCTYPE html>
-<html>
+<html lang="ar">
 <head>
   <meta charset="UTF-8">
-  <title>SudanPay Test</title>
+  <title>تسجيل الدخول - SudanPay</title>
 </head>
 <body>
-  <h1>SudanPay شغال ✅</h1>
 
-  <a href="login.html">تسجيل دخول</a><br>
-  <a href="send.html">إرسال</a><br>
-  <a href="receive.html">استلام</a>
+  <h2>تسجيل الدخول</h2>
+
+  <input type="email" id="email" placeholder="الإيميل"><br><br>
+  <input type="password" id="password" placeholder="كلمة المرور"><br><br>
+
+  <button onclick="login()">دخول</button>
+
+  <p id="msg"></p>
+
+  <!-- Firebase -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyB3vxJu_et-P80ek30I3MRdC_lGhooCCsc",
+      authDomain: "sudanpay-e332a.firebaseapp.com",
+      projectId: "sudanpay-e332a",
+      storageBucket: "sudanpay-e332a.firebasestorage.app",
+      messagingSenderId: "699809447272",
+      appId: "1:699809447272:web:90f3780ed6c768c4322add"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    window.login = function () {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      signInWithEmailAndPassword(auth, email, password)
+        .then(() => {
+          window.location.href = "home.html";
+        })
+        .catch((error) => {
+          document.getElementById("msg").innerText = error.message;
+        });
+    }
+  </script>
+
 </body>
-</html> 
+  </html>
