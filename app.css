@@ -91,3 +91,36 @@ body {
     transform: translateY(0);
   }
     }
+/* Colors */
+.blue { background: linear-gradient(135deg,#2563eb,#38bdf8); }
+.green { background: linear-gradient(135deg,#16a34a,#22c55e); }
+.purple { background: linear-gradient(135deg,#7c3aed,#a78bfa); }
+.orange { background: linear-gradient(135deg,#f97316,#fb923c); }
+
+.action-card {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 16px;
+  border-radius: 18px;
+  color: #fff;
+  margin: 15px;
+  box-shadow: 0 15px 40px rgba(0,0,0,.35);
+  cursor: pointer;
+}
+
+.action-card i {
+  font-size: 26px;
+}
+
+.action-card span {
+  font-size: 17px;
+  font-weight: bold;
+}
+
+/* Balance */
+.balance {
+  font-size: 28px;
+  font-weight: bold;
+  margin-top: 10px;
+                               }
