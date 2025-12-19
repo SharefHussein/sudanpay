@@ -1,25 +1,119 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sudan Pay - الرئيسية</title>
-  <link rel="stylesheet" href="app.css">
+<meta charset="UTF-8">
+<title>Sudan Pay</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+  margin:0;
+  background:#020617;
+  font-family:Arial;
+  color:#fff;
+}
+.app{
+  max-width:420px;
+  margin:auto;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+}
+.header{
+  padding:20px;
+  font-size:20px;
+  font-weight:bold;
+}
+.card{
+  background:#0b1228;
+  margin:10px;
+  padding:20px;
+  border-radius:16px;
+}
+.btn{
+  width:100%;
+  padding:14px;
+  margin-top:10px;
+  border:none;
+  border-radius:12px;
+  font-size:16px;
+  color:#fff;
+}
+.send{background:#22c55e;}
+.receive{background:#0ea5e9;}
+.statement{background:#6366f1;}
+.logout{background:#ef4444;}
+.nav{
+  display:flex;
+  justify-content:space-around;
+  padding:10px;
+  background:#020617;
+}
+.nav button{
+  background:none;
+  color:#9ca3af;
+  border:none;
+  font-size:14px;
+}
+</style>
 </head>
 
 <body>
-  <div class="app">
+
+<div class="app">
+
+  <div class="header">Sudan Pay</div>
+
+  <div class="card">
     <h3>الرصيد</h3>
-    <div id="balance">0 SDG</div>
+    <p id="balance">0 SDG</p>
 
-    <button onclick="goSend()">إرسال أموال</button>
-    <button onclick="goReceive()">استلام أموال</button>
-    <button onclick="goStatement()">كشف حساب</button>
-    <button onclick="goProfile()">الملف الشخصي</button>
-
-    <button onclick="logout()" style="background:#ff5252">تسجيل الخروج</button>
+    <button class="btn send" onclick="goSend()">إرسال أموال</button>
+    <button class="btn receive" onclick="goReceive()">استلام أموال</button>
+    <button class="btn statement" onclick="goStatement()">كشف حساب</button>
+    <button class="btn logout" onclick="logout()">تسجيل خروج</button>
   </div>
 
-  <script type="module" src="dashboard.js"></script>
+  <div class="nav">
+    <button onclick="goHome()">الرئيسية</button>
+    <button onclick="goSend()">إرسال</button>
+    <button onclick="goReceive()">استلام</button>
+    <button onclick="goProfile()">حسابي</button>
+  </div>
+
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyB3vxJu_et-P80ek30I3MRdC_lGhooCCsc",
+  authDomain: "sudanpay-e332a.firebaseapp.com",
+  projectId: "sudanpay-e332a",
+  storageBucket: "sudanpay-e332a.appspot.com",
+  messagingSenderId: "699809447272",
+  appId: "1:699809447272:web:90f3780ed6c768c4322add"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+/* 🔥 ربط الدوال بالـ window */
+window.goSend = () => location.href = "send.html";
+window.goReceive = () => location.href = "receive.html";
+window.goStatement = () => location.href = "statement.html";
+window.goProfile = () => location.href = "profile.html";
+window.goHome = () => location.href = "dashboard.html";
+
+window.logout = () => {
+  signOut(auth).then(() => location.href = "index.html");
+};
+
+onAuthStateChanged(auth, user => {
+  if (!user) location.href = "index.html";
+});
+</script>
+
 </body>
-</html>
+    </html>
