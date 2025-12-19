@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>الملف الشخصي | SudanPay</title>
+  <link rel="stylesheet" href="style.css">
+
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+</head>
+<body>
+
+<div class="app page">
+  <div class="card">
+
+    <h2>الملف الشخصي</h2>
+
+    <p id="email" style="margin-bottom:10px;"></p>
+
+    <div class="balance" id="balance">
+      SDG 0
+    </div>
+
+    <button class="secondary" onclick="back()">رجوع</button>
+    <button class="danger" onclick="logout()">تسجيل خروج</button>
+
+  </div>
+</div>
+
+<script src="app.js"></script>
+<script>
+auth.onAuthStateChanged(user => {
+  if (!user) {
+    location.href = "index.html";
+    return;
+  }
+
+  email.innerText = "📧 " + user.email;
+
+  db.collection("balances").doc(user.email).get()
+    .then(doc => {
+      balance.innerText = "SDG " + (doc.exists ? doc.data().amount : 0);
+    });
+});
+
+function back() {
+  location.href = "dashboard.html";
+}
+
+function logout() {
+  auth.signOut().then(() => {
+    location.href = "index.html";
+  });
+}
+</script>
+
+</body>
+  </html>
