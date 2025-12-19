@@ -1,59 +1,33 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-  <meta charset="UTF-8">
-  <title>الملف الشخصي | SudanPay</title>
-  <link rel="stylesheet" href="style.css">
-
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+<meta charset="UTF-8">
+<title>الملف الشخصي</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body{font-family:Arial;background:#0f2027;color:#fff;margin:0}
+.box{max-width:400px;margin:40px auto;background:#1e2a38;padding:20px;border-radius:12px;text-align:center}
+.avatar{width:90px;height:90px;border-radius:50%;background:#00c853;margin:auto;line-height:90px;font-size:32px}
+p{margin:10px 0}
+button{padding:12px;width:100%;border:none;border-radius:8px;background:#2979ff;color:#fff}
+</style>
 </head>
 <body>
 
-<div class="app page">
-  <div class="card">
+<div class="box">
+<div class="avatar">S</div>
+<h2>Sherif</h2>
+<p>رقم الحساب: 55892</p>
+<p>الحالة: مفعل ✅</p>
 
-    <h2>الملف الشخصي</h2>
-
-    <p id="email" style="margin-bottom:10px;"></p>
-
-    <div class="balance" id="balance">
-      SDG 0
-    </div>
-
-    <button class="secondary" onclick="back()">رجوع</button>
-    <button class="danger" onclick="logout()">تسجيل خروج</button>
-
-  </div>
+<button onclick="back()">رجوع</button>
 </div>
 
-<script src="app.js"></script>
 <script>
-auth.onAuthStateChanged(user => {
-  if (!user) {
-    location.href = "index.html";
-    return;
-  }
-
-  email.innerText = "📧 " + user.email;
-
-  db.collection("balances").doc(user.email).get()
-    .then(doc => {
-      balance.innerText = "SDG " + (doc.exists ? doc.data().amount : 0);
-    });
-});
-
-function back() {
-  location.href = "dashboard.html";
-}
-
-function logout() {
-  auth.signOut().then(() => {
-    location.href = "index.html";
-  });
+function back(){
+  location.href="dashboard.html";
 }
 </script>
 
 </body>
-  </html>
+</html>
