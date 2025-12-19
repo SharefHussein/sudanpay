@@ -55,40 +55,4 @@
       window.location.href = "index.html";
     }
   });
-    </script>
-auth.onAuthStateChanged(user => {
-  if (!user) {
-    location.href = "index.html";
-  } else {
-    loadBalance();
-  }
-});
-
-function loadBalance() {
-  db.collection("balances").doc(auth.currentUser.email)
-    .get().then(doc => {
-      if (doc.exists) {
-        balance.innerText = "SDG " + doc.data().amount;
-      } else {
-        balance.innerText = "SDG 15,000";
-      }
-    });
-}
-
-function goSend() {
-  location.href = "send.html";
-}
-
-function goStatement() {
-  location.href = "statement.html";
-}
-
-function logout() {
-  auth.signOut().then(() => {
-    location.href = "index.html";
-  });
-}
-</script>
-
-</body>
-    </html>
+        </script>
