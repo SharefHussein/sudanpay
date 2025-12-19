@@ -2,7 +2,7 @@
 <html lang="ar">
 <head>
   <meta charset="UTF-8">
-  <title>إرسال أموال</title>
+  <title>إرسال أموال | SudanPay</title>
   <link rel="stylesheet" href="style.css">
 
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
@@ -14,33 +14,65 @@
 <div class="card">
   <h2>إرسال أموال</h2>
 
-  <input id="to" placeholder="البريد المستلم">
+  <input id="to" placeholder="إيميل المستلم">
   <input id="amount" type="number" placeholder="المبلغ">
 
   <button onclick="sendMoney()">إرسال</button>
-  <p id="msg"></p>
+  <button onclick="back()">رجوع</button>
 
-  <a href="dashboard.html">رجوع</a>
+  <p id="msg"></p>
 </div>
 
 <script src="app.js"></script>
 <script>
-auth.onAuthStateChanged(u => {
-  if (!u) location.href = "index.html";
+auth.onAuthStateChanged(user => {
+  if (!user) location.href = "index.html";
 });
 
+function back() {
+  location.href = "dashboard.html";
+}
+
 function sendMoney() {
-  db.collection("transactions").add({
-    from: auth.currentUser.email,
-    to: to.value,
-    amount: amount.value,
-    type: "send",
-    time: new Date()
-  }).then(() => {
+  const to = document.getElementById("to").value;
+  const amount = Number(document.getElementById("amount").value);
+
+  if (!to || amount <= 0) {
+    msg.innerText = "أدخل البيانات صح";
+    return;
+  }
+
+  const from = auth.currentUser.email;
+
+  const senderRef = db.collection("balances").doc(from);
+  const receiverRef = db.collection("balances").doc(to);
+
+  senderRef.get().then(doc => {
+    let balance = doc.exists ? doc.data().amount : 15000;
+
+    if (balance < amount) {
+      msg.innerText = "رصيد غير كافي";
+      return;
+    }
+
+    senderRef.set({ amount: balance - amount });
+    receiverRef.get().then(r => {
+      let rBalance = r.exists ? r.data().amount : 0;
+      receiverRef.set({ amount: rBalance + amount });
+    });
+
+    db.collection("transactions").add({
+      from,
+      to,
+      amount,
+      type: "out",
+      time: new Date()
+    });
+
     msg.innerText = "تم الإرسال بنجاح";
   });
 }
 </script>
 
 </body>
-</html>
+  </html>
