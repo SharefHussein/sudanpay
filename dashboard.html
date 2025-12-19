@@ -1,170 +1,64 @@
 <!DOCTYPE html>
 <html lang="ar">
-<link rel="stylesheet" href="app.css">
 <head>
-  <meta charset="UTF-8" />
-  <title>Sudan Pay | Dashboard</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-      color: #fff;
-      margin: 0;
-      padding: 0;
-    }
-
-    .container {
-      max-width: 420px;
-      margin: 40px auto;
-      background: rgba(255,255,255,0.1);
-      padding: 25px;
-      border-radius: 15px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-      animation: fadeIn 0.8s ease-in-out;
-    }
-
-    h2 {
-      text-align: center;
-      margin-bottom: 10px;
-    }
-
-    .balance {
-      text-align: center;
-      font-size: 26px;
-      font-weight: bold;
-      margin: 20px 0;
-      color: #00ffcc;
-    }
-
-    button {
-      width: 100%;
-      padding: 14px;
-      margin-top: 10px;
-      border: none;
-      border-radius: 10px;
-      font-size: 16px;
-      cursor: pointer;
-      transition: transform 0.2s, opacity 0.2s;
-    }
-
-    button:hover {
-      transform: scale(1.03);
-      opacity: 0.9;
-    }
-
-    .primary { background: #00c853; color: #fff; }
-    .secondary { background: #2979ff; color: #fff; }
-    .warning { background: #ff9100; color: #fff; }
-    .danger { background: #ff5252; color: #fff; }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(15px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-  </style>
+  <meta charset="UTF-8">
+  <title>Sudan Pay</title>
+  <link rel="stylesheet" href="app.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
-<div class="bottom-nav">
-  <a href="dashboard.html" class="active">الرئيسية</a>
-  <a href="send.html">إرسال</a>
-  <a href="receive.html">استلام</a>
-  <a href="statement.html">كشف</a>
-  <a href="profile.html">حسابي</a>
-</div>
-  <script src="firebase.js"></script>
-  <script>
-  firebase.auth().onAuthStateChanged(function(user) {
-    if (!user) {
-      window.location.href = "index.html";
-    }
-  });
-  <script>
-  firebase.auth().onAuthStateChanged(function(user) {
-    if (user) {
-      firebase.database()
-        .ref("users/" + user.uid + "/balance")
-        .on("value", function(snapshot) {
-          document.getElementById("balance").innerText =
-            "الرصيد: " + (snapshot.val() || 0) + " SDG";
-        });
-    }
-  });
-</script> 
 <body>
 
-  <div class="container">
-    <h2>لوحة التحكم</h2>
-    <p style="text-align:center;">مرحباً بك في Sudan Pay</p>
+<div class="app">
 
-    <div class="balance" id="balance">الرصيد: 0 SDG</div>
-
-    <button class="primary" onclick="goSend()">إرسال أموال</button>
-    <button class="secondary" onclick="goReceive()">استلام أموال</button>
-    <button class="warning" onclick="goStatement()">كشف حساب</button>
-    <button class="secondary" onclick="goProfile()">الملف الشخصي</button>
-
-    <button class="danger" onclick="logout()">تسجيل الخروج</button>
+  <!-- Header -->
+  <div class="header">
+    الرصيد الكلي
+    <div class="balance-binance" id="balance">...</div>
   </div>
 
-  <!-- Firebase + Logic -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+  <!-- Quick Actions -->
+  <div class="actions">
+    <div class="action-btn" onclick="location.href='send.html'">
+      <i class="fa-solid fa-paper-plane"></i>
+      إرسال
+    </div>
+    <div class="action-btn" onclick="location.href='receive.html'">
+      <i class="fa-solid fa-wallet"></i>
+      استلام
+    </div>
+  </div>
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyB3vxJu_et-P80ek30I3MRdC_lGhooCCsc",
-      authDomain: "sudanpay-e332a.firebaseapp.com",
-      projectId: "sudanpay-e332a",
-      storageBucket: "sudanpay-e332a.appspot.com",
-      messagingSenderId: "699809447272",
-      appId: "1:699809447272:web:90f3780ed6c768c4322add"
-    };
+  <!-- Section -->
+  <div class="section-title">الخدمات</div>
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
+  <div class="list-card" onclick="location.href='statement.html'">
+    <i class="fa-solid fa-file-lines"></i> كشف الحساب
+  </div>
 
-    // حماية الصفحة
-    onAuthStateChanged(auth, (user) => {
-      if (!user) {
-        window.location.href = "index.html";
-      }
-    });
+</div>
 
-    // تنقل
-    function goSend() {
-      window.location.href = "send.html";
-    }
+<!-- Bottom Nav -->
+<div class="bottom-nav">
+  <a href="dashboard.html" class="active"><i class="fa-solid fa-house"></i><br>الرئيسية</a>
+  <a href="send.html"><i class="fa-solid fa-paper-plane"></i><br>إرسال</a>
+  <a href="receive.html"><i class="fa-solid fa-wallet"></i><br>استلام</a>
+  <a href="statement.html"><i class="fa-solid fa-file-lines"></i><br>كشف</a>
+  <a href="profile.html"><i class="fa-solid fa-user"></i><br>حسابي</a>
+</div>
 
-    function goReceive() {
-      window.location.href = "receive.html";
-    }
+<script src="firebase.js"></script>
+<script>
+  firebase.auth().onAuthStateChanged(function(user){
+    if(!user){ location.href="index.html"; }
 
-    function goStatement() {
-      window.location.href = "statement.html";
-    }
-
-    function goProfile() {
-      window.location.href = "profile.html";
-    }
-
-    function logout() {
-      signOut(auth).then(() => {
-        window.location.href = "index.html";
+    firebase.database()
+      .ref("users/"+user.uid+"/balance")
+      .on("value", s=>{
+        document.getElementById("balance").innerText =
+          (s.val() || 0) + " SDG";
       });
-    }
-
-    // ربط الدوال
-    window.goSend = goSend;
-    window.goReceive = goReceive;
-    window.goStatement = goStatement;
-    window.goProfile = goProfile;
-    window.logout = logout;
-
-    // رصيد وهمي مؤقت
-    document.getElementById("balance").innerText = "الرصيد: 0,00 SDG";
-  </script>
+  });
+</script>
 
 </body>
-  </html>
+                        </html>
