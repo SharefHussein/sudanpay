@@ -2,81 +2,24 @@
 <html lang="ar">
 <head>
   <meta charset="UTF-8">
-  <title>Sudan Pay</title>
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sudan Pay - الرئيسية</title>
   <link rel="stylesheet" href="app.css">
-  <link rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 
 <body>
+  <div class="app">
+    <h3>الرصيد</h3>
+    <div id="balance">0 SDG</div>
 
-<div class="app">
+    <button onclick="goSend()">إرسال أموال</button>
+    <button onclick="goReceive()">استلام أموال</button>
+    <button onclick="goStatement()">كشف حساب</button>
+    <button onclick="goProfile()">الملف الشخصي</button>
 
-  <!-- Header -->
-  <div class="header">
-    الرصيد الكلي
-    <div class="balance-binance" id="balance">0 SDG</div>
+    <button onclick="logout()" style="background:#ff5252">تسجيل الخروج</button>
   </div>
 
-  <!-- Actions -->
-  <div class="actions">
-    <div class="action-btn" onclick="go('send.html')">
-      <i class="fa-solid fa-paper-plane"></i>
-      إرسال
-    </div>
-
-    <div class="action-btn" onclick="go('receive.html')">
-      <i class="fa-solid fa-wallet"></i>
-      استلام
-    </div>
-  </div>
-
-  <!-- Services -->
-  <div class="section-title">الخدمات</div>
-
-  <div class="list-card" onclick="go('statement.html')">
-    <i class="fa-solid fa-file-lines"></i>
-    كشف الحساب
-  </div>
-
-</div>
-
-<!-- Bottom Navigation -->
-<div class="bottom-nav">
-  <a class="active" href="dashboard.html">
-    <i class="fa-solid fa-house"></i><br>الرئيسية
-  </a>
-  <a href="send.html">
-    <i class="fa-solid fa-paper-plane"></i><br>إرسال
-  </a>
-  <a href="receive.html">
-    <i class="fa-solid fa-wallet"></i><br>استلام
-  </a>
-  <a href="statement.html">
-    <i class="fa-solid fa-file-lines"></i><br>كشف
-  </a>
-  <a href="profile.html">
-    <i class="fa-solid fa-user"></i><br>حسابي
-  </a>
-</div>
-
-<script src="firebase.js"></script>
-
-<script>
-  function go(p){ location.href = p }
-
-  firebase.auth().onAuthStateChanged(user=>{
-    if(!user){ location.href="index.html"; return }
-
-    firebase.database()
-      .ref("users/"+user.uid+"/balance")
-      .on("value", s=>{
-        document.getElementById("balance").innerText =
-          (s.val() || 0) + " SDG"
-      })
-  })
-</script>
-
+  <script type="module" src="dashboard.js"></script>
 </body>
-  </html>
+</html>
