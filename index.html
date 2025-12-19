@@ -2,22 +2,85 @@
 <html lang="ar">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sudan Pay - دخول</title>
-  <link rel="stylesheet" href="app.css">
-</head>
+  <title>Sudan Pay</title>
 
+  <!-- مهم للموبايل -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #050b1e, #020617);
+      font-family: Arial, sans-serif;
+      color: #fff;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .box {
+      width: 100%;
+      max-width: 360px;
+      background: #0b1228;
+      padding: 25px;
+      border-radius: 16px;
+      box-shadow: 0 0 40px rgba(0,0,0,0.6);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px;
+      margin-bottom: 12px;
+      border-radius: 10px;
+      border: none;
+      outline: none;
+      font-size: 15px;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      border-radius: 10px;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+
+    .login {
+      background: linear-gradient(90deg, #22c55e, #16a34a);
+      color: #fff;
+    }
+
+    .register {
+      background: linear-gradient(90deg, #0ea5e9, #2563eb);
+      color: #fff;
+    }
+  </style>
+</head>
 <body>
-  <div class="app">
+
+  <div class="box">
     <h2>Sudan Pay</h2>
 
-    <input type="email" id="email" placeholder="البريد الإلكتروني">
-    <input type="password" id="password" placeholder="كلمة المرور">
+    <input id="email" type="email" placeholder="البريد الإلكتروني">
+    <input id="password" type="password" placeholder="كلمة المرور">
 
-    <button onclick="login()">دخول</button>
-    <button onclick="register()">تسجيل جديد</button>
+    <!-- مهم: type=button -->
+    <button class="login" type="button" onclick="login()">دخول</button>
+    <button class="register" type="button" onclick="register()">تسجيل جديد</button>
   </div>
 
+  <!-- Firebase -->
+  <script type="module" src="firebase.js"></script>
   <script type="module" src="auth.js"></script>
+
 </body>
-      </html>
+  </html>
