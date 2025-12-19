@@ -1,21 +1,43 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
-<meta charset="UTF-8">
-<title>تسجيل الدخول</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>Sudan Pay | دخول</title>
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Firebase v8 -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 </head>
 <body>
 
 <div class="card">
-<h2>تسجيل الدخول</h2>
+  <h2>Sudan Pay</h2>
 
-<input type="email" placeholder="البريد الإلكتروني">
-<input type="password" placeholder="كلمة المرور">
+  <input id="email" type="email" placeholder="البريد الإلكتروني">
+  <input id="password" type="password" placeholder="كلمة المرور">
 
-<button class="btn" onclick="location.href='dashboard.html'">دخول</button>
-<a class="link" href="#">إنشاء حساب جديد</a>
+  <button onclick="login()">دخول</button>
+  <button onclick="register()">تسجيل جديد</button>
+
+  <p id="msg"></p>
 </div>
+
+<script src="app.js"></script>
+<script>
+function register() {
+  auth.createUserWithEmailAndPassword(email.value, password.value)
+    .then(() => location.href = "dashboard.html")
+    .catch(e => msg.innerText = e.message);
+}
+
+function login() {
+  auth.signInWithEmailAndPassword(email.value, password.value)
+    .then(() => location.href = "dashboard.html")
+    .catch(e => msg.innerText = e.message);
+}
+</script>
 
 </body>
   </html>
