@@ -1,54 +1,23 @@
 <!DOCTYPE html>
 <html lang="ar">
-<link rel="stylesheet" href="app.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <head>
   <meta charset="UTF-8">
-  <title>Sudan Pay | دخول</title>
-  <link rel="stylesheet" href="style.css">
-
-  <!-- Firebase v8 -->
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sudan Pay - دخول</title>
+  <link rel="stylesheet" href="app.css">
 </head>
-  <div class="bottom-nav">
-  <a href="dashboard.html" class="active">الرئيسية</a>
-  <a href="send.html">إرسال</a>
-  <a href="receive.html">استلام</a>
-  <a href="statement.html">كشف</a>
-  <a href="profile.html">حسابي</a>
-  </div>
-  <script src="firebase.js"></script>
+
 <body>
-<div class="app page">
-  <div class="card">
-    
-  <h2>Sudan Pay</h2>
+  <div class="app">
+    <h2>Sudan Pay</h2>
 
-  <input id="email" type="email" placeholder="البريد الإلكتروني">
-  <input id="password" type="password" placeholder="كلمة المرور">
+    <input type="email" id="email" placeholder="البريد الإلكتروني">
+    <input type="password" id="password" placeholder="كلمة المرور">
 
-  <button onclick="login()">دخول</button>
-  <button onclick="register()">تسجيل جديد</button>
+    <button onclick="login()">دخول</button>
+    <button onclick="register()">تسجيل جديد</button>
+  </div>
 
-  <p id="msg"></p>
-</div>
-
-<script src="app.js"></script>
-<script>
-function register() {
-  auth.createUserWithEmailAndPassword(email.value, password.value)
-    .then(() => location.href = "dashboard.html")
-    .catch(e => msg.innerText = e.message);
-}
-
-function login() {
-  auth.signInWithEmailAndPassword(email.value, password.value)
-    .then(() => location.href = "dashboard.html")
-    .catch(e => msg.innerText = e.message);
-}
-</script>
-
+  <script type="module" src="auth.js"></script>
 </body>
-  </html>
+      </html>
