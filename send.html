@@ -24,55 +24,33 @@
 </div>
 
 <script src="app.js"></script>
-<script>
-auth.onAuthStateChanged(user => {
-  if (!user) location.href = "index.html";
-});
+<script type="module">
+  import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
 
-function back() {
-  location.href = "dashboard.html";
-}
+  const firebaseConfig = {
+    apiKey: "AIzaSyB3vxJu_et-P80ek30I3MRdC_lGhooCCsc",
+    authDomain: "sudanpay-e332a.firebaseapp.com",
+    projectId: "sudanpay-e332a",
+    storageBucket: "sudanpay-e332a.firebasestorage.app",
+    messagingSenderId: "699809447272",
+    appId: "1:699809447272:web:90f3780ed6c768c4322add"
+  };
 
-function sendMoney() {
-  const to = document.getElementById("to").value;
-  const amount = Number(document.getElementById("amount").value);
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
 
-  if (!to || amount <= 0) {
-    msg.innerText = "أدخل البيانات صح";
-    return;
+  function logout() {
+    signOut(auth).then(() => {
+      window.location.href = "index.html";
+    });
   }
 
-  const from = auth.currentUser.email;
+  window.logout = logout;
 
-  const senderRef = db.collection("balances").doc(from);
-  const receiverRef = db.collection("balances").doc(to);
-
-  senderRef.get().then(doc => {
-    let balance = doc.exists ? doc.data().amount : 15000;
-
-    if (balance < amount) {
-      msg.innerText = "رصيد غير كافي";
-      return;
+  onAuthStateChanged(auth, (user) => {
+    if (!user) {
+      window.location.href = "index.html";
     }
-
-    senderRef.set({ amount: balance - amount });
-    receiverRef.get().then(r => {
-      let rBalance = r.exists ? r.data().amount : 0;
-      receiverRef.set({ amount: rBalance + amount });
-    });
-
-    db.collection("transactions").add({
-      from,
-      to,
-      amount,
-      type: "out",
-      time: new Date()
-    });
-
-    msg.innerText = "تم الإرسال بنجاح";
   });
-}
 </script>
-
-</body>
-  </html>
