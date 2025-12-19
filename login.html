@@ -3,51 +3,141 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sudan Pay</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Sudan Pay | تسجيل الدخول</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: radial-gradient(circle at top, #0f1b2d, #05070c);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 380px;
+      background: rgba(15, 23, 42, 0.95);
+      border-radius: 20px;
+      padding: 28px;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.6);
+      animation: fadeUp 0.6s ease;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .logo {
+      text-align: center;
+      font-size: 26px;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #9ca3af;
+      font-size: 14px;
+      margin-bottom: 22px;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      margin-bottom: 6px;
+      color: #cbd5f5;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px;
+      border-radius: 12px;
+      border: none;
+      outline: none;
+      margin-bottom: 16px;
+      background: #020617;
+      color: #fff;
+      font-size: 15px;
+    }
+
+    input::placeholder {
+      color: #64748b;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      border-radius: 14px;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 600;
+      transition: transform 0.15s ease, opacity 0.15s ease;
+    }
+
+    button:active {
+      transform: scale(0.97);
+    }
+
+    .btn-login {
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: #022c22;
+      margin-bottom: 12px;
+    }
+
+    .btn-register {
+      background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+      color: #022c22;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 18px;
+      font-size: 12px;
+      color: #94a3b8;
+    }
+  </style>
 </head>
+
 <body>
 
-<div class="app fade-in">
+  <div class="card">
+    <div class="logo">Sudan Pay</div>
+    <div class="subtitle">الدخول إلى محفظتك الرقمية</div>
 
-  <div class="logo">
-    <span>S</span>
-  </div>
-
-  <h1>سودان باي</h1>
-  <p class="subtitle">منصة التحويلات المالية والمحفظة الإلكترونية</p>
-
-  <h2 style="margin-bottom:20px">إنشاء حساب جديد</h2>
-
-  <div class="input-group">
     <label>البريد الإلكتروني</label>
     <input type="email" id="email" placeholder="example@email.com">
-  </div>
 
-  <div class="input-group">
     <label>كلمة المرور</label>
-    <input type="password" id="password" placeholder="••••••">
+    <input type="password" id="password" placeholder="••••••••">
+
+    <button class="btn-login" onclick="login()">دخول</button>
+    <button class="btn-register" onclick="goRegister()">تسجيل جديد</button>
+
+    <div class="footer">
+      © 2025 Sudan Pay
+    </div>
   </div>
 
-  <div class="input-group">
-    <label>الاسم (English)</label>
-    <input type="text" placeholder="John Doe">
-  </div>
+  <script>
+    function login() {
+      // انتقال مباشر بدون تنبيه
+      window.location.href = "dashboard.html";
+    }
 
-  <div class="input-group">
-    <label>الاسم (العربية)</label>
-    <input type="text" placeholder="محمد أحمد">
-  </div>
-
-  <button class="btn" id="registerBtn">
-    إنشاء حساب والبدء
-  </button>
-
-  <div class="link">
-    <a href="login.html">لديك حساب بالفعل؟ تسجيل الدخول</a>
-  </div>
-
-</div>
+    function goRegister() {
+      window.location.href = "register.html";
+    }
+  </script>
 
 </body>
-</html>
+</html> 
