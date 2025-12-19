@@ -31,49 +31,33 @@
 </div>
 
 <script src="app.js"></script>
-<script>
-auth.onAuthStateChanged(user => {
-  if (!user) {
-    location.href = "index.html";
-    return;
+<script type="module">
+  import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyB3vxJu_et-P80ek30I3MRdC_lGhooCCsc",
+    authDomain: "sudanpay-e332a.firebaseapp.com",
+    projectId: "sudanpay-e332a",
+    storageBucket: "sudanpay-e332a.firebasestorage.app",
+    messagingSenderId: "699809447272",
+    appId: "1:699809447272:web:90f3780ed6c768c4322add"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  function logout() {
+    signOut(auth).then(() => {
+      window.location.href = "index.html";
+    });
   }
 
-  const email = user.email;
+  window.logout = logout;
 
-  db.collection("transactions")
-    .orderBy("time", "desc")
-    .onSnapshot(snapshot => {
-      list.innerHTML = "";
-
-      snapshot.forEach(doc => {
-        const t = doc.data();
-
-        if (t.from === email || t.to === email) {
-          const date = t.time.toDate();
-          const d = date.toLocaleDateString();
-          const tm = date.toLocaleTimeString();
-
-          const type = t.from === email ? "إرسال ⬆️" : "استلام ⬇️";
-          const other = t.from === email ? t.to : t.from;
-
-          list.innerHTML += `
-            <tr>
-              <td>${d}</td>
-              <td>${tm}</td>
-              <td>${type}</td>
-              <td>${t.amount} SDG</td>
-              <td>${other}</td>
-            </tr>
-          `;
-        }
-      });
-    });
-});
-
-function back() {
-  location.href = "dashboard.html";
-}
+  onAuthStateChanged(auth, (user) => {
+    if (!user) {
+      window.location.href = "index.html";
+    }
+  });
 </script>
-
-</body>
-    </html>
