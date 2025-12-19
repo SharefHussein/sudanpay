@@ -205,4 +205,17 @@ body {
   padding: 15px;
   border-radius: 14px;
   border: 1px solid #1e293b;
+  } /* ===== Mobile App Layout ===== */
+body {
+  display: flex;
+  justify-content: center;
+  background: #0b1220;
+}
+
+.app {
+  width: 100%;
+  max-width: 420px;   /* 👈 أهم سطر */
+  min-height: 100vh;
+  margin: auto;
+  background: #0b1220;
   }
