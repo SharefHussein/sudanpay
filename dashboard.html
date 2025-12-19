@@ -1,67 +1,143 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-  <meta charset="UTF-8">
-  <title>SudanPay | Dashboard</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <title>Sudan Pay | Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-</head>
-<body>
-<div class="app page">
-  <div class="card">
-    
-  <h2>SudanPay</h2>
-
-  <p id="balance" style="color:#00e676;font-size:18px;">
-    SDG 0
-  </p>
-
-  <button onclick="goSend()">إرسال أموال</button>
-  <button class="secondary" onclick="goProfile()">الملف الشخصي</button>
-  <button onclick="goStatement()">كشف حساب</button>
-  <button onclick="logout()" style="margin-top:15px;background:#ff5252;color:#fff;">
-  تسجيل الخروج
-  </button>
-</div>
-
-<script src="app.js"></script>
-<script type="module">
-  import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyB3vxJu_et-P80ek30I3MRdC_lGhooCCsc",
-    authDomain: "sudanpay-e332a.firebaseapp.com",
-    projectId: "sudanpay-e332a",
-    storageBucket: "sudanpay-e332a.firebasestorage.app",
-    messagingSenderId: "699809447272",
-    appId: "1:699809447272:web:90f3780ed6c768c4322add"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-
-  function logout() {
-    signOut(auth).then(() => {
-      window.location.href = "index.html";
-    });
-  }
-
-  // ⭐ مهم جداً
-  window.logout = logout;
-
-  onAuthStateChanged(auth, (user) => {
-    if (!user) {
-      window.location.href = "index.html";
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: #fff;
+      margin: 0;
+      padding: 0;
     }
-  });
 
-  function goProfile() {
-    location.href = "profile.html";
-  }
+    .container {
+      max-width: 420px;
+      margin: 40px auto;
+      background: rgba(255,255,255,0.1);
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      animation: fadeIn 0.8s ease-in-out;
+    }
 
-  window.goProfile = goProfile;
+    h2 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .balance {
+      text-align: center;
+      font-size: 26px;
+      font-weight: bold;
+      margin: 20px 0;
+      color: #00ffcc;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: transform 0.2s, opacity 0.2s;
+    }
+
+    button:hover {
+      transform: scale(1.03);
+      opacity: 0.9;
+    }
+
+    .primary { background: #00c853; color: #fff; }
+    .secondary { background: #2979ff; color: #fff; }
+    .warning { background: #ff9100; color: #fff; }
+    .danger { background: #ff5252; color: #fff; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <h2>لوحة التحكم</h2>
+    <p style="text-align:center;">مرحباً بك في Sudan Pay</p>
+
+    <div class="balance" id="balance">الرصيد: 0 SDG</div>
+
+    <button class="primary" onclick="goSend()">إرسال أموال</button>
+    <button class="secondary" onclick="goReceive()">استلام أموال</button>
+    <button class="warning" onclick="goStatement()">كشف حساب</button>
+    <button class="secondary" onclick="goProfile()">الملف الشخصي</button>
+
+    <button class="danger" onclick="logout()">تسجيل الخروج</button>
+  </div>
+
+  <!-- Firebase + Logic -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyB3vxJu_et-P80ek30I3MRdC_lGhooCCsc",
+      authDomain: "sudanpay-e332a.firebaseapp.com",
+      projectId: "sudanpay-e332a",
+      storageBucket: "sudanpay-e332a.appspot.com",
+      messagingSenderId: "699809447272",
+      appId: "1:699809447272:web:90f3780ed6c768c4322add"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // حماية الصفحة
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        window.location.href = "index.html";
+      }
+    });
+
+    // تنقل
+    function goSend() {
+      window.location.href = "send.html";
+    }
+
+    function goReceive() {
+      window.location.href = "receive.html";
+    }
+
+    function goStatement() {
+      window.location.href = "statement.html";
+    }
+
+    function goProfile() {
+      window.location.href = "profile.html";
+    }
+
+    function logout() {
+      signOut(auth).then(() => {
+        window.location.href = "index.html";
+      });
+    }
+
+    // ربط الدوال
+    window.goSend = goSend;
+    window.goReceive = goReceive;
+    window.goStatement = goStatement;
+    window.goProfile = goProfile;
+    window.logout = logout;
+
+    // رصيد وهمي مؤقت
+    document.getElementById("balance").innerText = "الرصيد: 12,500 SDG";
   </script>
+
+</body>
+  </html>
