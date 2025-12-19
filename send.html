@@ -1,94 +1,50 @@
 <!DOCTYPE html>
 <html lang="ar">
-<link rel="stylesheet" href="app.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <head>
   <meta charset="UTF-8">
-  <title>إرسال أموال | SudanPay</title>
-  <link rel="stylesheet" href="style.css">
+  <title>إرسال أموال</title>
 
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+  <link rel="stylesheet" href="app.css">
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
-  <div class="bottom-nav">
-  <a href="dashboard.html" class="active">الرئيسية</a>
-  <a href="send.html">إرسال</a>
-  <a href="receive.html">استلام</a>
-  <a href="statement.html">كشف</a>
-  <a href="profile.html">حسابي</a>
-  </div>
-  <script src="firebase.js"></script>
-  <script>
-  firebase.auth().onAuthStateChanged(function(user) {
-    if (!user) {
-      window.location.href = "index.html";
-    }
-  });
-  </script>
+
 <body>
-<div class="app page">
-  <div class="card">
-    
-  <h2>إرسال أموال</h2>
 
-  <input id="to" placeholder="إيميل المستلم">
-  <input id="amount" type="number" placeholder="المبلغ">
+<div class="app">
 
-  <button onclick="sendMoney()">إرسال</button>
-  <button onclick="back()">رجوع</button>
+  <div class="header">إرسال أموال</div>
 
-  <p id="msg"></p>
+  <div class="list-card">
+    <input id="to" placeholder="رقم المستلم"
+      style="width:100%;padding:12px;border-radius:12px;border:none;margin-bottom:10px">
+
+    <input id="amount" type="number" placeholder="المبلغ"
+      style="width:100%;padding:12px;border-radius:12px;border:none;margin-bottom:10px">
+
+    <button class="btn" onclick="sendMoney()">إرسال</button>
+  </div>
+
 </div>
 
-<script src="app.js"></script>
-<script type="module">
-import { getFirestore, doc, updateDoc, increment } 
-from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+<div class="bottom-nav">
+  <a href="dashboard.html"><i class="fa-solid fa-house"></i><br>الرئيسية</a>
+  <a class="active" href="send.html"><i class="fa-solid fa-paper-plane"></i><br>إرسال</a>
+  <a href="receive.html"><i class="fa-solid fa-wallet"></i><br>استلام</a>
+  <a href="statement.html"><i class="fa-solid fa-file-lines"></i><br>كشف</a>
+  <a href="profile.html"><i class="fa-solid fa-user"></i><br>حسابي</a>
+</div>
 
-const db = getFirestore();
+<script src="firebase.js"></script>
+<script>
+  firebase.auth().onAuthStateChanged(u=>{
+    if(!u) location.href="index.html"
+  })
 
-async function sendMoney() {
-  const amount = Number(document.getElementById("amount").value);
-  const userId = auth.currentUser.uid;
-
-  if(amount <= 0){
-    alert("مبلغ غير صحيح");
-    return;
+  function sendMoney(){
+    alert("إرسال الأموال الحقيقي سنفعّله في الخطوة القادمة");
   }
-
-  await updateDoc(doc(db, "users", userId), {
-    balance: increment(-amount)
-  });
-
-  alert("تم الإرسال بنجاح");
-  }
-  import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyB3vxJu_et-P80ek30I3MRdC_lGhooCCsc",
-    authDomain: "sudanpay-e332a.firebaseapp.com",
-    projectId: "sudanpay-e332a",
-    storageBucket: "sudanpay-e332a.firebasestorage.app",
-    messagingSenderId: "699809447272",
-    appId: "1:699809447272:web:90f3780ed6c768c4322add"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-
-  function logout() {
-    signOut(auth).then(() => {
-      window.location.href = "index.html";
-    });
-  }
-
-  window.logout = logout;
-
-  onAuthStateChanged(auth, (user) => {
-    if (!user) {
-      window.location.href = "index.html";
-    }
-  });
 </script>
+
+</body>
+                                                                          </html>
