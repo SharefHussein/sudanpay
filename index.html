@@ -3,21 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <title>Sudan Pay</title>
-
-  <!-- مهم للموبايل -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
     body {
       margin: 0;
-      padding: 0;
-      background: linear-gradient(135deg, #050b1e, #020617);
-      font-family: Arial, sans-serif;
-      color: #fff;
       height: 100vh;
+      background: linear-gradient(135deg, #020617, #050b1e);
+      font-family: Arial, sans-serif;
       display: flex;
       justify-content: center;
       align-items: center;
+      color: #fff;
     }
 
     .box {
@@ -25,8 +22,8 @@
       max-width: 360px;
       background: #0b1228;
       padding: 25px;
-      border-radius: 16px;
-      box-shadow: 0 0 40px rgba(0,0,0,0.6);
+      border-radius: 18px;
+      box-shadow: 0 20px 50px rgba(0,0,0,.6);
     }
 
     h2 {
@@ -38,49 +35,99 @@
       width: 100%;
       padding: 14px;
       margin-bottom: 12px;
-      border-radius: 10px;
+      border-radius: 12px;
       border: none;
-      outline: none;
       font-size: 15px;
     }
 
     button {
       width: 100%;
-      padding: 14px;
-      border-radius: 10px;
+      padding: 15px;
+      border-radius: 12px;
       border: none;
       font-size: 16px;
-      cursor: pointer;
       margin-top: 8px;
+      cursor: pointer;
+      color: #fff;
     }
 
     .login {
-      background: linear-gradient(90deg, #22c55e, #16a34a);
-      color: #fff;
+      background: linear-gradient(90deg,#22c55e,#16a34a);
     }
 
     .register {
-      background: linear-gradient(90deg, #0ea5e9, #2563eb);
-      color: #fff;
+      background: linear-gradient(90deg,#0ea5e9,#2563eb);
     }
   </style>
 </head>
+
 <body>
 
-  <div class="box">
-    <h2>Sudan Pay</h2>
+<div class="box">
+  <h2>Sudan Pay</h2>
 
-    <input id="email" type="email" placeholder="البريد الإلكتروني">
-    <input id="password" type="password" placeholder="كلمة المرور">
+  <input id="email" type="email" placeholder="البريد الإلكتروني">
+  <input id="password" type="password" placeholder="كلمة المرور">
 
-    <!-- مهم: type=button -->
-    <button class="login" type="button" onclick="login()">دخول</button>
-    <button class="register" type="button" onclick="register()">تسجيل جديد</button>
-  </div>
+  <button class="login" onclick="login()">دخول</button>
+  <button class="register" onclick="register()">تسجيل جديد</button>
+</div>
 
-  <!-- Firebase -->
-  <script type="module" src="firebase.js"></script>
-  <script type="module" src="auth.js"></script>
+<!-- Firebase -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import {
+    getAuth,
+    signInWithEmailAndPassword,
+    createUserWithEmailAndPassword
+  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyB3vxJu_et-P80ek30I3MRdC_lGhooCCsc",
+    authDomain: "sudanpay-e332a.firebaseapp.com",
+    projectId: "sudanpay-e332a",
+    storageBucket: "sudanpay-e332a.appspot.com",
+    messagingSenderId: "699809447272",
+    appId: "1:699809447272:web:90f3780ed6c768c4322add"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  window.login = function () {
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+
+    if (!email || !password) {
+      alert("أدخل البيانات");
+      return;
+    }
+
+    signInWithEmailAndPassword(auth, email, password)
+      .then(() => {
+        alert("تم الدخول");
+        window.location.href = "dashboard.html";
+      })
+      .catch(err => alert(err.message));
+  };
+
+  window.register = function () {
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+
+    if (!email || !password) {
+      alert("أدخل البيانات");
+      return;
+    }
+
+    createUserWithEmailAndPassword(auth, email, password)
+      .then(() => {
+        alert("تم إنشاء الحساب");
+        window.location.href = "dashboard.html";
+      })
+      .catch(err => alert(err.message));
+  };
+</script>
 
 </body>
-  </html>
+    </html>
