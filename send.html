@@ -1,21 +1,46 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
-<meta charset="UTF-8">
-<title>إرسال أموال</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>إرسال أموال</title>
+  <link rel="stylesheet" href="style.css">
+
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 </head>
 <body>
 
 <div class="card">
-<h2>إرسال أموال</h2>
+  <h2>إرسال أموال</h2>
 
-<input type="text" placeholder="رقم المستلم">
-<input type="number" placeholder="المبلغ">
+  <input id="to" placeholder="البريد المستلم">
+  <input id="amount" type="number" placeholder="المبلغ">
 
-<button class="btn">إرسال</button>
-<a class="link" href="dashboard.html">رجوع</a>
+  <button onclick="sendMoney()">إرسال</button>
+  <p id="msg"></p>
+
+  <a href="dashboard.html">رجوع</a>
 </div>
 
+<script src="app.js"></script>
+<script>
+auth.onAuthStateChanged(u => {
+  if (!u) location.href = "index.html";
+});
+
+function sendMoney() {
+  db.collection("transactions").add({
+    from: auth.currentUser.email,
+    to: to.value,
+    amount: amount.value,
+    type: "send",
+    time: new Date()
+  }).then(() => {
+    msg.innerText = "تم الإرسال بنجاح";
+  });
+}
+</script>
+
 </body>
-  </html>
+</html>
