@@ -1,81 +1,48 @@
 <!DOCTYPE html>
 <html lang="ar">
-<link rel="stylesheet" href="app.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <head>
   <meta charset="UTF-8">
-  <title>كشف الحساب | SudanPay</title>
-  <link rel="stylesheet" href="style.css">
+  <title>كشف الحساب</title>
 
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+  <link rel="stylesheet" href="app.css">
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
-  <div class="bottom-nav">
-  <a href="dashboard.html" class="active">الرئيسية</a>
-  <a href="send.html">إرسال</a>
-  <a href="receive.html">استلام</a>
-  <a href="statement.html">كشف</a>
-  <a href="profile.html">حسابي</a>
-  </div>
-  <script src="firebase.js"></script>
-  <script>
-  firebase.auth().onAuthStateChanged(function(user) {
-    if (!user) {
-      window.location.href = "index.html";
-    }
-  });
-  </script>
+
 <body>
-<div class="app page">
-  <div class="card">
-    
-  <h2>كشف الحساب</h2>
 
-  <table>
-    <thead>
-      <tr>
-        <th>التاريخ</th>
-        <th>الوقت</th>
-        <th>النوع</th>
-        <th>المبلغ</th>
-        <th>الطرف الآخر</th>
-      </tr>
-    </thead>
-    <tbody id="list"></tbody>
-  </table>
+<div class="app">
 
-  <button onclick="back()">رجوع</button>
+  <div class="header">كشف الحساب</div>
+
+  <div id="tx"></div>
+
 </div>
 
-<script src="app.js"></script>
-<script type="module">
-  import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+<div class="bottom-nav">
+  <a href="dashboard.html"><i class="fa-solid fa-house"></i><br>الرئيسية</a>
+  <a href="send.html"><i class="fa-solid fa-paper-plane"></i><br>إرسال</a>
+  <a href="receive.html"><i class="fa-solid fa-wallet"></i><br>استلام</a>
+  <a class="active" href="statement.html"><i class="fa-solid fa-file-lines"></i><br>كشف</a>
+  <a href="profile.html"><i class="fa-solid fa-user"></i><br>حسابي</a>
+</div>
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyB3vxJu_et-P80ek30I3MRdC_lGhooCCsc",
-    authDomain: "sudanpay-e332a.firebaseapp.com",
-    projectId: "sudanpay-e332a",
-    storageBucket: "sudanpay-e332a.firebasestorage.app",
-    messagingSenderId: "699809447272",
-    appId: "1:699809447272:web:90f3780ed6c768c4322add"
-  };
+<script src="firebase.js"></script>
+<script>
+  firebase.auth().onAuthStateChanged(u=>{
+    if(!u) location.href="index.html"
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-
-  function logout() {
-    signOut(auth).then(() => {
-      window.location.href = "index.html";
-    });
-  }
-
-  window.logout = logout;
-
-  onAuthStateChanged(auth, (user) => {
-    if (!user) {
-      window.location.href = "index.html";
-    }
-  });
+    firebase.database()
+      .ref("tx/"+u.uid)
+      .on("value", s=>{
+        let html=""
+        s.forEach(i=>{
+          html+=`<div class="list-card">${i.val().type} - ${i.val().amount} SDG</div>`
+        })
+        document.getElementById("tx").innerHTML = html || "لا توجد عمليات"
+      })
+  })
 </script>
+
+</body>
+    </html>
