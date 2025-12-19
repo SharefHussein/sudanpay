@@ -1,20 +1,63 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
-<meta charset="UTF-8">
-<title>SudanPay | الرئيسية</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>SudanPay | Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 </head>
-
 <body>
-<div class="card">
-<h1>SudanPay</h1>
-<p style="text-align:center;color:#22c55e">الرصيد: 15,000 SDG</p>
 
-<a class="menu-btn" href="send.html">إرسال أموال</a>
-<a class="menu-btn" href="receive.html">استلام أموال</a>
-<a class="menu-btn dark" href="statement.html">كشف حساب</a>
-<a class="menu-btn dark" href="index.html">تسجيل خروج</a>
+<div class="card">
+  <h2>SudanPay</h2>
+
+  <p id="balance" style="color:#00e676;font-size:18px;">
+    SDG 0
+  </p>
+
+  <button onclick="goSend()">إرسال أموال</button>
+  <button onclick="goStatement()">كشف حساب</button>
+  <button onclick="logout()" style="background:#d32f2f;">تسجيل خروج</button>
 </div>
+
+<script src="app.js"></script>
+<script>
+auth.onAuthStateChanged(user => {
+  if (!user) {
+    location.href = "index.html";
+  } else {
+    loadBalance();
+  }
+});
+
+function loadBalance() {
+  db.collection("balances").doc(auth.currentUser.email)
+    .get().then(doc => {
+      if (doc.exists) {
+        balance.innerText = "SDG " + doc.data().amount;
+      } else {
+        balance.innerText = "SDG 15,000";
+      }
+    });
+}
+
+function goSend() {
+  location.href = "send.html";
+}
+
+function goStatement() {
+  location.href = "statement.html";
+}
+
+function logout() {
+  auth.signOut().then(() => {
+    location.href = "index.html";
+  });
+}
+</script>
+
 </body>
-  </html>
+    </html>
