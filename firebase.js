@@ -1,17 +1,14 @@
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-<script>
-  var firebaseConfig = {
-    apiKey: "AIzaSyB3vxJu_et-P80ek30I3MRdC_lGhooCCsc",
-    authDomain: "sudanpay-e332a.firebaseapp.com",
-    projectId: "sudanpay-e332a",
-    databaseURL: "https://sudanpay-e332a-default-rtdb.firebaseio.com",
-    storageBucket: "sudanpay-e332a.appspot.com",
-    messagingSenderId: "699809447272",
-    appId: "1:699809447272:web:90f3780ed6c768c4322add"
-  };
+const firebaseConfig = {
+  apiKey: "AIzaSyB3vxJu_et-P80ek30I3MRdC_lGhooCCsc",
+  authDomain: "sudanpay-e332a.firebaseapp.com",
+  projectId: "sudanpay-e332a",
+  storageBucket: "sudanpay-e332a.appspot.com",
+  messagingSenderId: "699809447272",
+  appId: "1:699809447272:web:90f3780ed6c768c4322add"
+};
 
-  firebase.initializeApp(firebaseConfig);
-</script>
+export const app = initializeApp(firebaseConfig);
+export const auth = getAuth(app);
