@@ -2,49 +2,22 @@
 <html lang="ar">
 <head>
   <meta charset="UTF-8">
-  <title>إرسال أموال</title>
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sudan Pay - إرسال</title>
   <link rel="stylesheet" href="app.css">
-  <link rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 
 <body>
+  <div class="app">
+    <h3>إرسال أموال</h3>
 
-<div class="app">
+    <input type="text" id="to" placeholder="رقم المستلم">
+    <input type="number" id="amount" placeholder="المبلغ">
 
-  <div class="header">إرسال أموال</div>
-
-  <div class="list-card">
-    <input id="to" placeholder="رقم المستلم"
-      style="width:100%;padding:12px;border-radius:12px;border:none;margin-bottom:10px">
-
-    <input id="amount" type="number" placeholder="المبلغ"
-      style="width:100%;padding:12px;border-radius:12px;border:none;margin-bottom:10px">
-
-    <button class="btn" onclick="sendMoney()">إرسال</button>
+    <button onclick="sendMoney()">إرسال</button>
+    <button onclick="back()">رجوع</button>
   </div>
 
-</div>
-
-<div class="bottom-nav">
-  <a href="dashboard.html"><i class="fa-solid fa-house"></i><br>الرئيسية</a>
-  <a class="active" href="send.html"><i class="fa-solid fa-paper-plane"></i><br>إرسال</a>
-  <a href="receive.html"><i class="fa-solid fa-wallet"></i><br>استلام</a>
-  <a href="statement.html"><i class="fa-solid fa-file-lines"></i><br>كشف</a>
-  <a href="profile.html"><i class="fa-solid fa-user"></i><br>حسابي</a>
-</div>
-
-<script src="firebase.js"></script>
-<script>
-  firebase.auth().onAuthStateChanged(u=>{
-    if(!u) location.href="index.html"
-  })
-
-  function sendMoney(){
-    alert("إرسال الأموال الحقيقي سنفعّله في الخطوة القادمة");
-  }
-</script>
-
+  <script type="module" src="send.js"></script>
 </body>
-                                                                          </html>
+      </html> 
