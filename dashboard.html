@@ -1,53 +1,55 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sudan Pay</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sudan Pay - Dashboard</title>
+
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+
+<style>
+body {
+  background:#0b0f14;
+  color:white;
+  font-family:Arial;
+  padding:30px;
+}
+button {
+  padding:12px;
+  background:red;
+  color:white;
+  border:none;
+  border-radius:8px;
+}
+</style>
 </head>
+
 <body>
 
-<div class="app fade-in">
+<h2>مرحباً بك في Sudan Pay</h2>
+<button onclick="logout()">تسجيل خروج</button>
 
-  <div class="logo">
-    <span>S</span>
-  </div>
+<script>
+const firebaseConfig = {
+  apiKey: "PUT_YOUR_API_KEY",
+  authDomain: "PUT_YOUR_DOMAIN",
+  projectId: "PUT_PROJECT_ID",
+  appId: "PUT_APP_ID"
+};
 
-  <h1>سودان باي</h1>
-  <p class="subtitle">منصة التحويلات المالية والمحفظة الإلكترونية</p>
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
 
-  <h2 style="margin-bottom:20px">إنشاء حساب جديد</h2>
+auth.onAuthStateChanged(user=>{
+  if(!user) window.location.href="login.html";
+});
 
-  <div class="input-group">
-    <label>البريد الإلكتروني</label>
-    <input type="email" id="email" placeholder="example@email.com">
-  </div>
-
-  <div class="input-group">
-    <label>كلمة المرور</label>
-    <input type="password" id="password" placeholder="••••••">
-  </div>
-
-  <div class="input-group">
-    <label>الاسم (English)</label>
-    <input type="text" placeholder="John Doe">
-  </div>
-
-  <div class="input-group">
-    <label>الاسم (العربية)</label>
-    <input type="text" placeholder="محمد أحمد">
-  </div>
-
-  <button class="btn" id="registerBtn">
-    إنشاء حساب والبدء
-  </button>
-
-  <div class="link">
-    <a href="login.html">لديك حساب بالفعل؟ تسجيل الدخول</a>
-  </div>
-
-</div>
-
+function logout(){
+  auth.signOut().then(()=>{
+    window.location.href="login.html";
+  });
+}
+</script>
 </body>
-</html>
+</html> 
