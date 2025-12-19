@@ -1,8 +1,24 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+// Import Firebase core
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
 
-export const app = initializeApp({
-  apiKey: "ضع_apiKey_هنا",
-  authDomain: "PROJECT_ID.firebaseapp.com",
-  projectId: "PROJECT_ID",
-  appId: "APP_ID"
-});
+// Import Firebase Auth
+import { getAuth } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+
+// Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyB3vxJu_et-P80ek30I3MRdC_lGhooCCsc",
+  authDomain: "sudanpay-e332a.firebaseapp.com",
+  projectId: "sudanpay-e332a",
+  storageBucket: "sudanpay-e332a.appspot.com",
+  messagingSenderId: "699809447272",
+  appId: "1:699809447272:web:90f3780ed6c768c4322add"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+
+// Initialize Auth
+const auth = getAuth(app);
+
+// Export auth (لو عندك ملفات تانية)
+export { auth };
