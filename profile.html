@@ -1,33 +1,153 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-<meta charset="UTF-8">
-<title>الملف الشخصي</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
-body{font-family:Arial;background:#0f2027;color:#fff;margin:0}
-.box{max-width:400px;margin:40px auto;background:#1e2a38;padding:20px;border-radius:12px;text-align:center}
-.avatar{width:90px;height:90px;border-radius:50%;background:#00c853;margin:auto;line-height:90px;font-size:32px}
-p{margin:10px 0}
-button{padding:12px;width:100%;border:none;border-radius:8px;background:#2979ff;color:#fff}
-</style>
+  <meta charset="UTF-8">
+  <title>الملف الشخصي | Sudan Pay</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: "Segoe UI", sans-serif;
+      background: linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+      color: #fff;
+    }
+
+    .card {
+      max-width: 420px;
+      margin: 40px auto;
+      background: rgba(255,255,255,0.08);
+      padding: 25px;
+      border-radius: 18px;
+      box-shadow: 0 15px 40px rgba(0,0,0,.4);
+      backdrop-filter: blur(10px);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-size: 14px;
+      opacity: .9;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0 15px;
+      border-radius: 10px;
+      border: none;
+      outline: none;
+      font-size: 15px;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 12px;
+      background: #00c6ff;
+      background: linear-gradient(90deg,#00c6ff,#0072ff);
+      color: #fff;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      opacity: .9;
+    }
+
+    .back {
+      text-align: center;
+      margin-top: 15px;
+      opacity: .8;
+    }
+
+    .back a {
+      color: #00c6ff;
+      text-decoration: none;
+    }
+  </style>
 </head>
+
 <body>
 
-<div class="box">
-<div class="avatar">S</div>
-<h2>Sherif</h2>
-<p>رقم الحساب: 55892</p>
-<p>الحالة: مفعل ✅</p>
+  <div class="card">
+    <h2>الملف الشخصي (KYC)</h2>
 
-<button onclick="back()">رجوع</button>
-</div>
+    <label>الاسم الكامل</label>
+    <input id="name" placeholder="مثال: محمد أحمد">
 
-<script>
-function back(){
-  location.href="dashboard.html";
-}
-</script>
+    <label>رقم الهاتف</label>
+    <input id="phone" placeholder="+249...">
+
+    <label>الرقم الوطني / جواز</label>
+    <input id="idNumber">
+
+    <label>الدولة</label>
+    <select id="country">
+      <option value="Sudan">السودان</option>
+      <option value="Egypt">مصر</option>
+      <option value="UAE">الإمارات</option>
+    </select>
+
+    <button onclick="saveProfile()">حفظ البيانات</button>
+
+    <div class="back">
+      <a href="dashboard.html">← الرجوع للوحة التحكم</a>
+    </div>
+  </div>
+
+  <!-- Firebase -->
+  <script type="module">
+    import { getAuth, onAuthStateChanged }
+    from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+    import {
+      getFirestore,
+      doc,
+      setDoc,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    import { initializeApp }
+    from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyB3vxJu_et-P80ek30I3MRdC_lGhooCCsc",
+      authDomain: "sudanpay-e332a.firebaseapp.com",
+      projectId: "sudanpay-e332a",
+      storageBucket: "sudanpay-e332a.firebasestorage.app",
+      messagingSenderId: "699809447272",
+      appId: "1:699809447272:web:90f3780ed6c768c4322add"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    window.saveProfile = async function () {
+      const user = auth.currentUser;
+      if (!user) {
+        alert("الرجاء تسجيل الدخول");
+        return;
+      }
+
+      await setDoc(doc(db, "users", user.uid), {
+        name: name.value,
+        phone: phone.value,
+        idNumber: idNumber.value,
+        country: country.value,
+        kycStatus: "pending",
+        updatedAt: serverTimestamp()
+      }, { merge: true });
+
+      alert("تم حفظ البيانات بنجاح ✔️");
+    };
+  </script>
 
 </body>
-</html>
+  </html>
