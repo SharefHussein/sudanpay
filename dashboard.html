@@ -3,9 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <title>Sudan Pay</title>
+
   <link rel="stylesheet" href="app.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
+
 <body>
 
 <div class="app">
@@ -13,52 +16,67 @@
   <!-- Header -->
   <div class="header">
     الرصيد الكلي
-    <div class="balance-binance" id="balance">...</div>
+    <div class="balance-binance" id="balance">0 SDG</div>
   </div>
 
-  <!-- Quick Actions -->
+  <!-- Actions -->
   <div class="actions">
-    <div class="action-btn" onclick="location.href='send.html'">
+    <div class="action-btn" onclick="go('send.html')">
       <i class="fa-solid fa-paper-plane"></i>
       إرسال
     </div>
-    <div class="action-btn" onclick="location.href='receive.html'">
+
+    <div class="action-btn" onclick="go('receive.html')">
       <i class="fa-solid fa-wallet"></i>
       استلام
     </div>
   </div>
 
-  <!-- Section -->
+  <!-- Services -->
   <div class="section-title">الخدمات</div>
 
-  <div class="list-card" onclick="location.href='statement.html'">
-    <i class="fa-solid fa-file-lines"></i> كشف الحساب
+  <div class="list-card" onclick="go('statement.html')">
+    <i class="fa-solid fa-file-lines"></i>
+    كشف الحساب
   </div>
 
 </div>
 
-<!-- Bottom Nav -->
+<!-- Bottom Navigation -->
 <div class="bottom-nav">
-  <a href="dashboard.html" class="active"><i class="fa-solid fa-house"></i><br>الرئيسية</a>
-  <a href="send.html"><i class="fa-solid fa-paper-plane"></i><br>إرسال</a>
-  <a href="receive.html"><i class="fa-solid fa-wallet"></i><br>استلام</a>
-  <a href="statement.html"><i class="fa-solid fa-file-lines"></i><br>كشف</a>
-  <a href="profile.html"><i class="fa-solid fa-user"></i><br>حسابي</a>
+  <a class="active" href="dashboard.html">
+    <i class="fa-solid fa-house"></i><br>الرئيسية
+  </a>
+  <a href="send.html">
+    <i class="fa-solid fa-paper-plane"></i><br>إرسال
+  </a>
+  <a href="receive.html">
+    <i class="fa-solid fa-wallet"></i><br>استلام
+  </a>
+  <a href="statement.html">
+    <i class="fa-solid fa-file-lines"></i><br>كشف
+  </a>
+  <a href="profile.html">
+    <i class="fa-solid fa-user"></i><br>حسابي
+  </a>
 </div>
 
 <script src="firebase.js"></script>
+
 <script>
-  firebase.auth().onAuthStateChanged(function(user){
-    if(!user){ location.href="index.html"; }
+  function go(p){ location.href = p }
+
+  firebase.auth().onAuthStateChanged(user=>{
+    if(!user){ location.href="index.html"; return }
 
     firebase.database()
       .ref("users/"+user.uid+"/balance")
       .on("value", s=>{
         document.getElementById("balance").innerText =
-          (s.val() || 0) + " SDG";
-      });
-  });
+          (s.val() || 0) + " SDG"
+      })
+  })
 </script>
 
 </body>
-                        </html>
+  </html>
