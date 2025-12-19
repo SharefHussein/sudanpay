@@ -1,1 +1,78 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sudan Pay | إنشاء حساب</title>
 
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+
+<style>
+body{
+  margin:0;
+  background:#0d1117;
+  font-family:Arial;
+  color:white;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+}
+.box{
+  width:90%;
+  max-width:380px;
+}
+input,button{
+  width:100%;
+  padding:14px;
+  margin:10px 0;
+  border-radius:8px;
+  border:none;
+}
+button{
+  background:#1f6feb;
+  color:white;
+  font-size:16px;
+}
+</style>
+</head>
+
+<body>
+<div class="box">
+<h2>إنشاء حساب</h2>
+
+<input id="email" type="email" placeholder="الإيميل">
+<input id="password" type="password" placeholder="كلمة المرور">
+
+<button onclick="register()">إنشاء حساب</button>
+
+<p onclick="goLogin()" style="cursor:pointer;color:#1f6feb">
+لديك حساب؟ تسجيل دخول
+</p>
+</div>
+
+<script>
+var firebaseConfig = {
+  apiKey: "PUT_API_KEY",
+  authDomain: "PUT_DOMAIN",
+  projectId: "PUT_PROJECT_ID",
+  appId: "PUT_APP_ID"
+};
+firebase.initializeApp(firebaseConfig);
+
+function register(){
+  firebase.auth().createUserWithEmailAndPassword(
+    email.value,
+    password.value
+  ).then(()=>{
+    window.location.href="dashboard.html";
+  }).catch(e=>alert(e.message));
+}
+
+function goLogin(){
+  window.location.href="login.html";
+}
+</script>
+</body>
+  </html>
