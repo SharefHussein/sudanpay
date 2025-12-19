@@ -2,56 +2,78 @@
 <html lang="ar">
 <head>
   <meta charset="UTF-8">
-  <title>SudanPay - كشف الحساب</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>كشف الحساب | SudanPay</title>
+  <link rel="stylesheet" href="style.css">
+
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 </head>
+<body>
 
-<body style="margin:0;font-family:Arial;background:#0b1220;color:white">
+<div class="card">
+  <h2>كشف الحساب</h2>
 
-  <!-- Header -->
-  <div style="background:#111827;padding:15px;text-align:center;font-size:20px">
-    كشف الحساب
-  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>التاريخ</th>
+        <th>الوقت</th>
+        <th>النوع</th>
+        <th>المبلغ</th>
+        <th>الطرف الآخر</th>
+      </tr>
+    </thead>
+    <tbody id="list"></tbody>
+  </table>
 
-  <!-- Content -->
-  <div style="padding:15px">
+  <button onclick="back()">رجوع</button>
+</div>
 
-    <div style="background:#1f2937;padding:15px;border-radius:10px;margin-bottom:10px">
-      <div>📥 استلام أموال</div>
-      <div style="color:#22c55e">+ 50,000 SDG</div>
-      <div style="font-size:12px;color:#9ca3af">2025-01-10</div>
-    </div>
+<script src="app.js"></script>
+<script>
+auth.onAuthStateChanged(user => {
+  if (!user) {
+    location.href = "index.html";
+    return;
+  }
 
-    <div style="background:#1f2937;padding:15px;border-radius:10px;margin-bottom:10px">
-      <div>📤 إرسال أموال</div>
-      <div style="color:#ef4444">- 20,000 SDG</div>
-      <div style="font-size:12px;color:#9ca3af">2025-01-09</div>
-    </div>
+  const email = user.email;
 
-    <div style="background:#1f2937;padding:15px;border-radius:10px;margin-bottom:10px">
-      <div>📥 استلام أموال</div>
-      <div style="color:#22c55e">+ 10,000 SDG</div>
-      <div style="font-size:12px;color:#9ca3af">2025-01-08</div>
-    </div>
+  db.collection("transactions")
+    .orderBy("time", "desc")
+    .onSnapshot(snapshot => {
+      list.innerHTML = "";
 
-    <button onclick="back()" style="
-      width:100%;
-      margin-top:20px;
-      padding:12px;
-      background:#22c55e;
-      border:none;
-      border-radius:8px;
-      font-size:16px">
-      رجوع
-    </button>
+      snapshot.forEach(doc => {
+        const t = doc.data();
 
-  </div>
+        if (t.from === email || t.to === email) {
+          const date = t.time.toDate();
+          const d = date.toLocaleDateString();
+          const tm = date.toLocaleTimeString();
 
-  <script>
-    function back(){
-      window.location.href = "dashboard.html";
-    }
-  </script>
+          const type = t.from === email ? "إرسال ⬆️" : "استلام ⬇️";
+          const other = t.from === email ? t.to : t.from;
+
+          list.innerHTML += `
+            <tr>
+              <td>${d}</td>
+              <td>${tm}</td>
+              <td>${type}</td>
+              <td>${t.amount} SDG</td>
+              <td>${other}</td>
+            </tr>
+          `;
+        }
+      });
+    });
+});
+
+function back() {
+  location.href = "dashboard.html";
+}
+</script>
 
 </body>
-      </html>
+    </html>
