@@ -1,53 +1,84 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sudan Pay</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sudan Pay - إنشاء حساب</title>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+
+  <style>
+    body {
+      background:#0b0f14;
+      color:white;
+      font-family:Arial;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      height:100vh;
+    }
+    .box {
+      width:90%;
+      max-width:400px;
+    }
+    input, button {
+      width:100%;
+      padding:14px;
+      margin:10px 0;
+      border-radius:10px;
+      border:none;
+      font-size:16px;
+    }
+    button {
+      background:#1e90ff;
+      color:white;
+      cursor:pointer;
+    }
+  </style>
 </head>
+
 <body>
+  <div class="box">
+    <h2>إنشاء حساب جديد</h2>
 
-<div class="app fade-in">
+    <input id="email" type="email" placeholder="البريد الإلكتروني">
+    <input id="password" type="password" placeholder="كلمة المرور">
 
-  <div class="logo">
-    <span>S</span>
+    <button onclick="register()">إنشاء حساب</button>
+
+    <p onclick="goLogin()" style="cursor:pointer;color:#1e90ff">
+      لديك حساب؟ تسجيل الدخول
+    </p>
   </div>
 
-  <h1>سودان باي</h1>
-  <p class="subtitle">منصة التحويلات المالية والمحفظة الإلكترونية</p>
+<script>
+  // 🔑 Firebase config (بدّلها بمفاتيحك الحقيقية)
+  const firebaseConfig = {
+    apiKey: "PUT_YOUR_API_KEY",
+    authDomain: "PUT_YOUR_DOMAIN",
+    projectId: "PUT_PROJECT_ID",
+    appId: "PUT_APP_ID"
+  };
 
-  <h2 style="margin-bottom:20px">إنشاء حساب جديد</h2>
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
 
-  <div class="input-group">
-    <label>البريد الإلكتروني</label>
-    <input type="email" id="email" placeholder="example@email.com">
-  </div>
+  function register() {
+    const email = email.value;
+    const password = password.value;
 
-  <div class="input-group">
-    <label>كلمة المرور</label>
-    <input type="password" id="password" placeholder="••••••">
-  </div>
+    auth.createUserWithEmailAndPassword(email, password)
+      .then(() => {
+        window.location.href = "dashboard.html";
+      })
+      .catch(err => alert(err.message));
+  }
 
-  <div class="input-group">
-    <label>الاسم (English)</label>
-    <input type="text" placeholder="John Doe">
-  </div>
-
-  <button class="btn-primary" onclick="goToDashboard()">
-  إنشاء حساب والبدء
-  </button> 
-
-  <div class="link">
-    <a href="login.html">لديك حساب بالفعل؟ تسجيل الدخول</a>
-  </div>
-
-</div>
-
+  function goLogin() {
+    window.location.href = "login.html";
+  }
+</script>
 </body>
   </html>
-  <script>
-  function goToDashboard() {
-    window.location.href = "dashboard.html";
-  }
-  </script>
