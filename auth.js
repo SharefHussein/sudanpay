@@ -33,6 +33,7 @@ window.register = function () {
 
   createUserWithEmailAndPassword(auth, email, password)
     .then(() => {
+      alert("تم إنشاء الحساب");
       window.location.href = "dashboard.html";
     })
     .catch((error) => {
