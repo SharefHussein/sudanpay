@@ -105,7 +105,6 @@
 
     signInWithEmailAndPassword(auth, email, password)
       .then(() => {
-        alert("تم الدخول");
         window.location.href = "dashboard.html";
       })
       .catch(err => alert(err.message));
