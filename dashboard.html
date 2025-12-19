@@ -80,7 +80,18 @@
       window.location.href = "index.html";
     }
   });
-  </script>
+  <script>
+  firebase.auth().onAuthStateChanged(function(user) {
+    if (user) {
+      firebase.database()
+        .ref("users/" + user.uid + "/balance")
+        .on("value", function(snapshot) {
+          document.getElementById("balance").innerText =
+            "الرصيد: " + (snapshot.val() || 0) + " SDG";
+        });
+    }
+  });
+</script> 
 <body>
 
   <div class="container">
