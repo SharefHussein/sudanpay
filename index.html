@@ -34,14 +34,9 @@
     <input type="text" placeholder="John Doe">
   </div>
 
-  <div class="input-group">
-    <label>الاسم (العربية)</label>
-    <input type="text" placeholder="محمد أحمد">
-  </div>
-
-  <button class="btn" id="registerBtn">
-    إنشاء حساب والبدء
-  </button>
+  <button class="btn-primary" onclick="goToDashboard()">
+  إنشاء حساب والبدء
+  </button> 
 
   <div class="link">
     <a href="login.html">لديك حساب بالفعل؟ تسجيل الدخول</a>
@@ -51,3 +46,8 @@
 
 </body>
   </html>
+  <script>
+  function goToDashboard() {
+    window.location.href = "dashboard.html";
+  }
+  </script>
