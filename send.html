@@ -26,6 +26,26 @@
 
 <script src="app.js"></script>
 <script type="module">
+import { getFirestore, doc, updateDoc, increment } 
+from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const db = getFirestore();
+
+async function sendMoney() {
+  const amount = Number(document.getElementById("amount").value);
+  const userId = auth.currentUser.uid;
+
+  if(amount <= 0){
+    alert("مبلغ غير صحيح");
+    return;
+  }
+
+  await updateDoc(doc(db, "users", userId), {
+    balance: increment(-amount)
+  });
+
+  alert("تم الإرسال بنجاح");
+  }
   import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
   import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
 
