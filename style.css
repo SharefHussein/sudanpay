@@ -1,36 +1,103 @@
+:root {
+  --bg: #0f172a;
+  --card: #111827;
+  --primary: #22c55e;
+  --secondary: #334155;
+  --text: #e5e7eb;
+  --muted: #94a3b8;
+}
+
+* {
+  box-sizing: border-box;
+}
+
 body {
-  background:#0d1117;
-  color:#fff;
-  font-family: system-ui;
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont;
+  background: var(--bg);
+  color: var(--text);
 }
 
-.container {
-  max-width:360px;
-  margin:60px auto;
-  padding:20px;
+.app {
+  max-width: 420px;
+  margin: auto;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
+/* Top bar */
+.header {
+  padding: 16px;
+  background: #020617;
+  text-align: center;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+/* Content */
+.content {
+  flex: 1;
+  padding: 16px;
+}
+
+/* Cards */
+.card {
+  background: var(--card);
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+/* Balance */
+.balance {
+  font-size: 28px;
+  font-weight: bold;
+  color: var(--primary);
+}
+
+/* Buttons */
+.btn {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  margin-top: 10px;
+  background: var(--primary);
+  border: none;
+  border-radius: 14px;
+  color: #052e16;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.btn.secondary {
+  background: var(--secondary);
+  color: var(--text);
+}
+
+/* Inputs */
 input {
-  width:100%;
-  padding:12px;
-  margin:8px 0;
-  border-radius:8px;
-  border:none;
+  width: 100%;
+  padding: 14px;
+  margin-top: 10px;
+  border-radius: 14px;
+  border: none;
+  background: #020617;
+  color: var(--text);
 }
 
-button, .btn {
-  display:block;
-  width:100%;
-  text-align:center;
-  background:#2389ff;
-  color:#fff;
-  padding:12px;
-  margin:10px 0;
-  border-radius:10px;
-  text-decoration:none;
-  border:none;
+/* Transactions */
+.tx {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid #1e293b;
 }
 
-.secondary {
-  background:#444;
+.tx.in {
+  color: #22c55e;
 }
+
+.tx.out {
+  color: #ef4444;
+  }
