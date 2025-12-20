@@ -28,7 +28,11 @@ window.sendMoney = async function () {
     alert("غير مسجل دخول");
     return;
   }
-
+// حد أقصى للتحويل
+if (amount > 500000) {
+  alert("الحد الأقصى للتحويل 500,000");
+  return;
+}
   try {
     // البحث عن المستلم بالإيميل
     const q = query(collection(db, "users"), where("email", "==", toEmail));
