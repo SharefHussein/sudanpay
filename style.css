@@ -132,3 +132,25 @@ input {
 .notif.warning {
   background: #f39c12;
   }
+.header {
+  background: #1e88e5;
+  color: white;
+  padding: 15px;
+  text-align: center;
+}
+
+.footer {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.features li {
+  margin: 10px 0;
+  font-size: 18px;
+}
+
+@media (max-width: 600px) {
+  .container {
+    padding: 10px;
+  }
+}
