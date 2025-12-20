@@ -1,13 +1,22 @@
 <!DOCTYPE html>
-<html>
+<html lang="ar">
 <head>
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>كشف الحساب</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
 <div class="container">
-  <h2>قيد التطوير</h2>
-  <a class="btn" href="dashboard.html">رجوع</a>
+  <h2>كشف الحساب</h2>
+
+  <ul id="transactions"></ul>
+
+  <a href="dashboard.html" class="btn secondary">رجوع</a>
 </div>
+
+<script type="module" src="firebase.js"></script>
+<script type="module" src="statement.js"></script>
 </body>
 </html>
