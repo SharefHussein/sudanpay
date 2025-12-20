@@ -65,11 +65,12 @@ window.sendMoney = async function () {
 
       // تسجيل العملية
       await addDoc(collection(db, "transactions"), {
-        from: sender.email,
-        to: toEmail,
-        amount: amount,
-        createdAt: serverTimestamp()
-      });
+  from: sender.email,
+  to: toEmail,
+  amount,
+  participants: [sender.email, toEmail],
+  createdAt: serverTimestamp()
+});
     });
 
     alert("تم الإرسال بنجاح");
