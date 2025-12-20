@@ -101,3 +101,34 @@ input {
 .tx.out {
   color: #ef4444;
   }
+.notif {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: #1e90ff;
+  color: #fff;
+  padding: 12px 18px;
+  border-radius: 8px;
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: all 0.3s ease;
+  z-index: 9999;
+  font-size: 14px;
+}
+
+.notif.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.notif.error {
+  background: #e74c3c;
+}
+
+.notif.success {
+  background: #2ecc71;
+}
+
+.notif.warning {
+  background: #f39c12;
+  }
