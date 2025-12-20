@@ -1,4 +1,5 @@
 // auth.js
+import { notify } from "./notifications.js";
 import { auth, db } from "./firebase.js";
 
 import {
