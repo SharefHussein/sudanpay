@@ -1,37 +1,44 @@
-// statement.js
 import { auth, db } from "./firebase.js";
-
 import {
   collection,
   query,
   where,
-  getDocs,
-  orderBy
+  getDocs
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 auth.onAuthStateChanged(async (user) => {
   if (!user) {
-    window.location.href = "login.html";
+    location.href = "login.html";
     return;
   }
 
+  const list = document.getElementById("transactions");
+  list.innerHTML = "";
+
   const q = query(
     collection(db, "transactions"),
-    where("from", "==", user.email)
+    where("participants", "array-contains", user.email)
   );
 
   const snap = await getDocs(q);
-  const list = document.getElementById("transactions");
 
   if (snap.empty) {
-    list.innerHTML = "<li>لا توجد عمليات</li>";
+    list.innerHTML = "<p>لا توجد عمليات</p>";
     return;
   }
 
   snap.forEach(doc => {
     const t = doc.data();
-    const li = document.createElement("li");
-    li.innerText = `أرسلت ${t.amount} SDG إلى ${t.to}`;
-    list.appendChild(li);
+    const div = document.createElement("div");
+
+    if (t.to === user.email) {
+      div.className = "tx in";
+      div.innerText = `+ ${t.amount} من ${t.from}`;
+    } else {
+      div.className = "tx out";
+      div.innerText = `- ${t.amount} إلى ${t.to}`;
+    }
+
+    list.appendChild(div);
   });
 });
