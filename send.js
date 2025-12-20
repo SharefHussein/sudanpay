@@ -33,7 +33,9 @@ if (amount > 500000) {
   alert("الحد الأقصى للتحويل 500,000");
   return;
 }
-  try {
+  try  notify("تم التحويل بنجاح 💸");
+  {
+  
     // البحث عن المستلم بالإيميل
     const q = query(collection(db, "users"), where("email", "==", toEmail));
     const snap = await getDocs(q);
@@ -81,6 +83,6 @@ if (amount > 500000) {
     window.location.href = "dashboard.html";
 
   } catch (error) {
-    alert(error.message);
+    notify("فشل التحويل ❌", "error");
   }
 };
