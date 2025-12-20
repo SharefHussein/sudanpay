@@ -6,41 +6,53 @@
   <title>Sudan Pay</title>
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-<!-- ====== HEADER ====== -->
-<header class="main-header">
-  <div class="logo">Sudan Pay</div>
+  <!-- الهيدر الموحد -->
+  <div id="header"></div>
 
-  <nav class="nav">
-    <a href="index.html">الرئيسية</a>
-    <a href="about.html">عنا</a>
-    <a href="how-it-works.html">كيف يعمل</a>
-    <a href="features.html">المميزات</a>
-    <a href="pricing.html">التسعير</a>
-    <a href="login.html" class="btn">تسجيل الدخول</a>
-  </nav>
-</header>
+  <!-- المحتوى الرئيسي -->
+  <main class="container home">
 
-<!-- ====== MAIN CONTENT ====== -->
-<main class="container">
-  <h1>سودان باي</h1>
-  <p>منصة التحويلات المالية والمحفظة الإلكترونية في السودان</p>
+    <section class="hero">
+      <img src="logo.png" alt="Sudan Pay" class="logo-img">
 
-  <a href="login.html" class="btn">الدخول</a>
-  <a href="register.html" class="btn secondary">إنشاء حساب</a>
-</main>
+      <h1>Sudan Pay</h1>
+      <p class="subtitle">
+        منصة التحويلات المالية والمحفظة الإلكترونية داخل السودان
+      </p>
 
-<!-- ====== FOOTER ====== -->
-<footer class="main-footer">
-  <div class="footer-links">
-    <a href="privacy.html">سياسة الخصوصية</a>
-    <a href="terms.html">شروط الاستخدام</a>
-    <a href="license.html">الترخيص</a>
-  </div>
+      <div class="actions">
+        <a href="login.html" class="btn primary">تسجيل الدخول</a>
+        <a href="register.html" class="btn secondary">إنشاء حساب</a>
+      </div>
+    </section>
 
-  <p>© 2025 Sudan Pay — جميع الحقوق محفوظة</p>
-</footer>
+    <section class="features">
+      <div class="feature">
+        <h3>⚡ تحويل فوري</h3>
+        <p>حوّل أموالك خلال ثواني بأمان كامل</p>
+      </div>
 
-  </body>
+      <div class="feature">
+        <h3>🔒 أمان عالي</h3>
+        <p>حماية باستخدام Firebase وتقنيات حديثة</p>
+      </div>
+
+      <div class="feature">
+        <h3>📱 متوافق مع الموبايل</h3>
+        <p>تجربة استخدام مثل التطبيق</p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- الفوتر الموحد -->
+  <div id="footer"></div>
+
+  <!-- تحميل الهيدر والفوتر -->
+  <script src="layout.js"></script>
+
+</body>
 </html>
