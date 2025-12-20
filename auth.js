@@ -1,84 +1,95 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+// auth.js
+import { auth, db } from "./firebase.js";
+
 import {
-  getAuth,
-  signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
-  onAuthStateChanged,
-  signOut
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-// 🔹 إعدادات Firebase (زي ما هي عندك)
-const firebaseConfig = {
-  apiKey: "AIzaSyB3vxJu_et-P80ek30I3MRdC_lGhooCCsc",
-  authDomain: "sudanpay-e332a.firebaseapp.com",
-  projectId: "sudanpay-e332a",
-  storageBucket: "sudanpay-e332a.appspot.com",
-  messagingSenderId: "699809447272",
-  appId: "1:699809447272:web:90f3780ed6c768c4322add"
-};
+import {
+  doc,
+  setDoc,
+  getDoc,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-// 🔹 تهيئة Firebase
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-
-/* =========================
-   🔐 تسجيل الدخول
-========================= */
-window.login = function () {
+// =======================
+// Register (إنشاء حساب)
+// =======================
+window.register = async function () {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 
   if (!email || !password) {
-    alert("اكتب البريد وكلمة المرور");
+    alert("أدخل الإيميل وكلمة المرور");
     return;
   }
 
-  signInWithEmailAndPassword(auth, email, password)
-    .then(() => {
-      window.location.href = "dashboard.html";
-    })
-    .catch((error) => {
-      alert(error.message);
+  try {
+    const cred = await createUserWithEmailAndPassword(auth, email, password);
+    const user = cred.user;
+
+    // إنشاء Wallet تلقائي
+    await setDoc(doc(db, "users", user.uid), {
+      email: user.email,
+      balance: 0,
+      createdAt: serverTimestamp()
     });
+
+    window.location.href = "dashboard.html";
+  } catch (error) {
+    alert(error.message);
+  }
 };
 
-/* =========================
-   🆕 إنشاء حساب
-========================= */
-window.register = function () {
+// =======================
+// Login (تسجيل دخول)
+// =======================
+window.login = async function () {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 
   if (!email || !password) {
-    alert("اكتب البريد وكلمة المرور");
+    alert("أدخل الإيميل وكلمة المرور");
     return;
   }
 
-  createUserWithEmailAndPassword(auth, email, password)
-    .then(() => {
-      window.location.href = "dashboard.html";
-    })
-    .catch((error) => {
-      alert(error.message);
-    });
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+    window.location.href = "dashboard.html";
+  } catch (error) {
+    alert(error.message);
+  }
 };
 
-/* =========================
-   🚪 تسجيل خروج
-========================= */
-window.logout = function () {
-  signOut(auth).then(() => {
-    window.location.href = "login.html";
-  });
+// =======================
+// Logout (تسجيل خروج)
+// =======================
+window.logout = async function () {
+  await signOut(auth);
+  window.location.href = "login.html";
 };
 
-/* =========================
-   🛡️ حماية الصفحات
-========================= */
-onAuthStateChanged(auth, (user) => {
-  const page = window.location.pathname;
+// =======================
+// حماية الصفحات
+// =======================
+onAuthStateChanged(auth, async (user) => {
+  const path = window.location.pathname;
 
-  if (!user && !page.includes("login") && !page.includes("register") && !page.includes("index")) {
+  if (!user && path.includes("dashboard")) {
     window.location.href = "login.html";
+    return;
+  }
+
+  if (user && path.includes("dashboard")) {
+    // جلب الرصيد
+    const snap = await getDoc(doc(db, "users", user.uid));
+    if (snap.exists()) {
+      const balance = snap.data().balance;
+      const el = document.getElementById("balance");
+      if (el) el.innerText = balance + " SDG";
+    }
   }
 });
