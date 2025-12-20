@@ -8,23 +8,23 @@
 </head>
 <body>
 
-<div class="app">
-  <div class="header">Sudan Pay</div>
+  <div class="dashboard">
 
-  <div class="content">
-    <div class="card">
-      <div>الرصيد الحالي</div>
-      <div class="balance" id="balance">0</div>
+    <h2>لوحة التحكم</h2>
+
+    <div class="balance-box">
+      <p>الرصيد الحالي</p>
+      <h1 id="balance">0</h1>
     </div>
 
-    <div class="card">
-      <button class="btn" onclick="location.href='send.html'">إرسال أموال</button>
-      <button class="btn secondary" onclick="location.href='receive.html'">استلام أموال</button>
-      <button class="btn secondary" onclick="location.href='statement.html'">كشف حساب</button>
-      <button class="btn secondary" onclick="location.href='profile.html'">الملف الشخصي</button>
+    <div class="dashboard-actions">
+      <a href="send.html">إرسال أموال</a>
+      <a href="receive.html">استلام أموال</a>
+      <a href="statement.html">كشف حساب</a>
+      <a href="profile.html" class="secondary">الملف الشخصي</a>
+      <button onclick="logout()" class="danger">تسجيل خروج</button>
     </div>
 
-    <button class="btn secondary" onclick="logout()">تسجيل خروج</button>
   </div>
 
   <script type="module" src="firebase.js"></script>
