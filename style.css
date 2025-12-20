@@ -236,4 +236,83 @@ nav a {
     margin-left: 10px;
     font-size: 14px;
   }
+  /* ================= DASHBOARD ================= */
+
+.dashboard {
+  max-width: 600px;
+  margin: 40px auto;
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+
+.dashboard h2 {
+  margin-bottom: 10px;
+}
+
+.balance-box {
+  background: linear-gradient(135deg, #0ea5e9, #0284c7);
+  color: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 30px;
+}
+
+.balance-box p {
+  color: #e0f2fe;
+  font-size: 14px;
+}
+
+.balance-box h1 {
+  font-size: 32px;
+  margin-top: 10px;
+}
+
+.dashboard-actions {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+}
+
+.dashboard-actions a,
+.dashboard-actions button {
+  background: #0ea5e9;
+  color: #ffffff;
+  border: none;
+  padding: 14px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.dashboard-actions a:hover,
+.dashboard-actions button:hover {
+  background: #0284c7;
+}
+
+.dashboard-actions .secondary {
+  background: #e5e7eb;
+  color: #111827;
+}
+
+.dashboard-actions .secondary:hover {
+  background: #d1d5db;
+}
+
+.dashboard-actions .danger {
+  background: #ef4444;
+}
+
+.dashboard-actions .danger:hover {
+  background: #dc2626;
+}
+
+/* موبايل */
+@media (max-width: 500px) {
+  .dashboard-actions {
+    grid-template-columns: 1fr;
+  }
   } 
