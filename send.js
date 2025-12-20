@@ -1,6 +1,6 @@
 // send.js
 import { auth, db } from "./firebase.js";
-
+import { notify } from "./notifications.js";
 import {
   doc,
   getDoc,
