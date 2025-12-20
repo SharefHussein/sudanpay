@@ -1,11 +1,14 @@
-// receive.js
 import { auth } from "./firebase.js";
 
 auth.onAuthStateChanged(user => {
   if (!user) {
-    window.location.href = "login.html";
+    location.href = "login.html";
     return;
   }
 
-  document.getElementById("email").innerText = user.email;
+  const email = user.email;
+  document.getElementById("email").innerText = email;
+
+  const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(email)}`;
+  document.getElementById("qr").src = qrUrl;
 });
