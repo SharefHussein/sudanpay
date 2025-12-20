@@ -1,13 +1,25 @@
 <!DOCTYPE html>
-<html>
+<html lang="ar">
 <head>
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>إرسال أموال</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
 <div class="container">
-  <h2>قيد التطوير</h2>
-  <a class="btn" href="dashboard.html">رجوع</a>
+  <h2>إرسال أموال</h2>
+
+  <input id="toEmail" type="email" placeholder="إيميل المستلم">
+  <input id="amount" type="number" placeholder="المبلغ">
+
+  <button onclick="sendMoney()">إرسال</button>
+
+  <a href="dashboard.html" class="btn secondary">رجوع</a>
 </div>
+
+<script type="module" src="firebase.js"></script>
+<script type="module" src="send.js"></script>
 </body>
-</html>
+    </html>
