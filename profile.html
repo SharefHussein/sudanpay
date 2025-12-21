@@ -8,23 +8,23 @@
 </head>
 <body>
 
-<div class="app">
-  <div class="header">الملف الشخصي</div>
+<div class="page">
+  <h2>الملف الشخصي</h2>
 
-  <div class="content">
-    <div class="card">
-      <p>البريد الإلكتروني</p>
-      <strong id="email">---</strong>
-    </div>
+  <div class="card">
+    <p><strong>البريد الإلكتروني</strong></p>
+    <p id="email"></p>
 
-    <div class="card">
-      <p>الرصيد</p>
-      <div class="balance" id="balance">0</div>
-    </div>
+    <p><strong>الرصيد</strong></p>
+    <p id="balance">0</p>
 
-    <button class="btn secondary" onclick="location.href='dashboard.html'">رجوع</button>
+    <a href="dashboard.html">
+      <button class="btn btn-secondary">رجوع</button>
+    </a>
   </div>
 </div>
+
+</body>
 
 <script type="module" src="firebase.js"></script>
 <script type="module" src="profile.js"></script>
