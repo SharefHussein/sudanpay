@@ -30,19 +30,24 @@
     </div>
   </div>
 
-  <!-- Firebase SDK -->
+<!-- Firebase SDK (الصحيح 100%) -->
   <script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js"></script>
+
+  <!-- ملف app.js -->
   <script src="app.js"></script>
 
+  <!-- تسجيل الخروج -->
   <script>
     function logout() {
-      firebase.auth().signOut().then(() => {
-        alert('تم تسجيل الخروج بنجاح!');
-        window.location.href = 'login.html';
-      }).catch((error) => {
-        alert('حدث خطأ أثناء تسجيل الخروج');
-      });
+      firebase.auth().signOut()
+        .then(() => {
+          alert('تم تسجيل الخروج بنجاح!');
+          window.location.href = 'login.html';
+        })
+        .catch((error) => {
+          alert('حدث خطأ أثناء تسجيل الخروج: ' + error.message);
+        });
     }
   </script>
 </body>
