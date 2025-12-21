@@ -11,12 +11,11 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 
-// تسجيل الدخول (Login)
+// تسجيل الدخول
 const loginForm = document.getElementById('loginForm');
 if (loginForm) {
   loginForm.addEventListener('submit', (e) => {
     e.preventDefault();
-
     const email = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value;
 
@@ -34,12 +33,11 @@ if (loginForm) {
   });
 }
 
-// إنشاء حساب (Register)
+// إنشاء حساب
 const registerForm = document.getElementById('registerForm');
 if (registerForm) {
   registerForm.addEventListener('submit', (e) => {
     e.preventDefault();
-
     const fullName = document.getElementById('fullName').value.trim();
     const email = document.getElementById('email').value.trim();
     const phone = document.getElementById('phone').value.trim();
@@ -56,24 +54,23 @@ if (registerForm) {
         user.updateProfile({ displayName: fullName })
           .then(() => {
             alert('تم إنشاء الحساب بنجاح!');
-            window.location.href = 'dashboard.html';
+            window.location.href = 'dashboard.html'; // التوجيه للداشبورد
           });
       })
       .catch((error) => {
         let msg = 'حدث خطأ أثناء التسجيل';
-        if (error.code === 'auth/email-already-in-use') msg = 'البريد الإلكتروني مستخدم بالفعل';
+        if (error.code === 'auth/email-already-in-use') msg = 'البريد الإلكتروني مستخدم';
         if (error.code === 'auth/weak-password') msg = 'كلمة المرور ضعيفة جدًا';
         alert(msg);
       });
   });
 }
 
-// استعادة كلمة المرور (Forgot Password)
+// استعادة كلمة المرور
 const forgotForm = document.getElementById('forgotForm');
 if (forgotForm) {
   forgotForm.addEventListener('submit', (e) => {
     e.preventDefault();
-
     const email = document.getElementById('email').value.trim();
 
     auth.sendPasswordResetEmail(email)
@@ -85,6 +82,4 @@ if (forgotForm) {
         alert('حدث خطأ: ' + error.message);
       });
   });
-      }
-// اختبار بسيط عشان نعرف إن app.js شغال
-console.log("app.js تم تحميله بنجاح!");
+            }
