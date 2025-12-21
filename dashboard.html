@@ -1,33 +1,49 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>لوحة التحكم</title>
-  <link rel="stylesheet" href="style.css">
+  <title>لوحة التحكم - Sudan Pay</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+<body class="bg-gray-50 min-h-screen p-6">
 
-  <div class="dashboard">
+  <div class="max-w-4xl mx-auto bg-white p-10 rounded-2xl shadow-xl">
+    <h1 class="text-4xl font-bold text-green-700 mb-8 text-center">لوحة التحكم</h1>
 
-    <h2>لوحة التحكم</h2>
-
-    <div class="balance-box">
-      <p>الرصيد الحالي</p>
-      <h1 id="balance">0</h1>
+    <div class="bg-green-100 p-6 rounded-xl text-center mb-10">
+      <p class="text-lg text-gray-700 mb-2">الرصيد الحالي</p>
+      <h2 class="text-5xl font-bold text-green-800" id="balance">0</h2>
     </div>
 
-    <div class="dashboard-actions">
-      <a href="send.html">إرسال أموال</a>
-      <a href="receive.html">استلام أموال</a>
-      <a href="statement.html">كشف حساب</a>
-      <a href="profile.html" class="secondary">الملف الشخصي</a>
-      <button onclick="logout()" class="danger">تسجيل خروج</button>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
+      <a href="send.html" class="bg-green-600 hover:bg-green-700 text-white py-6 rounded-lg text-center font-bold">إرسال أموال</a>
+      <a href="receive.html" class="bg-blue-600 hover:bg-blue-700 text-white py-6 rounded-lg text-center font-bold">استلام أموال</a>
+      <a href="statement.html" class="bg-purple-600 hover:bg-purple-700 text-white py-6 rounded-lg text-center font-bold">كشف حساب</a>
+      <a href="profile.html" class="bg-gray-600 hover:bg-gray-700 text-white py-6 rounded-lg text-center font-bold">الملف الشخصي</a>
     </div>
 
+    <div class="text-center">
+      <button onclick="logout()" class="bg-red-600 hover:bg-red-700 text-white font-bold py-4 px-10 rounded-lg text-xl">
+        تسجيل الخروج
+      </button>
+    </div>
   </div>
 
-  <script type="module" src="firebase.js"></script>
-<script type="module" src="auth.js"></script>
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js"></script>
+  <script src="app.js"></script>
+
+  <script>
+    function logout() {
+      firebase.auth().signOut().then(() => {
+        alert('تم تسجيل الخروج بنجاح!');
+        window.location.href = 'login.html';
+      }).catch((error) => {
+        alert('حدث خطأ أثناء تسجيل الخروج');
+      });
+    }
+  </script>
 </body>
-  </html>
+</html>
