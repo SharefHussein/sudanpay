@@ -1,108 +1,99 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>Sudan Pay | محفظتك الإلكترونية في السودان</title>
-  <meta name="description" content="Sudan Pay هي محفظة إلكترونية تتيح لك تحويل الأموال، الدفع، وإدارة رصيدك بسهولة وأمان داخل السودان.">
-
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sudan Pay - محفظة إلكترونية سودانية</title>
+  <meta name="description" content="منصة التحويلات المالية والمحفظة الإلكترونية داخل السودان بأمان وسرعة عالية." />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
+<body class="bg-gray-50 font-sans text-gray-800">
 
-<body>
-
-<!-- ================= HEADER ================= -->
-<header class="header">
-  <div class="nav">
-    <div class="logo">Sudan Pay</div>
-    <nav>
-      <a href="#features">المميزات</a>
-      <a href="#how">كيف يعمل</a>
-      <a href="#about">عنّا</a>
-      <a href="login.html" class="btn small">دخول</a>
-    </nav>
-  </div>
-</header>
-
-<!-- ================= HERO ================= -->
-<section class="hero">
-  <div class="hero-content">
-    <h1>محفظتك الإلكترونية في السودان</h1>
-    <p>
-      Sudan Pay تتيح لك تحويل الأموال، الدفع، وإدارة رصيدك
-      بسهولة وأمان من موبايلك.
-    </p>
-
-    <div class="hero-actions">
-      <a href="register.html" class="btn primary">إنشاء حساب</a>
-      <a href="login.html" class="btn secondary">تسجيل الدخول</a>
+  <!-- Hero Section -->
+  <header class="bg-gradient-to-r from-green-600 to-green-800 text-white">
+    <div class="container mx-auto px-6 py-20 text-center">
+      <h1 class="text-5xl md:text-6xl font-bold mb-4">Sudan Pay</h1>
+      <h2 class="text-3xl md:text-4xl font-semibold mb-6">محفظتك الإلكترونية في السودان</h2>
+      <p class="text-xl md:text-2xl mb-10 max-w-3xl mx-auto">
+        حوّل فلوسك بسرعة وأمان، ادفع فواتيرك، اشحن رصيدك، وأكتر من ذلك... كل ده في تطبيق واحد!
+      </p>
+      <div class="flex flex-col sm:flex-row justify-center gap-6">
+        <a href="register.html" class="bg-white text-green-700 hover:bg-gray-100 font-bold py-4 px-8 rounded-full text-xl shadow-lg transition">
+          إنشاء حساب جديد
+        </a>
+        <a href="login.html" class="bg-transparent border-2 border-white hover:bg-white hover:text-green-700 font-bold py-4 px-8 rounded-full text-xl transition">
+          تسجيل الدخول
+        </a>
+      </div>
     </div>
-  </div>
+  </header>
 
-  <div class="hero-image">
-    <img src="mobile-mockup.png" alt="Sudan Pay App">
-  </div>
-</section>
-
-<!-- ================= FEATURES ================= -->
-<section id="features" class="section">
-  <h2>المميزات</h2>
-
-  <div class="features">
-    <div class="feature">⚡ تحويل فوري داخل السودان</div>
-    <div class="feature">🔒 أمان عالي وحماية بيانات</div>
-    <div class="feature">💰 رسوم منخفضة</div>
-    <div class="feature">📱 استخدام سهل من الموبايل</div>
-    <div class="feature">🏦 دعم النظام المالي السوداني</div>
-  </div>
-</section>
-
-<!-- ================= HOW IT WORKS ================= -->
-<section id="how" class="section light">
-  <h2>كيف يعمل Sudan Pay؟</h2>
-
-  <div class="steps">
-    <div class="step">
-      <span>1</span>
-      <p>أنشئ حسابك خلال دقائق</p>
+  <!-- Features Section -->
+  <section class="py-20 bg-white">
+    <div class="container mx-auto px-6 text-center">
+      <h2 class="text-4xl font-bold mb-12 text-gray-800">لماذا Sudan Pay؟</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+        <div class="p-8 bg-gray-50 rounded-xl shadow-md hover:shadow-lg transition">
+          <i class="fas fa-bolt text-5xl text-green-600 mb-6"></i>
+          <h3 class="text-2xl font-semibold mb-4">تحويل فوري</h3>
+          <p class="text-lg">حوّل أموالك خلال ثواني بأمان كامل.</p>
+        </div>
+        <div class="p-8 bg-gray-50 rounded-xl shadow-md hover:shadow-lg transition">
+          <i class="fas fa-shield-alt text-5xl text-green-600 mb-6"></i>
+          <h3 class="text-2xl font-semibold mb-4">أمان عالي</h3>
+          <p class="text-lg">حماية باستخدام Firebase وتقنيات حديثة.</p>
+        </div>
+        <div class="p-8 bg-gray-50 rounded-xl shadow-md hover:shadow-lg transition">
+          <i class="fas fa-mobile-alt text-5xl text-green-600 mb-6"></i>
+          <h3 class="text-2xl font-semibold mb-4">متوافق مع الموبايل</h3>
+          <p class="text-lg">تجربة استخدام مثل التطبيق على كل الأجهزة.</p>
+        </div>
+      </div>
     </div>
-    <div class="step">
-      <span>2</span>
-      <p>أضف رصيدك للمحفظة</p>
+  </section>
+
+  <!-- How It Works Section -->
+  <section class="py-20 bg-gray-100">
+    <div class="container mx-auto px-6 text-center">
+      <h2 class="text-4xl font-bold mb-12 text-gray-800">كيف تعمل Sudan Pay؟</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+        <div class="flex flex-col items-center">
+          <div class="bg-green-600 text-white w-20 h-20 rounded-full flex items-center justify-center text-3xl font-bold mb-6">1</div>
+          <h3 class="text-2xl font-semibold mb-4">سجّل حسابك</h3>
+          <p class="text-lg">بسرعة وسهولة في دقائق.</p>
+        </div>
+        <div class="flex flex-col items-center">
+          <div class="bg-green-600 text-white w-20 h-20 rounded-full flex items-center justify-center text-3xl font-bold mb-6">2</div>
+          <h3 class="text-2xl font-semibold mb-4">أضف رصيدك</h3>
+          <p class="text-lg">عبر بطاقات بنكية أو نقاط دفع محلية.</p>
+        </div>
+        <div class="flex flex-col items-center">
+          <div class="bg-green-600 text-white w-20 h-20 rounded-full flex items-center justify-center text-3xl font-bold mb-6">3</div>
+          <h3 class="text-2xl font-semibold mb-4">ابدأ التحويل</h3>
+          <p class="text-lg">حوّل أو ادفع بضغطة زر!</p>
+        </div>
+      </div>
     </div>
-    <div class="step">
-      <span>3</span>
-      <p>حوّل وادفع بسهولة وأمان</p>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-white py-10">
+    <div class="container mx-auto px-6 text-center">
+      <p class="text-2xl font-bold mb-4">Sudan Pay</p>
+      <p class="mb-6">محفظتك الإلكترونية الموثوقة في السودان</p>
+      <div class="flex justify-center gap-6 mb-6">
+        <a href="#" class="text-3xl hover:text-green-400"><i class="fab fa-twitter"></i></a>
+        <a href="#" class="text-3xl hover:text-green-400"><i class="fab fa-facebook"></i></a>
+        <a href="#" class="text-3xl hover:text-green-400"><i class="fab fa-whatsapp"></i></a>
+      </div>
+      <p class="text-sm">&copy; 2025 Sudan Pay. جميع الحقوق محفوظة.</p>
+      <div class="mt-4">
+        <a href="#" class="text-gray-400 hover:text-white mx-2">سياسة الخصوصية</a> |
+        <a href="#" class="text-gray-400 hover:text-white mx-2">الشروط والأحكام</a>
+      </div>
     </div>
-  </div>
-</section>
-
-<!-- ================= ABOUT ================= -->
-<section id="about" class="section">
-  <h2>لماذا Sudan Pay؟</h2>
-  <p class="about-text">
-    في ظل صعوبة التحويلات والدفع داخل السودان،
-    جاء Sudan Pay ليقدم حلاً بسيطاً وآمناً
-    يربط الناس ببعضهم ويوفر بديل رقمي موثوق.
-  </p>
-</section>
-
-<!-- ================= CTA ================= -->
-<section class="cta">
-  <h2>ابدأ الآن مع Sudan Pay</h2>
-  <a href="register.html" class="btn primary large">إنشاء حساب مجاناً</a>
-</section>
-
-<!-- ================= FOOTER ================= -->
-<footer class="footer">
-  <p>© 2025 Sudan Pay – جميع الحقوق محفوظة</p>
-  <div class="footer-links">
-    <a href="#">سياسة الخصوصية</a>
-    <a href="#">الشروط والأحكام</a>
-    <a href="#">الدعم</a>
-  </div>
-</footer>
+  </footer>
 
 </body>
-  </html>
+                                                            </html> 
