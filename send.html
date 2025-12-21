@@ -8,18 +8,21 @@
 </head>
 <body>
 
-<div class="app">
-  <div class="header">إرسال أموال</div>
+<div class="page">
+  <h2>إرسال أموال</h2>
 
-  <div class="content">
-    <div class="card">
-      <input id="toEmail" type="email" placeholder="إيميل المستلم">
-      <input id="amount" type="number" placeholder="المبلغ">
-      <button class="btn" onclick="sendMoney()">إرسال</button>
-    </div>
+  <div class="card">
+    <input type="email" placeholder="إيميل المستلم">
+    <input type="number" placeholder="المبلغ">
 
-    <button class="btn secondary" onclick="location.href='dashboard.html'">رجوع</button>
+    <button class="btn btn-primary">إرسال</button>
+    <a href="dashboard.html">
+      <button class="btn btn-secondary">رجوع</button>
+    </a>
   </div>
+</div>
+
+</body>
 
 <script type="module" src="firebase.js"></script>
 <script type="module" src="send.js"></script>
