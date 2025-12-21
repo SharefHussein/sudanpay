@@ -5,23 +5,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>استلام أموال</title>
   <link rel="stylesheet" href="style.css">
-</head>
 <body>
 
-<div class="container">
-<div class="card">
-  <p>QR للاستلام</p>
-  <img id="qr" style="width:200px;border-radius:12px">
-</div>  
+<div class="page">
   <h2>استلام أموال</h2>
 
-  <p>إيميل حسابك:</p>
-  <strong id="email"></strong>
+  <div class="card">
+    <img src="" id="qrCode" style="width:100%;border-radius:12px;margin-bottom:15px;">
 
-  <p>شارك الإيميل ده مع المرسل</p>
+    <p class="text-muted">
+      شارك هذا الإيميل مع المرسل
+    </p>
 
-  <a href="dashboard.html" class="btn secondary">رجوع</a>
+    <strong id="userEmail"></strong>
+
+    <a href="dashboard.html">
+      <button class="btn btn-secondary">رجوع</button>
+    </a>
+  </div>
 </div>
+
+</body>
 
 <script type="module" src="firebase.js"></script>
 <script type="module" src="receive.js"></script>
