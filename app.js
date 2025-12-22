@@ -30,7 +30,6 @@ if (loginForm) {
 
     auth.signInWithEmailAndPassword(email, password)
       .then(() => {
-        alert('تم تسجيل الدخول بنجاح!');
         window.location.href = 'dashboard.html';
       })
       .catch((error) => {
