@@ -1,3 +1,4 @@
+alert("app.js شغال 100%");
 // Firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyB3XJUy_et-P80ek3013MRdC...",
