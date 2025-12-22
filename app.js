@@ -1,85 +1,76 @@
-// تهيئة Firebase (الكونفيج بتاعك)
+// Firebase config
 const firebaseConfig = {
-  apiKey: "AIzaSyB3vxJu_et-P80ek30I3MRdC_lGhooCCsc",
+  apiKey: "AIzaSyB3XJUy_et-P80ek3013MRdC...",
   authDomain: "sudanpay-e332a.firebaseapp.com",
   projectId: "sudanpay-e332a",
-  storageBucket: "sudanpay-e332a.firebasestorage.app",
-  messagingSenderId: "699809447272",
-  appId: "1:699809447272:web:90f3780ed6c768c4322add"
+  storageBucket: "sudanpay-e332a.appspot.com",
+  messagingSenderId: "698090447272",
+  appId: "1:698090447272:web:9013780e6dc6"
 };
 
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 
-// تسجيل الدخول
-const loginForm = document.getElementById('loginForm');
+// LOGIN
+const loginForm = document.getElementById("loginForm");
 if (loginForm) {
-  loginForm.addEventListener('submit', (e) => {
+  loginForm.addEventListener("submit", (e) => {
     e.preventDefault();
-    const email = document.getElementById('email').value.trim();
-    const password = document.getElementById('password').value;
+
+    const email = document.getElementById("loginEmail").value;
+    const password = document.getElementById("loginPassword").value;
 
     auth.signInWithEmailAndPassword(email, password)
       .then(() => {
-        alert('تم تسجيل الدخول بنجاح!');
-        window.location.href = 'dashboard.html';
+        window.location.href = "dashboard.html";
       })
       .catch((error) => {
-        let msg = 'حدث خطأ، حاول مرة أخرى';
-        if (error.code === 'auth/user-not-found') msg = 'البريد الإلكتروني غير موجود';
-        if (error.code === 'auth/wrong-password') msg = 'كلمة المرور غير صحيحة';
+        let msg = "حدث خطأ";
+        if (error.code === "auth/user-not-found") msg = "الحساب غير موجود";
+        if (error.code === "auth/wrong-password") msg = "كلمة المرور غير صحيحة";
         alert(msg);
       });
   });
 }
 
-// إنشاء حساب
-const registerForm = document.getElementById('registerForm');
+// REGISTER
+const registerForm = document.getElementById("registerForm");
 if (registerForm) {
-  registerForm.addEventListener('submit', (e) => {
+  registerForm.addEventListener("submit", (e) => {
     e.preventDefault();
-    const fullName = document.getElementById('fullName').value.trim();
-    const email = document.getElementById('email').value.trim();
-    const phone = document.getElementById('phone').value.trim();
-    const password = document.getElementById('password').value;
 
-    if (!fullName || !email || !phone || !password) {
-      alert('املأ كل الحقول من فضلك');
-      return;
-    }
+    const fullname = document.getElementById("fullname").value;
+    const email = document.getElementById("registerEmail").value;
+    const password = document.getElementById("registerPassword").value;
 
     auth.createUserWithEmailAndPassword(email, password)
-      .then((userCredential) => {
-        const user = userCredential.user;
-        user.updateProfile({ displayName: fullName })
-          .then(() => {
-            alert('تم إنشاء الحساب بنجاح!');
-            window.location.href = 'dashboard.html'; // التوجيه للداشبورد
-          });
+      .then((cred) => {
+        return cred.user.updateProfile({ displayName: fullname });
+      })
+      .then(() => {
+        window.location.href = "dashboard.html";
       })
       .catch((error) => {
-        let msg = 'حدث خطأ أثناء التسجيل';
-        if (error.code === 'auth/email-already-in-use') msg = 'البريد الإلكتروني مستخدم';
-        if (error.code === 'auth/weak-password') msg = 'كلمة المرور ضعيفة جدًا';
-        alert(msg);
+        alert(error.message);
       });
   });
 }
 
-// استعادة كلمة المرور
-const forgotForm = document.getElementById('forgotForm');
+// FORGOT PASSWORD
+const forgotForm = document.getElementById("forgotForm");
 if (forgotForm) {
-  forgotForm.addEventListener('submit', (e) => {
+  forgotForm.addEventListener("submit", (e) => {
     e.preventDefault();
-    const email = document.getElementById('email').value.trim();
+
+    const email = document.getElementById("forgotEmail").value;
 
     auth.sendPasswordResetEmail(email)
       .then(() => {
-        alert('تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك!');
-        window.location.href = 'login.html';
+        alert("تم إرسال رابط استعادة كلمة المرور");
+        window.location.href = "login.html";
       })
       .catch((error) => {
-        alert('حدث خطأ: ' + error.message);
+        alert(error.message);
       });
   });
-            }
+                                          } 
