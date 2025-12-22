@@ -19,12 +19,9 @@
     <form id="loginForm" class="space-y-6">
   <div>
     <label for="email">البريد الإلكتروني</label>
-    <input type="email" id="email" required>
-  </div>
-  <div>
+    <input type="email" id="loginEmail" required>
     <label for="password">كلمة المرور</label>
-    <input type="password" id="password" required>
-  </div>
+<input type="password" id="loginPassword" required>
   <button type="submit">دخول</button>
     </form>
 
@@ -39,9 +36,10 @@
   });
   </script>
 
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js"></script>
-  <script src="app.js"></script>
+ <!-- Firebase v8 -->
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+
+<script src="app.js"></script>
 </body>
 </html>
