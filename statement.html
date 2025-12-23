@@ -1,28 +1,82 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>كشف الحساب</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>كشف الحساب - Sudan Pay</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+<body class="bg-slate-950 text-white min-h-screen">
+  <!-- Navbar -->
+  <nav class="bg-slate-900/80 backdrop-blur-md fixed w-full z-50">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+      <div class="text-2xl font-bold text-emerald-500">Sudan Pay</div>
+      <div class="flex space-x-6">
+        <a href="index.html" class="hover:text-emerald-400">الرئيسية</a>
+        <button onclick="logout()" class="bg-red-600 hover:bg-red-700 px-6 py-2 rounded-lg transition">خروج</button>
+      </div>
+    </div>
+  </nav>
 
-<div class="page">
-  <h2>كشف الحساب</h2>
+  <!-- Main Content -->
+  <div class="max-w-5xl mx-auto px-4 pt-24">
+    <h1 class="text-4xl font-bold mb-10 text-center">كشف الحساب</h1>
 
-  <div class="card">
-    <p class="text-muted">لا توجد عمليات حالياً</p>
+    <!-- Summary Card -->
+    <div class="bg-slate-800 p-8 rounded-2xl shadow-2xl mb-10">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+        <div>
+          <p class="text-gray-400 mb-2">الرصيد الحالي</p>
+          <p class="text-4xl font-bold text-emerald-500">0 جنيه</p>
+        </div>
+        <div>
+          <p class="text-gray-400 mb-2">إجمالي الإيداعات</p>
+          <p class="text-4xl font-bold text-emerald-500">0 جنيه</p>
+        </div>
+        <div>
+          <p class="text-gray-400 mb-2">إجمالي السحوبات</p>
+          <p class="text-4xl font-bold text-red-500">0 جنيه</p>
+        </div>
+      </div>
+    </div>
 
-    <a href="dashboard.html">
-      <button class="btn btn-secondary">رجوع</button>
-    </a>
+    <!-- Transactions Table -->
+    <div class="bg-slate-800 p-8 rounded-2xl shadow-2xl">
+      <h2 class="text-2xl font-bold mb-6 text-center">آخر المعاملات</h2>
+      <div class="overflow-x-auto">
+        <table class="w-full text-right">
+          <thead class="bg-slate-700">
+            <tr>
+              <th class="p-4">التاريخ</th>
+              <th class="p-4">النوع</th>
+              <th class="p-4">المبلغ</th>
+              <th class="p-4">الملاحظات</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-slate-700">
+              <td class="p-4">لا توجد معاملات بعد</td>
+              <td class="p-4">-</td>
+              <td class="p-4">-</td>
+              <td class="p-4">-</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
-</div>
 
-</body>
+  <!-- Firebase v8 -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="app.js"></script>
 
-<script type="module" src="firebase.js"></script>
-<script type="module" src="statement.js"></script>
+  <script>
+    function logout() {
+      firebase.auth().signOut().then(() => {
+        window.location.href = 'login.html';
+      });
+    }
+  </script>
 </body>
-</html>
+  </html>
