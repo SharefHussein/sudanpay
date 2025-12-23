@@ -1,55 +1,54 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>لوحة التحكم - Sudan Pay</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
-<body class="bg-gray-50 min-h-screen p-6">
-
-  <div class="max-w-4xl mx-auto bg-white p-10 rounded-2xl shadow-xl">
-    <h1 class="text-4xl font-bold text-green-700 mb-8 text-center">مرحباً بك في Sudan Pay</h1>
-
-    <div class="bg-green-100 p-6 rounded-xl text-center mb-10">
-      <p class="text-lg text-gray-700 mb-2">الرصيد الحالي</p>
-      <h2 class="text-5xl font-bold text-green-800" id="balance">0</h2>
+<body class="bg-slate-950 text-white min-h-screen">
+  <!-- Navbar -->
+  <nav class="bg-slate-900/80 backdrop-blur-md fixed w-full z-50">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+      <div class="text-2xl font-bold text-emerald-500">Sudan Pay</div>
+      <div class="flex space-x-6">
+        <a href="index.html" class="hover:text-emerald-400">الرئيسية</a>
+        <button onclick="logout()" class="bg-red-600 hover:bg-red-700 px-6 py-2 rounded-lg transition">خروج</button>
+      </div>
     </div>
+  </nav>
 
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
-      <a href="send.html" class="bg-green-600 hover:bg-green-700 text-white py-6 rounded-lg text-center font-bold">إرسال أموال</a>
-      <a href="receive.html" class="bg-blue-600 hover:bg-blue-700 text-white py-6 rounded-lg text-center font-bold">استلام أموال</a>
-      <a href="statement.html" class="bg-purple-600 hover:bg-purple-700 text-white py-6 rounded-lg text-center font-bold">كشف حساب</a>
-      <a href="profile.html" class="bg-gray-600 hover:bg-gray-700 text-white py-6 rounded-lg text-center font-bold">الملف الشخصي</a>
-    </div>
+  <!-- Dashboard Content -->
+  <div class="max-w-7xl mx-auto px-4 pt-24">
+    <h1 class="text-4xl font-bold mb-10">مرحباً بك في Sudan Pay</h1>
 
-    <div class="text-center">
-      <button onclick="logout()" class="bg-red-600 hover:bg-red-700 text-white font-bold py-4 px-10 rounded-lg text-xl transition">
-        تسجيل الخروج
-      </button>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div class="bg-slate-800 p-8 rounded-2xl">
+        <h2 class="text-2xl font-bold mb-4 text-emerald-500">الرصيد</h2>
+        <p class="text-4xl font-bold">0 جنيه</p>
+      </div>
+      <div class="bg-slate-800 p-8 rounded-2xl">
+        <h2 class="text-2xl font-bold mb-4 text-emerald-500">آخر معاملة</h2>
+        <p>لا توجد معاملات بعد</p>
+      </div>
+      <div class="bg-slate-800 p-8 rounded-2xl">
+        <h2 class="text-2xl font-bold mb-4 text-emerald-500">إرسال أموال</h2>
+        <a href="send.html" class="text-emerald-500 hover:underline">ابدأ الآن</a>
+      </div>
     </div>
   </div>
 
-  <!-- Firebase SDK v8 -->
+  <!-- Firebase v8 -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-
-  <!-- ملف app.js -->
   <script src="app.js"></script>
 
-  <!-- تسجيل الخروج -->
   <script>
     function logout() {
-      firebase.auth().signOut()
-        .then(() => {
-          alert('تم تسجيل الخروج بنجاح!');
-          window.location.href = 'login.html';
-        })
-        .catch((error) => {
-          alert('حدث خطأ أثناء تسجيل الخروج: ' + error.message);
-        });
+      firebase.auth().signOut().then(() => {
+        window.location.href = 'login.html';
+      });
     }
   </script>
 </body>
-  </html> 
+</html>
