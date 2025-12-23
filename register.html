@@ -5,53 +5,41 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>إنشاء حساب - Sudan Pay</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
-<body class="bg-gray-50 min-h-screen flex items-center justify-center">
-
-  <div class="w-full max-w-md px-6 py-12 bg-white rounded-2xl shadow-xl border border-gray-200">
-    <div class="text-center mb-10">
-      <img src="logo.png" alt="Sudan Pay Logo" class="w-32 mx-auto mb-4" />
-      <h1 class="text-4xl font-bold text-green-700">Sudan Pay</h1>
-      <p class="text-gray-600 mt-2">محفظتك الإلكترونية في السودان</p>
-    </div>
+<body class="bg-slate-950 text-white min-h-screen flex items-center justify-center">
+  <div class="w-full max-w-md p-8 bg-slate-800 rounded-2xl shadow-2xl">
+    <h1 class="text-4xl font-bold text-center text-emerald-500 mb-8">Sudan Pay</h1>
+    <h2 class="text-2xl text-center mb-6">إنشاء حساب جديد</h2>
 
     <form id="registerForm" class="space-y-6">
       <div>
-        <label for="fullName" class="block text-lg font-medium text-gray-700 mb-2">الاسم الكامل</label>
-        <input type="text" id="fullName" placeholder="محمد أحمد" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 text-lg"/>
+        <label class="block text-gray-300 mb-2">الاسم الكامل</label>
+        <input type="text" id="fullName" class="w-full p-4 bg-slate-700 rounded-lg border border-slate-600 focus:border-emerald-500 outline-none" required/>
       </div>
 
       <div>
-        <label for="email" class="block text-lg font-medium text-gray-700 mb-2">البريد الإلكتروني</label>
-        <input type="email" id="email" placeholder="example@sudanpay.com" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 text-lg"/>
+        <label class="block text-gray-300 mb-2">البريد الإلكتروني</label>
+        <input type="email" id="email" class="w-full p-4 bg-slate-700 rounded-lg border border-slate-600 focus:border-emerald-500 outline-none" required/>
       </div>
 
       <div>
-        <label for="phone" class="block text-lg font-medium text-gray-700 mb-2">رقم الهاتف</label>
-        <input type="tel" id="phone" placeholder="0912345678" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 text-lg"/>
+        <label class="block text-gray-300 mb-2">كلمة المرور</label>
+        <input type="password" id="password" class="w-full p-4 bg-slate-700 rounded-lg border border-slate-600 focus:border-emerald-500 outline-none" required/>
       </div>
 
-      <div>
-        <label for="password" class="block text-lg font-medium text-gray-700 mb-2">كلمة المرور</label>
-        <input type="password" id="password" placeholder="••••••••" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 text-lg"/>
-      </div>
-
-      <button type="submit" class="w-full bg-green-700 hover:bg-green-800 text-white font-bold py-4 px-6 rounded-lg text-xl transition duration-300 shadow-md">
+      <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 rounded-lg transition">
         إنشاء الحساب
       </button>
     </form>
 
-    <div class="text-center mt-8">
-      <p class="text-gray-600">لديك حساب؟ <a href="login.html" class="text-green-700 hover:underline font-medium">تسجيل الدخول</a></p>
-    </div>
+    <p class="text-center mt-6 text-gray-400">
+      لديك حساب؟ <a href="login.html" class="text-emerald-500 hover:underline">تسجيل الدخول</a>
+    </p>
   </div>
 
-<!-- Firebase SDK v8 -->
+  <!-- Firebase v8 -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-
-  
   <script src="app.js"></script>
 </body>
-          </html> 
+</html>
