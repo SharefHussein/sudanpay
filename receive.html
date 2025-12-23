@@ -1,33 +1,56 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>استلام أموال</title>
-  <link rel="stylesheet" href="style.css">
-<body>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>استلام أموال - Sudan Pay</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-950 text-white min-h-screen">
+  <!-- Navbar -->
+  <nav class="bg-slate-900/80 backdrop-blur-md fixed w-full z-50">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+      <div class="text-2xl font-bold text-emerald-500">Sudan Pay</div>
+      <div class="flex space-x-6">
+        <a href="index.html" class="hover:text-emerald-400">الرئيسية</a>
+        <button onclick="logout()" class="bg-red-600 hover:bg-red-700 px-6 py-2 rounded-lg transition">خروج</button>
+      </div>
+    </div>
+  </nav>
 
-<div class="page">
-  <h2>استلام أموال</h2>
+  <!-- Main Content -->
+  <div class="max-w-4xl mx-auto px-4 pt-24">
+    <h1 class="text-4xl font-bold mb-10 text-center">استلام أموال</h1>
 
-  <div class="card">
-    <img src="" id="qrCode" style="width:100%;border-radius:12px;margin-bottom:15px;">
+    <div class="bg-slate-800 p-10 rounded-2xl shadow-2xl text-center">
+      <i class="fas fa-qrcode text-8xl text-emerald-500 mb-8"></i>
+      <h2 class="text-3xl font-bold mb-6">رمز QR الخاص بك</h2>
+      <p class="text-xl text-gray-300 mb-8">شارك هذا الرمز مع أي شخص ليرسل لك أموال بسرعة</p>
 
-    <p class="text-muted">
-      شارك هذا الإيميل مع المرسل
-    </p>
+      <!-- رمز QR مؤقت (غيّره لاحقًا) -->
+      <div class="bg-white p-8 rounded-xl inline-block mb-8">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://sharefhussein.github.io/sudanpay" alt="QR Code" class="mx-auto"/>
+      </div>
 
-    <strong id="userEmail"></strong>
+      <p class="text-lg text-gray-400">أو شارك رقم حسابك: <span class="font-bold text-emerald-400">0912345678</span></p>
 
-    <a href="dashboard.html">
-      <button class="btn btn-secondary">رجوع</button>
-    </a>
+      <button class="mt-8 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 px-10 rounded-lg text-xl transition">
+        نسخ الرقم
+      </button>
+    </div>
   </div>
-</div>
 
-</body>
+  <!-- Firebase v8 -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="app.js"></script>
 
-<script type="module" src="firebase.js"></script>
-<script type="module" src="receive.js"></script>
+  <script>
+    function logout() {
+      firebase.auth().signOut().then(() => {
+        window.location.href = 'login.html';
+      });
+    }
+  </script>
 </body>
-  </html>
+</html>
