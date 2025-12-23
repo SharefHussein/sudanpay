@@ -1,30 +1,62 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>إرسال أموال</title>
-  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>إرسال أموال - Sudan Pay</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+<body class="bg-slate-950 text-white min-h-screen">
+  <!-- Navbar -->
+  <nav class="bg-slate-900/80 backdrop-blur-md fixed w-full z-50">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+      <div class="text-2xl font-bold text-emerald-500">Sudan Pay</div>
+      <div class="flex space-x-6">
+        <a href="index.html" class="hover:text-emerald-400">الرئيسية</a>
+        <button onclick="logout()" class="bg-red-600 hover:bg-red-700 px-6 py-2 rounded-lg transition">خروج</button>
+      </div>
+    </div>
+  </nav>
 
-<div class="page">
-  <h2>إرسال أموال</h2>
+  <!-- Main Content -->
+  <div class="max-w-4xl mx-auto px-4 pt-24">
+    <h1 class="text-4xl font-bold mb-10 text-center">إرسال أموال</h1>
 
-  <div class="card">
-    <input type="email" placeholder="إيميل المستلم">
-    <input type="number" placeholder="المبلغ">
+    <div class="bg-slate-800 p-10 rounded-2xl shadow-2xl">
+      <form class="space-y-8">
+        <div>
+          <label class="block text-gray-300 mb-2 text-lg">رقم الهاتف المستلم</label>
+          <input type="tel" placeholder="0912345678" class="w-full p-4 bg-slate-700 rounded-lg border border-slate-600 focus:border-emerald-500 outline-none text-lg" required/>
+        </div>
 
-    <button class="btn btn-primary">إرسال</button>
-    <a href="dashboard.html">
-      <button class="btn btn-secondary">رجوع</button>
-    </a>
+        <div>
+          <label class="block text-gray-300 mb-2 text-lg">المبلغ (جنيه سوداني)</label>
+          <input type="number" placeholder="1000" class="w-full p-4 bg-slate-700 rounded-lg border border-slate-600 focus:border-emerald-500 outline-none text-lg" required/>
+        </div>
+
+        <div>
+          <label class="block text-gray-300 mb-2 text-lg">ملاحظات (اختياري)</label>
+          <textarea placeholder="سبب التحويل..." class="w-full p-4 bg-slate-700 rounded-lg border border-slate-600 focus:border-emerald-500 outline-none h-32 text-lg"></textarea>
+        </div>
+
+        <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-5 rounded-lg text-xl transition shadow-lg">
+          إرسال الأموال الآن
+        </button>
+      </form>
+    </div>
   </div>
-</div>
 
-</body>
+  <!-- Firebase v8 -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="app.js"></script>
 
-<script type="module" src="firebase.js"></script>
-<script type="module" src="send.js"></script>
+  <script>
+    function logout() {
+      firebase.auth().signOut().then(() => {
+        window.location.href = 'login.html';
+      });
+    }
+  </script>
 </body>
-    </html>
+</html>
