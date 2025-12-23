@@ -5,38 +5,82 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>لوحة التحكم - Sudan Pay</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
 <body class="bg-slate-950 text-white min-h-screen">
   <!-- Navbar -->
   <nav class="bg-slate-900/80 backdrop-blur-md fixed w-full z-50">
     <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-      <div class="text-2xl font-bold text-emerald-500">Sudan Pay</div>
-      <div class="flex space-x-6">
-        <a href="index.html" class="hover:text-emerald-400">الرئيسية</a>
-        <button onclick="logout()" class="bg-red-600 hover:bg-red-700 px-6 py-2 rounded-lg transition">خروج</button>
+      <div class="text-2xl font-bold text-emerald-500 flex items-center">
+        <span class="text-3xl">S</span>udan Pay
+      </div>
+      <div class="hidden md:flex space-x-8">
+        <a href="index.html" class="hover:text-emerald-400 transition">الرئيسية</a>
+        <a href="send.html" class="hover:text-emerald-400 transition">إرسال أموال</a>
+        <a href="receive.html" class="hover:text-emerald-400 transition">استلام أموال</a>
+        <a href="statement.html" class="hover:text-emerald-400 transition">كشف حساب</a>
+        <a href="profile.html" class="hover:text-emerald-400 transition">الملف الشخصي</a>
+      </div>
+      <div class="flex space-x-4">
+        <button onclick="logout()" class="bg-red-600 hover:bg-red-700 px-6 py-2 rounded-lg transition">
+          خروج
+        </button>
       </div>
     </div>
   </nav>
 
   <!-- Dashboard Content -->
   <div class="max-w-7xl mx-auto px-4 pt-24">
-    <h1 class="text-4xl font-bold mb-10">مرحباً بك في Sudan Pay</h1>
+    <h1 class="text-4xl font-bold mb-10 text-center">مرحباً بك في لوحة التحكم</h1>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      <div class="bg-slate-800 p-8 rounded-2xl">
-        <h2 class="text-2xl font-bold mb-4 text-emerald-500">الرصيد</h2>
-        <p class="text-4xl font-bold">0 جنيه</p>
-      </div>
-      <div class="bg-slate-800 p-8 rounded-2xl">
-        <h2 class="text-2xl font-bold mb-4 text-emerald-500">آخر معاملة</h2>
-        <p>لا توجد معاملات بعد</p>
-      </div>
-      <div class="bg-slate-800 p-8 rounded-2xl">
-        <h2 class="text-2xl font-bold mb-4 text-emerald-500">إرسال أموال</h2>
-        <a href="send.html" class="bg-green-600 hover:bg-green-700 text-white py-6 rounded-lg text-center font-bold">إرسال أموال</a>
-<a href="receive.html" class="bg-blue-600 hover:bg-blue-700 text-white py-6 rounded-lg text-center font-bold">استلام أموال</a>
-<a href="statement.html" class="bg-purple-600 hover:bg-purple-700 text-white py-6 rounded-lg text-center font-bold">كشف حساب</a>
-<a href="profile.html" class="bg-gray-600 hover:bg-gray-700 text-white py-6 rounded-lg text-center font-bold">الملف الشخصي</a>
+    <!-- Balance Card -->
+    <div class="bg-gradient-to-r from-emerald-800 to-emerald-600 p-10 rounded-2xl shadow-2xl mb-12 text-center">
+      <p class="text-2xl mb-4">الرصيد الحالي</p>
+      <p class="text-6xl font-bold">0 جنيه</p>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+      <a href="send.html" class="bg-emerald-700 hover:bg-emerald-600 p-8 rounded-2xl text-center transition shadow-lg">
+        <i class="fas fa-paper-plane text-5xl mb-4"></i>
+        <h3 class="text-xl font-bold">إرسال أموال</h3>
+      </a>
+      <a href="receive.html" class="bg-blue-700 hover:bg-blue-600 p-8 rounded-2xl text-center transition shadow-lg">
+        <i class="fas fa-hand-holding-usd text-5xl mb-4"></i>
+        <h3 class="text-xl font-bold">استلام أموال</h3>
+      </a>
+      <a href="statement.html" class="bg-purple-700 hover:bg-purple-600 p-8 rounded-2xl text-center transition shadow-lg">
+        <i class="fas fa-file-invoice-dollar text-5xl mb-4"></i>
+        <h3 class="text-xl font-bold">كشف حساب</h3>
+      </a>
+      <a href="profile.html" class="bg-gray-700 hover:bg-gray-600 p-8 rounded-2xl text-center transition shadow-lg">
+        <i class="fas fa-user text-5xl mb-4"></i>
+        <h3 class="text-xl font-bold">الملف الشخصي</h3>
+      </a>
+    </div>
+
+    <!-- Recent Transactions -->
+    <div class="bg-slate-800 p-10 rounded-2xl shadow-2xl">
+      <h2 class="text-3xl font-bold mb-8 text-center">آخر المعاملات</h2>
+      <div class="overflow-x-auto">
+        <table class="w-full text-right">
+          <thead class="bg-slate-700">
+            <tr>
+              <th class="p-4">التاريخ</th>
+              <th class="p-4">النوع</th>
+              <th class="p-4">المبلغ</th>
+              <th class="p-4">الملاحظات</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-slate-700">
+              <td class="p-4 text-gray-400">لا توجد معاملات بعد</td>
+              <td class="p-4">-</td>
+              <td class="p-4">-</td>
+              <td class="p-4">-</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
@@ -48,10 +92,15 @@
 
   <script>
     function logout() {
-      firebase.auth().signOut().then(() => {
-        window.location.href = 'login.html';
-      });
+      firebase.auth().signOut()
+        .then(() => {
+          alert('تم تسجيل الخروج بنجاح!');
+          window.location.href = 'login.html';
+        })
+        .catch((error) => {
+          alert('حدث خطأ أثناء تسجيل الخروج: ' + error.message);
+        });
     }
   </script>
 </body>
-</html>
+          </html>
