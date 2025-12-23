@@ -3,103 +3,81 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Sudan Pay - محفظة إلكترونية سودانية</title>
-  <meta name="description" content="منصة التحويلات المالية والمحفظة الإلكترونية داخل السودان بأمان وسرعة عالية." />
+  <title>Sudan Pay - محفظتك الإلكترونية</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
-<body class="bg-gray-50 font-sans text-gray-800">
+<body class="bg-slate-950 text-white min-h-screen font-sans">
+  <!-- Navbar -->
+  <nav class="bg-slate-900/80 backdrop-blur-md fixed w-full z-50">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+      <div class="text-2xl font-bold text-emerald-500 flex items-center">
+        <span class="text-3xl">S</span>udan Pay
+      </div>
+      <div class="hidden md:flex space-x-8">
+        <a href="index.html" class="hover:text-emerald-400 transition">الرئيسية</a>
+        <a href="#" class="hover:text-emerald-400 transition">خدماتنا</a>
+        <a href="#" class="hover:text-emerald-400 transition">عنّا</a>
+        <a href="#" class="hover:text-emerald-400 transition">اتصل بنا</a>
+      </div>
+      <div class="flex space-x-4">
+        <a href="login.html" class="bg-emerald-600 hover:bg-emerald-700 px-6 py-2 rounded-lg transition">تسجيل الدخول</a>
+        <a href="register.html" class="bg-white text-slate-900 hover:bg-gray-100 px-6 py-2 rounded-lg transition">إنشاء حساب</a>
+      </div>
+    </div>
+  </nav>
 
-  <!-- Hero Section -->
-  <header class="bg-gradient-to-r from-green-600 to-green-800 text-white">
-    <div class="container mx-auto px-6 py-20 text-center">
-      <h1 class="text-5xl md:text-6xl font-bold mb-4">Sudan Pay</h1>
-      <h2 class="text-3xl md:text-4xl font-semibold mb-6">محفظتك الإلكترونية في السودان</h2>
-      <p class="text-xl md:text-2xl mb-10 max-w-3xl mx-auto">
-        حوّل فلوسك بسرعة وأمان، ادفع فواتيرك، اشحن رصيدك، وأكتر من ذلك... كل ده في تطبيق واحد!
+  <!-- Hero -->
+  <section class="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-950 via-slate-900 to-emerald-950 pt-20">
+    <div class="max-w-6xl mx-auto px-4 text-center">
+      <h1 class="text-5xl md:text-7xl font-bold mb-6">مرحباً بك في Sudan Pay</h1>
+      <p class="text-xl md:text-2xl text-gray-300 mb-10 max-w-3xl mx-auto">
+        محفظتك الإلكترونية الآمنة والسريعة في السودان – إرسال واستلام أموال بكل سهولة
       </p>
-      <div class="flex flex-col sm:flex-row justify-center gap-6">
-        <a href="register.html" class="bg-white text-green-700 hover:bg-gray-100 font-bold py-4 px-8 rounded-full text-xl shadow-lg transition">
-          إنشاء حساب جديد
+      <div class="flex flex-col md:flex-row gap-6 justify-center">
+        <a href="register.html" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 px-10 rounded-full text-xl transition shadow-lg">
+          ابدأ الآن
         </a>
-        <a href="login.html" class="bg-transparent border-2 border-white hover:bg-white hover:text-green-700 font-bold py-4 px-8 rounded-full text-xl transition">
+        <a href="login.html" class="bg-transparent border-2 border-emerald-500 hover:bg-emerald-600 hover:border-transparent text-white font-bold py-4 px-10 rounded-full text-xl transition">
           تسجيل الدخول
         </a>
       </div>
     </div>
-  </header>
-
-  <!-- Features Section -->
-  <section class="py-20 bg-white">
-    <div class="container mx-auto px-6 text-center">
-      <h2 class="text-4xl font-bold mb-12 text-gray-800">لماذا Sudan Pay؟</h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
-        <div class="p-8 bg-gray-50 rounded-xl shadow-md hover:shadow-lg transition">
-          <i class="fas fa-bolt text-5xl text-green-600 mb-6"></i>
-          <h3 class="text-2xl font-semibold mb-4">تحويل فوري</h3>
-          <p class="text-lg">حوّل أموالك خلال ثواني بأمان كامل.</p>
-        </div>
-        <div class="p-8 bg-gray-50 rounded-xl shadow-md hover:shadow-lg transition">
-          <i class="fas fa-shield-alt text-5xl text-green-600 mb-6"></i>
-          <h3 class="text-2xl font-semibold mb-4">أمان عالي</h3>
-          <p class="text-lg">حماية باستخدام Firebase وتقنيات حديثة.</p>
-        </div>
-        <div class="p-8 bg-gray-50 rounded-xl shadow-md hover:shadow-lg transition">
-          <i class="fas fa-mobile-alt text-5xl text-green-600 mb-6"></i>
-          <h3 class="text-2xl font-semibold mb-4">متوافق مع الموبايل</h3>
-          <p class="text-lg">تجربة استخدام مثل التطبيق على كل الأجهزة.</p>
-        </div>
-      </div>
-    </div>
   </section>
 
-  <!-- How It Works Section -->
-  <section class="py-20 bg-gray-100">
-    <div class="container mx-auto px-6 text-center">
-      <h2 class="text-4xl font-bold mb-12 text-gray-800">كيف تعمل Sudan Pay؟</h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
-        <div class="flex flex-col items-center">
-          <div class="bg-green-600 text-white w-20 h-20 rounded-full flex items-center justify-center text-3xl font-bold mb-6">1</div>
-          <h3 class="text-2xl font-semibold mb-4">سجّل حسابك</h3>
-          <p class="text-lg">بسرعة وسهولة في دقائق.</p>
+  <!-- Services -->
+  <section class="py-20 bg-slate-900">
+    <div class="max-w-6xl mx-auto px-4">
+      <h2 class="text-4xl font-bold text-center mb-16">خدماتنا</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="bg-slate-800 p-8 rounded-2xl text-center hover:bg-emerald-900 transition">
+          <i class="fas fa-money-bill-wave text-5xl text-emerald-500 mb-6"></i>
+          <h3 class="text-2xl font-bold mb-4">إرسال أموال</h3>
+          <p class="text-gray-400">أرسل أموال لأي شخص في السودان بسرعة وأمان</p>
         </div>
-        <div class="flex flex-col items-center">
-          <div class="bg-green-600 text-white w-20 h-20 rounded-full flex items-center justify-center text-3xl font-bold mb-6">2</div>
-          <h3 class="text-2xl font-semibold mb-4">أضف رصيدك</h3>
-          <p class="text-lg">عبر بطاقات بنكية أو نقاط دفع محلية.</p>
+        <div class="bg-slate-800 p-8 rounded-2xl text-center hover:bg-emerald-900 transition">
+          <i class="fas fa-hand-holding-usd text-5xl text-emerald-500 mb-6"></i>
+          <h3 class="text-2xl font-bold mb-4">استلام أموال</h3>
+          <p class="text-gray-400">استلم تحويلات من أي مكان في العالم</p>
         </div>
-        <div class="flex flex-col items-center">
-          <div class="bg-green-600 text-white w-20 h-20 rounded-full flex items-center justify-center text-3xl font-bold mb-6">3</div>
-          <h3 class="text-2xl font-semibold mb-4">ابدأ التحويل</h3>
-          <p class="text-lg">حوّل أو ادفع بضغطة زر!</p>
+        <div class="bg-slate-800 p-8 rounded-2xl text-center hover:bg-emerald-900 transition">
+          <i class="fas fa-file-invoice-dollar text-5xl text-emerald-500 mb-6"></i>
+          <h3 class="text-2xl font-bold mb-4">كشف حساب</h3>
+          <p class="text-gray-400">تابع معاملاتك ورصيدك في أي وقت</p>
         </div>
       </div>
     </div>
   </section>
 
   <!-- Footer -->
-  <footer class="bg-gray-900 text-white py-10">
-    <div class="container mx-auto px-6 text-center">
-      <p class="text-2xl font-bold mb-4">Sudan Pay</p>
-      <p class="mb-6">محفظتك الإلكترونية الموثوقة في السودان</p>
-      <div class="flex justify-center gap-6 mb-6">
-        <a href="#" class="text-3xl hover:text-green-400"><i class="fab fa-twitter"></i></a>
-        <a href="#" class="text-3xl hover:text-green-400"><i class="fab fa-facebook"></i></a>
-        <a href="#" class="text-3xl hover:text-green-400"><i class="fab fa-whatsapp"></i></a>
-      </div>
-      <p class="text-sm">&copy; 2025 Sudan Pay. جميع الحقوق محفوظة.</p>
-      <div class="mt-4">
-        <a href="#" class="text-gray-400 hover:text-white mx-2">سياسة الخصوصية</a> |
-        <a href="#" class="text-gray-400 hover:text-white mx-2">الشروط والأحكام</a>
-      </div>
-    </div>
+  <footer class="bg-slate-950 py-10 text-center text-gray-400">
+    <p>© 2025 Sudan Pay. جميع الحقوق محفوظة.</p>
   </footer>
-<!-- Firebase SDK v8 -->
+  <!-- Firebase SDK v8 -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 
   <!-- ملف app.js -->
   <script src="app.js"></script>
-
 </body>
-                                                            </html> 
+  </html>
