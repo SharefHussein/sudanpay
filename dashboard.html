@@ -8,9 +8,8 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
     .bg-hero { background: linear-gradient(to bottom, #0f172a, #1e293b); }
-    .btn-green { @apply bg-lime-400 hover:bg-lime-500 text-black font-bold py-6 px-10 rounded-3xl text-2xl transition shadow-2xl; }
-    .card-glass { @apply bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl p-12 text-center; }
-    .logo-svg { fill: #a3e635; }
+    .btn-action { @apply bg-gradient-to-r from-lime-400 to-lime-500 hover:from-lime-500 hover:to-lime-600 text-black font-bold py-8 px-10 rounded-3xl text-2xl transition-all shadow-2xl transform hover:scale-105; }
+    .card-balance { @apply bg-gradient-to-r from-emerald-700 to-emerald-600 p-10 rounded-3xl shadow-2xl text-center; }
   </style>
 </head>
 <body class="bg-hero min-h-screen">
@@ -18,7 +17,7 @@
   <nav class="fixed top-0 w-full z-50 bg-slate-900/90 backdrop-blur-md">
     <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
       <div class="flex items-center space-x-4">
-        <svg width="60" height="60" viewBox="0 0 100 100" class="logo-svg">
+        <svg width="60" height="60" viewBox="0 0 100 100" class="text-lime-400">
           <circle cx="50" cy="50" r="45" fill="currentColor" opacity="0.3"/>
           <path d="M30 50 Q50 10 70 50 Q50 90 30 50 Z" fill="currentColor"/>
           <circle cx="50" cy="30" r="20" fill="#0f172a"/>
@@ -33,36 +32,36 @@
 
   <!-- Main Content -->
   <div class="max-w-7xl mx-auto px-6 pt-32">
-    <h1 class="text-5xl md:text-6xl font-bold text-center mb-16">مرحباً بك في لوحة التحكم</h1>
+    <h1 class="text-5xl font-bold text-center mb-16">مرحباً بك في لوحة التحكم</h1>
 
     <!-- Balance Card -->
-    <div class="bg-gradient-to-r from-emerald-900 to-emerald-700 p-12 rounded-3xl shadow-2xl mb-20 text-center">
+    <div class="card-balance mb-20">
       <p class="text-3xl text-gray-200 mb-6">الرصيد الحالي</p>
-      <p class="text-7xl font-bold text-lime-400 drop-shadow-2xl">0 جنيه</p>
+      <p class="text-7xl font-bold text-white drop-shadow-2xl">0 جنيه</p>
     </div>
 
-    <!-- Quick Actions Buttons -->
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-10 mb-20">
-      <a href="send.html" class="btn-green flex flex-col items-center justify-center">
+    <!-- Quick Actions -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
+      <a href="send.html" class="btn-action flex flex-col items-center justify-center">
         <i class="fas fa-paper-plane text-6xl mb-6"></i>
         إرسال أموال
       </a>
-      <a href="receive.html" class="btn-green flex flex-col items-center justify-center">
+      <a href="receive.html" class="btn-action flex flex-col items-center justify-center">
         <i class="fas fa-qrcode text-6xl mb-6"></i>
         استلام أموال
       </a>
-      <a href="statement.html" class="btn-green flex flex-col items-center justify-center">
+      <a href="statement.html" class="btn-action flex flex-col items-center justify-center">
         <i class="fas fa-file-invoice-dollar text-6xl mb-6"></i>
         كشف حساب
       </a>
-      <a href="profile.html" class="btn-green flex flex-col items-center justify-center">
+      <a href="profile.html" class="btn-action flex flex-col items-center justify-center">
         <i class="fas fa-user text-6xl mb-6"></i>
         الملف الشخصي
       </a>
     </div>
 
     <!-- Recent Transactions -->
-    <div class="card-glass">
+    <div class="bg-white/10 backdrop-blur-md border border-white/20 p-12 rounded-3xl shadow-2xl mt-20">
       <h2 class="text-4xl font-bold text-center mb-12">آخر المعاملات</h2>
       <div class="text-center text-gray-300 text-2xl py-20">
         لا توجد معاملات بعد
@@ -88,4 +87,4 @@
     }
   </script>
 </body>
-  </html> 
+      </html> 
