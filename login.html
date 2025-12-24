@@ -5,30 +5,30 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>تسجيل الدخول - Sudan Pay</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .bg-hero { background: linear-gradient(to bottom, #0f172a, #1e293b); }
+    .btn-green { @apply bg-lime-400 hover:bg-lime-500 text-black font-bold py-4 px-10 rounded-full text-xl transition shadow-lg; }
+  </style>
 </head>
-<body class="bg-slate-950 text-white min-h-screen flex items-center justify-center">
-  <div class="w-full max-w-md p-8 bg-slate-800 rounded-2xl shadow-2xl">
-    <h1 class="text-4xl font-bold text-center text-emerald-500 mb-8">Sudan Pay</h1>
-    <h2 class="text-2xl text-center mb-6">تسجيل الدخول</h2>
+<body class="bg-hero min-h-screen flex items-center justify-center">
+  <div class="w-full max-w-md p-10 bg-white/10 backdrop-blur-md rounded-3xl shadow-2xl border border-white/20">
+    <div class="text-center mb-8">
+      <svg width="120" height="120" viewBox="0 0 100 100" class="mx-auto text-lime-400">
+        <circle cx="50" cy="50" r="45" fill="currentColor" opacity="0.3"/>
+        <path d="M30 50 Q50 10 70 50 Q50 90 30 50 Z" fill="currentColor"/>
+        <circle cx="50" cy="30" r="20" fill="#0f172a"/>
+      </svg>
+      <h1 class="text-4xl font-bold mt-6">Sudan Pay</h1>
+    </div>
 
-    <form id="loginForm" class="space-y-6">
-      <div>
-        <label class="block text-gray-300 mb-2">البريد الإلكتروني</label>
-        <input type="email" id="email" class="w-full p-4 bg-slate-700 rounded-lg border border-slate-600 focus:border-emerald-500 outline-none" required/>
-      </div>
-
-      <div>
-        <label class="block text-gray-300 mb-2">كلمة المرور</label>
-        <input type="password" id="password" class="w-full p-4 bg-slate-700 rounded-lg border border-slate-600 focus:border-emerald-500 outline-none" required/>
-      </div>
-
-      <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 rounded-lg transition">
-        دخول
-      </button>
+    <form id="loginForm" class="space-y-8">
+      <input type="email" id="email" placeholder="البريد الإلكتروني" class="w-full p-4 bg-white/10 border border-white/30 rounded-lg focus:border-lime-400 outline-none text-white placeholder-gray-400 text-lg"/>
+      <input type="password" id="password" placeholder="كلمة المرور" class="w-full p-4 bg-white/10 border border-white/30 rounded-lg focus:border-lime-400 outline-none text-white placeholder-gray-400 text-lg"/>
+      <button type="submit" class="w-full btn-green">تسجيل الدخول</button>
     </form>
 
-    <p class="text-center mt-6 text-gray-400">
-      ما عندك حساب؟ <a href="register.html" class="text-emerald-500 hover:underline">إنشاء حساب</a>
+    <p class="text-center mt-8 text-gray-300">
+      ليس لديك حساب؟ <a href="register.html" class="text-lime-400 hover:underline">إنشاء حساب</a>
     </p>
   </div>
 
@@ -37,4 +37,4 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
   <script src="app.js"></script>
 </body>
-</html>
+  </html> 
