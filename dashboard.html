@@ -8,8 +8,8 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
     .bg-hero { background: linear-gradient(to bottom, #0f172a, #1e293b); }
-    .btn-action { @apply bg-gradient-to-r from-lime-400 to-lime-500 hover:from-lime-500 hover:to-lime-600 text-black font-bold py-8 px-10 rounded-3xl text-2xl transition-all shadow-2xl transform hover:scale-105; }
-    .card-balance { @apply bg-gradient-to-r from-emerald-700 to-emerald-600 p-10 rounded-3xl shadow-2xl text-center; }
+    .btn-action { @apply bg-white hover:bg-gray-100 text-slate-900 font-bold py-10 px-8 rounded-3xl text-2xl transition-all shadow-2xl border border-gray-300 flex flex-col items-center justify-center; }
+    .card-balance { @apply bg-gradient-to-r from-emerald-700 to-emerald-600 p-12 rounded-3xl shadow-2xl text-center; }
   </style>
 </head>
 <body class="bg-hero min-h-screen">
@@ -41,21 +41,21 @@
     </div>
 
     <!-- Quick Actions -->
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
-      <a href="send.html" class="btn-action flex flex-col items-center justify-center">
-        <i class="fas fa-paper-plane text-6xl mb-6"></i>
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-10">
+      <a href="send.html" class="btn-action">
+        <i class="fas fa-paper-plane text-6xl text-emerald-600 mb-6"></i>
         إرسال أموال
       </a>
-      <a href="receive.html" class="btn-action flex flex-col items-center justify-center">
-        <i class="fas fa-qrcode text-6xl mb-6"></i>
+      <a href="receive.html" class="btn-action">
+        <i class="fas fa-qrcode text-6xl text-emerald-600 mb-6"></i>
         استلام أموال
       </a>
-      <a href="statement.html" class="btn-action flex flex-col items-center justify-center">
-        <i class="fas fa-file-invoice-dollar text-6xl mb-6"></i>
+      <a href="statement.html" class="btn-action">
+        <i class="fas fa-file-invoice-dollar text-6xl text-emerald-600 mb-6"></i>
         كشف حساب
       </a>
-      <a href="profile.html" class="btn-action flex flex-col items-center justify-center">
-        <i class="fas fa-user text-6xl mb-6"></i>
+      <a href="profile.html" class="btn-action">
+        <i class="fas fa-user text-6xl text-emerald-600 mb-6"></i>
         الملف الشخصي
       </a>
     </div>
@@ -87,4 +87,4 @@
     }
   </script>
 </body>
-      </html> 
+  </html> 
