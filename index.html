@@ -4,81 +4,97 @@
   <meta name="verifywebsiteownership" content="jf46gF6brMtbEMsnvCGx3WlWP"/>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Sudan Pay - محفظتك الإلكترونية</title>
+  <title>Sudan Pay</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    .bg-hero { background: linear-gradient(to bottom, #0f172a, #1e293b); }
+    .btn-green { @apply bg-lime-400 hover:bg-lime-500 text-black font-bold py-4 px-10 rounded-full text-xl transition shadow-lg; }
+    .card-glass { @apply bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl p-10 text-center; }
+    .logo-svg { fill: #a3e635; }
+  </style>
 </head>
-<body class="bg-slate-950 text-white min-h-screen font-sans">
+<body class="bg-slate-950 text-white min-h-screen">
   <!-- Navbar -->
-  <nav class="bg-slate-900/80 backdrop-blur-md fixed w-full z-50">
-    <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-      <div class="text-2xl font-bold text-emerald-500 flex items-center">
-        <span class="text-3xl">S</span>udan Pay
+  <nav class="fixed top-0 w-full z-50 bg-slate-900/90 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div class="flex items-center space-x-4">
+        <svg width="60" height="60" viewBox="0 0 100 100" class="logo-svg">
+          <circle cx="50" cy="50" r="45" fill="currentColor" opacity="0.3"/>
+          <path d="M30 50 Q50 10 70 50 Q50 90 30 50 Z" fill="currentColor"/>
+          <circle cx="50" cy="30" r="20" fill="#0f172a"/>
+        </svg>
+        <span class="text-3xl font-bold">Sudan Pay</span>
       </div>
-      <div class="hidden md:flex space-x-8">
-        <a href="index.html" class="hover:text-emerald-400 transition">الرئيسية</a>
-        <a href="#" class="hover:text-emerald-400 transition">خدماتنا</a>
-        <a href="#" class="hover:text-emerald-400 transition">عنّا</a>
-        <a href="#" class="hover:text-emerald-400 transition">اتصل بنا</a>
-      </div>
-      <div class="flex space-x-4">
-        <a href="login.html" class="bg-emerald-600 hover:bg-emerald-700 px-6 py-2 rounded-lg transition">تسجيل الدخول</a>
-        <a href="register.html" class="bg-white text-slate-900 hover:bg-gray-100 px-6 py-2 rounded-lg transition">إنشاء حساب</a>
+      <div class="flex space-x-6">
+        <a href="login.html" class="btn-green">تسجيل الدخول</a>
+        <a href="register.html" class="text-white hover:text-lime-400 transition text-xl">إنشاء حساب</a>
       </div>
     </div>
   </nav>
 
   <!-- Hero -->
-  <section class="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-950 via-slate-900 to-emerald-950 pt-20">
-    <div class="max-w-6xl mx-auto px-4 text-center">
-      <h1 class="text-5xl md:text-7xl font-bold mb-6">مرحباً بك في Sudan Pay</h1>
-      <p class="text-xl md:text-2xl text-gray-300 mb-10 max-w-3xl mx-auto">
-        محفظتك الإلكترونية الآمنة والسريعة في السودان – إرسال واستلام أموال بكل سهولة
+  <section class="min-h-screen flex items-center justify-center bg-hero pt-20">
+    <div class="max-w-6xl mx-auto px-6 text-center">
+      <svg width="200" height="200" viewBox="0 0 100 100" class="mx-auto mb-8 logo-svg">
+        <circle cx="50" cy="50" r="45" fill="currentColor" opacity="0.3"/>
+        <path d="M30 50 Q50 10 70 50 Q50 90 30 50 Z" fill="currentColor"/>
+        <circle cx="50" cy="30" r="20" fill="#0f172a"/>
+      </svg>
+      <h1 class="text-6xl md:text-7xl font-bold mb-8">Welcome to Sudan Pay</h1>
+      <p class="text-2xl text-gray-300 mb-12 max-w-4xl mx-auto">
+        محفظتك الإلكترونية الآمنة والسريعة في السودان – تحويلات فورية وسهلة في أي وقت
       </p>
-      <div class="flex flex-col md:flex-row gap-6 justify-center">
-        <a href="register.html" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 px-10 rounded-full text-xl transition shadow-lg">
-          ابدأ الآن
-        </a>
-        <a href="login.html" class="bg-transparent border-2 border-emerald-500 hover:bg-emerald-600 hover:border-transparent text-white font-bold py-4 px-10 rounded-full text-xl transition">
-          تسجيل الدخول
-        </a>
+      <div class="flex flex-col md:flex-row gap-8 justify-center">
+        <button class="btn-green">Learn More</button>
+        <button class="bg-transparent border-2 border-lime-400 hover:bg-lime-400/20 text-white font-bold py-4 px-10 rounded-full text-xl transition">
+          Contact Us
+        </button>
       </div>
     </div>
   </section>
 
   <!-- Services -->
-  <section class="py-20 bg-slate-900">
-    <div class="max-w-6xl mx-auto px-4">
-      <h2 class="text-4xl font-bold text-center mb-16">خدماتنا</h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div class="bg-slate-800 p-8 rounded-2xl text-center hover:bg-emerald-900 transition">
-          <i class="fas fa-money-bill-wave text-5xl text-emerald-500 mb-6"></i>
+  <section class="py-20 bg-slate-900/50">
+    <div class="max-w-6xl mx-auto px-6">
+      <h2 class="text-4xl font-bold text-center mb-16">Our Services</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+        <div class="card-glass">
+          <svg width="80" height="80" viewBox="0 0 100 100" class="mx-auto mb-6 logo-svg">
+            <circle cx="50" cy="50" r="45" fill="currentColor" opacity="0.3"/>
+            <path d="M30 50 Q50 10 70 50 Q50 90 30 50 Z" fill="currentColor"/>
+          </svg>
           <h3 class="text-2xl font-bold mb-4">إرسال أموال</h3>
-          <p class="text-gray-400">أرسل أموال لأي شخص في السودان بسرعة وأمان</p>
+          <p class="text-gray-300">أرسل لأي شخص في ثواني</p>
         </div>
-        <div class="bg-slate-800 p-8 rounded-2xl text-center hover:bg-emerald-900 transition">
-          <i class="fas fa-hand-holding-usd text-5xl text-emerald-500 mb-6"></i>
+        <div class="card-glass">
+          <svg width="80" height="80" viewBox="0 0 100 100" class="mx-auto mb-6 logo-svg">
+            <circle cx="50" cy="50" r="45" fill="currentColor" opacity="0.3"/>
+            <path d="M30 50 Q50 10 70 50 Q50 90 30 50 Z" fill="currentColor"/>
+          </svg>
           <h3 class="text-2xl font-bold mb-4">استلام أموال</h3>
-          <p class="text-gray-400">استلم تحويلات من أي مكان في العالم</p>
+          <p class="text-gray-300">شارك رمزك واستلم بسهولة</p>
         </div>
-        <div class="bg-slate-800 p-8 rounded-2xl text-center hover:bg-emerald-900 transition">
-          <i class="fas fa-file-invoice-dollar text-5xl text-emerald-500 mb-6"></i>
+        <div class="card-glass">
+          <svg width="80" height="80" viewBox="0 0 100 100" class="mx-auto mb-6 logo-svg">
+            <circle cx="50" cy="50" r="45" fill="currentColor" opacity="0.3"/>
+            <path d="M30 50 Q50 10 70 50 Q50 90 30 50 Z" fill="currentColor"/>
+          </svg>
           <h3 class="text-2xl font-bold mb-4">كشف حساب</h3>
-          <p class="text-gray-400">تابع معاملاتك ورصيدك في أي وقت</p>
+          <p class="text-gray-300">تابع معاملاتك بدقة</p>
         </div>
       </div>
     </div>
   </section>
 
   <!-- Footer -->
-  <footer class="bg-slate-950 py-10 text-center text-gray-400">
+  <footer class="bg-slate-950 py-12 text-center text-gray-400">
     <p>© 2025 Sudan Pay. جميع الحقوق محفوظة.</p>
   </footer>
-  <!-- Firebase SDK v8 -->
+
+  <!-- Firebase v8 -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-
-  <!-- ملف app.js -->
   <script src="app.js"></script>
 </body>
   </html>
