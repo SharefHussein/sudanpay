@@ -5,41 +5,54 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>إرسال أموال - Sudan Pay</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    .bg-hero { background: linear-gradient(to bottom, #0f172a, #1e293b); }
+    .btn-green { @apply bg-lime-400 hover:bg-lime-500 text-black font-bold py-4 px-10 rounded-full text-xl transition shadow-lg; }
+    .card-glass { @apply bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl p-10; }
+    .logo-svg { fill: #a3e635; }
+  </style>
 </head>
-<body class="bg-slate-950 text-white min-h-screen">
+<body class="bg-hero min-h-screen">
   <!-- Navbar -->
-  <nav class="bg-slate-900/80 backdrop-blur-md fixed w-full z-50">
-    <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-      <div class="text-2xl font-bold text-emerald-500">Sudan Pay</div>
-      <div class="flex space-x-6">
-        <a href="index.html" class="hover:text-emerald-400">الرئيسية</a>
-        <button onclick="logout()" class="bg-red-600 hover:bg-red-700 px-6 py-2 rounded-lg transition">خروج</button>
+  <nav class="fixed top-0 w-full z-50 bg-slate-900/90 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div class="flex items-center space-x-4">
+        <svg width="60" height="60" viewBox="0 0 100 100" class="logo-svg">
+          <circle cx="50" cy="50" r="45" fill="currentColor" opacity="0.3"/>
+          <path d="M30 50 Q50 10 70 50 Q50 90 30 50 Z" fill="currentColor"/>
+          <circle cx="50" cy="30" r="20" fill="#0f172a"/>
+        </svg>
+        <span class="text-3xl font-bold">Sudan Pay</span>
       </div>
+      <button onclick="logout()" class="bg-red-600 hover:bg-red-700 px-6 py-3 rounded-full transition">
+        خروج
+      </button>
     </div>
   </nav>
 
   <!-- Main Content -->
-  <div class="max-w-4xl mx-auto px-4 pt-24">
-    <h1 class="text-4xl font-bold mb-10 text-center">إرسال أموال</h1>
+  <div class="max-w-4xl mx-auto px-6 pt-32">
+    <h1 class="text-5xl font-bold text-center mb-16">إرسال أموال</h1>
 
-    <div class="bg-slate-800 p-10 rounded-2xl shadow-2xl">
+    <div class="card-glass">
       <form class="space-y-8">
         <div>
-          <label class="block text-gray-300 mb-2 text-lg">رقم الهاتف المستلم</label>
-          <input type="tel" placeholder="0912345678" class="w-full p-4 bg-slate-700 rounded-lg border border-slate-600 focus:border-emerald-500 outline-none text-lg" required/>
+          <label class="block text-gray-300 mb-3 text-xl">رقم الهاتف أو البريد الإلكتروني للمستلم</label>
+          <input type="text" placeholder="0912345678 أو example@sudanpay.com" class="w-full p-5 bg-white/10 border border-white/30 rounded-xl focus:border-lime-400 outline-none text-white text-lg"/>
         </div>
 
         <div>
-          <label class="block text-gray-300 mb-2 text-lg">المبلغ (جنيه سوداني)</label>
-          <input type="number" placeholder="1000" class="w-full p-4 bg-slate-700 rounded-lg border border-slate-600 focus:border-emerald-500 outline-none text-lg" required/>
+          <label class="block text-gray-300 mb-3 text-xl">المبلغ (جنيه سوداني)</label>
+          <input type="number" placeholder="1000" class="w-full p-5 bg-white/10 border border-white/30 rounded-xl focus:border-lime-400 outline-none text-white text-lg"/>
         </div>
 
         <div>
-          <label class="block text-gray-300 mb-2 text-lg">ملاحظات (اختياري)</label>
-          <textarea placeholder="سبب التحويل..." class="w-full p-4 bg-slate-700 rounded-lg border border-slate-600 focus:border-emerald-500 outline-none h-32 text-lg"></textarea>
+          <label class="block text-gray-300 mb-3 text-xl">ملاحظات (اختياري)</label>
+          <textarea placeholder="سبب التحويل..." class="w-full p-5 bg-white/10 border border-white/30 rounded-xl focus:border-lime-400 outline-none text-white text-lg h-32"></textarea>
         </div>
 
-        <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-5 rounded-lg text-xl transition shadow-lg">
+        <button type="submit" class="w-full btn-green">
           إرسال الأموال الآن
         </button>
       </form>
@@ -59,4 +72,4 @@
     }
   </script>
 </body>
-</html>
+            </html> 
