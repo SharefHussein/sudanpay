@@ -5,7 +5,7 @@
   <meta name="theme-color" content="#007bff"> 
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Sudan Pay</title>
+  <title>Sudan Pay - الرئيسية</title>
   
   <script src="https://accounts.google.com/gsi/client" async defer></script>
   
@@ -16,11 +16,10 @@
     .btn-green { @apply bg-lime-400 hover:bg-lime-500 text-black font-bold py-4 px-10 rounded-full text-xl transition shadow-lg; }
     .card-glass { @apply bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl p-10 text-center; }
     .logo-svg { fill: #a3e635; }
-    /* تنسيق خاص لزر جوجل ليتناسب مع تصميمك */
-    #g_id_onload { display: none; }
   </style>
 </head>
 <body class="bg-slate-950 text-white min-h-screen">
+
   <nav class="fixed top-0 w-full z-50 bg-slate-900/90 backdrop-blur-md">
     <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
       <div class="flex items-center space-x-4">
@@ -29,7 +28,7 @@
           <path d="M30 50 Q50 10 70 50 Q50 90 30 50 Z" fill="currentColor"/>
           <circle cx="50" cy="30" r="20" fill="#0f172a"/>
         </svg>
-        <span class="text-3xl font-bold">Sudan Pay</span>
+        <span class="text-3xl font-bold px-4">Sudan Pay</span>
       </div>
       
       <div class="flex items-center space-x-6 gap-4">
@@ -40,16 +39,9 @@
              data-callback="handleCredentialResponse"
              data-auto_prompt="false">
         </div>
-        <div class="g_id_signin"
-             data-type="standard"
-             data-shape="pill"
-             data-theme="filled_blue"
-             data-text="signin_with"
-             data-size="large"
-             data-logo_alignment="left">
-        </div>
-
-        <a href="register.html" class="text-white hover:text-lime-400 transition text-xl">إنشاء حساب</a>
+        <div class="g_id_signin" data-type="standard" data-shape="pill" data-theme="filled_blue" data-text="signin_with" data-size="large"></div>
+        
+        <a href="register.html" class="hidden md:block text-white hover:text-lime-400 transition text-xl">إنشاء حساب</a>
       </div>
     </div>
   </nav>
@@ -61,14 +53,14 @@
         <path d="M30 50 Q50 10 70 50 Q50 90 30 50 Z" fill="currentColor"/>
         <circle cx="50" cy="30" r="20" fill="#0f172a"/>
       </svg>
-      <h1 class="text-6xl md:text-7xl font-bold mb-8">Welcome to Sudan Pay</h1>
+      <h1 class="text-6xl md:text-7xl font-bold mb-8 uppercase">Welcome to Sudan Pay</h1>
       <p class="text-2xl text-gray-300 mb-12 max-w-4xl mx-auto">
         محفظتك الإلكترونية الآمنة والسريعة في السودان – تحويلات فورية وسهلة في أي وقت
       </p>
       <div class="flex flex-col md:flex-row gap-8 justify-center">
-        <button class="btn-green">Learn More</button>
+        <button class="btn-green">ابدأ الآن</button>
         <button class="bg-transparent border-2 border-lime-400 hover:bg-lime-400/20 text-white font-bold py-4 px-10 rounded-full text-xl transition">
-          Contact Us
+          تواصل معنا
         </button>
       </div>
     </div>
@@ -76,51 +68,43 @@
 
   <section class="py-20 bg-slate-900/50">
     <div class="max-w-6xl mx-auto px-6">
-      <h2 class="text-4xl font-bold text-center mb-16">Our Services</h2>
+      <h2 class="text-4xl font-bold text-center mb-16">خدماتنا</h2>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
         <div class="card-glass">
-          <svg width="80" height="80" viewBox="0 0 100 100" class="mx-auto mb-6 logo-svg">
-            <circle cx="50" cy="50" r="45" fill="currentColor" opacity="0.3"/>
-            <path d="M30 50 Q50 10 70 50 Q50 90 30 50 Z" fill="currentColor"/>
-          </svg>
+          <i class="fas fa-paper-plane text-5xl text-lime-400 mb-6"></i>
           <h3 class="text-2xl font-bold mb-4">إرسال أموال</h3>
-          <p class="text-gray-300">أرسل لأي شخص في ثواني</p>
+          <p class="text-gray-300">أرسل لأي شخص في ثواني داخل السودان</p>
         </div>
         <div class="card-glass">
-          <svg width="80" height="80" viewBox="0 0 100 100" class="mx-auto mb-6 logo-svg">
-            <circle cx="50" cy="50" r="45" fill="currentColor" opacity="0.3"/>
-            <path d="M30 50 Q50 10 70 50 Q50 90 30 50 Z" fill="currentColor"/>
-          </svg>
+          <i class="fas fa-qrcode text-5xl text-lime-400 mb-6"></i>
           <h3 class="text-2xl font-bold mb-4">استلام أموال</h3>
-          <p class="text-gray-300">شارك رمزك واستلم بسهولة</p>
+          <p class="text-gray-300">شارك رمز QR الخاص بك واستلم مدفوعاتك</p>
         </div>
         <div class="card-glass">
-          <svg width="80" height="80" viewBox="0 0 100 100" class="mx-auto mb-6 logo-svg">
-            <circle cx="50" cy="50" r="45" fill="currentColor" opacity="0.3"/>
-            <path d="M30 50 Q50 10 70 50 Q50 90 30 50 Z" fill="currentColor"/>
-          </svg>
+          <i class="fas fa-history text-5xl text-lime-400 mb-6"></i>
           <h3 class="text-2xl font-bold mb-4">كشف حساب</h3>
-          <p class="text-gray-300">تابع معاملاتك بدقة</p>
+          <p class="text-gray-300">تابع جميع معاملاتك المالية بدقة عالية</p>
         </div>
       </div>
     </div>
   </section>
 
-  <footer class="bg-slate-950 py-12 text-center text-gray-400">
+  <footer class="bg-slate-950 py-12 text-center text-gray-400 border-t border-white/5">
     <p>© 2025 Sudan Pay. جميع الحقوق محفوظة.</p>
   </footer>
 
   <script>
     function handleCredentialResponse(response) {
-      // فك تشفير البيانات القادمة من جوجل
+      // فك تشفير البيانات من جوجل
       const responsePayload = parseJwt(response.credential);
 
-      console.log("ID: " + responsePayload.sub);
-      console.log('Full Name: ' + responsePayload.name);
-      console.log('Email: ' + responsePayload.email);
-      console.log('Image URL: ' + responsePayload.picture);
+      // حفظ البيانات في ذاكرة المتصفح لاستخدامها في صفحة Dashboard
+      localStorage.setItem('user_name', responsePayload.name);
+      localStorage.setItem('user_email', responsePayload.email);
+      localStorage.setItem('user_image', responsePayload.picture);
 
-      alert("أهلاً بك يا " + responsePayload.name + " في Sudan Pay!");
+      // التوجه لصفحة لوحة التحكم
+      window.location.href = "dashboard.html"; 
     }
 
     function parseJwt(token) {
@@ -135,7 +119,6 @@
 
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-  <script src="app.js"></script>
 </body>
 </html>
  
