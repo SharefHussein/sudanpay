@@ -1,17 +1,13 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <link rel="manifest" href="/manifest.json">
-  <meta name="theme-color" content="#007bff"> 
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Sudan Pay</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
     .bg-hero { background: linear-gradient(to bottom, #0f172a, #1e293b); }
     .btn-green { @apply bg-lime-400 hover:bg-lime-500 text-black font-bold py-4 px-10 rounded-full text-xl transition shadow-lg cursor-pointer; }
-    .card-glass { @apply bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl p-10 text-center; }
     .logo-svg { fill: #a3e635; }
   </style>
 </head>
@@ -19,42 +15,31 @@
   <nav class="fixed top-0 w-full z-50 bg-slate-900/90 backdrop-blur-md">
     <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
       <div class="flex items-center space-x-4">
-        <svg width="60" height="60" viewBox="0 0 100 100" class="logo-svg">
-          <circle cx="50" cy="50" r="45" fill="currentColor" opacity="0.3"/>
-          <path d="M30 50 Q50 10 70 50 Q50 90 30 50 Z" fill="currentColor"/>
-          <circle cx="50" cy="30" r="20" fill="#0f172a"/>
-        </svg>
-        <span class="text-3xl font-bold px-4">Sudan Pay</span>
+        <span class="text-3xl font-bold">Sudan Pay</span>
       </div>
-      <div class="flex space-x-6 items-center">
-        <button onclick="signInWithGoogle()" id="googleBtn" class="bg-white text-black px-4 py-2 rounded-lg font-bold flex items-center gap-2 hover:bg-gray-200 transition">
-          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="18">
-          دخول
+      <div class="flex space-x-4">
+        <button onclick="signInWithGoogle()" class="bg-white text-black px-4 py-2 rounded-full font-bold text-sm flex items-center gap-2">
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="16"> دخول سريع
         </button>
-        <a href="register.html" class="text-white hover:text-lime-400 transition text-xl hidden md:block">إنشاء حساب</a>
+        <a href="login.html" class="border border-white px-4 py-2 rounded-full text-sm">تسجيل دخول</a>
       </div>
     </div>
   </nav>
 
-  <section class="min-h-screen flex items-center justify-center bg-hero pt-20">
-    <div class="max-w-6xl mx-auto px-6 text-center">
-      <svg width="200" height="200" viewBox="0 0 100 100" class="mx-auto mb-8 logo-svg">
-        <circle cx="50" cy="50" r="45" fill="currentColor" opacity="0.3"/>
-        <path d="M30 50 Q50 10 70 50 Q50 90 30 50 Z" fill="currentColor"/>
-        <circle cx="50" cy="30" r="20" fill="#0f172a"/>
-      </svg>
-      <h1 class="text-6xl md:text-7xl font-bold mb-8">Welcome to Sudan Pay</h1>
-      <p class="text-2xl text-gray-300 mb-12 max-w-4xl mx-auto">محفظتك الإلكترونية الآمنة والسريعة في السودان</p>
-      <div class="flex flex-col md:flex-row gap-8 justify-center">
-        <button onclick="signInWithGoogle()" class="btn-green">ابدأ الآن</button>
-        <button class="bg-transparent border-2 border-lime-400 hover:bg-lime-400/20 text-white font-bold py-4 px-10 rounded-full text-xl transition">تواصل معنا</button>
+  <section class="min-h-screen flex items-center justify-center bg-hero pt-20 text-center">
+    <div class="max-w-4xl px-6">
+      <h1 class="text-6xl font-bold mb-8">Welcome to Sudan Pay</h1>
+      <p class="text-2xl text-gray-300 mb-12">محفظتك الإلكترونية الآمنة والسريعة في السودان</p>
+      <div class="flex gap-4 justify-center">
+        <a href="register.html" class="btn-green">إنشاء حساب</a>
+        <button onclick="signInWithGoogle()" class="bg-white/10 border border-white/20 py-4 px-10 rounded-full text-xl hover:bg-white/20 transition">دخول بجوجل</button>
       </div>
     </div>
   </section>
 
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-
+  
   <script src="app.js"></script>
 </body>
 </html>
