@@ -6,6 +6,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Sudan Pay</title>
+  
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
@@ -13,10 +16,11 @@
     .btn-green { @apply bg-lime-400 hover:bg-lime-500 text-black font-bold py-4 px-10 rounded-full text-xl transition shadow-lg; }
     .card-glass { @apply bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl p-10 text-center; }
     .logo-svg { fill: #a3e635; }
+    /* تنسيق خاص لزر جوجل ليتناسب مع تصميمك */
+    #g_id_onload { display: none; }
   </style>
 </head>
 <body class="bg-slate-950 text-white min-h-screen">
-  <!-- Navbar -->
   <nav class="fixed top-0 w-full z-50 bg-slate-900/90 backdrop-blur-md">
     <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
       <div class="flex items-center space-x-4">
@@ -27,14 +31,29 @@
         </svg>
         <span class="text-3xl font-bold">Sudan Pay</span>
       </div>
-      <div class="flex space-x-6">
-        <a href="login.html" class="btn-green">تسجيل الدخول</a>
+      
+      <div class="flex items-center space-x-6 gap-4">
+        <div id="g_id_onload"
+             data-client_id="699809447272-mau3s5i7ghhnheo9rsjlpjgs77muam9u.apps.googleusercontent.com"
+             data-context="signin"
+             data-ux_mode="popup"
+             data-callback="handleCredentialResponse"
+             data-auto_prompt="false">
+        </div>
+        <div class="g_id_signin"
+             data-type="standard"
+             data-shape="pill"
+             data-theme="filled_blue"
+             data-text="signin_with"
+             data-size="large"
+             data-logo_alignment="left">
+        </div>
+
         <a href="register.html" class="text-white hover:text-lime-400 transition text-xl">إنشاء حساب</a>
       </div>
     </div>
   </nav>
 
-  <!-- Hero -->
   <section class="min-h-screen flex items-center justify-center bg-hero pt-20">
     <div class="max-w-6xl mx-auto px-6 text-center">
       <svg width="200" height="200" viewBox="0 0 100 100" class="mx-auto mb-8 logo-svg">
@@ -55,7 +74,6 @@
     </div>
   </section>
 
-  <!-- Services -->
   <section class="py-20 bg-slate-900/50">
     <div class="max-w-6xl mx-auto px-6">
       <h2 class="text-4xl font-bold text-center mb-16">Our Services</h2>
@@ -88,14 +106,36 @@
     </div>
   </section>
 
-  <!-- Footer -->
   <footer class="bg-slate-950 py-12 text-center text-gray-400">
     <p>© 2025 Sudan Pay. جميع الحقوق محفوظة.</p>
   </footer>
 
-  <!-- Firebase v8 -->
+  <script>
+    function handleCredentialResponse(response) {
+      // فك تشفير البيانات القادمة من جوجل
+      const responsePayload = parseJwt(response.credential);
+
+      console.log("ID: " + responsePayload.sub);
+      console.log('Full Name: ' + responsePayload.name);
+      console.log('Email: ' + responsePayload.email);
+      console.log('Image URL: ' + responsePayload.picture);
+
+      alert("أهلاً بك يا " + responsePayload.name + " في Sudan Pay!");
+    }
+
+    function parseJwt(token) {
+      var base64Url = token.split('.')[1];
+      var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+      }).join(''));
+      return JSON.parse(jsonPayload);
+    }
+  </script>
+
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
   <script src="app.js"></script>
 </body>
-  </html>
+</html>
+ 
