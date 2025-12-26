@@ -5,8 +5,7 @@
   <meta name="theme-color" content="#007bff"> 
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Sudan Pay - الرئيسية</title>
-  
+  <title>Sudan Pay</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
@@ -17,7 +16,6 @@
   </style>
 </head>
 <body class="bg-slate-950 text-white min-h-screen">
-
   <nav class="fixed top-0 w-full z-50 bg-slate-900/90 backdrop-blur-md">
     <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
       <div class="flex items-center space-x-4">
@@ -28,60 +26,36 @@
         </svg>
         <span class="text-3xl font-bold px-4">Sudan Pay</span>
       </div>
-      
-      <div class="flex items-center space-x-6 gap-4">
-        <button id="googleSignInBtn" class="bg-white text-black px-6 py-2 rounded-full font-bold flex items-center gap-2 hover:bg-gray-200 transition">
-          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20">
-          تسجيل الدخول بجوجل
+      <div class="flex space-x-6 items-center">
+        <button onclick="signInWithGoogle()" id="googleBtn" class="bg-white text-black px-4 py-2 rounded-lg font-bold flex items-center gap-2 hover:bg-gray-200 transition">
+          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="18">
+          دخول
         </button>
+        <a href="register.html" class="text-white hover:text-lime-400 transition text-xl hidden md:block">إنشاء حساب</a>
       </div>
     </div>
   </nav>
 
   <section class="min-h-screen flex items-center justify-center bg-hero pt-20">
     <div class="max-w-6xl mx-auto px-6 text-center">
-      <h1 class="text-6xl md:text-7xl font-bold mb-8 uppercase">Sudan Pay</h1>
-      <p class="text-2xl text-gray-300 mb-12 max-w-4xl mx-auto">محفظتك الإلكترونية في السودان</p>
-      <button class="btn-green" onclick="signInWithGoogle()">ابدأ الآن</button>
+      <svg width="200" height="200" viewBox="0 0 100 100" class="mx-auto mb-8 logo-svg">
+        <circle cx="50" cy="50" r="45" fill="currentColor" opacity="0.3"/>
+        <path d="M30 50 Q50 10 70 50 Q50 90 30 50 Z" fill="currentColor"/>
+        <circle cx="50" cy="30" r="20" fill="#0f172a"/>
+      </svg>
+      <h1 class="text-6xl md:text-7xl font-bold mb-8">Welcome to Sudan Pay</h1>
+      <p class="text-2xl text-gray-300 mb-12 max-w-4xl mx-auto">محفظتك الإلكترونية الآمنة والسريعة في السودان</p>
+      <div class="flex flex-col md:flex-row gap-8 justify-center">
+        <button onclick="signInWithGoogle()" class="btn-green">ابدأ الآن</button>
+        <button class="bg-transparent border-2 border-lime-400 hover:bg-lime-400/20 text-white font-bold py-4 px-10 rounded-full text-xl transition">تواصل معنا</button>
+      </div>
     </div>
   </section>
 
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
 
-  <script>
-    // إعدادات فايربيس الخاصة بمشروعك
-    const firebaseConfig = {
-      apiKey: "AIzaSyB3vxJu_et-P80ek30I3MRdC_IGhooCCsc", // مفتاحك من الصورة
-      authDomain: "sudanpay-e332a.firebaseapp.com", // من معرف المشروع
-      projectId: "sudanpay-e332a",
-      storageBucket: "sudanpay-e332a.appspot.com",
-      messagingSenderId: "699809447272",
-      appId: "1:699809447272:web:7f61c..." 
-    };
-
-    // بدء تشغيل فايربيس
-    firebase.initializeApp(firebaseConfig);
-
-    const provider = new firebase.auth.GoogleAuthProvider();
-
-    function signInWithGoogle() {
-      firebase.auth().signInWithPopup(provider)
-        .then((result) => {
-          const user = result.user;
-          console.log("نجح الدخول:", user.displayName);
-          // حفظ البيانات والتوجه للوحة التحكم
-          localStorage.setItem('user_name', user.displayName);
-          localStorage.setItem('user_image', user.photoURL);
-          window.location.href = "dashboard.html";
-        }).catch((error) => {
-          console.error("خطأ في الدخول:", error.message);
-          alert("حدث خطأ أثناء تسجيل الدخول");
-        });
-    }
-
-    document.getElementById('googleSignInBtn').onclick = signInWithGoogle;
-  </script>
+  <script src="app.js"></script>
 </body>
 </html>
  
