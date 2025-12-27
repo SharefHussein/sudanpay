@@ -6,80 +6,105 @@
   <title>الملف الشخصي - Sudan Pay</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+  
   <style>
-    .bg-hero { background: linear-gradient(to bottom, #0f172a, #1e293b); }
-    .btn-green { @apply bg-lime-400 hover:bg-lime-500 text-black font-bold py-4 px-10 rounded-full text-xl transition shadow-lg; }
-    .card-glass { @apply bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl p-10; }
-    .logo-svg { fill: #a3e635; }
+    body { font-family: 'Cairo', sans-serif; background-color: #0f172a; }
+    .hero-gradient { background: radial-gradient(circle at top right, #1e293b, #0f172a); }
+    .glass-nav { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .glass-card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); }
+    .info-box { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 20px; transition: 0.3s; }
+    .info-box:hover { background: rgba(255, 255, 255, 0.05); border-color: #a3e635; }
+    .avatar-glow { box-shadow: 0 0 30px rgba(163, 230, 53, 0.15); border: 3px solid #a3e635; }
   </style>
 </head>
-<body class="bg-hero min-h-screen">
-  <!-- Navbar -->
-  <nav class="fixed top-0 w-full z-50 bg-slate-900/90 backdrop-blur-md">
+
+<body class="hero-gradient text-white min-h-screen pb-10">
+
+  <nav class="fixed top-0 w-full z-50 glass-nav">
     <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-      <div class="flex items-center space-x-4">
-        <svg width="60" height="60" viewBox="0 0 100 100" class="logo-svg">
-          <circle cx="50" cy="50" r="45" fill="currentColor" opacity="0.3"/>
-          <path d="M30 50 Q50 10 70 50 Q50 90 30 50 Z" fill="currentColor"/>
-          <circle cx="50" cy="30" r="20" fill="#0f172a"/>
-        </svg>
-        <span class="text-3xl font-bold">Sudan Pay</span>
-      </div>
-      <button onclick="logout()" class="bg-red-600 hover:bg-red-700 px-6 py-3 rounded-full transition">
-        خروج
-      </button>
+      <a href="dashboard.html" class="flex items-center gap-2 hover:text-[#a3e635] transition">
+        <i class="fas fa-arrow-right"></i>
+        <span class="font-bold">لوحة التحكم</span>
+      </a>
+      <span class="text-xl font-black text-[#a3e635]">SUDAN<span class="text-white">PAY</span></span>
+      <button onclick="logout()" class="text-red-400 hover:text-white transition text-sm font-bold">خروج</button>
     </div>
   </nav>
 
-  <!-- Main Content -->
-  <div class="max-w-4xl mx-auto px-6 pt-32">
-    <h1 class="text-5xl font-bold text-center mb-16">الملف الشخصي</h1>
-
-    <div class="card-glass">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-        <div>
-          <h2 class="text-3xl font-bold mb-8 text-lime-400">بياناتك الشخصية</h2>
-          <div class="space-y-6">
-            <div>
-              <p class="text-gray-400 text-lg">الاسم الكامل</p>
-              <p class="text-2xl font-bold">محمد أحمد</p>
+  <main class="max-w-4xl mx-auto px-6 pt-28">
+    
+    <div class="flex flex-col items-center mb-10">
+        <div class="w-24 h-24 bg-slate-800 rounded-full mb-4 flex items-center justify-center avatar-glow overflow-hidden">
+            <i class="fas fa-user text-4xl text-[#a3e635]"></i>
             </div>
-            <div>
-              <p class="text-gray-400 text-lg">البريد الإلكتروني</p>
-              <p class="text-2xl font-bold">example@sudanpay.com</p>
-            </div>
-            <div>
-              <p class="text-gray-400 text-lg">رقم الهاتف</p>
-              <p class="text-2xl font-bold">0912345678</p>
-            </div>
-            <div>
-              <p class="text-gray-400 text-lg">تاريخ الانضمام</p>
-              <p class="text-2xl font-bold">24 ديسمبر 2025</p>
-            </div>
-          </div>
-        </div>
-
-        <div>
-          <h2 class="text-3xl font-bold mb-8 text-lime-400">إجراءات</h2>
-          <div class="space-y-6">
-            <button class="w-full bg-lime-400 hover:bg-lime-500 text-black font-bold py-4 rounded-full text-xl transition shadow-lg">
-              تغيير كلمة المرور
-            </button>
-            <button class="w-full bg-white/10 hover:bg-white/20 border border-white/30 text-white font-bold py-4 rounded-full text-xl transition">
-              تحديث البيانات
-            </button>
-            <button class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-4 rounded-full text-xl transition">
-              حذف الحساب
-            </button>
-          </div>
-        </div>
-      </div>
+        <h1 id="user-display-name" class="text-2xl font-black mb-1">محمد أحمد</h1>
+        <p id="user-display-email" class="text-gray-400 text-sm">example@sudanpay.com</p>
+        <span class="mt-3 px-4 py-1 bg-[#a3e635]/10 text-[#a3e635] text-[10px] font-bold rounded-full border border-[#a3e635]/20 uppercase">حساب موثق</span>
     </div>
-  </div>
 
-  <!-- Firebase v8 -->
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        
+        <div class="glass-card rounded-[32px] p-8">
+            <h3 class="text-lg font-bold mb-6 flex items-center gap-2">
+                <i class="fas fa-id-card text-[#a3e635]"></i> البيانات الشخصية
+            </h3>
+            <div class="space-y-4">
+                <div class="info-box p-4">
+                    <p class="text-[10px] text-gray-500 font-bold uppercase">الاسم بالكامل</p>
+                    <p class="text-sm font-bold">محمد أحمد علي</p>
+                </div>
+                <div class="info-box p-4">
+                    <p class="text-[10px] text-gray-500 font-bold uppercase">رقم الهاتف</p>
+                    <p class="text-sm font-bold">0912345678</p>
+                </div>
+                <div class="info-box p-4">
+                    <p class="text-[10px] text-gray-500 font-bold uppercase">تاريخ الانضمام</p>
+                    <p class="text-sm font-bold">24 ديسمبر 2025</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="glass-card rounded-[32px] p-8">
+            <h3 class="text-lg font-bold mb-6 flex items-center gap-2">
+                <i class="fas fa-shield-alt text-[#a3e635]"></i> الأمان والإعدادات
+            </h3>
+            <div class="space-y-4">
+                <button class="w-full flex items-center justify-between p-4 info-box hover:bg-white/5 transition group">
+                    <div class="flex items-center gap-3">
+                        <i class="fas fa-lock text-gray-400 group-hover:text-[#a3e635]"></i>
+                        <span class="text-sm">تغيير كلمة المرور</span>
+                    </div>
+                    <i class="fas fa-chevron-left text-xs text-gray-600"></i>
+                </button>
+
+                <button class="w-full flex items-center justify-between p-4 info-box hover:bg-white/5 transition group">
+                    <div class="flex items-center gap-3">
+                        <i class="fas fa-user-edit text-gray-400 group-hover:text-[#a3e635]"></i>
+                        <span class="text-sm">تعديل البيانات</span>
+                    </div>
+                    <i class="fas fa-chevron-left text-xs text-gray-600"></i>
+                </button>
+
+                <button class="w-full flex items-center justify-between p-4 rounded-2xl border border-red-500/10 bg-red-500/5 hover:bg-red-500 hover:text-white transition group text-red-500 mt-6">
+                    <div class="flex items-center gap-3">
+                        <i class="fas fa-trash-alt"></i>
+                        <span class="text-sm font-bold">حذف الحساب نهائياً</span>
+                    </div>
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="mt-10 text-center">
+        <p class="text-gray-500 text-xs">تحتاج للمساعدة؟ <a href="#" class="text-[#a3e635] font-bold">تواصل مع الدعم الفني</a></p>
+    </div>
+
+  </main>
+
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
   <script src="app.js"></script>
 
   <script>
@@ -90,4 +115,5 @@
     }
   </script>
 </body>
-    </html> 
+</html>
+ 
