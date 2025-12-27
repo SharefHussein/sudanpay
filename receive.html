@@ -6,72 +6,106 @@
   <title>استلام أموال - Sudan Pay</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
   <style>
-    .bg-hero { background: linear-gradient(to bottom, #0f172a, #1e293b); }
-    .btn-green { @apply bg-lime-400 hover:bg-lime-500 text-black font-bold py-4 px-10 rounded-full text-xl transition shadow-lg; }
-    .card-glass { @apply bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl p-10 text-center; }
-    .logo-svg { fill: #a3e635; }
+    body { font-family: 'Cairo', sans-serif; background-color: #0f172a; color: white; }
+    .hero-gradient { background: radial-gradient(circle at top right, #1e293b, #0f172a); }
+    .glass-card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); backdrop-filter: blur(15px); }
+    .qr-white-bg { background: white; padding: 20px; border-radius: 30px; box-shadow: 0 0 30px rgba(163, 230, 53, 0.15); }
+    .btn-lime { @apply bg-[#a3e635] hover:bg-[#bef264] text-black font-black py-4 px-10 rounded-2xl transition-all duration-300 shadow-lg shadow-lime-500/20; }
   </style>
 </head>
-<body class="bg-hero min-h-screen">
-  <!-- Navbar -->
-  <nav class="fixed top-0 w-full z-50 bg-slate-900/90 backdrop-blur-md">
+<body class="hero-gradient min-h-screen pb-24">
+
+  <nav class="fixed top-0 w-full z-50 bg-[#0f172a]/80 backdrop-blur-md border-b border-white/5">
     <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-      <div class="flex items-center space-x-4">
-        <svg width="60" height="60" viewBox="0 0 100 100" class="logo-svg">
-          <circle cx="50" cy="50" r="45" fill="currentColor" opacity="0.3"/>
-          <path d="M30 50 Q50 10 70 50 Q50 90 30 50 Z" fill="currentColor"/>
-          <circle cx="50" cy="30" r="20" fill="#0f172a"/>
-        </svg>
-        <span class="text-3xl font-bold">Sudan Pay</span>
+      <div class="flex items-center gap-2">
+        <div class="w-10 h-10 bg-[#a3e635] rounded-xl flex items-center justify-center shadow-lg">
+          <span class="text-black font-black text-xl">S</span>
+        </div>
+        <span class="text-2xl font-black tracking-tighter">SUDAN<span class="text-[#a3e635]">PAY</span></span>
       </div>
-      <button onclick="logout()" class="bg-red-600 hover:bg-red-700 px-6 py-3 rounded-full transition">
+      <button onclick="logout()" class="text-red-400 font-bold hover:bg-red-500/10 px-4 py-2 rounded-xl transition">
         خروج
       </button>
     </div>
   </nav>
 
-  <!-- Main Content -->
-  <div class="max-w-4xl mx-auto px-6 pt-32">
-    <h1 class="text-5xl font-bold text-center mb-16">استلام أموال</h1>
+  <div class="max-w-xl mx-auto px-6 pt-32 text-center">
+    <h1 class="text-4xl font-black mb-4">استلام أموال</h1>
+    <p class="text-gray-400 mb-10">امسح الرمز أو شارك بياناتك لاستقبال التحويلات</p>
 
-    <div class="card-glass">
-      <svg width="200" height="200" viewBox="0 0 100 100" class="mx-auto mb-8 logo-svg">
-        <circle cx="50" cy="50" r="45" fill="currentColor" opacity="0.3"/>
-        <path d="M30 50 Q50 10 70 50 Q50 90 30 50 Z" fill="currentColor"/>
-        <circle cx="50" cy="30" r="20" fill="#0f172a"/>
-      </svg>
-      <h2 class="text-3xl font-bold mb-6">رمز QR الخاص بك</h2>
-      <p class="text-xl text-gray-300 mb-10 max-w-2xl mx-auto">
-        شارك هذا الرمز مع أي شخص ليرسل لك أموال بسرعة وأمان
-      </p>
-
-      <!-- QR Code (مؤقت) -->
-      <div class="bg-white p-10 rounded-2xl inline-block mb-10">
-        <img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=https://sharefhussein.github.io/sudanpay" alt="QR Code" class="mx-auto"/>
+    <div class="glass-card p-10 rounded-[40px] shadow-2xl">
+      <div class="mb-8">
+        <div class="w-16 h-16 bg-white/5 border border-white/10 rounded-full mx-auto flex items-center justify-center text-[#a3e635] text-2xl mb-3">
+          <i class="fas fa-user-circle"></i>
+        </div>
+        <h2 id="user-display-name" class="text-xl font-bold italic">جاري التحميل...</h2>
       </div>
 
-      <p class="text-lg text-gray-400 mb-8">
-        أو شارك رقم حسابك: <span class="font-bold text-lime-400 text-2xl">0912345678</span>
-      </p>
+      <div class="qr-white-bg inline-block mb-8">
+        <img id="qr-image" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=SudanPay" alt="QR Code" class="w-48 h-48"/>
+      </div>
 
-      <button class="btn-green">
-        نسخ الرقم
-      </button>
+      <div class="space-y-4">
+        <p class="text-sm text-gray-400">حسابك الرقمي:</p>
+        <div id="user-account-id" class="text-2xl font-black text-[#a3e635] bg-white/5 py-4 rounded-2xl border border-white/5 tracking-wider">
+          ---
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4 mt-10">
+        <button onclick="copyAccount()" class="glass-card py-4 rounded-2xl font-bold text-sm hover:bg-white/10 transition">
+          <i class="fas fa-copy ml-2"></i> نسخ الرقم
+        </button>
+        <button onclick="shareLink()" class="btn-lime text-sm">
+          <i class="fas fa-share-alt ml-2"></i> مشاركة
+        </button>
+      </div>
     </div>
   </div>
 
-  <!-- Firebase v8 -->
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <nav class="fixed bottom-6 left-6 right-6 h-20 glass-card rounded-[30px] flex items-center justify-around px-4 z-50">
+    <a href="dashboard.html" class="text-gray-500 text-xl"><i class="fas fa-home"></i></a>
+    <a href="receive.html" class="text-[#a3e635] text-xl"><i class="fas fa-qrcode"></i></a>
+    <a href="profile.html" class="text-gray-500 text-xl"><i class="fas fa-user"></i></a>
+  </nav>
+
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
   <script src="app.js"></script>
 
   <script>
-    function logout() {
-      firebase.auth().signOut().then(() => {
+    // تحديث البيانات بناءً على المستخدم الحالي
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        document.getElementById('user-display-name').innerText = user.displayName || "مستخدم سودان باي";
+        document.getElementById('user-account-id').innerText = user.email.split('@')[0]; // استخدام الجزء الأول من الإيميل كمعرف
+        
+        // تحديث الـ QR ليحتوي على إيميل المستخدم للتحويل
+        const qrImg = document.getElementById('qr-image');
+        qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${user.email}`;
+      } else {
         window.location.href = 'login.html';
-      });
+      }
+    });
+
+    function copyAccount() {
+      const acc = document.getElementById('user-account-id').innerText;
+      navigator.clipboard.writeText(acc);
+      alert("تم نسخ معرف الحساب: " + acc);
+    }
+
+    function shareLink() {
+      if (navigator.share) {
+        navigator.share({
+          title: 'حساب Sudan Pay',
+          text: `أرسل لي الأموال عبر معرفي: ${document.getElementById('user-account-id').innerText}`
+        });
+      }
     }
   </script>
 </body>
-    </html> 
+</html>
+ 
