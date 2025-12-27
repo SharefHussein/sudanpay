@@ -1,54 +1,83 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>الترخيص والشراكات - Sudan Pay</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الترخيص والشراكات - Sudan Pay</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Cairo', sans-serif; background-color: #0f172a; color: white; }
+        .glass-card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); }
+        .accent-border { border-right: 4px solid #a3e635; }
+    </style>
 </head>
-<body>
+<body class="min-h-screen pb-20">
 
-<header class="main-header">
-  <div class="logo">Sudan Pay</div>
-</header>
+    <header class="p-10 text-center">
+        <div class="inline-block p-3 glass-card rounded-2xl mb-4">
+            <i class="fas fa-file-contract text-[#a3e635] text-2xl"></i>
+        </div>
+        <h1 class="text-3xl font-black italic mb-2">الترخيص والشراكات</h1>
+        <p class="text-gray-400 text-sm">الإطار القانوني والرؤية المستقبلية</p>
+    </header>
 
-<main class="container">
-  <h2>الترخيص والشراكات</h2>
+    <main class="max-w-3xl mx-auto px-6 space-y-6">
+        
+        <div class="glass-card p-8 rounded-[35px]">
+            <p class="leading-relaxed text-gray-300">
+                <span class="text-[#a3e635] font-bold">Sudan Pay</span> هي منصة تقنية مالية (FinTech) مبتكرة، تهدف لتوفير حلول دفع رقمية متكاملة داخل السودان، معتمدة على أعلى معايير الأمان العالمية.
+            </p>
+        </div>
 
-  <p>
-    Sudan Pay منصة تقنية مالية (FinTech) تعمل على توفير حلول
-    دفع رقمية داخل السودان باستخدام تقنيات حديثة وآمنة.
-  </p>
+        <div class="glass-card p-8 rounded-[35px] accent-border">
+            <h3 class="text-[#a3e635] font-black mb-4 flex items-center gap-2">
+                <i class="fas fa-gavel text-sm"></i> الوضع القانوني
+            </h3>
+            <p class="text-sm text-gray-400 leading-relaxed">
+                المنصة حالياً في مرحلة <span class="text-white font-bold">التطوير والاختبار (Beta)</span>. نحن نلتزم بالعمل تحت إشراف اللوائح التنظيمية والجهات المختصة لضمان الامتثال الكامل قبل الإطلاق التجاري الشامل.
+            </p>
+        </div>
 
-  <h3>الوضع القانوني</h3>
-  <p>
-    Sudan Pay حالياً في مرحلة التطوير والاختبار، وتهدف إلى
-    الامتثال الكامل للوائح الصادرة من الجهات التنظيمية المختصة
-    داخل السودان عند الإطلاق الرسمي.
-  </p>
+        <div class="glass-card p-8 rounded-[35px]">
+            <h3 class="text-[#a3e635] font-black mb-6">شراكاتنا الاستراتيجية</h3>
+            <div class="space-y-4">
+                <div class="flex items-center gap-4 bg-white/5 p-4 rounded-2xl">
+                    <i class="fas fa-university text-gray-500"></i>
+                    <span class="text-sm font-bold">المؤسسات المالية والبنوك المحلية</span>
+                </div>
+                <div class="flex items-center gap-4 bg-white/5 p-4 rounded-2xl">
+                    <i class="fas fa-wallet text-gray-500"></i>
+                    <span class="text-sm font-bold">مزودي خدمات الدفع الإلكتروني</span>
+                </div>
+                <div class="flex items-center gap-4 bg-white/5 p-4 rounded-2xl">
+                    <i class="fas fa-microchip text-gray-500"></i>
+                    <span class="text-sm font-bold">شركات البنية التحتية التقنية</span>
+                </div>
+            </div>
+        </div>
 
-  <h3>الشراكات</h3>
-  <p>
-    نعمل على بناء شراكات استراتيجية مع:
-  </p>
+        <p class="text-center text-[10px] text-gray-600 px-10">
+            جميع الشعارات والعلامات التجارية المسجلة هي ملك لأصحابها ولا يتم الإعلان عن الشراكة إلا بعد التوقيع الرسمي.
+        </p>
 
-  <ul>
-    <li>مزودي خدمات الدفع</li>
-    <li>مؤسسات مالية وبنوك محلية</li>
-    <li>شركات تقنية داعمة</li>
-  </ul>
+    </main>
 
-  <p>
-    أي شعارات أو أسماء شركاء سيتم الإعلان عنها رسمياً
-    بعد إتمام الاتفاقيات القانونية.
-  </p>
-</main>
+    <div class="mt-10 text-center">
+        <a href="index.html" class="text-gray-500 hover:text-[#a3e635] transition font-bold text-sm">
+            <i class="fas fa-arrow-right ml-2"></i> العودة للرئيسية
+        </a>
+    </div>
 
-<footer class="main-footer">
-  <p>© 2025 Sudan Pay</p>
-</footer>
-<script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js"></script>
-<script src="app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="app.js"></script>
+
+    <footer class="mt-20 py-10 text-center border-t border-white/5">
+        <p class="text-gray-500 text-xs font-bold">© 2025 SUDAN PAY - حقوق التطوير محفوظة</p>
+    </footer>
+
 </body>
-  </html>
+</html>
+ 
