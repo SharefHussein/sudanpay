@@ -1,26 +1,142 @@
-<div class="glass-card p-6 rounded-[30px] mt-6">
-    <h3 class="text-sm font-bold mb-6 flex items-center gap-2">
-        <i class="fas fa-shield-alt text-[#a3e635]"></i> الأمان والإعدادات
-    </h3>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الملف الشخصي - Sudan Pay</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Cairo', sans-serif; 
+            background-color: #0f172a; 
+            color: white; 
+            margin: 0;
+        }
+        .glass-card { 
+            background: rgba(255, 255, 255, 0.03); 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            backdrop-filter: blur(15px); 
+        }
+        .hero-gradient {
+            background: radial-gradient(circle at top right, rgba(163, 230, 53, 0.05), transparent);
+        }
+    </style>
+</head>
+<body class="min-h-screen pb-28 hero-gradient">
 
-    <button onclick="changePassword()" class="flex items-center justify-between w-full p-4 bg-white/5 rounded-2xl mb-3 border border-white/5 hover:bg-white/10 transition">
-        <div class="flex items-center gap-3">
-            <i class="fas fa-lock text-gray-500 text-xs"></i>
-            <span class="text-xs font-bold text-gray-300">تغيير كلمة المرور</span>
+    <header class="p-6 flex items-center justify-between">
+        <div class="flex items-center gap-4">
+            <a href="dashboard.html" class="w-10 h-10 glass-card rounded-full flex items-center justify-center text-gray-400 hover:text-[#a3e635] transition">
+                <i class="fas fa-arrow-right"></i>
+            </a>
+            <h1 class="text-xl font-black italic">لوحة التحكم</h1>
         </div>
-        <i class="fas fa-chevron-left text-[10px] text-gray-600"></i>
-    </button>
+        <button onclick="logout()" class="px-4 py-2 bg-red-500/10 text-red-500 rounded-xl font-bold text-xs border border-red-500/20">
+            خروج
+        </button>
+    </header>
 
-    <button onclick="updateUserData()" class="flex items-center justify-between w-full p-4 bg-white/5 rounded-2xl mb-3 border border-white/5 hover:bg-white/10 transition">
-        <div class="flex items-center gap-3">
-            <i class="fas fa-user-edit text-gray-500 text-xs"></i>
-            <span class="text-xs font-bold text-gray-300">تعديل البيانات</span>
+    <main class="px-6 max-w-md mx-auto">
+        
+        <div class="glass-card p-6 rounded-[35px] space-y-4 mb-6">
+            <div class="space-y-1">
+                <label class="text-[10px] text-gray-500 mr-2">الاسم بالكامل</label>
+                <div id="user-name" class="w-full p-4 rounded-2xl bg-white/5 border border-white/5 font-bold text-sm">
+                    جاري التحميل...
+                </div>
+            </div>
+
+            <div class="space-y-1">
+                <label class="text-[10px] text-gray-500 mr-2">رقم الهاتف</label>
+                <div id="user-phone" class="w-full p-4 rounded-2xl bg-white/5 border border-white/5 font-bold text-sm tracking-widest text-left">
+                    0000000000
+                </div>
+            </div>
+
+            <div class="space-y-1">
+                <label class="text-[10px] text-gray-500 mr-2">تاريخ الانضمام</label>
+                <div id="join-date" class="w-full p-4 rounded-2xl bg-white/5 border border-white/5 font-bold text-sm text-gray-400">
+                    -- ديسمبر 2025
+                </div>
+            </div>
         </div>
-        <i class="fas fa-chevron-left text-[10px] text-gray-600"></i>
-    </button>
 
-    <button onclick="deleteAccount()" class="w-full p-4 mt-4 border border-red-500/20 bg-red-500/5 rounded-2xl text-red-500 font-bold text-xs hover:bg-red-500/10 transition">
-        <i class="fas fa-trash-alt ml-2"></i> حذف الحساب نهائياً
-    </button>
-</div>
- 
+        <div class="glass-card p-6 rounded-[35px]">
+            <h3 class="text-sm font-black mb-6 flex items-center gap-2">
+                <i class="fas fa-shield-alt text-[#a3e635]"></i> الأمان والإعدادات
+            </h3>
+
+            <button onclick="changePassword()" class="flex items-center justify-between w-full p-5 bg-white/5 rounded-2xl mb-4 border border-white/5 hover:bg-white/10 transition group">
+                <div class="flex items-center gap-4">
+                    <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-gray-500 group-hover:text-[#a3e635]">
+                        <i class="fas fa-lock text-xs"></i>
+                    </div>
+                    <span class="text-xs font-bold text-gray-300">تغيير كلمة المرور</span>
+                </div>
+                <i class="fas fa-chevron-left text-[10px] text-gray-600"></i>
+            </button>
+
+            <button onclick="updateUserData()" class="flex items-center justify-between w-full p-5 bg-white/5 rounded-2xl mb-4 border border-white/5 hover:bg-white/10 transition group">
+                <div class="flex items-center gap-4">
+                    <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-gray-500 group-hover:text-[#a3e635]">
+                        <i class="fas fa-user-edit text-xs"></i>
+                    </div>
+                    <span class="text-xs font-bold text-gray-300">تعديل البيانات</span>
+                </div>
+                <i class="fas fa-chevron-left text-[10px] text-gray-600"></i>
+            </button>
+
+            <button onclick="deleteAccount()" class="w-full p-5 mt-4 border border-red-500/20 bg-red-500/5 rounded-2xl text-red-500 font-black text-xs hover:bg-red-500/10 transition flex items-center justify-center gap-2">
+                <i class="fas fa-trash-alt"></i> حذف الحساب نهائياً
+            </button>
+        </div>
+
+        <p class="text-center mt-10 text-[10px] text-gray-600 font-bold">
+            تحتاج للمساعدة؟ <span class="text-[#a3e635]">تواصل مع الدعم الفني</span>
+        </p>
+    </main>
+
+    <nav class="fixed bottom-6 left-6 right-6 h-20 glass-card rounded-[30px] flex items-center justify-around px-4 z-50">
+        <a href="dashboard.html" class="text-gray-500 hover:text-[#a3e635] transition text-xl">
+            <i class="fas fa-home"></i>
+        </a>
+        <a href="send.html" class="text-gray-500 hover:text-[#a3e635] transition text-xl">
+            <i class="fas fa-paper-plane"></i>
+        </a>
+        <a href="receive.html" class="text-gray-500 hover:text-[#a3e635] transition text-xl">
+            <i class="fas fa-qrcode"></i>
+        </a>
+        <a href="profile.html" class="text-[#a3e635] text-xl">
+            <i class="fas fa-user-circle"></i>
+        </a>
+    </nav>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    
+    <script src="app.js"></script>
+
+    <script>
+        // كود لجلب بيانات المستخدم وعرضها في الحقول عند فتح الصفحة
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                db.collection("users").doc(user.uid).onSnapshot((doc) => {
+                    if (doc.exists) {
+                        const data = doc.data();
+                        document.getElementById('user-name').innerText = data.name || "مستخدم جديد";
+                        document.getElementById('user-phone').innerText = data.phone || "لا يوجد رقم";
+                        // تنسيق التاريخ إذا كان موجوداً
+                        if(data.createdAt) {
+                             const date = new Date(data.createdAt.seconds * 1000);
+                             document.getElementById('join-date').innerText = date.toLocaleDateString('ar-EG', { day: 'numeric', month: 'long', year: 'numeric' });
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
