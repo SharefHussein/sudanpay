@@ -6,70 +6,131 @@
   <title>لوحة التحكم - Sudan Pay</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+  
   <style>
-    .bg-hero { background: linear-gradient(to bottom, #0f172a, #1e293b); }
-    .btn-action { @apply bg-white hover:bg-gray-100 text-slate-900 font-bold py-10 px-8 rounded-3xl text-2xl transition-all shadow-2xl border border-gray-300 flex flex-col items-center justify-center; }
-    .card-balance { @apply bg-gradient-to-r from-emerald-700 to-emerald-600 p-12 rounded-3xl shadow-2xl text-center; }
+    body { font-family: 'Cairo', sans-serif; background-color: #0f172a; }
+    
+    /* تأثير الزجاج للنوافذ */
+    .glass-card { 
+        background: rgba(30, 41, 59, 0.7); 
+        backdrop-filter: blur(12px); 
+        border: 1px solid rgba(255, 255, 255, 0.05); 
+    }
+
+    /* تصميم البطاقة البنكية */
+    .bank-card {
+        background: linear-gradient(135deg, #a3e635 0%, #65a30d 100%);
+        border-radius: 28px;
+        position: relative;
+        overflow: hidden;
+        transition: transform 0.3s ease;
+    }
+    .bank-card:hover { transform: scale(1.02); }
+    .bank-card::before {
+        content: ""; position: absolute; top: -50px; right: -50px;
+        width: 150px; height: 150px; background: rgba(255,255,255,0.15); border-radius: 50%;
+    }
+
+    /* أزرار العمليات السريعة */
+    .action-link {
+        background: #1e293b;
+        border: 1px solid rgba(255,255,255,0.05);
+        transition: all 0.3s ease;
+    }
+    .action-link:hover {
+        background: #334155;
+        border-color: #a3e635;
+        transform: translateY(-5px);
+    }
+    .action-icon-bg {
+        background: rgba(163, 230, 53, 0.1);
+        color: #a3e635;
+    }
   </style>
 </head>
-<body class="bg-hero min-h-screen">
-  <!-- Navbar -->
-  <nav class="fixed top-0 w-full z-50 bg-slate-900/90 backdrop-blur-md">
+
+<body class="text-white min-h-screen">
+
+  <nav class="fixed top-0 w-full z-50 glass-card">
     <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-      <div class="flex items-center space-x-4">
-        <svg width="60" height="60" viewBox="0 0 100 100" class="text-lime-400">
-          <circle cx="50" cy="50" r="45" fill="currentColor" opacity="0.3"/>
-          <path d="M30 50 Q50 10 70 50 Q50 90 30 50 Z" fill="currentColor"/>
-          <circle cx="50" cy="30" r="20" fill="#0f172a"/>
-        </svg>
-        <span class="text-3xl font-bold">Sudan Pay</span>
+      <div class="flex items-center gap-2">
+        <span class="text-xl font-black text-[#a3e635]">SUDAN<span class="text-white">PAY</span></span>
       </div>
-      <button onclick="logout()" class="bg-red-500 hover:bg-red-600 text-white px-8 py-4 rounded-full text-xl font-bold transition shadow-lg">
-        خروج
-      </button>
+      <div class="flex items-center gap-4">
+        <div class="hidden sm:block text-left ml-4">
+            <p class="text-[10px] text-gray-400 leading-none">مرحباً بك،</p>
+            <p class="text-sm font-bold">مستخدم سودان باي</p>
+        </div>
+        <button onclick="logout()" class="bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white p-2.5 rounded-xl transition-all border border-red-500/20">
+          <i class="fas fa-sign-out-alt"></i>
+        </button>
+      </div>
     </div>
   </nav>
 
-  <!-- Main Content -->
-  <div class="max-w-7xl mx-auto px-6 pt-32">
-    <h1 class="text-5xl font-bold text-center mb-16">مرحباً بك في لوحة التحكم</h1>
-
-    <!-- Balance Card -->
-    <div class="card-balance mb-20">
-      <p class="text-3xl text-gray-200 mb-6">الرصيد الحالي</p>
-      <p class="text-7xl font-bold text-white drop-shadow-2xl">0 جنيه</p>
-    </div>
-
-    <!-- Quick Actions -->
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-10">
-      <a href="send.html" class="btn-action">
-        <i class="fas fa-paper-plane text-6xl text-emerald-600 mb-6"></i>
-        إرسال أموال
-      </a>
-      <a href="receive.html" class="btn-action">
-        <i class="fas fa-qrcode text-6xl text-emerald-600 mb-6"></i>
-        استلام أموال
-      </a>
-      <a href="statement.html" class="btn-action">
-        <i class="fas fa-file-invoice-dollar text-6xl text-emerald-600 mb-6"></i>
-        كشف حساب
-      </a>
-      <a href="profile.html" class="btn-action">
-        <i class="fas fa-user text-6xl text-emerald-600 mb-6"></i>
-        الملف الشخصي
-      </a>
-    </div>
-
-    <!-- Recent Transactions -->
-    <div class="bg-white/10 backdrop-blur-md border border-white/20 p-12 rounded-3xl shadow-2xl mt-20">
-      <h2 class="text-4xl font-bold text-center mb-12">آخر المعاملات</h2>
-      <div class="text-center text-gray-300 text-2xl py-20">
-        لا توجد معاملات بعد
+  <main class="max-w-4xl mx-auto px-6 pt-28 pb-10">
+    
+    <div class="bank-card p-8 mb-10 shadow-2xl shadow-[#a3e635]/10">
+      <div class="flex justify-between items-start mb-12">
+        <div>
+            <p class="text-black/60 font-bold text-sm mb-1 uppercase tracking-wider">الرصيد المتاح</p>
+            <h2 class="text-4xl sm:text-5xl font-black text-black leading-none">0.00 <span class="text-2xl">SDG</span></h2>
+        </div>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/2560px-Visa_Inc._logo.svg.png" class="h-6 opacity-20 grayscale brightness-0" alt="Visa">
+      </div>
+      <div class="flex justify-between items-end">
+        <p class="text-black/50 font-mono tracking-[4px]">**** **** **** 0000</p>
+        <button class="bg-black text-white px-4 py-2 rounded-lg text-xs font-bold hover:bg-gray-800 transition">شحن رصيد</button>
       </div>
     </div>
-  </div>
 
-  <!-- Firebase v8 -->
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-10">
+      <a href="send.html" class="action-link p-6 rounded-3xl flex flex-col items-center gap-3">
+        <div class="action-icon-bg w-14 h-14 rounded-2xl flex items-center justify-center text-xl">
+            <i class="fas fa-paper-plane"></i>
+        </div>
+        <span class="text-sm font-bold">إرسال</span>
+      </a>
+
+      <a href="receive.html" class="action-link p-6 rounded-3xl flex flex-col items-center gap-3">
+        <div class="action-icon-bg w-14 h-14 rounded-2xl flex items-center justify-center text-xl">
+            <i class="fas fa-qrcode"></i>
+        </div>
+        <span class="text-sm font-bold">استلام</span>
+      </a>
+
+      <a href="statement.html" class="action-link p-6 rounded-3xl flex flex-col items-center gap-3">
+        <div class="action-icon-bg w-14 h-14 rounded-2xl flex items-center justify-center text-xl">
+            <i class="fas fa-history"></i>
+        </div>
+        <span class="text-sm font-bold">العمليات</span>
+      </a>
+
+      <a href="profile.html" class="action-link p-6 rounded-3xl flex flex-col items-center gap-3">
+        <div class="action-icon-bg w-14 h-14 rounded-2xl flex items-center justify-center text-xl">
+            <i class="fas fa-cog"></i>
+        </div>
+        <span class="text-sm font-bold">الإعدادات</span>
+      </a>
+    </div>
+
+    <div class="glass-card rounded-3xl p-6">
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="font-bold text-lg">آخر المعاملات</h3>
+        <a href="statement.html" class="text-[#a3e635] text-sm font-bold">عرض الكل</a>
+      </div>
+      
+      <div class="flex flex-col items-center py-10 opacity-30">
+        <div class="w-16 h-16 border-2 border-dashed border-gray-500 rounded-full flex items-center justify-center mb-4 text-2xl">
+            <i class="fas fa-receipt"></i>
+        </div>
+        <p class="text-sm">لا توجد سجلات بعد</p>
+      </div>
+    </div>
+
+  </main>
+
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
   <script src="app.js"></script>
@@ -78,13 +139,12 @@
     function logout() {
       firebase.auth().signOut()
         .then(() => {
-          alert('تم تسجيل الخروج بنجاح!');
           window.location.href = 'login.html';
         })
         .catch((error) => {
-          alert('حدث خطأ أثناء تسجيل الخروج: ' + error.message);
+          console.error(error.message);
         });
     }
   </script>
 </body>
-  </html> 
+</html>
