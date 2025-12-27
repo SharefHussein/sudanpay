@@ -1,94 +1,145 @@
-// 1. إعدادات Firebase
+// 1. إعدادات Firebase (تأكد من مطابقة هذه البيانات لمشروعك في Firebase Console)
 const firebaseConfig = {
-  apiKey: "AIzaSyB3vxJu_et-P80ek30I3MRdC_lGhooCCsc",
-  authDomain: "sudanpay-e332a.firebaseapp.com",
-  projectId: "sudanpay-e332a",
-  storageBucket: "sudanpay-e332a.appspot.com",
-  messagingSenderId: "699809447272",
-  appId: "1:699809447272:web:90f3780ed6c768c4322add"
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_PROJECT_ID.appspot.com",
+    messagingSenderId: "YOUR_MESSAGING_ID",
+    appId: "YOUR_APP_ID"
 };
 
-// تهيئة الخدمة
-if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
+// تهيئة Firebase
+if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+}
+
 const auth = firebase.auth();
 const db = firebase.firestore();
 
-// 2. دالة الدخول بجوجل (لا تعمل إلا بالضغط)
-window.signInWithGoogle = function() {
-    const provider = new firebase.auth.GoogleAuthProvider();
-    auth.signInWithPopup(provider).then((result) => {
-        // الانتقال فقط بعد نجاح العملية
-        window.location.replace("dashboard.html");
-    }).catch(err => {
-        if(err.code !== 'auth/popup-closed-by-user') alert("خطأ جوجل: " + err.message);
-    });
+// --- نظام التنبيهات الزجاجي (Notifications) ---
+window.showNotify = function(message, type = "success") {
+    const notif = document.createElement("div");
+    notif.style.cssText = `
+        position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px);
+        padding: 15px 30px; border-radius: 20px; z-index: 9999; font-size: 14px; font-weight: bold;
+        transition: all 0.5s ease; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    `;
+
+    if (type === "success") {
+        notif.style.backgroundColor = "rgba(163, 230, 53, 0.9)";
+        notif.style.color = "#000";
+    } else {
+        notif.style.backgroundColor = "rgba(239, 68, 68, 0.9)";
+        notif.style.color = "#fff";
+    }
+
+    notif.innerText = message;
+    document.body.appendChild(notif);
+    setTimeout(() => notif.style.transform = "translateX(-50%) translateY(0)", 100);
+    setTimeout(() => {
+        notif.style.transform = "translateX(-50%) translateY(-100px)";
+        setTimeout(() => notif.remove(), 500);
+    }, 3500);
 };
 
-// 3. دالة الدخول بالبريد (لا تعمل إلا بالضغط على الزر)
-const loginForm = document.getElementById('loginForm');
-if (loginForm) {
-    loginForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const email = document.getElementById('email').value.trim();
-        const password = document.getElementById('password').value;
-        const btn = e.target.querySelector('button');
-        
-        btn.disabled = true; // منع الضغط المتكرر
-        btn.innerText = "جاري التحقق...";
+// --- ميزة تحويل الأموال (Send Money) ---
+window.sendMoney = async function () {
+    const toEmail = document.getElementById("toEmail").value.trim();
+    const amount = Number(document.getElementById("amount").value);
+    const sender = auth.currentUser;
 
-        auth.signInWithEmailAndPassword(email, password).then(() => {
-            window.location.replace("dashboard.html");
-        }).catch(err => {
-            btn.disabled = false;
-            btn.innerText = "تسجيل الدخول";
-            alert("بيانات الدخول غير صحيحة");
-        });
-    });
-}
+    if (!toEmail || amount <= 0) {
+        showNotify("الرجاء إدخال بيانات صحيحة", "error");
+        return;
+    }
+    if (amount > 500000) {
+        showNotify("الحد الأقصى للتحويل 500,000 SDG", "error");
+        return;
+    }
+    if (sender && toEmail === sender.email) {
+        showNotify("لا يمكنك التحويل لنفسك!", "error");
+        return;
+    }
 
-// 4. دالة إنشاء الحساب (Register)
-const registerForm = document.getElementById('registerForm');
-if (registerForm) {
-    registerForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const fullName = document.getElementById('fullName').value.trim();
-        const email = document.getElementById('email').value.trim();
-        const password = document.getElementById('password').value;
-        const btn = e.target.querySelector('button');
+    try {
+        const receiverQuery = await db.collection("users").where("email", "==", toEmail).get();
+        if (receiverQuery.empty) {
+            showNotify("المستلم غير موجود في النظام", "error");
+            return;
+        }
 
-        btn.disabled = true;
-        
-        auth.createUserWithEmailAndPassword(email, password).then((cred) => {
-            return cred.user.updateProfile({ displayName: fullName }).then(() => cred);
-        }).then((cred) => {
-            return db.collection("users").doc(cred.user.uid).set({
-                fullName: fullName,
-                email: email,
-                balance: 0,
+        const receiverDoc = receiverQuery.docs[0];
+        const receiverRef = receiverDoc.ref;
+        const senderRef = db.collection("users").doc(sender.uid);
+
+        await db.runTransaction(async (transaction) => {
+            const senderSnap = await transaction.get(senderRef);
+            const receiverSnap = await transaction.get(receiverRef);
+
+            const senderBalance = senderSnap.data().balance || 0;
+            if (senderBalance < amount) {
+                throw "رصيد غير كافي!";
+            }
+
+            transaction.update(senderRef, { balance: senderBalance - amount });
+            transaction.update(receiverRef, { balance: (receiverSnap.data().balance || 0) + amount });
+
+            const txRef = db.collection("transactions").doc();
+            transaction.set(txRef, {
+                from: sender.email, to: toEmail, amount: amount,
+                participants: [sender.email, toEmail],
                 createdAt: firebase.firestore.FieldValue.serverTimestamp()
             });
-        }).then(() => {
-            window.location.replace("dashboard.html");
-        }).catch(err => {
-            btn.disabled = false;
-            alert(err.message);
         });
-    });
-}
 
-// 5. حماية الصفحات فقط (بدون تحويل تلقائي للداخل)
-auth.onAuthStateChanged((user) => {
-    const path = window.location.pathname;
-    // إذا كنت غير مسجل وتحاول دخول الداشبورد، نرجعك للوجن
-    if (!user && (path.includes("dashboard") || path.includes("profile"))) {
-        window.location.replace("login.html");
+        showNotify("تم التحويل بنجاح 💸", "success");
+        setTimeout(() => window.location.href = "dashboard.html", 2000);
+
+    } catch (error) {
+        showNotify("فشل: " + error, "error");
     }
-});
+};
 
-// 6. دالة تسجيل الخروج
+// --- جلب سجل العمليات (Transactions) ---
+window.loadTransactions = function() {
+    const list = document.getElementById("transactions-list");
+    if (!list) return;
+
+    const user = auth.currentUser;
+    db.collection("transactions")
+      .where("participants", "array-contains", user.email)
+      .orderBy("createdAt", "desc").limit(10)
+      .onSnapshot((snap) => {
+          list.innerHTML = "";
+          if (snap.empty) {
+              list.innerHTML = "<p class='text-gray-500 text-center text-xs'>لا توجد عمليات</p>";
+              return;
+          }
+          snap.forEach(doc => {
+              const t = doc.data();
+              const isOut = t.from === user.email;
+              const item = document.createElement("div");
+              item.className = "flex items-center justify-between p-4 bg-white/5 rounded-2xl mb-3 border border-white/5";
+              item.innerHTML = `
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full flex items-center justify-center ${isOut ? 'text-red-400 bg-red-400/10' : 'text-[#a3e635] bg-[#a3e635]/10'}">
+                        <i class="fas ${isOut ? 'fa-arrow-up' : 'fa-arrow-down'} text-[10px]"></i>
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-bold">${isOut ? 'إلى: ' + t.to : 'من: ' + t.from}</p>
+                        <p class="text-[8px] text-gray-500">${t.createdAt ? new Date(t.createdAt.seconds * 1000).toLocaleDateString() : 'الآن'}</p>
+                    </div>
+                </div>
+                <p class="font-black text-sm ${isOut ? 'text-white' : 'text-[#a3e635]'}">${isOut ? '-' : '+'}${t.amount}</p>
+              `;
+              list.appendChild(item);
+          });
+      });
+};
+
+// --- تسجيل الخروج ---
 window.logout = function() {
-    auth.signOut().then(() => {
-        window.location.replace("login.html");
-    });
+    auth.signOut().then(() => window.location.href = "login.html");
 };
  
