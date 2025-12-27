@@ -6,70 +6,92 @@
   <title>إرسال أموال - Sudan Pay</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+  
   <style>
-    .bg-hero { background: linear-gradient(to bottom, #0f172a, #1e293b); }
-    .btn-green { @apply bg-lime-400 hover:bg-lime-500 text-black font-bold py-4 px-10 rounded-full text-xl transition shadow-lg; }
-    .card-glass { @apply bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl p-10; }
-    .logo-svg { fill: #a3e635; }
+    body { font-family: 'Cairo', sans-serif; }
+    .hero-gradient { background: radial-gradient(circle at top right, #1e293b, #0f172a); }
+    .glass-nav { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .glass-card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); }
+    .btn-lime { background: #a3e635; color: #000; transition: all 0.3s ease; }
+    .btn-lime:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(163, 230, 53, 0.2); }
+    input:focus, textarea:focus { border-color: #a3e635 !important; box-shadow: 0 0 0 2px rgba(163, 230, 53, 0.1); outline: none; }
   </style>
 </head>
-<body class="bg-hero min-h-screen">
-  <!-- Navbar -->
-  <nav class="fixed top-0 w-full z-50 bg-slate-900/90 backdrop-blur-md">
+<body class="hero-gradient text-white min-h-screen">
+
+  <nav class="fixed top-0 w-full z-50 glass-nav">
     <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-      <div class="flex items-center space-x-4">
-        <svg width="60" height="60" viewBox="0 0 100 100" class="logo-svg">
-          <circle cx="50" cy="50" r="45" fill="currentColor" opacity="0.3"/>
-          <path d="M30 50 Q50 10 70 50 Q50 90 30 50 Z" fill="currentColor"/>
-          <circle cx="50" cy="30" r="20" fill="#0f172a"/>
-        </svg>
-        <span class="text-3xl font-bold">Sudan Pay</span>
-      </div>
-      <button onclick="logout()" class="bg-red-600 hover:bg-red-700 px-6 py-3 rounded-full transition">
-        خروج
-      </button>
+      <a href="dashboard.html" class="flex items-center gap-2 hover:text-[#a3e635] transition">
+        <i class="fas fa-arrow-right"></i>
+        <span class="text-xl font-bold">رجوع للرئيسية</span>
+      </a>
+      <span class="text-2xl font-extrabold text-[#a3e635]">SUDAN<span class="text-white">PAY</span></span>
     </div>
   </nav>
 
-  <!-- Main Content -->
-  <div class="max-w-4xl mx-auto px-6 pt-32">
-    <h1 class="text-5xl font-bold text-center mb-16">إرسال أموال</h1>
+  <div class="max-w-2xl mx-auto px-6 pt-32 pb-10">
+    <div class="text-center mb-10">
+        <h1 class="text-4xl font-black mb-2">إرسال أموال</h1>
+        <p class="text-gray-400">حول أموالك بأمان لأي مستخدم آخر</p>
+    </div>
 
-    <div class="card-glass">
-      <form class="space-y-8">
+    <div class="flex items-center justify-center mb-10 gap-4">
+        <div class="flex flex-col items-center">
+            <div class="w-10 h-10 rounded-full bg-[#a3e635] text-black flex items-center justify-center font-bold shadow-lg shadow-[#a3e635]/20">1</div>
+            <span class="text-[10px] mt-2 font-bold">البيانات</span>
+        </div>
+        <div class="w-16 h-[2px] bg-gray-700 mb-6"></div>
+        <div class="flex flex-col items-center opacity-40">
+            <div class="w-10 h-10 rounded-full bg-gray-700 text-white flex items-center justify-center font-bold">2</div>
+            <span class="text-[10px] mt-2">التأكيد</span>
+        </div>
+    </div>
+
+    <div class="glass-card rounded-[32px] p-8 md:p-10 shadow-2xl">
+      <form id="sendForm" class="space-y-6">
         <div>
-          <label class="block text-gray-300 mb-3 text-xl">رقم الهاتف أو البريد الإلكتروني للمستلم</label>
-          <input type="text" placeholder="0912345678 أو example@sudanpay.com" class="w-full p-5 bg-white/10 border border-white/30 rounded-xl focus:border-lime-400 outline-none text-white text-lg"/>
+          <label class="block text-gray-400 mb-3 text-sm font-bold mr-1">المستلم (رقم هاتف أو بريد إلكتروني)</label>
+          <div class="relative">
+            <i class="fas fa-user absolute left-4 top-1/2 -translate-y-1/2 text-gray-500"></i>
+            <input type="text" id="recipient" placeholder="09xxxxxxx أو بريد إلكتروني" 
+                   class="w-full pl-12 pr-5 py-4 bg-white/5 border border-white/10 rounded-2xl text-white text-lg transition-all" required/>
+          </div>
         </div>
 
         <div>
-          <label class="block text-gray-300 mb-3 text-xl">المبلغ (جنيه سوداني)</label>
-          <input type="number" placeholder="1000" class="w-full p-5 bg-white/10 border border-white/30 rounded-xl focus:border-lime-400 outline-none text-white text-lg"/>
+          <label class="block text-gray-400 mb-3 text-sm font-bold mr-1">المبلغ (SDG)</label>
+          <div class="relative">
+            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-[#a3e635] font-bold">جنيه</span>
+            <input type="number" id="amount" placeholder="0.00" 
+                   class="w-full pl-16 pr-5 py-5 bg-white/5 border border-white/10 rounded-2xl text-white text-3xl font-bold transition-all text-center" required/>
+          </div>
+          <p class="text-[11px] text-gray-500 mt-2 text-center">أقل مبلغ للتحويل هو 100 جنيه سوداني</p>
         </div>
 
         <div>
-          <label class="block text-gray-300 mb-3 text-xl">ملاحظات (اختياري)</label>
-          <textarea placeholder="سبب التحويل..." class="w-full p-5 bg-white/10 border border-white/30 rounded-xl focus:border-lime-400 outline-none text-white text-lg h-32"></textarea>
+          <label class="block text-gray-400 mb-3 text-sm font-bold mr-1">ملاحظات (اختياري)</label>
+          <textarea id="notes" placeholder="اكتب ملاحظة قصيرة..." 
+                    class="w-full p-5 bg-white/5 border border-white/10 rounded-2xl text-white text-lg h-24 resize-none transition-all"></textarea>
         </div>
 
-        <button type="submit" class="w-full btn-green">
-          إرسال الأموال الآن
+        <button type="submit" class="w-full btn-lime py-5 rounded-2xl text-xl font-black shadow-xl mt-4">
+          استمرار للتأكيد <i class="fas fa-chevron-left mr-2 text-sm"></i>
         </button>
       </form>
     </div>
+
+    <div class="mt-8 flex gap-4 p-5 rounded-2xl bg-blue-500/5 border border-blue-500/10 items-start">
+        <i class="fas fa-shield-halved text-blue-400 mt-1"></i>
+        <p class="text-xs text-gray-400 leading-relaxed">
+            يتم تشفير كافة المعاملات المالية. يرجى التأكد من بيانات المستلم قبل الضغط على تأكيد، حيث لا يمكن استرداد المبالغ بعد إرسالها.
+        </p>
+    </div>
   </div>
 
-  <!-- Firebase v8 -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
   <script src="app.js"></script>
-
-  <script>
-    function logout() {
-      firebase.auth().signOut().then(() => {
-        window.location.href = 'login.html';
-      });
-    }
-  </script>
-</body>
-            </html> 
+  <script src="send.js"></script> </body>
+</html>
+ 
