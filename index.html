@@ -3,73 +3,84 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Sudan Pay | محفظتك الرقمية</title>
+  <title>Sudan Pay - مستقبل الدفع الرقمي</title>
+  
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+  
   <style>
-    body { font-family: 'Cairo', sans-serif; }
-    .glass-nav { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.1); }
+    body { font-family: 'Cairo', sans-serif; background-color: #0f172a; }
     .hero-gradient { background: radial-gradient(circle at top right, #1e293b, #0f172a); }
-    .btn-primary { background: #a3e635; color: #000; transition: all 0.3s ease; }
-    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(163, 230, 53, 0.2); }
+    .btn-lime { @apply bg-[#a3e635] hover:bg-[#bef264] text-black font-black py-4 px-8 rounded-2xl transition-all duration-300 transform hover:-translate-y-1 shadow-lg shadow-lime-500/20; }
+    .btn-outline { @apply bg-white/5 border border-white/10 hover:bg-white/10 text-white font-bold py-4 px-8 rounded-2xl transition-all duration-300; }
+    .glass-nav { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .text-glow { text-shadow: 0 0 20px rgba(163, 230, 53, 0.3); }
   </style>
 </head>
-<body class="bg-[#0f172a] text-white min-h-screen">
+
+<body class="hero-gradient text-white min-h-screen">
 
   <nav class="fixed top-0 w-full z-50 glass-nav">
     <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-      <div class="flex items-center">
-        <span class="text-2xl font-extrabold tracking-tighter text-[#a3e635]">SUDAN<span class="text-white">PAY</span></span>
+      <div class="flex items-center gap-2">
+        <div class="w-10 h-10 bg-[#a3e635] rounded-xl flex items-center justify-center shadow-lg">
+          <span class="text-black font-black text-xl">S</span>
+        </div>
+        <span class="text-2xl font-black tracking-tighter">SUDAN<span class="text-[#a3e635]">PAY</span></span>
       </div>
-      <div class="hidden md:flex space-x-8 ml-10">
-          <a href="#" class="text-gray-300 hover:text-white transition">الرئيسية</a>
-          <a href="#" class="text-gray-300 hover:text-white transition">المميزات</a>
-          <a href="#" class="text-gray-300 hover:text-white transition">عن التطبيق</a>
-      </div>
-      <div class="flex items-center gap-3">
-        <a href="login.html" class="hidden sm:block text-sm font-semibold hover:text-[#a3e635] transition">تسجيل دخول</a>
-        <button onclick="signInWithGoogle()" class="bg-white text-black px-5 py-2.5 rounded-xl font-bold text-sm flex items-center gap-2 hover:bg-gray-100 transition">
-            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="18">
-            <span class="hidden xs:block">دخول سريع</span>
-        </button>
-      </div>
+      <a href="login.html" class="text-sm font-bold hover:text-[#a3e635] transition">دخول</a>
     </div>
   </nav>
 
-  <section class="relative min-h-screen flex items-center justify-center hero-gradient px-6 overflow-hidden">
-    <div class="absolute top-1/4 -right-20 w-80 h-80 bg-[#a3e635] opacity-5 rounded-full blur-[100px]"></div>
-    <div class="absolute bottom-1/4 -left-20 w-80 h-80 bg-blue-600 opacity-5 rounded-full blur-[100px]"></div>
-
-    <div class="max-w-4xl text-center z-10">
-      <div class="inline-block px-4 py-1.5 mb-6 border border-[#a3e635]/30 bg-[#a3e635]/10 rounded-full">
-          <span class="text-[#a3e635] text-sm font-bold">متوفر الآن في السودان 🇸🇩</span>
-      </div>
-      <h1 class="text-5xl md:text-7xl font-extrabold mb-6 leading-tight">
-        مستقبل الدفع الرقمي <br> <span class="text-[#a3e635]">بين يديك</span>
-      </h1>
-      <p class="text-lg md:text-xl text-gray-400 mb-10 max-w-2xl mx-auto leading-relaxed">
-        أرسل واستلم الأموال، اشحن رصيدك، وادفع فواتيرك بكل أمان وسهولة من أي مكان في السودان.
-      </p>
-      
-      <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
-        <a href="register.html" class="btn-primary w-full sm:w-auto px-10 py-4 rounded-2xl text-lg font-bold">
-            ابدأ الآن مجاناً
-        </a>
-        <button onclick="signInWithGoogle()" class="bg-white/5 border border-white/10 w-full sm:w-auto px-10 py-4 rounded-2xl text-lg font-bold hover:bg-white/10 transition">
-            الدخول بواسطة جوجل
-        </button>
-      </div>
-
-      <div class="mt-16 pt-8 border-t border-white/5 flex flex-wrap justify-center gap-8 opacity-50 grayscale">
-          <span class="font-bold italic">SECURE PAY</span>
-          <span class="font-bold italic">FAST TRANSFER</span>
-          <span class="font-bold italic">24/7 SUPPORT</span>
-      </div>
+  <div class="pt-32 pb-20 px-6 max-w-5xl mx-auto text-center">
+    <div class="inline-flex items-center gap-2 bg-white/5 border border-white/10 px-4 py-2 rounded-full mb-8">
+        <span class="relative flex h-2 w-2">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#a3e635] opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-[#a3e635]"></span>
+        </span>
+        <span class="text-[10px] font-bold uppercase tracking-widest text-gray-400">متوفر الآن في السودان</span>
     </div>
-  </section>
+
+    <h1 class="text-5xl md:text-7xl font-black mb-6 leading-tight">
+      مستقبل الدفع الرقمي <br/>
+      <span class="text-[#a3e635] text-glow italic">بين يديك</span>
+    </h1>
+    
+    <p class="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto mb-12 leading-relaxed">
+      أرسل واستلم الأموال، اشحن رصيدك، وادفع فواتيرك بكل أمان وسهولة من أي مكان في السودان.
+    </p>
+
+    <div class="flex flex-col gap-4 max-w-md mx-auto">
+      
+      <button onclick="signInWithGoogle()" class="w-full bg-white text-black font-black py-4 rounded-2xl flex items-center justify-center gap-3 shadow-2xl hover:bg-gray-100 transition-all transform hover:-translate-y-1">
+        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="22">
+        الدخول بواسطة جوجل
+      </button>
+
+      <div class="grid grid-cols-2 gap-4">
+        <a href="login.html" class="btn-lime flex items-center justify-center text-sm">
+          <i class="fas fa-envelope ml-2"></i> بالبريد
+        </a>
+        <a href="register.html" class="btn-outline flex items-center justify-center text-sm">
+          <i class="fas fa-user-plus ml-2"></i> اشتراك
+        </a>
+      </div>
+
+    </div>
+
+    <div class="mt-20 pt-10 border-t border-white/5 flex flex-wrap justify-center gap-8 opacity-40 grayscale">
+        <span class="font-bold flex items-center gap-2"><i class="fas fa-bolt"></i> FAST TRANSFER</span>
+        <span class="font-bold flex items-center gap-2"><i class="fas fa-shield-alt"></i> SECURE PAY</span>
+        <span class="font-bold flex items-center gap-2"><i class="fas fa-headset"></i> SUPPORT 24/7</span>
+    </div>
+  </div>
 
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
   <script src="app.js"></script>
+
 </body>
 </html>
+ 
