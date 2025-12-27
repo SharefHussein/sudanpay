@@ -1,179 +1,226 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Sudan Pay - لوحة التحكم</title>
-    <!-- Tailwind CSS -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sudan Pay - مستقبل الدفع الرقمي في السودان</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        body { 
-            font-family: 'Cairo', sans-serif; 
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            color: white;
-            min-height: 100vh;
+        :root {
+            --primary: #10b981;
+            --primary-dark: #059669;
+            --secondary: #1e293b;
+            --dark: #0f172a;
+            --light: #f8fafc;
         }
-        .glass-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        .btn-primary {
-            background: linear-gradient(135deg, #a3e635 0%, #84cc16 100%);
-            transition: all 0.3s ease;
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(163, 230, 53, 0.3);
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Cairo', sans-serif; background-color: var(--dark); color: white; }
+        .gradient-bg { background: linear-gradient(135deg, var(--dark) 0%, var(--secondary) 100%); }
+        .glass-card { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .btn-primary { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); transition: all 0.3s ease; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3); }
+        .pulse-animation { animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
     </style>
 </head>
-<body class="px-4 py-6">
+<body class="gradient-bg min-h-screen">
     <!-- شريط التنقل -->
-    <nav class="glass-card rounded-2xl p-4 mb-6 flex justify-between items-center">
-        <div class="flex items-center gap-3">
-            <img id="userPhoto" src="" alt="" class="w-10 h-10 rounded-full hidden">
-            <div>
-                <h1 id="userName" class="font-bold text-lg">جاري التحميل...</h1>
-                <p id="userEmail" class="text-gray-400 text-sm">...</p>
+    <nav class="glass-card sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-2 space-x-reverse">
+                <div class="w-10 h-10 rounded-full bg-gradient-to-r from-green-400 to-emerald-500 flex items-center justify-center">
+                    <i class="fas fa-wallet text-white"></i>
+                </div>
+                <span class="text-2xl font-black tracking-tight">SUDAN<span class="text-green-400">PAY</span></span>
             </div>
-        </div>
-        
-        <div class="flex items-center gap-2">
-            <button onclick="window.location.href='index.html'" class="p-2 rounded-xl hover:bg-white/10">
-                <i class="fas fa-home"></i>
-            </button>
-            <button onclick="logout()" class="px-4 py-2 rounded-xl bg-red-500/20 text-red-300 hover:bg-red-500/30">
-                <i class="fas fa-sign-out-alt mr-2"></i> تسجيل خروج
-            </button>
+            <div class="hidden md:flex space-x-6 space-x-reverse">
+                <a href="#features" class="hover:text-green-400 transition">المميزات</a>
+                <a href="#how-it-works" class="hover:text-green-400 transition">كيف يعمل</a>
+                <a href="#security" class="hover:text-green-400 transition">الأمان</a>
+                <a href="login.html" class="text-green-400 hover:text-green-300">تسجيل الدخول</a>
+            </div>
+            <button class="md:hidden text-xl"><i class="fas fa-bars"></i></button>
         </div>
     </nav>
 
-    <!-- المحتوى الرئيسي -->
-    <div class="max-w-6xl mx-auto">
-        <!-- بطاقة الرصيد -->
-        <div class="glass-card rounded-3xl p-8 mb-8">
-            <div class="flex justify-between items-start mb-6">
-                <div>
-                    <h2 class="text-gray-400 text-sm mb-1">الرصيد المتاح</h2>
-                    <div id="userBalance" class="text-5xl font-black">0.00 جنيه</div>
-                    <p class="text-gray-500 text-sm mt-2">آخر تحديث: الآن</p>
-                </div>
-                <div class="text-right">
-                    <i class="fas fa-wallet text-6xl text-[#a3e635] opacity-50"></i>
-                </div>
+    <!-- البطل الرئيسي -->
+    <section class="container mx-auto px-6 py-16 text-center">
+        <div class="max-w-3xl mx-auto">
+            <h1 class="text-5xl md:text-6xl font-black mb-6 leading-tight">
+                مستقبل <span class="text-green-400">الدفع الرقمي</span> في السودان
+            </h1>
+            <p class="text-xl text-gray-300 mb-10">
+                تحويلات فورية، أمان كامل، وخدمة متاحة 24/7. انضم إلى الآلاف الذين يثقون بـ Sudan Pay لمعاملاتهم المالية.
+            </p>
+            <div class="flex flex-col md:flex-row justify-center gap-4 mb-16">
+                <button onclick="signInWithGoogle()" class="btn-primary text-white font-bold py-4 px-8 rounded-2xl flex items-center justify-center gap-3">
+                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="24">
+                    الدخول بواسطة جوجل
+                </button>
+                <a href="register.html" class="glass-card border border-green-400/30 text-green-400 font-bold py-4 px-8 rounded-2xl text-center hover:bg-green-400/10 transition">
+                    <i class="fas fa-user-plus ml-2"></i> إنشاء حساب جديد
+                </a>
             </div>
             
-            <div class="grid grid-cols-2 gap-4">
-                <button onclick="window.location.href='#send'" class="btn-primary py-4 rounded-xl font-bold">
-                    <i class="fas fa-paper-plane mr-2"></i> إرسال أموال
-                </button>
-                <button onclick="showNotify('قريباً...', 'success')" class="glass-card py-4 rounded-xl font-bold">
-                    <i class="fas fa-download mr-2"></i> إيداع أموال
-                </button>
-            </div>
-        </div>
-
-        <!-- قسم إرسال الأموال -->
-        <div id="send" class="glass-card rounded-3xl p-8 mb-8">
-            <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
-                <i class="fas fa-paper-plane text-[#a3e635]"></i> إرسال أموال
-            </h2>
-            
-            <div class="space-y-4">
-                <div>
-                    <label class="block text-gray-400 mb-2">بريد المستلم</label>
-                    <input id="toEmail" type="email" 
-                           class="w-full p-4 rounded-xl bg-white/5 border border-white/10 focus:border-[#a3e635] focus:outline-none"
-                           placeholder="example@email.com">
+            <!-- إحصائيات -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-20">
+                <div class="glass-card p-6 rounded-2xl">
+                    <div class="text-3xl font-black text-green-400 mb-2">1000+</div>
+                    <div class="text-gray-400">مستخدم نشط</div>
                 </div>
-                
-                <div>
-                    <label class="block text-gray-400 mb-2">المبلغ (جنيه)</label>
-                    <input id="amount" type="number" min="1" step="0.01"
-                           class="w-full p-4 rounded-xl bg-white/5 border border-white/10 focus:border-[#a3e635] focus:outline-none"
-                           placeholder="0.00">
+                <div class="glass-card p-6 rounded-2xl">
+                    <div class="text-3xl font-black text-green-400 mb-2">50,000+</div>
+                    <div class="text-gray-400">معاملة ناجحة</div>
                 </div>
-                
-                <button onclick="sendMoney()" class="btn-primary w-full py-4 rounded-xl font-bold text-lg">
-                    <i class="fas fa-bolt mr-2"></i> تأكيد الإرسال
-                </button>
-            </div>
-        </div>
-
-        <!-- المعاملات الأخيرة -->
-        <div class="glass-card rounded-3xl p-8 mb-8">
-            <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
-                <i class="fas fa-history text-[#a3e635]"></i> نشاط حديث
-            </h2>
-            <div class="space-y-4">
-                <div class="p-4 rounded-xl bg-white/5">
-                    <p class="text-gray-400">لا توجد معاملات حديثة</p>
-                    <p class="text-sm text-gray-500">ستظهر معاملاتك هنا بعد إرسال أو استقبال الأموال</p>
+                <div class="glass-card p-6 rounded-2xl">
+                    <div class="text-3xl font-black text-green-400 mb-2">99.9%</div>
+                    <div class="text-gray-400">معدل رضا</div>
+                </div>
+                <div class="glass-card p-6 rounded-2xl">
+                    <div class="text-3xl font-black text-green-400 mb-2">24/7</div>
+                    <div class="text-gray-400">خدمة دائمة</div>
                 </div>
             </div>
         </div>
+    </section>
 
-        <!-- إعدادات الحساب -->
-        <div class="glass-card rounded-3xl p-8">
-            <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
-                <i class="fas fa-cog text-[#a3e635]"></i> إعدادات الحساب
-            </h2>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <button onclick="updateUserData()" class="glass-card p-4 rounded-xl text-left hover:bg-white/10 transition">
-                    <i class="fas fa-user-edit text-[#a3e635] mb-2"></i>
-                    <h3 class="font-bold">تعديل البيانات</h3>
-                    <p class="text-gray-400 text-sm">تغيير الاسم أو رقم الهاتف</p>
-                </button>
-                
-                <button onclick="changePassword()" class="glass-card p-4 rounded-xl text-left hover:bg-white/10 transition">
-                    <i class="fas fa-key text-[#a3e635] mb-2"></i>
-                    <h3 class="font-bold">تغيير كلمة المرور</h3>
-                    <p class="text-gray-400 text-sm">تحديث كلمة المرور الحالية</p>
-                </button>
-                
-                <button onclick="showNotify('قريباً...', 'success')" class="glass-card p-4 rounded-xl text-left hover:bg-white/10 transition">
-                    <i class="fas fa-bell text-[#a3e635] mb-2"></i>
-                    <h3 class="font-bold">الإشعارات</h3>
-                    <p class="text-gray-400 text-sm">إدارة إشعارات التطبيق</p>
-                </button>
-                
-                <button onclick="deleteAccount()" class="glass-card p-4 rounded-xl text-left bg-red-500/10 hover:bg-red-500/20 transition">
-                    <i class="fas fa-trash-alt text-red-400 mb-2"></i>
-                    <h3 class="font-bold text-red-300">حذف الحساب</h3>
-                    <p class="text-gray-400 text-sm">حذف الحساب نهائياً</p>
-                </button>
+    <!-- الميزات -->
+    <section id="features" class="py-16 bg-black/20">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-black text-center mb-12">لماذا تختار <span class="text-green-400">Sudan Pay</span>؟</h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="glass-card p-8 rounded-3xl">
+                    <div class="w-16 h-16 rounded-full bg-green-400/20 flex items-center justify-center mb-6">
+                        <i class="fas fa-bolt text-3xl text-green-400"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">تحويلات فورية</h3>
+                    <p class="text-gray-400">أرسل واستقبل الأموال في ثوانٍ معدودة، 24 ساعة في اليوم، 7 أيام في الأسبوع.</p>
+                </div>
+                <div class="glass-card p-8 rounded-3xl">
+                    <div class="w-16 h-16 rounded-full bg-green-400/20 flex items-center justify-center mb-6">
+                        <i class="fas fa-shield-alt text-3xl text-green-400"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">أمان متقدم</h3>
+                    <p class="text-gray-400">تشفير من الدرجة الأولى مع طبقات متعددة من الحماية لضمان أموالك.</p>
+                </div>
+                <div class="glass-card p-8 rounded-3xl">
+                    <div class="w-16 h-16 rounded-full bg-green-400/20 flex items-center justify-center mb-6">
+                        <i class="fas fa-hand-holding-usd text-3xl text-green-400"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">رسوم منخفضة</h3>
+                    <p class="text-gray-400">معاملات برسوم رمزية، وأحياناً بدون رسوم لمعظم التحويلات الداخلية.</p>
+                </div>
             </div>
         </div>
-    </div>
+    </section>
+
+    <!-- كيف يعمل -->
+    <section id="how-it-works" class="py-16">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-black text-center mb-12">كيف <span class="text-green-400">يعمل</span>؟</h2>
+            <div class="grid md:grid-cols-4 gap-8 max-w-5xl mx-auto">
+                <div class="text-center">
+                    <div class="w-20 h-20 rounded-full bg-green-400 flex items-center justify-center mx-auto mb-4 text-2xl font-black">1</div>
+                    <h3 class="text-xl font-bold mb-2">أنشئ حساب</h3>
+                    <p class="text-gray-400">سجل في دقائق باستخدام هاتفك أو بريدك الإلكتروني</p>
+                </div>
+                <div class="text-center">
+                    <div class="w-20 h-20 rounded-full bg-green-400/70 flex items-center justify-center mx-auto mb-4 text-2xl font-black">2</div>
+                    <h3 class="text-xl font-bold mb-2">أضف رصيد</h3>
+                    <p class="text-gray-400">قم بشحن محفظتك باستخدام وسائل دفع متعددة</p>
+                </div>
+                <div class="text-center">
+                    <div class="w-20 h-20 rounded-full bg-green-400/50 flex items-center justify-center mx-auto mb-4 text-2xl font-black">3</div>
+                    <h3 class="text-xl font-bold mb-2">أرسل أموال</h3>
+                    <p class="text-gray-400">أرسل الأموال لأي شخص باستخدام رقم هاتفه أو بريده</p>
+                </div>
+                <div class="text-center">
+                    <div class="w-20 h-20 rounded-full bg-green-400/30 flex items-center justify-center mx-auto mb-4 text-2xl font-black">4</div>
+                    <h3 class="text-xl font-bold mb-2">استلم وتحقق</h3>
+                    <p class="text-gray-400">استلم الأموال فوراً وتتبع جميع معاملاتك</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="py-16">
+        <div class="container mx-auto px-6 text-center">
+            <div class="glass-card rounded-3xl p-12 max-w-4xl mx-auto">
+                <h2 class="text-4xl font-black mb-6">جاهز للبدء؟</h2>
+                <p class="text-xl text-gray-300 mb-8">انضم إلى ثورة الدفع الرقمي في السودان اليوم</p>
+                <div class="flex flex-col md:flex-row justify-center gap-4">
+                    <button onclick="signInWithGoogle()" class="btn-primary text-white font-bold py-4 px-10 rounded-2xl text-lg flex items-center justify-center gap-3">
+                        <i class="fab fa-google"></i> سجل بحساب Google
+                    </button>
+                    <a href="register.html" class="glass-card border border-white/20 text-white font-bold py-4 px-10 rounded-2xl text-lg hover:bg-white/10 transition">
+                        <i class="fas fa-envelope ml-2"></i> سجل بالبريد الإلكتروني
+                    </a>
+                </div>
+                <p class="text-gray-400 mt-6">لديك حساب بالفعل؟ <a href="login.html" class="text-green-400 hover:underline">سجل الدخول</a></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="glass-card border-t border-white/10 py-8">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <div class="flex items-center space-x-2 space-x-reverse">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-r from-green-400 to-emerald-500 flex items-center justify-center">
+                            <i class="fas fa-wallet text-white"></i>
+                        </div>
+                        <span class="text-2xl font-black">SUDAN<span class="text-green-400">PAY</span></span>
+                    </div>
+                    <p class="text-gray-400 mt-2">مستقبل الدفع الرقمي في السودان</p>
+                </div>
+                <div class="text-center md:text-right">
+                    <p class="text-gray-400 mb-2">© 2024 Sudan Pay. جميع الحقوق محفوظة.</p>
+                    <div class="flex space-x-4 space-x-reverse justify-center md:justify-end">
+                        <a href="#" class="text-gray-400 hover:text-green-400"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-green-400"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-green-400"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-green-400"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
 
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-    <!-- التطبيق الرئيسي -->
     <script src="app.js"></script>
     
-    <!-- تحميل بيانات المستخدم عند فتح الصفحة -->
+    <!-- Scripts -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // تحميل بيانات المستخدم
-            loadUserData();
-            
-            // إضافة تأثيرات للعناصر
-            const cards = document.querySelectorAll('.glass-card');
-            cards.forEach(card => {
-                card.addEventListener('mouseenter', () => {
-                    card.style.transform = 'translateY(-4px)';
-                });
-                card.addEventListener('mouseleave', () => {
-                    card.style.transform = 'translateY(0)';
-                });
+        // Mobile menu toggle
+        document.querySelector('button.md\\:hidden').addEventListener('click', function() {
+            const menu = document.querySelector('.hidden.md\\:flex');
+            menu.classList.toggle('hidden');
+            menu.classList.toggle('flex');
+            menu.classList.toggle('flex-col');
+            menu.classList.toggle('absolute');
+            menu.classList.toggle('top-16');
+            menu.classList.toggle('left-0');
+            menu.classList.toggle('right-0');
+            menu.classList.toggle('bg-dark');
+            menu.classList.toggle('p-4');
+            menu.classList.toggle('space-y-4');
+        });
+        
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
             });
         });
     </script>
