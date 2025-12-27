@@ -2,10 +2,10 @@
   "name": "Sudan Pay",
   "short_name": "SudanPay",
   "description": "محفظتك الإلكترونية الآمنة والسريعة في السودان – تحويلات فورية، إرسال واستلام أموال بسهولة",
-  "start_url": "/",
+  "start_url": "index.html",
   "display": "standalone",
-  "background_color": "#007bff",
-  "theme_color": "#0056b3",
+  "background_color": "#0f172a",
+  "theme_color": "#a3e635",
   "orientation": "portrait-primary",
   "lang": "ar",
   "dir": "rtl",
@@ -22,21 +22,7 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
-    },
-    {
-      "src": "icons/icon-384x384.png",
-      "sizes": "384x384",
-      "type": "image/png"
-    },
-    {
-      "src": "icons/icon-152x152.png",
-      "sizes": "152x152",
-      "type": "image/png"
-    },
-    {
-      "src": "icons/icon-144x144.png",
-      "sizes": "144x144",
-      "type": "image/png"
     }
   ]
 }
+ 
