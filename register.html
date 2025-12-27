@@ -3,40 +3,92 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>إنشاء حساب - Sudan Pay</title>
+  <title>إنشاء حساب جديد - Sudan Pay</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+  
   <style>
-    .bg-hero { background: linear-gradient(to bottom, #0f172a, #1e293b); }
-    .btn-green { @apply bg-lime-400 hover:bg-lime-500 text-black font-bold py-4 px-10 rounded-full text-xl transition shadow-lg; }
+    body { font-family: 'Cairo', sans-serif; }
+    .hero-gradient { background: radial-gradient(circle at top right, #1e293b, #0f172a); }
+    .glass-card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); backdrop-filter: blur(15px); }
+    .input-field { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.3s ease; }
+    .input-field:focus { border-color: #a3e635; background: rgba(255, 255, 255, 0.08); outline: none; box-shadow: 0 0 15px rgba(163, 230, 53, 0.1); }
+    .btn-lime { background: #a3e635; color: #000; transition: all 0.3s ease; }
+    .btn-lime:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(163, 230, 53, 0.2); }
   </style>
 </head>
-<body class="bg-hero min-h-screen flex items-center justify-center">
-  <div class="w-full max-w-md p-10 bg-white/10 backdrop-blur-md rounded-3xl shadow-2xl border border-white/20">
+
+<body class="hero-gradient text-white min-h-screen flex items-center justify-center p-6">
+
+  <div class="w-full max-w-[500px] py-10">
     <div class="text-center mb-8">
-      <svg width="120" height="120" viewBox="0 0 100 100" class="mx-auto text-lime-400">
-        <circle cx="50" cy="50" r="45" fill="currentColor" opacity="0.3"/>
-        <path d="M30 50 Q50 10 70 50 Q50 90 30 50 Z" fill="currentColor"/>
-        <circle cx="50" cy="30" r="20" fill="#0f172a"/>
-      </svg>
-      <h1 class="text-4xl font-bold mt-6">Sudan Pay</h1>
+        <div class="inline-flex items-center justify-center w-16 h-16 bg-[#a3e635]/10 rounded-2xl border border-[#a3e635]/20 mb-4">
+            <span class="text-3xl font-black text-[#a3e635]">S</span>
+        </div>
+        <h1 class="text-3xl font-black">ابدأ رحلتك مع <span class="text-[#a3e635]">SUDAN PAY</span></h1>
+        <p class="text-gray-400 text-sm mt-2">انضم لآلاف المستخدمين في أسرع محفظة إلكترونية</p>
     </div>
 
-    <form id="registerForm" class="space-y-8">
-      <input type="text" id="fullName" placeholder="الاسم الكامل" class="w-full p-4 bg-white/10 border border-white/30 rounded-lg focus:border-lime-400 outline-none text-white placeholder-gray-400 text-lg"/>
-      <input type="email" id="email" placeholder="البريد الإلكتروني" class="w-full p-4 bg-white/10 border border-white/30 rounded-lg focus:border-lime-400 outline-none text-white placeholder-gray-400 text-lg"/>
-      <input type="tel" id="phone" placeholder="رقم الهاتف" class="w-full p-4 bg-white/10 border border-white/30 rounded-lg focus:border-lime-400 outline-none text-white placeholder-gray-400 text-lg"/>
-      <input type="password" id="password" placeholder="كلمة المرور" class="w-full p-4 bg-white/10 border border-white/30 rounded-lg focus:border-lime-400 outline-none text-white placeholder-gray-400 text-lg"/>
-      <button type="submit" class="w-full btn-green">إنشاء الحساب</button>
-    </form>
+    <div class="glass-card rounded-[35px] p-8 md:p-10 shadow-2xl border border-white/10">
+      <form id="registerForm" class="space-y-4">
+        
+        <div>
+          <label class="block text-[10px] font-bold text-gray-500 mb-1 mr-1 uppercase tracking-widest">الاسم الكامل</label>
+          <div class="relative">
+            <i class="fas fa-user absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 text-xs"></i>
+            <input type="text" id="fullName" placeholder="الاسم رباعي كما في الهوية" 
+                   class="w-full pl-11 pr-5 py-3.5 rounded-2xl input-field text-white text-sm" required/>
+          </div>
+        </div>
 
-    <p class="text-center mt-8 text-gray-300">
-      لديك حساب؟ <a href="login.html" class="text-lime-400 hover:underline">تسجيل الدخول</a>
+        <div>
+          <label class="block text-[10px] font-bold text-gray-500 mb-1 mr-1 uppercase tracking-widest">البريد الإلكتروني</label>
+          <div class="relative">
+            <i class="fas fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 text-xs"></i>
+            <input type="email" id="email" placeholder="name@example.com" 
+                   class="w-full pl-11 pr-5 py-3.5 rounded-2xl input-field text-white text-sm" required/>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-[10px] font-bold text-gray-500 mb-1 mr-1 uppercase tracking-widest">رقم الهاتف</label>
+          <div class="relative">
+            <i class="fas fa-phone absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 text-xs"></i>
+            <input type="tel" id="phone" placeholder="09xxxxxxxx" 
+                   class="w-full pl-11 pr-5 py-3.5 rounded-2xl input-field text-white text-sm text-left" dir="ltr" required/>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-[10px] font-bold text-gray-500 mb-1 mr-1 uppercase tracking-widest">كلمة المرور</label>
+          <div class="relative">
+            <i class="fas fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 text-xs"></i>
+            <input type="password" id="password" placeholder="••••••••" 
+                   class="w-full pl-11 pr-5 py-3.5 rounded-2xl input-field text-white text-sm" required/>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2 py-2 mr-1">
+            <input type="checkbox" id="terms" class="accent-[#a3e635]" required>
+            <label for="terms" class="text-[10px] text-gray-400">أوافق على <a href="#" class="text-[#a3e635] underline">شروط الاستخدام</a> و <a href="#" class="text-[#a3e635] underline">سياسة الخصوصية</a></label>
+        </div>
+
+        <button type="submit" class="w-full btn-lime py-4 rounded-2xl font-black text-lg shadow-xl mt-2 transition-all">
+          إنشاء حساب مجاني
+        </button>
+      </form>
+    </div>
+
+    <p class="text-center mt-6 text-gray-400 text-sm">
+      لديك حساب بالفعل؟ <a href="login.html" class="text-[#a3e635] font-black hover:underline ml-1">سجل دخولك</a>
     </p>
   </div>
 
-  <!-- Firebase v8 -->
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
   <script src="app.js"></script>
+
 </body>
-        </html> 
+</html>
+ 
