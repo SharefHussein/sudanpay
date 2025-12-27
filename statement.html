@@ -6,68 +6,112 @@
   <title>كشف الحساب - Sudan Pay</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+  
   <style>
-    .bg-hero { background: linear-gradient(to bottom, #0f172a, #1e293b); }
-    .card-glass { @apply bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl p-10; }
-    .logo-svg { fill: #a3e635; }
+    body { font-family: 'Cairo', sans-serif; background-color: #0f172a; }
+    .hero-gradient { background: radial-gradient(circle at top right, #1e293b, #0f172a); }
+    .glass-nav { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .glass-card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); }
+    .stat-card { transition: transform 0.3s ease; border-right: 4px solid transparent; }
+    .stat-card:hover { transform: translateY(-5px); background: rgba(255, 255, 255, 0.05); }
   </style>
 </head>
-<body class="bg-hero min-h-screen">
-  <!-- Navbar -->
-  <nav class="fixed top-0 w-full z-50 bg-slate-900/90 backdrop-blur-md">
+
+<body class="hero-gradient text-white min-h-screen pb-10">
+
+  <nav class="fixed top-0 w-full z-50 glass-nav">
     <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-      <div class="flex items-center space-x-4">
-        <svg width="60" height="60" viewBox="0 0 100 100" class="logo-svg">
-          <circle cx="50" cy="50" r="45" fill="currentColor" opacity="0.3"/>
-          <path d="M30 50 Q50 10 70 50 Q50 90 30 50 Z" fill="currentColor"/>
-          <circle cx="50" cy="30" r="20" fill="#0f172a"/>
-        </svg>
-        <span class="text-3xl font-bold">Sudan Pay</span>
-      </div>
-      <button onclick="logout()" class="bg-red-600 hover:bg-red-700 px-6 py-3 rounded-full transition">
-        خروج
-      </button>
+      <a href="dashboard.html" class="flex items-center gap-2 hover:text-[#a3e635] transition">
+        <i class="fas fa-arrow-right"></i>
+        <span class="font-bold">لوحة التحكم</span>
+      </a>
+      <span class="text-xl font-black text-[#a3e635]">SUDAN<span class="text-white">PAY</span></span>
+      <button onclick="logout()" class="text-red-400 hover:text-red-300 text-sm font-bold">خروج</button>
     </div>
   </nav>
 
-  <!-- Main Content -->
-  <div class="max-w-6xl mx-auto px-6 pt-32">
-    <h1 class="text-5xl font-bold text-center mb-16">كشف الحساب</h1>
+  <main class="max-w-6xl mx-auto px-6 pt-28">
+    
+    <div class="mb-10">
+        <h1 class="text-3xl font-black mb-2">كشف الحساب</h1>
+        <p class="text-gray-400 text-sm">مراجعة كافة حركاتك المالية والتحويلات</p>
+    </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-10 mb-16">
-      <div class="card-glass text-center">
-        <p class="text-xl text-gray-300 mb-4">الرصيد الحالي</p>
-        <p class="text-5xl font-bold text-lime-400">0 جنيه</p>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
+      <div class="glass-card p-6 rounded-3xl stat-card border-r-[#a3e635]">
+        <p class="text-gray-400 text-xs font-bold mb-1">الرصيد الحالي</p>
+        <h3 class="text-2xl font-black text-[#a3e635]">0.00 <span class="text-xs">SDG</span></h3>
       </div>
-      <div class="card-glass text-center">
-        <p class="text-xl text-gray-300 mb-4">إجمالي الإيداعات</p>
-        <p class="text-5xl font-bold text-lime-400">0 جنيه</p>
+      
+      <div class="glass-card p-6 rounded-3xl stat-card border-r-emerald-500">
+        <p class="text-gray-400 text-xs font-bold mb-1">إجمالي الإيداعات</p>
+        <h3 class="text-2xl font-black text-emerald-400">0.00 <span class="text-xs">SDG</span></h3>
       </div>
-      <div class="card-glass text-center">
-        <p class="text-xl text-gray-300 mb-4">إجمالي السحوبات</p>
-        <p class="text-5xl font-bold text-red-400">0 جنيه</p>
+
+      <div class="glass-card p-6 rounded-3xl stat-card border-r-red-500">
+        <p class="text-gray-400 text-xs font-bold mb-1">إجمالي السحوبات</p>
+        <h3 class="text-2xl font-black text-red-400">0.00 <span class="text-xs">SDG</span></h3>
       </div>
     </div>
 
-    <div class="card-glass">
-      <h2 class="text-3xl font-bold text-center mb-10">آخر المعاملات</h2>
-      <div class="text-center text-gray-400 text-2xl py-20">
-        لا توجد معاملات بعد
+    <div class="glass-card rounded-[32px] overflow-hidden">
+      <div class="p-6 border-b border-white/5 flex justify-between items-center bg-white/5">
+        <h2 class="font-bold">سجل العمليات</h2>
+        <button class="text-xs bg-white/5 px-3 py-1.5 rounded-lg border border-white/10 hover:bg-white/10 transition">
+            <i class="fas fa-filter ml-1 text-[#a3e635]"></i> تصفية
+        </button>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-right border-collapse">
+          <thead>
+            <tr class="text-gray-500 text-xs uppercase tracking-wider border-b border-white/5">
+              <th class="px-6 py-4 font-bold">العملية</th>
+              <th class="px-6 py-4 font-bold">التاريخ</th>
+              <th class="px-6 py-4 font-bold">الحالة</th>
+              <th class="px-6 py-4 font-bold text-left">المبلغ</th>
+            </tr>
+          </thead>
+          <tbody id="transactions-body">
+            <tr class="border-b border-white/5 hover:bg-white/[0.02] transition">
+                <td class="px-6 py-5">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-full bg-emerald-500/10 text-emerald-500 flex items-center justify-center text-xs">
+                            <i class="fas fa-arrow-down"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-bold">استلام أموال</p>
+                            <p class="text-[10px] text-gray-500">من: محمد أحمد</p>
+                        </div>
+                    </div>
+                </td>
+                <td class="px-6 py-5 text-xs text-gray-400">27 ديسمبر 2025</td>
+                <td class="px-6 py-5">
+                    <span class="px-2 py-1 rounded-md bg-emerald-500/10 text-emerald-500 text-[10px] font-bold">مكتمل</span>
+                </td>
+                <td class="px-6 py-5 text-left font-bold text-emerald-400">+5,000 SDG</td>
+             </tr>
+          </tbody>
+        </table>
+
+        <div id="empty-state" class="flex flex-col items-center py-20 opacity-30">
+          <i class="fas fa-folder-open text-5xl mb-4"></i>
+          <p class="text-sm">لا توجد معاملات مسجلة حتى الآن</p>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- Firebase v8 -->
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  </main>
+
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
   <script src="app.js"></script>
-
   <script>
     function logout() {
-      firebase.auth().signOut().then(() => {
-        window.location.href = 'login.html';
-      });
+      firebase.auth().signOut().then(() => { window.location.href = 'login.html'; });
     }
   </script>
 </body>
-  </html> 
+</html>
+ 
