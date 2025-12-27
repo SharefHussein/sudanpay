@@ -4,34 +4,102 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Sudan Pay - الرئيسية</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Cairo', sans-serif; background: radial-gradient(circle at top right, #1e293b, #0f172a); color: white; min-h-screen; }
+        body { 
+            font-family: 'Cairo', sans-serif; 
+            background: radial-gradient(circle at top right, #1e293b, #0f172a); 
+            color: white; 
+            min-height: 100vh;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #a3e635 0%, #84cc16 100%);
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(163, 230, 53, 0.3);
+        }
     </style>
 </head>
 <body class="flex flex-col items-center justify-center min-h-screen px-6">
+    <!-- الشعار والعنوان -->
     <div class="text-center mb-10">
-        <h1 class="text-5xl font-black mb-4">SUDAN<span class="text-[#a3e635]">PAY</span></h1>
-        <p class="text-gray-400">مستقبل الدفع الرقمي في السودان</p>
+        <div class="mb-6">
+            <i class="fas fa-wallet text-6xl text-[#a3e635] mb-4"></i>
+        </div>
+        <h1 class="text-5xl font-black mb-4 tracking-tight">
+            SUDAN<span class="text-[#a3e635]">PAY</span>
+        </h1>
+        <p class="text-gray-400 text-lg max-w-md mx-auto">
+            مستقبل الدفع الرقمي في السودان. تحويلات سريعة، آمنة، وسهلة.
+        </p>
     </div>
 
-    <div class="w-full max-w-sm flex flex-col gap-4">
-        <button onclick="signInWithGoogle()" class="w-full bg-white text-black font-black py-4 rounded-2xl flex items-center justify-center gap-3 shadow-xl">
-            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20">
+    <!-- بطاقة الخيارات -->
+    <div class="glass-card w-full max-w-md rounded-3xl p-8 mb-10">
+        <h2 class="text-2xl font-bold mb-6 text-center">ابدأ رحلتك معنا</h2>
+        
+        <!-- زر الدخول بجوجل -->
+        <button onclick="signInWithGoogle()" 
+                class="btn-primary w-full text-black font-black py-4 rounded-2xl flex items-center justify-center gap-3 shadow-xl mb-4">
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20" alt="Google">
             الدخول بواسطة جوجل
         </button>
-        <div class="grid grid-cols-2 gap-4">
-            <a href="login.html" class="bg-[#a3e635] text-black font-black py-4 rounded-2xl text-center">بالبريد</a>
-            <a href="register.html" class="bg-white/10 border border-white/20 text-white font-bold py-4 rounded-2xl text-center">اشتراك</a>
+        
+        <!-- زر الدخول بالإيميل -->
+        <a href="login.html" 
+           class="block w-full bg-white/10 border border-white/20 text-white font-bold py-4 rounded-2xl text-center mb-4 hover:bg-white/20 transition">
+            <i class="fas fa-envelope mr-2"></i> الدخول بالبريد الإلكتروني
+        </a>
+        
+        <!-- زر التسجيل -->
+        <a href="register.html" 
+           class="block w-full bg-transparent border-2 border-[#a3e635] text-[#a3e635] font-bold py-4 rounded-2xl text-center hover:bg-[#a3e635] hover:text-black transition">
+            <i class="fas fa-user-plus mr-2"></i> إنشاء حساب جديد
+        </a>
+    </div>
+
+    <!-- الميزات -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl w-full mb-10">
+        <div class="glass-card p-6 rounded-2xl text-center">
+            <i class="fas fa-bolt text-3xl text-[#a3e635] mb-4"></i>
+            <h3 class="font-bold text-lg mb-2">تحويلات فورية</h3>
+            <p class="text-gray-400 text-sm">أرسل واستقبل الأموال في ثوانٍ</p>
+        </div>
+        <div class="glass-card p-6 rounded-2xl text-center">
+            <i class="fas fa-shield-alt text-3xl text-[#a3e635] mb-4"></i>
+            <h3 class="font-bold text-lg mb-2">أمان كامل</h3>
+            <p class="text-gray-400 text-sm">تشفير متقدم لحماية معاملاتك</p>
+        </div>
+        <div class="glass-card p-6 rounded-2xl text-center">
+            <i class="fas fa-mobile-alt text-3xl text-[#a3e635] mb-4"></i>
+            <h3 class="font-bold text-lg mb-2">متاح دائمًا</h3>
+            <p class="text-gray-400 text-sm">خدمة 24/7 على جميع الأجهزة</p>
         </div>
     </div>
 
+    <!-- تذييل الصفحة -->
+    <footer class="text-center text-gray-500 text-sm mt-8">
+        <p>© 2024 Sudan Pay. جميع الحقوق محفوظة.</p>
+        <p class="mt-1">تم التطوير بكل ❤️ من أجل السودان</p>
+    </footer>
+
+    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <!-- التطبيق الرئيسي -->
     <script src="app.js"></script>
 </body>
-</html>
- 
- 
+                                                                    </html> 
