@@ -1,96 +1,87 @@
-// auth.js
-import { notify } from "./notifications.js";
-import { auth, db } from "./firebase.js";
+// auth.js (الإصدار المتوافق مع v8)
 
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  signOut,
-  onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-import {
-  doc,
-  setDoc,
-  getDoc,
-  serverTimestamp
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+const db = firebase.firestore(); // تعريف قاعدة البيانات
 
 // =======================
-// Register (إنشاء حساب)
+// Register (إنشاء حساب مع إنشاء محفظة)
 // =======================
-window.register = async function () {
+window.register = function () {
+  const fullName = document.getElementById("fullName").value;
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 
-  if (!email || !password) {
-    alert("أدخل الإيميل وكلمة المرور");
+  if (!email || !password || !fullName) {
+    alert("يرجى ملء جميع الحقول");
     return;
   }
 
-  try {
-    const cred = await createUserWithEmailAndPassword(auth, email, password);
-    const user = cred.user;
-
-    // إنشاء Wallet تلقائي
-    await setDoc(doc(db, "users", user.uid), {
-      email: user.email,
-      balance: 0,
-      createdAt: serverTimestamp()
+  firebase.auth().createUserWithEmailAndPassword(email, password)
+    .then((cred) => {
+      // 1. تحديث اسم المستخدم
+      return cred.user.updateProfile({ displayName: fullName }).then(() => cred);
+    })
+    .then((cred) => {
+      // 2. إنشاء مستند للمستخدم في Firestore (المحفظة)
+      return db.collection("users").doc(cred.user.uid).set({
+        fullName: fullName,
+        email: email,
+        balance: 0, // الرصيد الافتتاحي
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    })
+    .then(() => {
+      window.location.href = "dashboard.html";
+    })
+    .catch((error) => {
+      alert("خطأ في التسجيل: " + error.message);
     });
-
-    window.location.href = "dashboard.html";
-  } catch (error) {
-    alert(error.message);
-  }
 };
 
 // =======================
 // Login (تسجيل دخول)
 // =======================
-window.login = async function () {
+window.login = function () {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 
-  if (!email || !password) {
-    alert("أدخل الإيميل وكلمة المرور");
-    return;
-  }
-
-  try {
-    await signInWithEmailAndPassword(auth, email, password);
-    window.location.href = "dashboard.html";
-  } catch (error) {
-    alert(error.message);
-  }
+  firebase.auth().signInWithEmailAndPassword(email, password)
+    .then(() => {
+      window.location.href = "dashboard.html";
+    })
+    .catch((error) => {
+      alert("خطأ في الدخول: " + error.message);
+    });
 };
 
 // =======================
-// Logout (تسجيل خروج)
+// حماية الصفحات وجلب البيانات
 // =======================
-window.logout = async function () {
-  await signOut(auth);
-  window.location.href = "login.html";
-};
-
-// =======================
-// حماية الصفحات
-// =======================
-onAuthStateChanged(auth, async (user) => {
+firebase.auth().onAuthStateChanged((user) => {
   const path = window.location.pathname;
 
-  if (!user && path.includes("dashboard")) {
+  // إذا حاول دخول الداشبورد وهو غير مسجل
+  if (!user && (path.includes("dashboard") || path.includes("statement") || path.includes("profile"))) {
     window.location.href = "login.html";
     return;
   }
 
-  if (user && path.includes("dashboard")) {
-    // جلب الرصيد
-    const snap = await getDoc(doc(db, "users", user.uid));
-    if (snap.exists()) {
-      const balance = snap.data().balance;
-      const el = document.getElementById("balance");
-      if (el) el.innerText = balance + " SDG";
-    }
+  // إذا كان مسجل دخول، نقوم بجلب الرصيد من Firestore
+  if (user) {
+    db.collection("users").doc(user.uid).onSnapshot((doc) => {
+      if (doc.exists) {
+        const data = doc.data();
+        
+        // تحديث الرصيد في أي صفحة تحتوي على عنصر بمعرف balance
+        const balanceEl = document.getElementById("balance");
+        if (balanceEl) {
+            balanceEl.innerText = data.balance.toLocaleString() + " SDG";
+        }
+        
+        // تحديث الاسم في البروفايل أو الداشبورد
+        const nameEl = document.getElementById("user-display-name");
+        if (nameEl) nameEl.innerText = data.fullName;
+      }
+    });
   }
 });
+ 
