@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Sudan Pay - الرئيسية</title>
+    <title>Sudan Pay - لوحة التحكم</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome -->
@@ -13,8 +13,8 @@
     <style>
         body { 
             font-family: 'Cairo', sans-serif; 
-            background: radial-gradient(circle at top right, #1e293b, #0f172a); 
-            color: white; 
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: white;
             min-height: 100vh;
         }
         .glass-card {
@@ -32,68 +32,125 @@
         }
     </style>
 </head>
-<body class="flex flex-col items-center justify-center min-h-screen px-6">
-    <!-- الشعار والعنوان -->
-    <div class="text-center mb-10">
-        <div class="mb-6">
-            <i class="fas fa-wallet text-6xl text-[#a3e635] mb-4"></i>
+<body class="px-4 py-6">
+    <!-- شريط التنقل -->
+    <nav class="glass-card rounded-2xl p-4 mb-6 flex justify-between items-center">
+        <div class="flex items-center gap-3">
+            <img id="userPhoto" src="" alt="" class="w-10 h-10 rounded-full hidden">
+            <div>
+                <h1 id="userName" class="font-bold text-lg">جاري التحميل...</h1>
+                <p id="userEmail" class="text-gray-400 text-sm">...</p>
+            </div>
         </div>
-        <h1 class="text-5xl font-black mb-4 tracking-tight">
-            SUDAN<span class="text-[#a3e635]">PAY</span>
-        </h1>
-        <p class="text-gray-400 text-lg max-w-md mx-auto">
-            مستقبل الدفع الرقمي في السودان. تحويلات سريعة، آمنة، وسهلة.
-        </p>
-    </div>
-
-    <!-- بطاقة الخيارات -->
-    <div class="glass-card w-full max-w-md rounded-3xl p-8 mb-10">
-        <h2 class="text-2xl font-bold mb-6 text-center">ابدأ رحلتك معنا</h2>
         
-        <!-- زر الدخول بجوجل -->
-        <button onclick="signInWithGoogle()" 
-                class="btn-primary w-full text-black font-black py-4 rounded-2xl flex items-center justify-center gap-3 shadow-xl mb-4">
-            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20" alt="Google">
-            الدخول بواسطة جوجل
-        </button>
-        
-        <!-- زر الدخول بالإيميل -->
-        <a href="login.html" 
-           class="block w-full bg-white/10 border border-white/20 text-white font-bold py-4 rounded-2xl text-center mb-4 hover:bg-white/20 transition">
-            <i class="fas fa-envelope mr-2"></i> الدخول بالبريد الإلكتروني
-        </a>
-        
-        <!-- زر التسجيل -->
-        <a href="register.html" 
-           class="block w-full bg-transparent border-2 border-[#a3e635] text-[#a3e635] font-bold py-4 rounded-2xl text-center hover:bg-[#a3e635] hover:text-black transition">
-            <i class="fas fa-user-plus mr-2"></i> إنشاء حساب جديد
-        </a>
-    </div>
+        <div class="flex items-center gap-2">
+            <button onclick="window.location.href='index.html'" class="p-2 rounded-xl hover:bg-white/10">
+                <i class="fas fa-home"></i>
+            </button>
+            <button onclick="logout()" class="px-4 py-2 rounded-xl bg-red-500/20 text-red-300 hover:bg-red-500/30">
+                <i class="fas fa-sign-out-alt mr-2"></i> تسجيل خروج
+            </button>
+        </div>
+    </nav>
 
-    <!-- الميزات -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl w-full mb-10">
-        <div class="glass-card p-6 rounded-2xl text-center">
-            <i class="fas fa-bolt text-3xl text-[#a3e635] mb-4"></i>
-            <h3 class="font-bold text-lg mb-2">تحويلات فورية</h3>
-            <p class="text-gray-400 text-sm">أرسل واستقبل الأموال في ثوانٍ</p>
+    <!-- المحتوى الرئيسي -->
+    <div class="max-w-6xl mx-auto">
+        <!-- بطاقة الرصيد -->
+        <div class="glass-card rounded-3xl p-8 mb-8">
+            <div class="flex justify-between items-start mb-6">
+                <div>
+                    <h2 class="text-gray-400 text-sm mb-1">الرصيد المتاح</h2>
+                    <div id="userBalance" class="text-5xl font-black">0.00 جنيه</div>
+                    <p class="text-gray-500 text-sm mt-2">آخر تحديث: الآن</p>
+                </div>
+                <div class="text-right">
+                    <i class="fas fa-wallet text-6xl text-[#a3e635] opacity-50"></i>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-4">
+                <button onclick="window.location.href='#send'" class="btn-primary py-4 rounded-xl font-bold">
+                    <i class="fas fa-paper-plane mr-2"></i> إرسال أموال
+                </button>
+                <button onclick="showNotify('قريباً...', 'success')" class="glass-card py-4 rounded-xl font-bold">
+                    <i class="fas fa-download mr-2"></i> إيداع أموال
+                </button>
+            </div>
         </div>
-        <div class="glass-card p-6 rounded-2xl text-center">
-            <i class="fas fa-shield-alt text-3xl text-[#a3e635] mb-4"></i>
-            <h3 class="font-bold text-lg mb-2">أمان كامل</h3>
-            <p class="text-gray-400 text-sm">تشفير متقدم لحماية معاملاتك</p>
+
+        <!-- قسم إرسال الأموال -->
+        <div id="send" class="glass-card rounded-3xl p-8 mb-8">
+            <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
+                <i class="fas fa-paper-plane text-[#a3e635]"></i> إرسال أموال
+            </h2>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-gray-400 mb-2">بريد المستلم</label>
+                    <input id="toEmail" type="email" 
+                           class="w-full p-4 rounded-xl bg-white/5 border border-white/10 focus:border-[#a3e635] focus:outline-none"
+                           placeholder="example@email.com">
+                </div>
+                
+                <div>
+                    <label class="block text-gray-400 mb-2">المبلغ (جنيه)</label>
+                    <input id="amount" type="number" min="1" step="0.01"
+                           class="w-full p-4 rounded-xl bg-white/5 border border-white/10 focus:border-[#a3e635] focus:outline-none"
+                           placeholder="0.00">
+                </div>
+                
+                <button onclick="sendMoney()" class="btn-primary w-full py-4 rounded-xl font-bold text-lg">
+                    <i class="fas fa-bolt mr-2"></i> تأكيد الإرسال
+                </button>
+            </div>
         </div>
-        <div class="glass-card p-6 rounded-2xl text-center">
-            <i class="fas fa-mobile-alt text-3xl text-[#a3e635] mb-4"></i>
-            <h3 class="font-bold text-lg mb-2">متاح دائمًا</h3>
-            <p class="text-gray-400 text-sm">خدمة 24/7 على جميع الأجهزة</p>
+
+        <!-- المعاملات الأخيرة -->
+        <div class="glass-card rounded-3xl p-8 mb-8">
+            <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
+                <i class="fas fa-history text-[#a3e635]"></i> نشاط حديث
+            </h2>
+            <div class="space-y-4">
+                <div class="p-4 rounded-xl bg-white/5">
+                    <p class="text-gray-400">لا توجد معاملات حديثة</p>
+                    <p class="text-sm text-gray-500">ستظهر معاملاتك هنا بعد إرسال أو استقبال الأموال</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- إعدادات الحساب -->
+        <div class="glass-card rounded-3xl p-8">
+            <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
+                <i class="fas fa-cog text-[#a3e635]"></i> إعدادات الحساب
+            </h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <button onclick="updateUserData()" class="glass-card p-4 rounded-xl text-left hover:bg-white/10 transition">
+                    <i class="fas fa-user-edit text-[#a3e635] mb-2"></i>
+                    <h3 class="font-bold">تعديل البيانات</h3>
+                    <p class="text-gray-400 text-sm">تغيير الاسم أو رقم الهاتف</p>
+                </button>
+                
+                <button onclick="changePassword()" class="glass-card p-4 rounded-xl text-left hover:bg-white/10 transition">
+                    <i class="fas fa-key text-[#a3e635] mb-2"></i>
+                    <h3 class="font-bold">تغيير كلمة المرور</h3>
+                    <p class="text-gray-400 text-sm">تحديث كلمة المرور الحالية</p>
+                </button>
+                
+                <button onclick="showNotify('قريباً...', 'success')" class="glass-card p-4 rounded-xl text-left hover:bg-white/10 transition">
+                    <i class="fas fa-bell text-[#a3e635] mb-2"></i>
+                    <h3 class="font-bold">الإشعارات</h3>
+                    <p class="text-gray-400 text-sm">إدارة إشعارات التطبيق</p>
+                </button>
+                
+                <button onclick="deleteAccount()" class="glass-card p-4 rounded-xl text-left bg-red-500/10 hover:bg-red-500/20 transition">
+                    <i class="fas fa-trash-alt text-red-400 mb-2"></i>
+                    <h3 class="font-bold text-red-300">حذف الحساب</h3>
+                    <p class="text-gray-400 text-sm">حذف الحساب نهائياً</p>
+                </button>
+            </div>
         </div>
     </div>
-
-    <!-- تذييل الصفحة -->
-    <footer class="text-center text-gray-500 text-sm mt-8">
-        <p>© 2024 Sudan Pay. جميع الحقوق محفوظة.</p>
-        <p class="mt-1">تم التطوير بكل ❤️ من أجل السودان</p>
-    </footer>
 
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
@@ -101,5 +158,24 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
     <!-- التطبيق الرئيسي -->
     <script src="app.js"></script>
+    
+    <!-- تحميل بيانات المستخدم عند فتح الصفحة -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // تحميل بيانات المستخدم
+            loadUserData();
+            
+            // إضافة تأثيرات للعناصر
+            const cards = document.querySelectorAll('.glass-card');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    card.style.transform = 'translateY(-4px)';
+                });
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = 'translateY(0)';
+                });
+            });
+        });
+    </script>
 </body>
-                                                                    </html> 
+    </html> 
