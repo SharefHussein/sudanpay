@@ -19,7 +19,7 @@ if (!firebase.apps.length) {
 const auth = firebase.auth();
 const db = firebase.firestore();
 const appCheck = firebase.appCheck();
-appCheck.activate('A9ECD854-8B88-472C-BC28-A38741F20C03);
+appCheck.activate('A9ECD854-8B88-472C-BC28-A38741F20C03');
 
 // 2. 🔔 نظام التنبيهات الذكي
 window.showNotify = function(message, type = "success") {
