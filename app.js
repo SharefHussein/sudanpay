@@ -8,50 +8,84 @@ const firebaseConfig = {
   appId: "1:699809447272:web:90f3780ed6c768c4322add"
 };
 
-// 2. تهيئة الخدمات
+// تهيئة الخدمة
 if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
 const auth = firebase.auth();
 const db = firebase.firestore();
 
-// 3. دالة الدخول بجوجل (مع إجبار الانتقال)
+// 2. دالة الدخول بجوجل (لا تعمل إلا بالضغط)
 window.signInWithGoogle = function() {
     const provider = new firebase.auth.GoogleAuthProvider();
     auth.signInWithPopup(provider).then((result) => {
-        console.log("تم الدخول بجوجل");
-        window.location.replace("dashboard.html"); // تحويل إجباري
-    }).catch(err => alert("خطأ جوجل: " + err.message));
+        // الانتقال فقط بعد نجاح العملية
+        window.location.replace("dashboard.html");
+    }).catch(err => {
+        if(err.code !== 'auth/popup-closed-by-user') alert("خطأ جوجل: " + err.message);
+    });
 };
 
-// 4. دالة الدخول بالبريد
+// 3. دالة الدخول بالبريد (لا تعمل إلا بالضغط على الزر)
 const loginForm = document.getElementById('loginForm');
 if (loginForm) {
     loginForm.addEventListener('submit', (e) => {
         e.preventDefault();
         const email = document.getElementById('email').value.trim();
         const password = document.getElementById('password').value;
+        const btn = e.target.querySelector('button');
+        
+        btn.disabled = true; // منع الضغط المتكرر
+        btn.innerText = "جاري التحقق...";
+
         auth.signInWithEmailAndPassword(email, password).then(() => {
-            window.location.replace("dashboard.html"); // تحويل إجباري
-        }).catch(err => alert("بيانات الدخول غير صحيحة"));
+            window.location.replace("dashboard.html");
+        }).catch(err => {
+            btn.disabled = false;
+            btn.innerText = "تسجيل الدخول";
+            alert("بيانات الدخول غير صحيحة");
+        });
     });
 }
 
-// 5. مراقب الحالة (Redirect Guard) - أهم جزء لحل مشكلة الثبات
+// 4. دالة إنشاء الحساب (Register)
+const registerForm = document.getElementById('registerForm');
+if (registerForm) {
+    registerForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const fullName = document.getElementById('fullName').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value;
+        const btn = e.target.querySelector('button');
+
+        btn.disabled = true;
+        
+        auth.createUserWithEmailAndPassword(email, password).then((cred) => {
+            return cred.user.updateProfile({ displayName: fullName }).then(() => cred);
+        }).then((cred) => {
+            return db.collection("users").doc(cred.user.uid).set({
+                fullName: fullName,
+                email: email,
+                balance: 0,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+        }).then(() => {
+            window.location.replace("dashboard.html");
+        }).catch(err => {
+            btn.disabled = false;
+            alert(err.message);
+        });
+    });
+}
+
+// 5. حماية الصفحات فقط (بدون تحويل تلقائي للداخل)
 auth.onAuthStateChanged((user) => {
     const path = window.location.pathname;
-    if (user) {
-        // لو المستخدم مسجل وهو في صفحة البداية أو اللوجن، حوله للداشبورد فوراً
-        if (path.includes("index") || path.includes("login") || path.includes("register") || path.endsWith("/")) {
-            window.location.replace("dashboard.html");
-        }
-    } else {
-        // لو غير مسجل ويحاول دخول الداشبورد، أرجعه للوجن
-        if (path.includes("dashboard") || path.includes("profile")) {
-            window.location.replace("login.html");
-        }
+    // إذا كنت غير مسجل وتحاول دخول الداشبورد، نرجعك للوجن
+    if (!user && (path.includes("dashboard") || path.includes("profile"))) {
+        window.location.replace("login.html");
     }
 });
 
-// 6. تسجيل الخروج
+// 6. دالة تسجيل الخروج
 window.logout = function() {
     auth.signOut().then(() => {
         window.location.replace("login.html");
