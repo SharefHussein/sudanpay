@@ -1,86 +1,37 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Sudan Pay - مستقبل الدفع الرقمي</title>
-  
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
-  
-  <style>
-    body { font-family: 'Cairo', sans-serif; background-color: #0f172a; }
-    .hero-gradient { background: radial-gradient(circle at top right, #1e293b, #0f172a); }
-    .btn-lime { @apply bg-[#a3e635] hover:bg-[#bef264] text-black font-black py-4 px-8 rounded-2xl transition-all duration-300 transform hover:-translate-y-1 shadow-lg shadow-lime-500/20; }
-    .btn-outline { @apply bg-white/5 border border-white/10 hover:bg-white/10 text-white font-bold py-4 px-8 rounded-2xl transition-all duration-300; }
-    .glass-nav { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.05); }
-    .text-glow { text-shadow: 0 0 20px rgba(163, 230, 53, 0.3); }
-  </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Sudan Pay - الرئيسية</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <style>
+        body { font-family: 'Cairo', sans-serif; background: radial-gradient(circle at top right, #1e293b, #0f172a); color: white; min-h-screen; }
+    </style>
 </head>
+<body class="flex flex-col items-center justify-center min-h-screen px-6">
+    <div class="text-center mb-10">
+        <h1 class="text-5xl font-black mb-4">SUDAN<span class="text-[#a3e635]">PAY</span></h1>
+        <p class="text-gray-400">مستقبل الدفع الرقمي في السودان</p>
+    </div>
 
-<body class="hero-gradient text-white min-h-screen">
-
-  <nav class="fixed top-0 w-full z-50 glass-nav">
-    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-      <div class="flex items-center gap-2">
-        <div class="w-10 h-10 bg-[#a3e635] rounded-xl flex items-center justify-center shadow-lg">
-          <span class="text-black font-black text-xl">S</span>
+    <div class="w-full max-w-sm flex flex-col gap-4">
+        <button onclick="signInWithGoogle()" class="w-full bg-white text-black font-black py-4 rounded-2xl flex items-center justify-center gap-3 shadow-xl">
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20">
+            الدخول بواسطة جوجل
+        </button>
+        <div class="grid grid-cols-2 gap-4">
+            <a href="login.html" class="bg-[#a3e635] text-black font-black py-4 rounded-2xl text-center">بالبريد</a>
+            <a href="register.html" class="bg-white/10 border border-white/20 text-white font-bold py-4 rounded-2xl text-center">اشتراك</a>
         </div>
-        <span class="text-2xl font-black tracking-tighter">SUDAN<span class="text-[#a3e635]">PAY</span></span>
-      </div>
-      <a href="login.html" class="text-sm font-bold hover:text-[#a3e635] transition">دخول</a>
-    </div>
-  </nav>
-
-  <div class="pt-32 pb-20 px-6 max-w-5xl mx-auto text-center">
-    <div class="inline-flex items-center gap-2 bg-white/5 border border-white/10 px-4 py-2 rounded-full mb-8">
-        <span class="relative flex h-2 w-2">
-            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#a3e635] opacity-75"></span>
-            <span class="relative inline-flex rounded-full h-2 w-2 bg-[#a3e635]"></span>
-        </span>
-        <span class="text-[10px] font-bold uppercase tracking-widest text-gray-400">متوفر الآن في السودان</span>
     </div>
 
-    <h1 class="text-5xl md:text-7xl font-black mb-6 leading-tight">
-      مستقبل الدفع الرقمي <br/>
-      <span class="text-[#a3e635] text-glow italic">بين يديك</span>
-    </h1>
-    
-    <p class="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto mb-12 leading-relaxed">
-      أرسل واستلم الأموال، اشحن رصيدك، وادفع فواتيرك بكل أمان وسهولة من أي مكان في السودان.
-    </p>
-
-    <div class="flex flex-col gap-4 max-w-md mx-auto">
-      
-      <button onclick="signInWithGoogle()" class="w-full bg-white text-black font-black py-4 rounded-2xl flex items-center justify-center gap-3 shadow-2xl hover:bg-gray-100 transition-all transform hover:-translate-y-1">
-        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="22">
-        الدخول بواسطة جوجل
-      </button>
-
-      <div class="grid grid-cols-2 gap-4">
-        <a href="login.html" class="btn-lime flex items-center justify-center text-sm">
-          <i class="fas fa-envelope ml-2"></i> بالبريد
-        </a>
-        <a href="register.html" class="btn-outline flex items-center justify-center text-sm">
-          <i class="fas fa-user-plus ml-2"></i> اشتراك
-        </a>
-      </div>
-
-    </div>
-
-    <div class="mt-20 pt-10 border-t border-white/5 flex flex-wrap justify-center gap-8 opacity-40 grayscale">
-        <span class="font-bold flex items-center gap-2"><i class="fas fa-bolt"></i> FAST TRANSFER</span>
-        <span class="font-bold flex items-center gap-2"><i class="fas fa-shield-alt"></i> SECURE PAY</span>
-        <span class="font-bold flex items-center gap-2"><i class="fas fa-headset"></i> SUPPORT 24/7</span>
-    </div>
-  </div>
-
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-  <script src="app.js"></script>
-
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>
+ 
  
