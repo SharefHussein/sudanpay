@@ -2,41 +2,40 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>الملف الشخصي - Sudan Pay</title>
+    <title>الحساب - Sudan Pay</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-[#0f172a] text-white p-6">
+<body class="p-6">
     <header class="flex items-center gap-4 mb-10">
-        <a href="dashboard.html" class="text-gray-400"><i class="fas fa-arrow-right"></i></a>
-        <h1 class="text-xl font-bold">الملف الشخصي</h1>
+        <a href="dashboard.html" class="w-10 h-10 bg-white/5 rounded-full flex items-center justify-center border border-white/10 text-[#a3e635]">
+            <i class="fas fa-arrow-right"></i>
+        </a>
+        <h1 class="text-xl font-bold">إعدادات الحساب</h1>
     </header>
 
-    <div class="flex flex-col items-center mb-10">
-        <div class="w-24 h-24 bg-[#1e293b] rounded-full flex items-center justify-center border-4 border-[#a3e635] shadow-lg shadow-lime-500/10 mb-4">
-            <i class="fas fa-user-tie text-4xl text-[#a3e635]"></i>
+    <div class="flex flex-col items-center mb-12">
+        <div class="w-24 h-24 bg-[#1e293b] rounded-full flex items-center justify-center border-2 border-[#a3e635] shadow-[0_0_20px_rgba(163,230,53,0.2)] mb-4">
+            <i class="fas fa-user-shield text-4xl text-[#a3e635]"></i>
         </div>
         <h2 id="userName" class="text-xl font-black italic">جاري التحميل...</h2>
-        <p id="userEmail" class="text-gray-500 text-xs mt-1">...</p>
+        <p id="userEmail" class="text-gray-500 text-[10px] mt-1 tracking-widest uppercase">...</p>
     </div>
 
-    <div class="space-y-3">
-        <div class="glass-card p-5 flex items-center justify-between">
-            <div class="flex items-center gap-4"><i class="fas fa-shield-alt text-[#a3e635]"></i><span class="text-sm font-bold">إعدادات الأمان</span></div>
+    <div class="space-y-4">
+        <div class="neon-card flex items-center justify-between p-5 group transition cursor-pointer">
+            <div class="flex items-center gap-4">
+                <div class="w-10 h-10 bg-[#a3e635]/10 rounded-lg flex items-center justify-center text-[#a3e635] group-hover:bg-[#a3e635] group-hover:text-black transition">
+                    <i class="fas fa-cog"></i>
+                </div>
+                <span class="text-sm font-bold">ضبط الحماية</span>
+            </div>
             <i class="fas fa-chevron-left text-gray-700 text-xs"></i>
         </div>
-        <div class="glass-card p-5 flex items-center justify-between">
-            <div class="flex items-center gap-4"><i class="fas fa-bell text-[#a3e635]"></i><span class="text-sm font-bold">التنبيهات</span></div>
-            <i class="fas fa-chevron-left text-gray-700 text-xs"></i>
-        </div>
-        <div class="glass-card p-5 flex items-center justify-between">
-            <div class="flex items-center gap-4"><i class="fas fa-headset text-[#a3e635]"></i><span class="text-sm font-bold">الدعم الفني</span></div>
-            <i class="fas fa-chevron-left text-gray-700 text-xs"></i>
-        </div>
-        
-        <button onclick="auth.signOut()" class="w-full p-5 rounded-2xl bg-red-500/10 text-red-500 font-black mt-10 border border-red-500/10 transition active:scale-95">
-            تسجيل الخروج
+
+        <button onclick="auth.signOut()" class="w-full py-5 rounded-2xl bg-red-500/5 text-red-500 font-black text-xs border border-red-500/10 active:scale-95 transition">
+            تسجيل الخروج من الحساب
         </button>
     </div>
 
@@ -48,7 +47,7 @@
         auth.onAuthStateChanged(user => {
             if(user) {
                 document.getElementById('userEmail').innerText = user.email;
-                db.collection("users").doc(user.uid).get().then(doc => {
+                db.collection("users").doc(user.uid).onSnapshot(doc => {
                     if(doc.exists) document.getElementById('userName').innerText = doc.data().name;
                 });
             } else { window.location.href = "login.html"; }
