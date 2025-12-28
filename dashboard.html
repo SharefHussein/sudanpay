@@ -7,36 +7,48 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-[#0f172a] text-white p-4">
-    <header class="flex flex-col items-center py-6">
-        <div class="w-14 h-14 bg-[#1e293b] rounded-full flex items-center justify-center border-2 border-[#a3e635] mb-2">
-            <span class="text-[#a3e635] text-2xl font-black italic">S</span>
+<body class="p-4">
+    <header class="flex justify-between items-center py-4 mb-6">
+        <div class="flex items-center gap-2">
+            <div class="w-8 h-8 bg-[#a3e635] rounded flex items-center justify-center">
+                <i class="fas fa-leaf text-black text-xs"></i>
+            </div>
+            <span class="font-bold text-lg tracking-tight italic">Sudan<span class="text-[#a3e635]">Pay</span></span>
         </div>
-        <h1 class="text-lg font-bold">Sudan <span class="text-[#a3e635]">Pay</span></h1>
+        <div class="w-10 h-10 bg-white/5 rounded-full flex items-center justify-center border border-white/10">
+            <i class="fas fa-user text-sm"></i>
+        </div>
     </header>
 
-    <div class="glass-card p-8 text-center mb-8 relative">
-        <p class="text-[10px] text-gray-400 mb-1">Total Revenue</p>
-        <h2 id="balance" class="text-3xl font-black italic">0.00 <span class="text-xs text-[#a3e635]">SDG</span></h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <div class="neon-card relative overflow-hidden">
+            <p class="text-xs text-gray-400 mb-1 italic">Total Revenue</p>
+            <h2 id="balance" class="text-3xl font-black">0.00 <span class="text-xs text-[#a3e635]">SDG</span></h2>
+            <div class="absolute right-4 bottom-4 w-12 h-8 bg-[#a3e635]/10 rounded-lg flex items-center justify-center">
+                <i class="fas fa-chart-line text-[#a3e635] text-xs"></i>
+            </div>
+        </div>
+        
+        <div class="neon-card bg-[#a3e635]/5 border-[#a3e635]/20">
+            <p class="text-xs text-gray-400 mb-1">Active Users</p>
+            <h2 class="text-2xl font-bold">Live <span class="text-xs bg-[#a3e635] text-black px-2 rounded-full">Secure</span></h2>
+        </div>
     </div>
 
+    <h3 class="text-xs font-bold text-gray-500 mb-4 mr-2 uppercase tracking-widest">Quick Actions</h3>
     <div class="grid grid-cols-2 gap-4">
-        <a href="send.html" class="glass-card p-6 flex flex-col items-center gap-2 transition active:scale-95">
-            <div class="w-10 h-10 bg-[#a3e635] text-black rounded-lg flex items-center justify-center"><i class="fas fa-paper-plane text-sm"></i></div>
-            <span class="text-[10px] font-bold">Send</span>
+        <a href="send.html" class="neon-card flex flex-col items-center gap-3 active:scale-95 transition">
+            <div class="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center border border-white/10 text-[#a3e635]">
+                <i class="fas fa-paper-plane"></i>
+            </div>
+            <span class="text-[10px] font-black uppercase">Send Payment</span>
         </a>
-        <a href="history.html" class="glass-card p-6 flex flex-col items-center gap-2 transition active:scale-95">
-            <div class="w-10 h-10 bg-[#a3e635] text-black rounded-lg flex items-center justify-center"><i class="fas fa-history text-sm"></i></div>
-            <span class="text-[10px] font-bold">History</span>
+        <a href="history.html" class="neon-card flex flex-col items-center gap-3 active:scale-95 transition">
+            <div class="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center border border-white/10 text-[#a3e635]">
+                <i class="fas fa-list-ul"></i>
+            </div>
+            <span class="text-[10px] font-black uppercase">Transactions</span>
         </a>
-        <a href="profile.html" class="glass-card p-6 flex flex-col items-center gap-2 transition active:scale-95">
-            <div class="w-10 h-10 bg-[#a3e635] text-black rounded-lg flex items-center justify-center"><i class="fas fa-user text-sm"></i></div>
-            <span class="text-[10px] font-bold">Profile</span>
-        </a>
-        <button onclick="auth.signOut()" class="glass-card p-6 flex flex-col items-center gap-2 transition active:scale-95">
-            <div class="w-10 h-10 bg-red-500 text-white rounded-lg flex items-center justify-center"><i class="fas fa-sign-out-alt text-sm"></i></div>
-            <span class="text-[10px] font-bold">Sign out</span>
-        </button>
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
