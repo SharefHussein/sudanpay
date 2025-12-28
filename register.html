@@ -3,52 +3,278 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sudan Pay - إنشاء حساب</title>
+    <title>إنشاء حساب - Sudan Pay</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Cairo', sans-serif; background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); }
-        .glass-card { background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); }
+        :root {
+            --primary: #10b981;
+            --primary-dark: #059669;
+            --secondary: #1e293b;
+            --dark: #0f172a;
+        }
+        body { font-family: 'Cairo', sans-serif; background: linear-gradient(135deg, var(--dark) 0%, var(--secondary) 100%); }
+        .glass-card { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .btn-primary { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); }
+        .input-field { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.2); }
+        .input-field:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2); }
+        .progress-bar { height: 4px; background: rgba(255, 255, 255, 0.1); border-radius: 2px; overflow: hidden; }
+        .progress-fill { height: 100%; background: var(--primary); transition: width 0.3s ease; }
+        .password-strength-0 { width: 20%; background: #ef4444; }
+        .password-strength-1 { width: 40%; background: #f59e0b; }
+        .password-strength-2 { width: 60%; background: #eab308; }
+        .password-strength-3 { width: 80%; background: #84cc16; }
+        .password-strength-4 { width: 100%; background: #10b981; }
     </style>
 </head>
 <body class="min-h-screen flex items-center justify-center p-4">
-    <div class="glass-card rounded-3xl p-8 w-full max-w-md">
-        <a href="index.html" class="text-gray-400 hover:text-white mb-6 block">
-            <i class="fas fa-arrow-right mr-2"></i> العودة للرئيسية
-        </a>
-        
-        <h1 class="text-3xl font-black mb-2">إنشاء حساب جديد</h1>
-        <p class="text-gray-400 mb-8">انضم إلينا وابدأ رحلتك مع Sudan Pay</p>
-        
-        <div class="space-y-4">
-            <div>
-                <label class="block text-gray-400 mb-2">الاسم الكامل</label>
-                <input id="name" type="text" class="w-full p-4 rounded-xl bg-white/5 border border-white/10 focus:border-[#a3e635] focus:outline-none" placeholder="أحمد محمد">
+    <!-- خلفية متحركة -->
+    <div class="fixed inset-0 overflow-hidden z-[-1]">
+        <div class="absolute -top-40 -right-40 w-80 h-80 bg-green-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
+        <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-emerald-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse delay-1000"></div>
+    </div>
+
+    <!-- البطاقة الرئيسية -->
+    <div class="glass-card rounded-3xl w-full max-w-2xl overflow-hidden">
+        <!-- رأس متعدد الخطوات -->
+        <div class="bg-gradient-to-r from-green-500 to-emerald-600 p-8">
+            <a href="index.html" class="absolute top-6 right-6 text-white/80 hover:text-white">
+                <i class="fas fa-arrow-right text-xl"></i>
+            </a>
+            
+            <div class="text-center mb-8">
+                <div class="w-20 h-20 rounded-full bg-white/20 flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-user-plus text-3xl text-white"></i>
+                </div>
+                <h1 class="text-3xl font-black text-white">إنشاء حساب جديد</h1>
+                <p class="text-white/80 mt-2">انضم إلى ثورة الدفع الرقمي في السودان</p>
             </div>
             
-            <div>
-                <label class="block text-gray-400 mb-2">البريد الإلكتروني</label>
-                <input id="email" type="email" class="w-full p-4 rounded-xl bg-white/5 border border-white/10 focus:border-[#a3e635] focus:outline-none" placeholder="your@email.com">
+            <!-- شريط التقدم -->
+            <div class="max-w-md mx-auto">
+                <div class="flex justify-between mb-2">
+                    <div class="text-white/80 text-sm">الخطوة <span id="currentStep">1</span> من 3</div>
+                    <div class="text-white/80 text-sm" id="stepTitle">المعلومات الأساسية</div>
+                </div>
+                <div class="progress-bar">
+                    <div id="stepProgress" class="progress-fill" style="width: 33%"></div>
+                </div>
             </div>
-            
-            <div>
-                <label class="block text-gray-400 mb-2">كلمة المرور</label>
-                <input id="password" type="password" class="w-full p-4 rounded-xl bg-white/5 border border-white/10 focus:border-[#a3e635] focus:outline-none" placeholder="6 أحرف على الأقل">
+        </div>
+
+        <!-- المحتوى متعدد الخطوات -->
+        <div class="p-8">
+            <!-- الخطوة 1: المعلومات الأساسية -->
+            <div id="step1" class="space-y-6">
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-gray-400 mb-2 font-medium">الاسم الأول</label>
+                        <div class="relative">
+                            <input type="text" id="firstName" required 
+                                   class="w-full input-field rounded-xl p-4 pl-12"
+                                   placeholder="أحمد">
+                            <div class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
+                                <i class="fas fa-user"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-gray-400 mb-2 font-medium">اسم العائلة</label>
+                        <div class="relative">
+                            <input type="text" id="lastName" required 
+                                   class="w-full input-field rounded-xl p-4 pl-12"
+                                   placeholder="محمد">
+                            <div class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
+                                <i class="fas fa-user"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-gray-400 mb-2 font-medium">البريد الإلكتروني</label>
+                    <div class="relative">
+                        <input type="email" id="email" required 
+                               class="w-full input-field rounded-xl p-4 pl-12"
+                               placeholder="example@email.com">
+                        <div class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                    </div>
+                    <p class="text-gray-500 text-sm mt-1">سنستخدم هذا البريد للتواصل معك</p>
+                </div>
+
+                <div>
+                    <label class="block text-gray-400 mb-2 font-medium">رقم الهاتف</label>
+                    <div class="relative">
+                        <input type="tel" id="phone" 
+                               class="w-full input-field rounded-xl p-4 pl-12"
+                               placeholder="09XX XXX XXX">
+                        <div class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-between pt-6">
+                    <div></div>
+                    <button onclick="nextStep()" class="btn-primary text-white font-bold py-3 px-8 rounded-xl">
+                        التالي <i class="fas fa-arrow-left ml-2"></i>
+                    </button>
+                </div>
             </div>
-            
-            <div>
-                <label class="block text-gray-400 mb-2">تأكيد كلمة المرور</label>
-                <input id="confirmPassword" type="password" class="w-full p-4 rounded-xl bg-white/5 border border-white/10 focus:border-[#a3e635] focus:outline-none" placeholder="أعد كتابة كلمة المرور">
+
+            <!-- الخطوة 2: كلمة المرور -->
+            <div id="step2" class="space-y-6 hidden">
+                <div>
+                    <label class="block text-gray-400 mb-2 font-medium">كلمة المرور</label>
+                    <div class="relative">
+                        <input type="password" id="password" required 
+                               class="w-full input-field rounded-xl p-4 pl-12 pr-12"
+                               placeholder="أنشئ كلمة مرور قوية"
+                               oninput="checkPasswordStrength()">
+                        <div class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                        <button type="button" class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white" 
+                                onclick="togglePassword('password')">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- قوة كلمة المرور -->
+                    <div class="mt-4">
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="text-gray-400">قوة كلمة المرور</span>
+                            <span id="strengthText" class="font-bold text-red-400">ضعيفة</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div id="passwordStrength" class="progress-fill password-strength-0"></div>
+                        </div>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-2 mt-3">
+                            <div class="flex items-center">
+                                <i id="lengthCheck" class="fas fa-times text-red-400 mr-2"></i>
+                                <span class="text-sm text-gray-400">8 أحرف</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i id="numberCheck" class="fas fa-times text-red-400 mr-2"></i>
+                                <span class="text-sm text-gray-400">رقم</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i id="uppercaseCheck" class="fas fa-times text-red-400 mr-2"></i>
+                                <span class="text-sm text-gray-400">حرف كبير</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i id="specialCheck" class="fas fa-times text-red-400 mr-2"></i>
+                                <span class="text-sm text-gray-400">رمز خاص</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-gray-400 mb-2 font-medium">تأكيد كلمة المرور</label>
+                    <div class="relative">
+                        <input type="password" id="confirmPassword" required 
+                               class="w-full input-field rounded-xl p-4 pl-12 pr-12"
+                               placeholder="أعد كتابة كلمة المرور"
+                               oninput="checkPasswordMatch()">
+                        <div class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                        <button type="button" class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white" 
+                                onclick="togglePassword('confirmPassword')">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                    <p id="matchMessage" class="text-sm mt-1"></p>
+                </div>
+
+                <!-- شروط الخدمة -->
+                <div class="bg-white/5 p-4 rounded-xl">
+                    <label class="flex items-start">
+                        <input type="checkbox" id="terms" class="mt-1 rounded bg-white/10 border-white/20 text-green-400 focus:ring-green-400">
+                        <span class="mr-3 text-gray-400 text-sm">
+                            أوافق على 
+                            <a href="#" class="text-green-400 hover:text-green-300">شروط الخدمة</a> 
+                            و 
+                            <a href="#" class="text-green-400 hover:text-green-300">سياسة الخصوصية</a>
+                            لـ Sudan Pay. أقر بأنني على علم بمخاطر الخدمات المالية الرقمية وأتحمل مسؤولية أمن حسابي.
+                        </span>
+                    </label>
+                </div>
+
+                <div class="flex justify-between pt-6">
+                    <button onclick="prevStep()" class="glass-card text-white font-bold py-3 px-8 rounded-xl hover:bg-white/10 transition">
+                        <i class="fas fa-arrow-right mr-2"></i> السابق
+                    </button>
+                    <button onclick="nextStep()" class="btn-primary text-white font-bold py-3 px-8 rounded-xl">
+                        التالي <i class="fas fa-arrow-left ml-2"></i>
+                    </button>
+                </div>
             </div>
-            
-            <button onclick="registerWithEmail()" class="w-full bg-[#a3e635] text-black font-black py-4 rounded-xl mt-6">
-                <i class="fas fa-user-plus mr-2"></i> إنشاء الحساب
-            </button>
-            
-            <div class="text-center mt-4">
-                <a href="login.html" class="text-[#a3e635] hover:underline">لديك حساب بالفعل؟ سجل الدخول</a>
+
+            <!-- الخطوة 3: التأكيد -->
+            <div id="step3" class="space-y-6 hidden">
+                <div class="text-center py-4">
+                    <div class="w-24 h-24 rounded-full bg-green-400/20 flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-check text-4xl text-green-400"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-2">جاهز تقريباً!</h3>
+                    <p class="text-gray-400 mb-6">راجع معلوماتك قبل إنشاء الحساب</p>
+                </div>
+
+                <div class="glass-card rounded-xl p-6 space-y-4">
+                    <div class="flex justify-between">
+                        <span class="text-gray-400">الاسم:</span>
+                        <span id="reviewName" class="font-bold"></span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-400">البريد:</span>
+                        <span id="reviewEmail" class="font-bold"></span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-400">الهاتف:</span>
+                        <span id="reviewPhone" class="font-bold"></span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-400">نوع الحساب:</span>
+                        <span class="font-bold text-green-400">حساب شخصي</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-400">الرصيد الابتدائي:</span>
+                        <span class="font-bold text-green-400">1,000 جنيه</span>
+                    </div>
+                </div>
+
+                <div class="bg-green-400/10 border border-green-400/30 rounded-xl p-4">
+                    <div class="flex items-start">
+                        <i class="fas fa-gift text-green-400 text-xl mt-1 mr-3"></i>
+                        <div>
+                            <h4 class="font-bold text-green-400">مكافأة الترحيب!</h4>
+                            <p class="text-gray-400 text-sm">احصل على 1,000 جنيه رصيد مجاني عند إنشاء حسابك الأول!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-between pt-6">
+                    <button onclick="prevStep()" class="glass-card text-white font-bold py-3 px-8 rounded-xl hover:bg-white/10 transition">
+                        <i class="fas fa-arrow-right mr-2"></i> السابق
+                    </button>
+                    <button onclick="completeRegistration()" class="btn-primary text-white font-bold py-3 px-8 rounded-xl">
+                        <i class="fas fa-check ml-2"></i> إنشاء الحساب
+                    </button>
+                </div>
             </div>
+        </div>
+
+        <!-- التذييل -->
+        <div class="border-t border-white/10 p-6 text-center">
+            <p class="text-gray-500 text-sm">لديك حساب بالفعل؟ 
+                <a href="login.html" class="text-green-400 hover:text-green-300 font-bold">سجل الدخول</a>
+            </p>
         </div>
     </div>
 
@@ -56,6 +282,234 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script src="app.js"></script>
+
+    <!-- Scripts -->
+    <script>
+        let currentStep = 1;
+        let passwordStrength = 0;
+        let passwordsMatch = false;
+
+        // تبديل الخطوات
+        function nextStep() {
+            if (!validateStep(currentStep)) {
+                return;
+            }
+            
+            document.getElementById(`step${currentStep}`).classList.add('hidden');
+            currentStep++;
+            
+            if (currentStep > 3) currentStep = 3;
+            
+            updateStepUI();
+        }
+
+        function prevStep() {
+            document.getElementById(`step${currentStep}`).classList.add('hidden');
+            currentStep--;
+            
+            if (currentStep < 1) currentStep = 1;
+            
+            updateStepUI();
+        }
+
+        function updateStepUI() {
+            // إظهار الخطوة الحالية
+            document.getElementById(`step${currentStep}`).classList.remove('hidden');
+            
+            // تحديث العنوان وشريط التقدم
+            document.getElementById('currentStep').textContent = currentStep;
+            document.getElementById('stepProgress').style.width = `${(currentStep / 3) * 100}%`;
+            
+            const titles = ['', 'المعلومات الأساسية', 'كلمة المرور', 'التأكيد'];
+            document.getElementById('stepTitle').textContent = titles[currentStep];
+            
+            // إذا كانت الخطوة 3، املأ بيانات المراجعة
+            if (currentStep === 3) {
+                fillReviewData();
+            }
+        }
+
+        // التحقق من الخطوة
+        function validateStep(step) {
+            if (step === 1) {
+                const firstName = document.getElementById('firstName').value.trim();
+                const lastName = document.getElementById('lastName').value.trim();
+                const email = document.getElementById('email').value.trim();
+                
+                if (!firstName || !lastName || !email) {
+                    showNotify("يرجى ملء جميع الحقول المطلوبة", "error");
+                    return false;
+                }
+                
+                if (!email.includes('@')) {
+                    showNotify("يرجى إدخال بريد إلكتروني صحيح", "error");
+                    return false;
+                }
+                
+                return true;
+            }
+            
+            if (step === 2) {
+                const password = document.getElementById('password').value;
+                const confirm = document.getElementById('confirmPassword').value;
+                const terms = document.getElementById('terms').checked;
+                
+                if (!password || !confirm) {
+                    showNotify("يرجى إدخال كلمة المرور وتأكيدها", "error");
+                    return false;
+                }
+                
+                if (passwordStrength < 2) {
+                    showNotify("كلمة المرور ضعيفة جداً. يرجى اختيار كلمة أقوى", "error");
+                    return false;
+                }
+                
+                if (!passwordsMatch) {
+                    showNotify("كلمتا المرور غير متطابقتين", "error");
+                    return false;
+                }
+                
+                if (!terms) {
+                    showNotify("يجب الموافقة على شروط الخدمة", "error");
+                    return false;
+                }
+                
+                return true;
+            }
+            
+            return true;
+        }
+
+        // التحقق من قوة كلمة المرور
+        function checkPasswordStrength() {
+            const password = document.getElementById('password').value;
+            let strength = 0;
+            
+            // التحقق من الطول
+            const hasLength = password.length >= 8;
+            document.getElementById('lengthCheck').className = hasLength ? 'fas fa-check text-green-400 mr-2' : 'fas fa-times text-red-400 mr-2';
+            if (hasLength) strength++;
+            
+            // التحقق من الأرقام
+            const hasNumber = /\d/.test(password);
+            document.getElementById('numberCheck').className = hasNumber ? 'fas fa-check text-green-400 mr-2' : 'fas fa-times text-red-400 mr-2';
+            if (hasNumber) strength++;
+            
+            // التحقق من الأحرف الكبيرة
+            const hasUppercase = /[A-Z]/.test(password);
+            document.getElementById('uppercaseCheck').className = hasUppercase ? 'fas fa-check text-green-400 mr-2' : 'fas fa-times text-red-400 mr-2';
+            if (hasUppercase) strength++;
+            
+            // التحقق من الرموز الخاصة
+            const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+            document.getElementById('specialCheck').className = hasSpecial ? 'fas fa-check text-green-400 mr-2' : 'fas fa-times text-red-400 mr-2';
+            if (hasSpecial) strength++;
+            
+            passwordStrength = strength;
+            
+            // تحديث شريط القوة
+            const strengthBar = document.getElementById('passwordStrength');
+            strengthBar.className = `progress-fill password-strength-${strength}`;
+            
+            // تحديث النص
+            const texts = ['ضعيفة جداً', 'ضعيفة', 'متوسطة', 'جيدة', 'قوية جداً'];
+            const colors = ['text-red-400', 'text-orange-400', 'text-yellow-400', 'text-green-400', 'text-emerald-400'];
+            document.getElementById('strengthText').textContent = texts[strength];
+            document.getElementById('strengthText').className = `font-bold ${colors[strength]}`;
+            
+            // التحقق من التطابق
+            checkPasswordMatch();
+        }
+
+        // التحقق من تطابق كلمة المرور
+        function checkPasswordMatch() {
+            const password = document.getElementById('password').value;
+            const confirm = document.getElementById('confirmPassword').value;
+            const message = document.getElementById('matchMessage');
+            
+            if (!confirm) {
+                message.textContent = '';
+                passwordsMatch = false;
+                return;
+            }
+            
+            if (password === confirm) {
+                message.textContent = '✓ كلمتا المرور متطابقتان';
+                message.className = 'text-sm mt-1 text-green-400';
+                passwordsMatch = true;
+            } else {
+                message.textContent = '✗ كلمتا المرور غير متطابقتين';
+                message.className = 'text-sm mt-1 text-red-400';
+                passwordsMatch = false;
+            }
+        }
+
+        // ملء بيانات المراجعة
+        function fillReviewData() {
+            const firstName = document.getElementById('firstName').value.trim();
+            const lastName = document.getElementById('lastName').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            
+            document.getElementById('reviewName').textContent = `${firstName} ${lastName}`;
+            document.getElementById('reviewEmail').textContent = email;
+            document.getElementById('reviewPhone').textContent = phone || 'لم يتم الإضافة';
+        }
+
+        // إنشاء الحساب
+        async function completeRegistration() {
+            const firstName = document.getElementById('firstName').value.trim();
+            const lastName = document.getElementById('lastName').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const password = document.getElementById('password').value;
+            
+            const fullName = `${firstName} ${lastName}`;
+            
+            // زر التحميل
+            const btn = document.querySelector('button[onclick="completeRegistration()"]');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin ml-2"></i> جاري الإنشاء...';
+            btn.disabled = true;
+            
+            try {
+                await registerWithEmail(fullName, email, password, phone);
+            } catch (error) {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        }
+
+        // تبديل عرض كلمة المرور
+        function togglePassword(fieldId) {
+            const field = document.getElementById(fieldId);
+            const icon = field.nextElementSibling.querySelector('i');
+            
+            if (field.type === 'password') {
+                field.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                field.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+
+        // تهيئة الصفحة
+        document.addEventListener('DOMContentLoaded', function() {
+            updateStepUI();
+            
+            // إدخال سريع للاختبار (إلغاء التعليق عند الحاجة)
+            // document.getElementById('firstName').value = 'أحمد';
+            // document.getElementById('lastName').value = 'محمد';
+            // document.getElementById('email').value = 'test@example.com';
+            // document.getElementById('phone').value = '0912345678';
+            // document.getElementById('password').value = 'Test123!@#';
+            // document.getElementById('confirmPassword').value = 'Test123!@#';
+            // document.getElementById('terms').checked = true;
+            // checkPasswordStrength();
+        });
+    </script>
 </body>
-            </html> 
- 
+    </html> 
