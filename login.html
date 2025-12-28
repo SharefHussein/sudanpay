@@ -105,10 +105,45 @@
                 </div>
 
                 <!-- زر الدخول -->
-                <button type="button" onclick="handleLogin()" 
-                        class="btn-primary w-full text-white font-bold py-4 rounded-xl text-lg hover:opacity-90 transition">
-                    <i class="fas fa-sign-in-alt ml-2"></i> تسجيل الدخول
-                </button>
+                <button type="button" onclick="loginWithEmail()" 
+        class="btn-primary w-full text-white font-bold py-4 rounded-xl text-lg hover:opacity-90 transition">
+    <i class="fas fa-sign-in-alt ml-2"></i> تسجيل الدخول
+</button>
+
+<script>
+    async function loginWithEmail() {
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value;
+        
+        if (!email || !password) {
+            alert("يرجى ملء جميع الحقول");
+            return;
+        }
+        
+        // تحميل Firebase أولاً
+        if (typeof firebase === 'undefined') {
+            alert("جاري تحميل النظام...");
+            setTimeout(() => loginWithEmail(), 1000);
+            return;
+        }
+        
+        try {
+            const btn = this;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin ml-2"></i> جاري الدخول...';
+            btn.disabled = true;
+            
+            await firebase.auth().signInWithEmailAndPassword(email, password);
+            alert("✅ تم الدخول بنجاح!");
+            window.location.href = "dashboard.html";
+            
+        } catch (error) {
+            alert("❌ خطأ: " + error.message);
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        }
+    }
+</script>
             </form>
 
             <!-- روابط إضافية -->
