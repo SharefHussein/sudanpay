@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <title>اختبار الدخول</title>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyB3vxJu_et-P80ek30I3MRdC_lGhooCCsc",
+            authDomain: "sudanpay-e332a.firebaseapp.com",
+            projectId: "sudanpay-e332a",
+            storageBucket: "sudanpay-e332a.appspot.com",
+            messagingSenderId: "699809447272",
+            appId: "1:699809447272:web:90f3780ed6c768c4322add"
+        };
+        
+        firebase.initializeApp(firebaseConfig);
+        
+        function testLogin() {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            firebase.auth().signInWithPopup(provider)
+                .then(() => {
+                    alert("✅ نجاح! انتقل إلى dashboard.html");
+                    window.location.href = "dashboard.html";
+                })
+                .catch(error => {
+                    alert("❌ خطأ: " + error.message);
+                });
+        }
+    </script>
+</head>
+<body style="text-align: center; padding: 50px;">
+    <h1>اختبار الدخول المباشر</h1>
+    <button onclick="testLogin()" style="padding: 15px 30px; font-size: 18px;">
+        اختبار الدخول بجوجل
+    </button>
+    <p><a href="index.html">العودة للصفحة الرئيسية</a></p>
+</body>
+  </html>
