@@ -1,9 +1,39 @@
-body { font-family: 'Cairo', sans-serif; margin: 0; }
-.glass-card {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    border-radius: 20px;
+:root {
+    --bg-main: #0b0e14; /* خلفية داكنة جداً */
+    --bg-card: #161b22; /* لون البطاقات */
+    --neon-green: #a3e635; /* الأخضر الفسفوري */
+    --text-gray: #8b949e;
 }
-input::placeholder { color: #4b5563; font-size: 12px; }
+
+body {
+    background-color: var(--bg-main);
+    color: white;
+    font-family: 'Cairo', sans-serif;
+    margin: 0;
+    overflow-x: hidden;
+}
+
+/* بطاقة زجاجية بلمسة خضراء */
+.neon-card {
+    background: var(--bg-card);
+    border: 1px solid rgba(163, 230, 53, 0.1);
+    border-radius: 24px;
+    padding: 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.btn-neon {
+    background-color: var(--neon-green);
+    color: #000;
+    font-weight: 900;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.btn-neon:hover {
+    box-shadow: 0 0 20px rgba(163, 230, 53, 0.6);
+    transform: translateY(-2px);
+}
+
+/* إخفاء شريط التمرير لمظهر التطبيقات */
 ::-webkit-scrollbar { display: none; }
