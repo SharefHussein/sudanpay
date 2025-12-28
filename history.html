@@ -2,19 +2,24 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>النشاط - Sudan Pay</title>
+    <title>العمليات - Sudan Pay</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <style>body { background: #0f172a; font-family: 'Cairo', sans-serif; color: white; } .glass { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(10px); }</style>
+    <link rel="stylesheet" href="style.css">
 </head>
-<body class="p-6 pb-24">
-    <header class="mb-8 flex justify-between items-center">
-        <h1 class="text-2xl font-black">كشف الحساب</h1>
-        <a href="dashboard.html" class="text-gray-500"><i class="fas fa-times text-xl"></i></a>
+<body class="p-6">
+    <header class="flex items-center gap-4 mb-8">
+        <a href="dashboard.html" class="w-10 h-10 bg-white/5 rounded-full flex items-center justify-center border border-white/10 text-[#a3e635]">
+            <i class="fas fa-arrow-right"></i>
+        </a>
+        <h1 class="text-xl font-bold">آخر العمليات</h1>
     </header>
 
-    <div id="txList" class="space-y-4 text-sm text-right italic">
-        <p class="text-gray-500 text-center py-10 italic">جاري تحميل العمليات...</p>
+    <div id="txList" class="space-y-4">
+        <div class="text-center py-20">
+            <i class="fas fa-spinner animate-spin text-[#a3e635] text-2xl"></i>
+            <p class="text-gray-500 text-xs mt-4">جاري مزامنة بياناتك...</p>
+        </div>
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
@@ -23,32 +28,10 @@
     <script src="app.js"></script>
     <script>
         auth.onAuthStateChanged(user => {
-            if(user) {
-                db.collection("transactions").where("participants", "array-contains", user.email)
-                .orderBy("createdAt", "desc").onSnapshot(snap => {
-                    const list = document.getElementById("txList");
-                    list.innerHTML = "";
-                    if(snap.empty) { list.innerHTML = "<p class='text-center text-gray-500'>لا توجد عمليات بعد</p>"; return; }
-                    snap.forEach(doc => {
-                        const tx = doc.data();
-                        const isOut = tx.from === user.email;
-                        list.innerHTML += `
-                        <div class="glass p-5 rounded-[25px] flex justify-between items-center">
-                            <div class="flex items-center gap-3 text-right">
-                                <div class="w-10 h-10 rounded-full flex items-center justify-center ${isOut ? 'bg-red-500/10 text-red-500' : 'bg-green-500/10 text-green-500'}">
-                                    <i class="fas ${isOut ? 'fa-arrow-up' : 'fa-arrow-down'}"></i>
-                                </div>
-                                <div>
-                                    <p class="font-bold text-white">${isOut ? tx.to : tx.from}</p>
-                                    <p class="text-[10px] text-gray-500">${tx.createdAt?.toDate().toLocaleString('ar-EG') || 'الآن'}</p>
-                                </div>
-                            </div>
-                            <p class="font-black ${isOut ? 'text-white' : 'text-[#a3e635]'}">${isOut ? '-' : '+'}${tx.amount} <span class="text-[10px]">SDG</span></p>
-                        </div>`;
-                    });
-                });
-            }
+            if(user) loadTransactions(user.email);
+            else window.location.href = "login.html";
         });
     </script>
 </body>
 </html>
+ 
