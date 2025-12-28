@@ -1,8 +1,8 @@
 // ============================================
-// SUDAN PAY - التطبيق الكامل للدفع الرقمي
+// SUDAN PAY - تطبيق الدفع الرقمي (نسخة مستقرة)
 // ============================================
 
-// 1. 🔐 إعدادات Firebase
+// 1. 🔧 إعدادات Firebase
 const firebaseConfig = {
     apiKey: "AIzaSyB3vxJu_et-P80ek30I3MRdC_lGhooCCsc",
     authDomain: "sudanpay-e332a.firebaseapp.com",
@@ -13,121 +13,57 @@ const firebaseConfig = {
 };
 
 // 2. ⚡ تهيئة Firebase
-let auth, db, appCheck;
+let auth, db;
+let authChecked = false;
 
 try {
     if (!firebase.apps.length) {
         firebase.initializeApp(firebaseConfig);
-        console.log("🔥 Firebase initialized");
+        console.log("✅ Firebase initialized");
     }
     
     auth = firebase.auth();
     db = firebase.firestore();
-    
-    // App Check (اختياري للتجربة)
-    if (typeof firebase.appCheck !== 'undefined') {
-        appCheck = firebase.appCheck();
-        // Debug token للتطوير
-        appCheck.activate('00000000-0000-4000-8000-000000000001', true);
-    }
+    console.log("✅ الخدمات جاهزة");
     
 } catch (error) {
-    console.error("❌ Firebase initialization error:", error);
+    console.error("❌ خطأ في تهيئة Firebase:", error);
 }
 
-// 3. 🎨 نظام الإشعارات المتطور
+// 3. 🔔 نظام الإشعارات
 window.showNotify = function(message, type = "success", duration = 4000) {
-    const notif = document.createElement("div");
-    const icon = type === "success" ? "✅" : "❌";
+    console.log("🔔:", message);
     
+    // إنشاء إشعار بسيط
+    const notif = document.createElement("div");
     notif.innerHTML = `
-        <div class="fixed top-6 right-6 z-[9999] animate-slideIn">
-            <div class="flex items-center p-4 rounded-2xl shadow-2xl min-w-[300px] max-w-md ${
-                type === "success" 
-                    ? "bg-gradient-to-r from-green-500 to-emerald-600" 
-                    : "bg-gradient-to-r from-red-500 to-rose-600"
-            }">
-                <div class="text-2xl mr-3">${icon}</div>
-                <div class="flex-1 text-white font-bold">${message}</div>
-                <button onclick="this.parentElement.parentElement.remove()" class="text-white/70 hover:text-white ml-3">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
+        <div style="
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: ${type === "success" ? "#10b981" : "#ef4444"};
+            color: white;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: bold;
+            z-index: 9999;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            animation: slideDown 0.3s ease-out;
+        ">
+            ${type === "success" ? "✅" : "❌"} ${message}
         </div>
     `;
     
     document.body.appendChild(notif);
     
-    // إضافة CSS للأنيميشن
-    if (!document.querySelector('#notif-style')) {
-        const style = document.createElement('style');
-        style.id = 'notif-style';
-        style.textContent = `
-            @keyframes slideIn {
-                from { transform: translateX(100%); opacity: 0; }
-                to { transform: translateX(0); opacity: 1; }
-            }
-            .animate-slideIn { animation: slideIn 0.3s ease-out; }
-        `;
-        document.head.appendChild(style);
-    }
-    
-    // إزالة التلقائية
     setTimeout(() => {
-        if (notif.parentElement) {
-            notif.style.animation = "slideIn 0.3s ease-out reverse";
-            setTimeout(() => notif.remove(), 300);
-        }
+        notif.style.animation = "slideUp 0.3s ease-out forwards";
+        setTimeout(() => notif.remove(), 300);
     }, duration);
 };
 
-// 4. 👤 إدارة المستخدمين
-class UserManager {
-    static async createUserProfile(user, additionalData = {}) {
-        const userRef = db.collection("users").doc(user.uid);
-        const userData = {
-            uid: user.uid,
-            email: user.email,
-            name: user.displayName || additionalData.name || "مستخدم جديد",
-            phone: additionalData.phone || "",
-            photoURL: user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.email)}&background=10b981&color=fff`,
-            balance: 1000.00, // رصيد ترحيبي
-            currency: "SDG",
-            isActive: true,
-            isVerified: user.emailVerified,
-            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-            lastLogin: firebase.firestore.FieldValue.serverTimestamp(),
-            settings: {
-                notifications: true,
-                twoFactor: false,
-                language: "ar",
-                theme: "dark"
-            },
-            statistics: {
-                totalSent: 0,
-                totalReceived: 0,
-                transactionsCount: 0
-            }
-        };
-        
-        await userRef.set(userData, { merge: true });
-        return userData;
-    }
-    
-    static async getUserProfile(uid) {
-        const doc = await db.collection("users").doc(uid).get();
-        return doc.exists ? doc.data() : null;
-    }
-    
-    static async updateProfile(uid, updates) {
-        await db.collection("users").doc(uid).update({
-            ...updates,
-            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-        });
-    }
-}
-
-// 5. 🔐 نظام المصادقة
+// 4. 🔐 نظام المصادقة (مبسط وموثوق)
 window.signInWithGoogle = async function() {
     if (!auth) {
         showNotify("النظام غير جاهز", "error");
@@ -136,25 +72,21 @@ window.signInWithGoogle = async function() {
     
     try {
         const provider = new firebase.auth.GoogleAuthProvider();
-        provider.addScope('email');
-        provider.addScope('profile');
-        
         const result = await auth.signInWithPopup(provider);
         const user = result.user;
         
-        // إنشاء/تحديث الملف
-        await UserManager.createUserProfile(user);
+        // إنشاء ملف المستخدم
+        const userRef = db.collection("users").doc(user.uid);
+        await userRef.set({
+            name: user.displayName || "مستخدم جديد",
+            email: user.email,
+            photoURL: user.photoURL || "",
+            balance: 1000.00,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            lastLogin: new Date().toISOString()
+        }, { merge: true });
         
-        showNotify(`مرحباً ${user.displayName}! ✅`, "success");
-        
-        // تسجيل نشاط الدخول
-        await db.collection("activity_logs").add({
-            userId: user.uid,
-            action: "login",
-            method: "google",
-            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-            userAgent: navigator.userAgent
-        });
+        showNotify(`مرحباً ${user.displayName || user.email}!`, "success");
         
         // الانتقال بعد تأخير
         setTimeout(() => {
@@ -163,21 +95,14 @@ window.signInWithGoogle = async function() {
         
     } catch (error) {
         console.error("Login error:", error);
-        showNotify(`خطأ في الدخول: ${error.message}`, "error");
+        showNotify(`خطأ: ${error.message}`, "error");
     }
 };
 
 window.signInWithEmail = async function(email, password) {
     try {
-        const result = await auth.signInWithEmailAndPassword(email, password);
-        const user = result.user;
-        
-        showNotify("مرحباً بعودتك! ✅", "success");
-        
-        // تحديث آخر دخول
-        await UserManager.updateProfile(user.uid, {
-            lastLogin: firebase.firestore.FieldValue.serverTimestamp()
-        });
+        await auth.signInWithEmailAndPassword(email, password);
+        showNotify("تم الدخول بنجاح", "success");
         
         setTimeout(() => {
             window.location.href = "dashboard.html";
@@ -193,13 +118,17 @@ window.registerWithEmail = async function(name, email, password, phone = "") {
         const result = await auth.createUserWithEmailAndPassword(email, password);
         const user = result.user;
         
-        // إنشاء الملف
-        await UserManager.createUserProfile(user, { name, phone });
+        // إنشاء ملف المستخدم
+        await db.collection("users").doc(user.uid).set({
+            name: name,
+            email: email,
+            phone: phone,
+            balance: 1000.00,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            lastLogin: new Date().toISOString()
+        });
         
-        // إرسال رسالة تأكيد البريد
-        await user.sendEmailVerification();
-        
-        showNotify(`تم إنشاء حساب ${name} بنجاح! ✅ تحقق من بريدك`, "success");
+        showNotify(`تم إنشاء حساب ${name} بنجاح!`, "success");
         
         setTimeout(() => {
             window.location.href = "dashboard.html";
@@ -210,241 +139,132 @@ window.registerWithEmail = async function(name, email, password, phone = "") {
     }
 };
 
-// 6. 💰 نظام الدفع
-class PaymentSystem {
-    static async transferMoney(senderId, receiverEmail, amount, notes = "") {
-        if (amount <= 0) throw new Error("المبلغ يجب أن يكون أكبر من الصفر");
-        
-        const senderRef = db.collection("users").doc(senderId);
-        const receiverQuery = await db.collection("users").where("email", "==", receiverEmail).get();
-        
-        if (receiverQuery.empty) throw new Error("المستلم غير موجود");
-        
-        const receiverDoc = receiverQuery.docs[0];
-        const receiverRef = receiverDoc.ref;
-        const receiverData = receiverDoc.data();
-        
-        if (senderId === receiverDoc.id) throw new Error("لا يمكن التحويل لنفسك");
-        
-        return await db.runTransaction(async (transaction) => {
-            const senderDoc = await transaction.get(senderRef);
-            const receiverDoc = await transaction.get(receiverRef);
-            
-            const senderData = senderDoc.data();
-            const receiverData2 = receiverDoc.data();
-            
-            // التحقق من الرصيد
-            if (senderData.balance < amount) {
-                throw new Error("رصيدك غير كافٍ لإتمام العملية");
-            }
-            
-            // رسوم التحويل (1%)
-            const fee = amount * 0.01;
-            const totalDeduction = amount + fee;
-            
-            if (senderData.balance < totalDeduction) {
-                throw new Error(`رصيدك غير كافٍ (يشمل الرسوم: ${fee.toFixed(2)} جنيه)`);
-            }
-            
-            // تحديث الرصيد
-            transaction.update(senderRef, {
-                balance: senderData.balance - totalDeduction,
-                "statistics.totalSent": (senderData.statistics?.totalSent || 0) + amount,
-                "statistics.transactionsCount": (senderData.statistics?.transactionsCount || 0) + 1
-            });
-            
-            transaction.update(receiverRef, {
-                balance: (receiverData2.balance || 0) + amount,
-                "statistics.totalReceived": (receiverData2.statistics?.totalReceived || 0) + amount,
-                "statistics.transactionsCount": (receiverData2.statistics?.transactionsCount || 0) + 1
-            });
-            
-            // تسجيل المعاملة
-            const txRef = db.collection("transactions").doc();
-            const txData = {
-                id: txRef.id,
-                fromId: senderId,
-                fromEmail: senderData.email,
-                fromName: senderData.name,
-                toId: receiverDoc.id,
-                toEmail: receiverEmail,
-                toName: receiverData2.name,
-                amount: amount,
-                fee: fee,
-                total: totalDeduction,
-                currency: "SDG",
-                status: "completed",
-                notes: notes,
-                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                createdAt: new Date().toISOString()
-            };
-            
-            transaction.set(txRef, txData);
-            
-            // إشعارات
-            await this.sendNotification(receiverDoc.id, "استلام", `استلمت ${amount.toFixed(2)} جنيه من ${senderData.name}`);
-            await this.sendNotification(senderId, "إرسال", `أرسلت ${amount.toFixed(2)} جنيه إلى ${receiverData2.name}`);
-            
-            return {
-                success: true,
-                transactionId: txRef.id,
-                amount: amount,
-                fee: fee,
-                newBalance: senderData.balance - totalDeduction,
-                receiverName: receiverData2.name
-            };
-        });
+// 5. 💰 نظام الدفع
+window.sendMoney = async function(toEmail, amount, notes = "") {
+    const user = auth.currentUser;
+    if (!user) {
+        showNotify("يجب تسجيل الدخول أولاً", "error");
+        return;
     }
     
-    static async sendNotification(userId, type, message) {
-        await db.collection("notifications").add({
-            userId: userId,
-            type: type,
-            message: message,
-            isRead: false,
-            timestamp: firebase.firestore.FieldValue.serverTimestamp()
-        });
-    }
-    
-    static async getTransactions(userId, limit = 20) {
-        const snapshot = await db.collection("transactions")
-            .where("participants", "array-contains", userId)
-            .orderBy("timestamp", "desc")
-            .limit(limit)
-            .get();
-        
-        return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    }
-}
-
-// 7. 📊 واجهة API مبسطة
-window.SudanPay = {
-    // المستخدم
-    getCurrentUser: () => auth?.currentUser,
-    getUserProfile: async () => {
-        const user = auth.currentUser;
-        return user ? await UserManager.getUserProfile(user.uid) : null;
-    },
-    
-    // الدفع
-    sendMoney: async (toEmail, amount, notes = "") => {
-        const user = auth.currentUser;
-        if (!user) throw new Error("يجب تسجيل الدخول أولاً");
-        
-        try {
-            const result = await PaymentSystem.transferMoney(user.uid, toEmail, amount, notes);
-            showNotify(`تم التحويل بنجاح إلى ${result.receiverName} ✅`, "success");
-            return result;
-        } catch (error) {
-            showNotify(error.message, "error");
-            throw error;
-        }
-    },
-    
-    getBalance: async () => {
-        const user = auth.currentUser;
-        if (!user) return 0;
-        
-        const profile = await UserManager.getUserProfile(user.uid);
-        return profile?.balance || 0;
-    },
-    
-    getTransactions: async (limit = 10) => {
-        const user = auth.currentUser;
-        if (!user) return [];
-        
-        return await PaymentSystem.getTransactions(user.uid, limit);
-    },
-    
-    // الإعدادات
-    updateProfile: async (updates) => {
-        const user = auth.currentUser;
-        if (!user) throw new Error("يجب تسجيل الدخول أولاً");
-        
-        await UserManager.updateProfile(user.uid, updates);
-        showNotify("تم تحديث الملف الشخصي ✅", "success");
-    },
-    
-    changePassword: async (newPassword) => {
-        const user = auth.currentUser;
-        if (!user) throw new Error("يجب تسجيل الدخول أولاً");
-        
-        await user.updatePassword(newPassword);
-        showNotify("تم تغيير كلمة المرور ✅", "success");
-    },
-    
-    deleteAccount: async () => {
-        const user = auth.currentUser;
-        if (!user) throw new Error("يجب تسجيل الدخول أولاً");
-        
-        if (!confirm("⚠️ تحذير: هذا الإجراء لا يمكن التراجع عنه. سيتم حذف جميع بياناتك.")) {
+    try {
+        // البحث عن المستقبل
+        const receiverQuery = await db.collection("users").where("email", "==", toEmail).get();
+        if (receiverQuery.empty) {
+            showNotify("المستخدم غير موجود", "error");
             return;
         }
         
-        // حذف البيانات أولاً
-        await db.collection("users").doc(user.uid).delete();
+        const receiverDoc = receiverQuery.docs[0];
         
-        // حذف الحساب
-        await user.delete();
+        // استخدام Transaction
+        await db.runTransaction(async (transaction) => {
+            const senderRef = db.collection("users").doc(user.uid);
+            const receiverRef = db.collection("users").doc(receiverDoc.id);
+            
+            const senderDoc = await transaction.get(senderRef);
+            const receiverDoc = await transaction.get(receiverRef);
+            
+            const senderBalance = senderDoc.data().balance || 0;
+            const receiverBalance = receiverDoc.data().balance || 0;
+            
+            if (senderBalance < amount) {
+                throw new Error("رصيدك غير كافٍ");
+            }
+            
+            // تحديث الرصيد
+            transaction.update(senderRef, { balance: senderBalance - amount });
+            transaction.update(receiverRef, { balance: receiverBalance + amount });
+            
+            // تسجيل المعاملة
+            transaction.set(db.collection("transactions").doc(), {
+                from: user.email,
+                to: toEmail,
+                amount: amount,
+                notes: notes,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+        });
         
-        showNotify("تم حذف حسابك بنجاح", "success");
-        setTimeout(() => window.location.href = "index.html", 1500);
-    },
+        showNotify(`تم تحويل ${amount} جنيه بنجاح`, "success");
+        return true;
+        
+    } catch (error) {
+        showNotify(error.message, "error");
+        return false;
+    }
+};
+
+// 6. 📊 وظائف لوحة التحكم
+window.loadUserData = async function() {
+    const user = auth.currentUser;
+    if (!user) {
+        // إذا لم يكن مسجلاً، لا تحاول إعادة التوجيه هنا
+        return null;
+    }
     
-    // المساعدة
-    logout: () => {
+    try {
+        const doc = await db.collection("users").doc(user.uid).get();
+        if (doc.exists) {
+            return doc.data();
+        }
+    } catch (error) {
+        console.error("Error loading user data:", error);
+    }
+    
+    return null;
+};
+
+// 7. 🚪 تسجيل الخروج
+window.logout = function() {
+    if (auth) {
         auth.signOut().then(() => {
             window.location.href = "index.html";
         });
     }
 };
 
-// 8. 👁️ مراقبة حالة المصادقة
+// 8. ⚡ نظام التحكم في التوجيه (مبسط ومضمون)
 if (auth) {
-    auth.onAuthStateChanged(async (user) => {
-        const currentPage = window.location.pathname.split("/").pop();
+    auth.onAuthStateChanged((user) => {
+        // منع التكرار
+        if (authChecked) return;
+        authChecked = true;
         
-        if (user) {
-            console.log("✅ User signed in:", user.email);
-            
-            // إذا كان في الصفحة الرئيسية، اذهب للوحة التحكم
-            if (currentPage === "index.html" || currentPage === "" || currentPage === "login.html" || currentPage === "register.html") {
-                setTimeout(() => {
+        const currentPage = window.location.pathname.split("/").pop();
+        console.log("🔍 تحقق:", user ? "مسجل" : "غير مسجل", "الصفحة:", currentPage);
+        
+        // تأخير 1.5 ثانية للتحقق
+        setTimeout(() => {
+            if (user) {
+                // مسجل دخول
+                if (currentPage === "index.html" || currentPage === "" || 
+                    currentPage === "login.html" || currentPage === "register.html") {
+                    console.log("➡️ توجيه إلى dashboard");
                     window.location.href = "dashboard.html";
-                }, 1000);
-            }
-            
-            // تحديث آخر دخول
-            if (currentPage === "dashboard.html") {
-                try {
-                    await UserManager.updateProfile(user.uid, {
-                        lastLogin: firebase.firestore.FieldValue.serverTimestamp()
-                    });
-                } catch (error) {
-                    console.error("Error updating last login:", error);
+                }
+            } else {
+                // غير مسجل
+                if (currentPage === "dashboard.html") {
+                    console.log("⬅️ توجيه إلى الرئيسية");
+                    window.location.href = "index.html";
                 }
             }
             
-        } else {
-            console.log("❌ No user signed in");
-            
-            // إذا كان في صفحة محمية، اذهب للرئيسية
-            if (currentPage === "dashboard.html" || currentPage === "profile.html" || currentPage === "settings.html") {
-                setTimeout(() => {
-                    window.location.href = "index.html";
-                }, 1000);
-            }
-        }
+            // إعادة تعيين بعد 5 ثوانٍ
+            setTimeout(() => {
+                authChecked = false;
+            }, 5000);
+        }, 1500);
     });
 }
 
 // 9. 🛠️ وظائف مساعدة
 window.formatCurrency = (amount) => {
     return new Intl.NumberFormat('ar-SD', {
-        style: 'currency',
-        currency: 'SDG',
-        minimumFractionDigits: 2
-    }).format(amount);
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    }).format(amount) + " جنيه";
 };
 
 window.formatDate = (date) => {
@@ -457,13 +277,4 @@ window.formatDate = (date) => {
     });
 };
 
-// 10. 📱 دعم PWA
-if ('serviceWorker' in navigator && window.location.protocol === 'https:') {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js').catch(error => {
-            console.log('ServiceWorker registration failed:', error);
-        });
-    });
-}
-
-console.log("🚀 Sudan Pay App Loaded Successfully!"); 
+console.log("🚀 Sudan Pay App Loaded Successfully!");
