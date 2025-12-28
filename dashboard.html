@@ -554,5 +554,44 @@
         function loadNotifications() { showNotify("قريباً...", "success"); }
         function loadAnalytics() { showNotify("قريباً...", "success"); }
     </script>
+    <script>
+    // تحقق صارم عند فتح لوحة التحكم
+    document.addEventListener('DOMContentLoaded', async function() {
+        console.log("🔐 بدء تحقق لوحة التحكم...");
+        
+        // انتظر 2 ثانية للتحقق من Firebase
+        setTimeout(async () => {
+            try {
+                // تحقق من وجود مستخدم فعلي
+                const user = firebase.auth().currentUser;
+                
+                if (!user) {
+                    console.log("❌ لا يوجد مستخدم - إعادة توجيه");
+                    window.location.href = "index.html?error=no_user";
+                    return;
+                }
+                
+                // تحقق من بيانات المستخدم في Firestore
+                const userDoc = await firebase.firestore()
+                    .collection("users")
+                    .doc(user.uid)
+                    .get();
+                
+                if (!userDoc.exists) {
+                    console.log("❌ ملف المستخدم غير موجود - إعادة توجيه");
+                    firebase.auth().signOut();
+                    window.location.href = "index.html?error=no_profile";
+                    return;
+                }
+                
+                console.log("✅ تحقق ناجح:", user.email);
+                
+            } catch (error) {
+                console.error("خطأ في التحقق:", error);
+                window.location.href = "index.html?error=auth_failed";
+            }
+        }, 2000);
+    });
+    </script>
 </body>
                       </html>
