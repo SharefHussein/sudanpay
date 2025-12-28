@@ -1,8 +1,8 @@
 // ============================================
-// SUDANPAY - تطبيق الدفع الرقمي
+// SUDAN PAY - التطبيق الكامل للدفع الرقمي
 // ============================================
 
-// 1. 🔒 إعدادات Firebase (ضع مفاتيحك الحقيقية هنا)
+// 1. 🔐 إعدادات Firebase
 const firebaseConfig = {
     apiKey: "AIzaSyB3vxJu_et-P80ek30I3MRdC_lGhooCCsc",
     authDomain: "sudanpay-e332a.firebaseapp.com",
@@ -12,338 +12,458 @@ const firebaseConfig = {
     appId: "1:699809447272:web:90f3780ed6c768c4322add"
 };
 
-// تهيئة Firebase
-if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
+// 2. ⚡ تهيئة Firebase
+let auth, db, appCheck;
+
+try {
+    if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+        console.log("🔥 Firebase initialized");
+    }
+    
+    auth = firebase.auth();
+    db = firebase.firestore();
+    
+    // App Check (اختياري للتجربة)
+    if (typeof firebase.appCheck !== 'undefined') {
+        appCheck = firebase.appCheck();
+        // Debug token للتطوير
+        appCheck.activate('00000000-0000-4000-8000-000000000001', true);
+    }
+    
+} catch (error) {
+    console.error("❌ Firebase initialization error:", error);
 }
-const auth = firebase.auth();
-const db = firebase.firestore();
-const appCheck = firebase.appCheck();
-appCheck.activate('A9ECD854-8B88-472C-BC28-A38741F20C03');
 
-// 2. 🔔 نظام التنبيهات الذكي
-window.showNotify = function(message, type = "success") {
+// 3. 🎨 نظام الإشعارات المتطور
+window.showNotify = function(message, type = "success", duration = 4000) {
     const notif = document.createElement("div");
-    notif.style.cssText = `
-        position: fixed; top: 25px; left: 50%; transform: translateX(-50%) translateY(-120%);
-        padding: 16px 32px; border-radius: 24px; z-index: 10000; font-size: 14px; font-weight: 900;
-        transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55); backdrop-filter: blur(12px);
-        border: 1px solid rgba(255,255,255,0.15); box-shadow: 0 15px 35px rgba(0,0,0,0.4);
-        display: flex; align-items: center; gap: 10px; min-width: 280px; justify-content: center;
-        pointer-events: none;
+    const icon = type === "success" ? "✅" : "❌";
+    
+    notif.innerHTML = `
+        <div class="fixed top-6 right-6 z-[9999] animate-slideIn">
+            <div class="flex items-center p-4 rounded-2xl shadow-2xl min-w-[300px] max-w-md ${
+                type === "success" 
+                    ? "bg-gradient-to-r from-green-500 to-emerald-600" 
+                    : "bg-gradient-to-r from-red-500 to-rose-600"
+            }">
+                <div class="text-2xl mr-3">${icon}</div>
+                <div class="flex-1 text-white font-bold">${message}</div>
+                <button onclick="this.parentElement.parentElement.remove()" class="text-white/70 hover:text-white ml-3">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
     `;
-    if (type === "success") {
-        notif.style.backgroundColor = "rgba(163, 230, 53, 0.95)";
-        notif.style.color = "#000";
-        notif.innerHTML = `<i class="fas fa-check-circle"></i> ${message}`;
-    } else {
-        notif.style.backgroundColor = "rgba(239, 68, 68, 0.95)";
-        notif.style.color = "#fff";
-        notif.innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${message}`;
-    }
+    
     document.body.appendChild(notif);
-    setTimeout(() => { notif.style.transform = "translateX(-50%) translateY(0)"; }, 100);
-    setTimeout(() => {
-        notif.style.transform = "translateX(-50%) translateY(-150%)";
-        setTimeout(() => notif.remove(), 600);
-    }, 3500);
-};
-
-// 3. 🔐 وظائف المصادقة
-// الدخول بحساب Google
-window.signInWithGoogle = function() {
-    const provider = new firebase.auth.GoogleAuthProvider();
-    auth.signInWithPopup(provider)
-        .then((result) => {
-            // إنشاء أو تحديث بيانات المستخدم في Firestore
-            const user = result.user;
-            const userRef = db.collection("users").doc(user.uid);
-            userRef.set({
-                name: user.displayName || "مستخدم جديد",
-                email: user.email,
-                photoURL: user.photoURL || "",
-                balance: 1000.00, // رصيد ترحيبي
-                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                lastLogin: firebase.firestore.FieldValue.serverTimestamp()
-            }, { merge: true });
-            
-            showNotify(`مرحباً ${user.displayName || user.email}! ✅`, "success");
-            setTimeout(() => {
-                window.location.href = "dashboard.html";
-            }, 1500);
-        })
-        .catch((error) => {
-            console.error("خطأ في الدخول:", error);
-            showNotify("فشل الدخول: " + error.message, "error");
-        });
-};
-
-// الدخول بالإيميل (لصفحة login.html)
-window.signInWithEmail = function() {
-    const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value;
     
-    if (!email || !password) {
-        showNotify("يرجى ملء جميع الحقول", "error");
-        return;
-    }
-    
-    auth.signInWithEmailAndPassword(email, password)
-        .then((userCredential) => {
-            showNotify("تم الدخول بنجاح ✅", "success");
-            setTimeout(() => {
-                window.location.href = "dashboard.html";
-            }, 1500);
-        })
-        .catch((error) => {
-            showNotify("خطأ: " + error.message, "error");
-        });
-};
-
-// التسجيل بحساب جديد (لصفحة register.html)
-window.registerWithEmail = function() {
-    const name = document.getElementById("name").value.trim();
-    const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value;
-    const confirmPassword = document.getElementById("confirmPassword").value;
-    
-    if (!name || !email || !password) {
-        showNotify("يرجى ملء جميع الحقول", "error");
-        return;
-    }
-    
-    if (password !== confirmPassword) {
-        showNotify("كلمتا المرور غير متطابقتين", "error");
-        return;
-    }
-    
-    if (password.length < 6) {
-        showNotify("كلمة المرور يجب أن تكون 6 أحرف على الأقل", "error");
-        return;
-    }
-    
-    auth.createUserWithEmailAndPassword(email, password)
-        .then((userCredential) => {
-            const user = userCredential.user;
-            // إنشاء بيانات المستخدم في Firestore
-            db.collection("users").doc(user.uid).set({
-                name: name,
-                email: email,
-                balance: 1000.00, // رصيد ترحيبي
-                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                lastLogin: firebase.firestore.FieldValue.serverTimestamp()
-            });
-            
-            showNotify(`تم إنشاء حساب ${name} بنجاح! ✅`, "success");
-            setTimeout(() => {
-                window.location.href = "dashboard.html";
-            }, 1500);
-        })
-        .catch((error) => {
-            showNotify("خطأ: " + error.message, "error");
-        });
-};
-
-// 4. 💰 وظائف المال والمعاملات
-// تحميل بيانات المستخدم والرصيد
-window.loadUserData = async function() {
-    const user = auth.currentUser;
-    if (!user) {
-        window.location.href = "index.html";
-        return;
-    }
-    
-    try {
-        const userDoc = await db.collection("users").doc(user.uid).get();
-        if (userDoc.exists) {
-            const userData = userDoc.data();
-            // تحديث واجهة Dashboard
-            document.getElementById("userName").textContent = userData.name || user.email;
-            document.getElementById("userEmail").textContent = user.email;
-            document.getElementById("userBalance").textContent = `${userData.balance?.toFixed(2) || "0.00"} جنيه`;
-            
-            // صورة المستخدم
-            const userPhoto = document.getElementById("userPhoto");
-            if (userData.photoURL) {
-                userPhoto.src = userData.photoURL;
-                userPhoto.style.display = "block";
+    // إضافة CSS للأنيميشن
+    if (!document.querySelector('#notif-style')) {
+        const style = document.createElement('style');
+        style.id = 'notif-style';
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
             }
-        }
-    } catch (error) {
-        console.error("خطأ في تحميل البيانات:", error);
+            .animate-slideIn { animation: slideIn 0.3s ease-out; }
+        `;
+        document.head.appendChild(style);
     }
+    
+    // إزالة التلقائية
+    setTimeout(() => {
+        if (notif.parentElement) {
+            notif.style.animation = "slideIn 0.3s ease-out reverse";
+            setTimeout(() => notif.remove(), 300);
+        }
+    }, duration);
 };
 
-// إرسال الأموال
-window.sendMoney = async function() {
-    const toEmail = document.getElementById("toEmail").value.trim();
-    const amountInput = document.getElementById("amount");
-    const amount = Number(amountInput.value);
-    const sender = auth.currentUser;
-    
-    if (!toEmail || amount <= 0) {
-        showNotify("أدخل بيانات صحيحة", "error");
-        return;
+// 4. 👤 إدارة المستخدمين
+class UserManager {
+    static async createUserProfile(user, additionalData = {}) {
+        const userRef = db.collection("users").doc(user.uid);
+        const userData = {
+            uid: user.uid,
+            email: user.email,
+            name: user.displayName || additionalData.name || "مستخدم جديد",
+            phone: additionalData.phone || "",
+            photoURL: user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.email)}&background=10b981&color=fff`,
+            balance: 1000.00, // رصيد ترحيبي
+            currency: "SDG",
+            isActive: true,
+            isVerified: user.emailVerified,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            lastLogin: firebase.firestore.FieldValue.serverTimestamp(),
+            settings: {
+                notifications: true,
+                twoFactor: false,
+                language: "ar",
+                theme: "dark"
+            },
+            statistics: {
+                totalSent: 0,
+                totalReceived: 0,
+                transactionsCount: 0
+            }
+        };
+        
+        await userRef.set(userData, { merge: true });
+        return userData;
     }
     
-    // لا يمكن إرسال أموال لنفسك
-    if (toEmail.toLowerCase() === sender.email.toLowerCase()) {
-        showNotify("لا يمكن إرسال الأموال لنفسك", "error");
+    static async getUserProfile(uid) {
+        const doc = await db.collection("users").doc(uid).get();
+        return doc.exists ? doc.data() : null;
+    }
+    
+    static async updateProfile(uid, updates) {
+        await db.collection("users").doc(uid).update({
+            ...updates,
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+    }
+}
+
+// 5. 🔐 نظام المصادقة
+window.signInWithGoogle = async function() {
+    if (!auth) {
+        showNotify("النظام غير جاهز", "error");
         return;
     }
     
     try {
-        // البحث عن المستقبل
-        const receiverQuery = await db.collection("users").where("email", "==", toEmail).get();
-        if (receiverQuery.empty) {
-            showNotify("المستخدم غير موجود", "error");
-            return;
-        }
+        const provider = new firebase.auth.GoogleAuthProvider();
+        provider.addScope('email');
+        provider.addScope('profile');
+        
+        const result = await auth.signInWithPopup(provider);
+        const user = result.user;
+        
+        // إنشاء/تحديث الملف
+        await UserManager.createUserProfile(user);
+        
+        showNotify(`مرحباً ${user.displayName}! ✅`, "success");
+        
+        // تسجيل نشاط الدخول
+        await db.collection("activity_logs").add({
+            userId: user.uid,
+            action: "login",
+            method: "google",
+            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+            userAgent: navigator.userAgent
+        });
+        
+        // الانتقال بعد تأخير
+        setTimeout(() => {
+            window.location.href = "dashboard.html";
+        }, 1500);
+        
+    } catch (error) {
+        console.error("Login error:", error);
+        showNotify(`خطأ في الدخول: ${error.message}`, "error");
+    }
+};
+
+window.signInWithEmail = async function(email, password) {
+    try {
+        const result = await auth.signInWithEmailAndPassword(email, password);
+        const user = result.user;
+        
+        showNotify("مرحباً بعودتك! ✅", "success");
+        
+        // تحديث آخر دخول
+        await UserManager.updateProfile(user.uid, {
+            lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        
+        setTimeout(() => {
+            window.location.href = "dashboard.html";
+        }, 1500);
+        
+    } catch (error) {
+        showNotify(`خطأ: ${error.message}`, "error");
+    }
+};
+
+window.registerWithEmail = async function(name, email, password, phone = "") {
+    try {
+        const result = await auth.createUserWithEmailAndPassword(email, password);
+        const user = result.user;
+        
+        // إنشاء الملف
+        await UserManager.createUserProfile(user, { name, phone });
+        
+        // إرسال رسالة تأكيد البريد
+        await user.sendEmailVerification();
+        
+        showNotify(`تم إنشاء حساب ${name} بنجاح! ✅ تحقق من بريدك`, "success");
+        
+        setTimeout(() => {
+            window.location.href = "dashboard.html";
+        }, 2000);
+        
+    } catch (error) {
+        showNotify(`خطأ: ${error.message}`, "error");
+    }
+};
+
+// 6. 💰 نظام الدفع
+class PaymentSystem {
+    static async transferMoney(senderId, receiverEmail, amount, notes = "") {
+        if (amount <= 0) throw new Error("المبلغ يجب أن يكون أكبر من الصفر");
+        
+        const senderRef = db.collection("users").doc(senderId);
+        const receiverQuery = await db.collection("users").where("email", "==", receiverEmail).get();
+        
+        if (receiverQuery.empty) throw new Error("المستلم غير موجود");
         
         const receiverDoc = receiverQuery.docs[0];
-        const receiverId = receiverDoc.id;
+        const receiverRef = receiverDoc.ref;
+        const receiverData = receiverDoc.data();
         
-        // استخدام Transaction لضمان السلامة
-        await db.runTransaction(async (transaction) => {
-            const senderRef = db.collection("users").doc(sender.uid);
-            const receiverRef = db.collection("users").doc(receiverId);
-            
+        if (senderId === receiverDoc.id) throw new Error("لا يمكن التحويل لنفسك");
+        
+        return await db.runTransaction(async (transaction) => {
             const senderDoc = await transaction.get(senderRef);
             const receiverDoc = await transaction.get(receiverRef);
             
-            const senderBalance = senderDoc.data().balance || 0;
-            const receiverBalance = receiverDoc.data().balance || 0;
+            const senderData = senderDoc.data();
+            const receiverData2 = receiverDoc.data();
             
-            // التحقق من الرصيد الكافي
-            if (senderBalance < amount) {
+            // التحقق من الرصيد
+            if (senderData.balance < amount) {
                 throw new Error("رصيدك غير كافٍ لإتمام العملية");
             }
             
+            // رسوم التحويل (1%)
+            const fee = amount * 0.01;
+            const totalDeduction = amount + fee;
+            
+            if (senderData.balance < totalDeduction) {
+                throw new Error(`رصيدك غير كافٍ (يشمل الرسوم: ${fee.toFixed(2)} جنيه)`);
+            }
+            
             // تحديث الرصيد
-            transaction.update(senderRef, { balance: senderBalance - amount });
-            transaction.update(receiverRef, { balance: receiverBalance + amount });
+            transaction.update(senderRef, {
+                balance: senderData.balance - totalDeduction,
+                "statistics.totalSent": (senderData.statistics?.totalSent || 0) + amount,
+                "statistics.transactionsCount": (senderData.statistics?.transactionsCount || 0) + 1
+            });
+            
+            transaction.update(receiverRef, {
+                balance: (receiverData2.balance || 0) + amount,
+                "statistics.totalReceived": (receiverData2.statistics?.totalReceived || 0) + amount,
+                "statistics.transactionsCount": (receiverData2.statistics?.transactionsCount || 0) + 1
+            });
             
             // تسجيل المعاملة
             const txRef = db.collection("transactions").doc();
-            transaction.set(txRef, {
-                fromId: sender.uid,
-                fromEmail: sender.email,
-                toId: receiverId,
-                toEmail: toEmail,
+            const txData = {
+                id: txRef.id,
+                fromId: senderId,
+                fromEmail: senderData.email,
+                fromName: senderData.name,
+                toId: receiverDoc.id,
+                toEmail: receiverEmail,
+                toName: receiverData2.name,
                 amount: amount,
+                fee: fee,
+                total: totalDeduction,
+                currency: "SDG",
                 status: "completed",
-                createdAt: firebase.firestore.FieldValue.serverTimestamp()
-            });
+                notes: notes,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                createdAt: new Date().toISOString()
+            };
+            
+            transaction.set(txRef, txData);
+            
+            // إشعارات
+            await this.sendNotification(receiverDoc.id, "استلام", `استلمت ${amount.toFixed(2)} جنيه من ${senderData.name}`);
+            await this.sendNotification(senderId, "إرسال", `أرسلت ${amount.toFixed(2)} جنيه إلى ${receiverData2.name}`);
+            
+            return {
+                success: true,
+                transactionId: txRef.id,
+                amount: amount,
+                fee: fee,
+                newBalance: senderData.balance - totalDeduction,
+                receiverName: receiverData2.name
+            };
         });
+    }
+    
+    static async sendNotification(userId, type, message) {
+        await db.collection("notifications").add({
+            userId: userId,
+            type: type,
+            message: message,
+            isRead: false,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        });
+    }
+    
+    static async getTransactions(userId, limit = 20) {
+        const snapshot = await db.collection("transactions")
+            .where("participants", "array-contains", userId)
+            .orderBy("timestamp", "desc")
+            .limit(limit)
+            .get();
         
-        showNotify(`تم تحويل ${amount.toFixed(2)} جنيه بنجاح ✅`, "success");
+        return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    }
+}
+
+// 7. 📊 واجهة API مبسطة
+window.SudanPay = {
+    // المستخدم
+    getCurrentUser: () => auth?.currentUser,
+    getUserProfile: async () => {
+        const user = auth.currentUser;
+        return user ? await UserManager.getUserProfile(user.uid) : null;
+    },
+    
+    // الدفع
+    sendMoney: async (toEmail, amount, notes = "") => {
+        const user = auth.currentUser;
+        if (!user) throw new Error("يجب تسجيل الدخول أولاً");
         
-        // تحديث الرصيد في الواجهة
-        setTimeout(() => {
-            loadUserData(); // إعادة تحميل البيانات
-            document.getElementById("toEmail").value = "";
-            amountInput.value = "";
-        }, 1000);
+        try {
+            const result = await PaymentSystem.transferMoney(user.uid, toEmail, amount, notes);
+            showNotify(`تم التحويل بنجاح إلى ${result.receiverName} ✅`, "success");
+            return result;
+        } catch (error) {
+            showNotify(error.message, "error");
+            throw error;
+        }
+    },
+    
+    getBalance: async () => {
+        const user = auth.currentUser;
+        if (!user) return 0;
         
-    } catch (error) {
-        showNotify(error.message, "error");
+        const profile = await UserManager.getUserProfile(user.uid);
+        return profile?.balance || 0;
+    },
+    
+    getTransactions: async (limit = 10) => {
+        const user = auth.currentUser;
+        if (!user) return [];
+        
+        return await PaymentSystem.getTransactions(user.uid, limit);
+    },
+    
+    // الإعدادات
+    updateProfile: async (updates) => {
+        const user = auth.currentUser;
+        if (!user) throw new Error("يجب تسجيل الدخول أولاً");
+        
+        await UserManager.updateProfile(user.uid, updates);
+        showNotify("تم تحديث الملف الشخصي ✅", "success");
+    },
+    
+    changePassword: async (newPassword) => {
+        const user = auth.currentUser;
+        if (!user) throw new Error("يجب تسجيل الدخول أولاً");
+        
+        await user.updatePassword(newPassword);
+        showNotify("تم تغيير كلمة المرور ✅", "success");
+    },
+    
+    deleteAccount: async () => {
+        const user = auth.currentUser;
+        if (!user) throw new Error("يجب تسجيل الدخول أولاً");
+        
+        if (!confirm("⚠️ تحذير: هذا الإجراء لا يمكن التراجع عنه. سيتم حذف جميع بياناتك.")) {
+            return;
+        }
+        
+        // حذف البيانات أولاً
+        await db.collection("users").doc(user.uid).delete();
+        
+        // حذف الحساب
+        await user.delete();
+        
+        showNotify("تم حذف حسابك بنجاح", "success");
+        setTimeout(() => window.location.href = "index.html", 1500);
+    },
+    
+    // المساعدة
+    logout: () => {
+        auth.signOut().then(() => {
+            window.location.href = "index.html";
+        });
     }
 };
 
-// 5. ⚙️ وظائف الإعدادات
-// تغيير كلمة المرور
-window.changePassword = function() {
-    const user = auth.currentUser;
-    if (!user) return;
-    
-    const newPassword = prompt("أدخل كلمة المرور الجديدة (6 أحرف على الأقل):");
-    if (!newPassword || newPassword.length < 6) {
-        showNotify("كلمة المرور ضعيفة جداً", "error");
-        return;
-    }
-    
-    user.updatePassword(newPassword).then(() => {
-        showNotify("تم تغيير كلمة المرور بنجاح ✅", "success");
-    }).catch((error) => {
-        if (error.code === "auth/requires-recent-login") {
-            showNotify("للأمان، يرجى إعادة تسجيل الدخول أولاً", "error");
+// 8. 👁️ مراقبة حالة المصادقة
+if (auth) {
+    auth.onAuthStateChanged(async (user) => {
+        const currentPage = window.location.pathname.split("/").pop();
+        
+        if (user) {
+            console.log("✅ User signed in:", user.email);
+            
+            // إذا كان في الصفحة الرئيسية، اذهب للوحة التحكم
+            if (currentPage === "index.html" || currentPage === "" || currentPage === "login.html" || currentPage === "register.html") {
+                setTimeout(() => {
+                    window.location.href = "dashboard.html";
+                }, 1000);
+            }
+            
+            // تحديث آخر دخول
+            if (currentPage === "dashboard.html") {
+                try {
+                    await UserManager.updateProfile(user.uid, {
+                        lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                } catch (error) {
+                    console.error("Error updating last login:", error);
+                }
+            }
+            
         } else {
-            showNotify("خطأ: " + error.message, "error");
+            console.log("❌ No user signed in");
+            
+            // إذا كان في صفحة محمية، اذهب للرئيسية
+            if (currentPage === "dashboard.html" || currentPage === "profile.html" || currentPage === "settings.html") {
+                setTimeout(() => {
+                    window.location.href = "index.html";
+                }, 1000);
+            }
         }
     });
+}
+
+// 9. 🛠️ وظائف مساعدة
+window.formatCurrency = (amount) => {
+    return new Intl.NumberFormat('ar-SD', {
+        style: 'currency',
+        currency: 'SDG',
+        minimumFractionDigits: 2
+    }).format(amount);
 };
 
-// تحديث البيانات الشخصية
-window.updateUserData = function() {
-    const user = auth.currentUser;
-    if (!user) return;
-    
-    const newName = prompt("أدخل الاسم الجديد:", user.displayName || "");
-    const newPhone = prompt("أدخل رقم الهاتف الجديد:", "");
-    
-    if (newName || newPhone) {
-        const updates = {};
-        if (newName) updates.name = newName;
-        if (newPhone) updates.phone = newPhone;
-        
-        // تحديث في Firestore
-        db.collection("users").doc(user.uid).update(updates)
-            .then(() => {
-                showNotify("تم تحديث البيانات بنجاح ✅", "success");
-                setTimeout(() => location.reload(), 1500);
-            })
-            .catch((err) => {
-                showNotify("فشل التحديث: " + err.message, "error");
-            });
-    }
-};
-
-// حذف الحساب (مع التحذير)
-window.deleteAccount = function() {
-    if (!confirm("⚠️ تحذير: هل أنت متأكد من حذف حسابك؟\n\nهذا الإجراء:\n• سيمسح جميع بياناتك\n• سيفقد رصيدك\n• لا يمكن التراجع عنه")) {
-        return;
-    }
-    
-    const user = auth.currentUser;
-    if (!user) return;
-    
-    // حذف بيانات المستخدم أولاً
-    db.collection("users").doc(user.uid).delete()
-        .then(() => {
-            // حذف حساب المصادقة
-            return user.delete();
-        })
-        .then(() => {
-            showNotify("تم حذف حسابك بنجاح", "success");
-            setTimeout(() => {
-                window.location.replace("index.html");
-            }, 1500);
-        })
-        .catch((error) => {
-            if (error.code === "auth/requires-recent-login") {
-                showNotify("للأمان، يرجى إعادة تسجيل الدخول أولاً", "error");
-            } else {
-                showNotify("خطأ في الحذف: " + error.message, "error");
-            }
-        });
-};
-
-// 6. 🚪 تسجيل الخروج
-window.logout = function() {
-    auth.signOut().then(() => {
-        window.location.replace("index.html");
+window.formatDate = (date) => {
+    return new Date(date).toLocaleDateString('ar-SD', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
     });
 };
 
-// 7. 🔍 مراقبة حالة المصادقة
-auth.onAuthStateChanged((user) => {
-    const currentPage = window.location.pathname.split("/").pop();
-    
-    if (user && (currentPage === "index.html" || currentPage === "")) {
-        // إذا كان مسجل دخول وهو في الصفحة الرئيسية، انتقل للـ Dashboard
-        window.location.href = "dashboard.html";
-    } else if (!user && (currentPage === "dashboard.html" || currentPage === "profile.html")) {
-        // إذا لم يكن مسجل دخول وهو في صفحات تحتاج تسجيل، ارجع للرئيسية
-        window.location.href = "index.html";
-    }
-}); 
+// 10. 📱 دعم PWA
+if ('serviceWorker' in navigator && window.location.protocol === 'https:') {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(error => {
+            console.log('ServiceWorker registration failed:', error);
+        });
+    });
+}
+
+console.log("🚀 Sudan Pay App Loaded Successfully!"); 
