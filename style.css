@@ -1,0 +1,36 @@
+/* الألوان والخطوط الأساسية */
+:root {
+    --primary: #a3e635;
+    --bg-dark: #0f172a;
+    --glass: rgba(255, 255, 255, 0.03);
+    --border: rgba(255, 255, 255, 0.1);
+}
+
+body {
+    background-color: var(--bg-dark);
+    font-family: 'Cairo', sans-serif;
+    color: white;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* بطاقة الزجاج الاحترافية */
+.glass-card {
+    background: var(--glass);
+    border: 1px solid var(--border);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-radius: 30px;
+}
+
+/* تأثير الضغط على الأزرار */
+.btn-click {
+    transition: transform 0.1s active;
+}
+.btn-click:active {
+    transform: scale(0.96);
+}
+
+/* إخفاء شريط التمرير */
+::-webkit-scrollbar {
+    display: none;
+}
