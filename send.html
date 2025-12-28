@@ -5,18 +5,26 @@
     <title>إرسال - Sudan Pay</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <style>body { background: #0f172a; color: white; font-family: 'Cairo', sans-serif; } .glass { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(10px); }</style>
+    <link rel="stylesheet" href="style.css">
 </head>
-<body class="p-6">
-    <header class="mb-10 flex items-center gap-4">
-        <a href="dashboard.html" class="w-10 h-10 glass rounded-full flex items-center justify-center text-gray-500"><i class="fas fa-arrow-right"></i></a>
-        <h1 class="text-xl font-bold">إرسال أموال</h1>
+<body class="bg-[#0f172a] text-white p-6">
+    <header class="flex items-center gap-4 mb-10">
+        <a href="dashboard.html" class="text-gray-400"><i class="fas fa-arrow-right"></i></a>
+        <h1 class="text-xl font-bold">تحويل أموال</h1>
     </header>
 
-    <div class="glass p-8 rounded-[40px]">
-        <input type="email" id="toEmail" placeholder="بريد المستلم" class="w-full p-4 mb-4 rounded-2xl bg-white/5 border border-white/10 outline-none focus:border-[#a3e635]">
-        <input type="number" id="amount" placeholder="المبلغ (SDG)" class="w-full p-4 mb-6 rounded-2xl bg-white/5 border border-white/10 outline-none focus:border-[#a3e635] text-center font-bold text-2xl text-[#a3e635]">
-        <button onclick="sendMoney()" class="w-full py-5 bg-[#a3e635] text-black font-black rounded-2xl">تأكيد التحويل</button>
+    <div class="glass-card p-8">
+        <label class="text-[10px] text-gray-500 mb-2 block mr-2">بريد المستلم</label>
+        <input type="email" id="toEmail" placeholder="example@mail.com" 
+               class="w-full p-4 mb-6 rounded-xl bg-white/5 border border-white/10 text-white outline-none focus:border-[#a3e635] text-sm">
+        
+        <label class="text-[10px] text-gray-500 mb-2 block mr-2 text-center">المبلغ المراد تحويله</label>
+        <input type="number" id="amount" placeholder="0.00" 
+               class="w-full p-4 mb-8 rounded-xl bg-white/5 border border-white/10 text-[#a3e635] outline-none text-center text-3xl font-black italic">
+        
+        <button onclick="sendMoney()" class="w-full py-5 bg-[#a3e635] text-black font-black rounded-xl shadow-lg shadow-lime-500/20 transition active:scale-95">
+            تأكيد التحويل الآن
+        </button>
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
