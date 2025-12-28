@@ -612,5 +612,38 @@
         alert("✅ اختبار ناجح!\nافتح Console لرؤية التفاصيل");
     }
 </script>
+    <script>
+    // تحقق يدوي من تسجيل الدخول عند فتح لوحة التحكم
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log("📱 لوحة التحكم - بدء التحقق...");
+        
+        // انتظر 3 ثوانٍ للتحقق
+        setTimeout(() => {
+            if (typeof firebase === 'undefined') {
+                console.log("❌ Firebase غير محمل");
+                window.location.href = "index.html?error=no_firebase";
+                return;
+            }
+            
+            const user = firebase.auth().currentUser;
+            console.log("👤 المستخدم الحالي:", user ? user.email : "لا يوجد");
+            
+            if (!user) {
+                console.log("❌ لم يتم تسجيل الدخول");
+                alert("⚠️ لم يتم تسجيل الدخول. سيتم توجيهك للصفحة الرئيسية.");
+                window.location.href = "index.html";
+                return;
+            }
+            
+            console.log("✅ تم التحقق بنجاح. جاري تحميل البيانات...");
+            
+            // تحميل بيانات المستخدم
+            if (typeof loadUserData === 'function') {
+                loadUserData();
+            }
+            
+        }, 3000);
+    });
+            </script>
 </body>
                       </html>
