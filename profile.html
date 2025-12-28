@@ -5,37 +5,39 @@
     <title>الملف الشخصي - Sudan Pay</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <style>body { background: #0f172a; font-family: 'Cairo', sans-serif; color: white; } .glass { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(10px); }</style>
+    <link rel="stylesheet" href="style.css">
 </head>
-<body class="p-6">
-    <header class="mb-10 flex items-center gap-4 text-right">
-        <a href="dashboard.html" class="w-10 h-10 glass rounded-full flex items-center justify-center text-gray-500"><i class="fas fa-arrow-right"></i></a>
+<body class="bg-[#0f172a] text-white p-6">
+    <header class="flex items-center gap-4 mb-10">
+        <a href="dashboard.html" class="text-gray-400"><i class="fas fa-arrow-right"></i></a>
         <h1 class="text-xl font-bold">الملف الشخصي</h1>
     </header>
 
-    <div class="text-center mb-10">
-        <div class="w-24 h-24 glass rounded-full mx-auto flex items-center justify-center text-3xl text-[#a3e635] mb-4 border-2 border-[#a3e635]/20 shadow-xl shadow-lime-500/5">
-            <i class="fas fa-user-tie"></i>
+    <div class="flex flex-col items-center mb-10">
+        <div class="w-24 h-24 bg-[#1e293b] rounded-full flex items-center justify-center border-4 border-[#a3e635] shadow-lg shadow-lime-500/10 mb-4">
+            <i class="fas fa-user-tie text-4xl text-[#a3e635]"></i>
         </div>
-        <h2 id="profName" class="text-xl font-black italic">...</h2>
-        <p id="profEmail" class="text-gray-500 text-sm">...</p>
+        <h2 id="userName" class="text-xl font-black italic">جاري التحميل...</h2>
+        <p id="userEmail" class="text-gray-500 text-xs mt-1">...</p>
     </div>
 
     <div class="space-y-3">
-        <div class="glass p-5 rounded-[25px] flex items-center justify-between">
-            <div class="flex items-center gap-4"><i class="fas fa-shield-alt text-[#a3e635]"></i><span>الأمان والحماية</span></div>
-            <i class="fas fa-chevron-left text-gray-600 text-xs"></i>
+        <div class="glass-card p-5 flex items-center justify-between">
+            <div class="flex items-center gap-4"><i class="fas fa-shield-alt text-[#a3e635]"></i><span class="text-sm font-bold">إعدادات الأمان</span></div>
+            <i class="fas fa-chevron-left text-gray-700 text-xs"></i>
         </div>
-        <div class="glass p-5 rounded-[25px] flex items-center justify-between">
-            <div class="flex items-center gap-4"><i class="fas fa-bell text-[#a3e635]"></i><span>الإشعارات</span></div>
-            <i class="fas fa-chevron-left text-gray-600 text-xs"></i>
+        <div class="glass-card p-5 flex items-center justify-between">
+            <div class="flex items-center gap-4"><i class="fas fa-bell text-[#a3e635]"></i><span class="text-sm font-bold">التنبيهات</span></div>
+            <i class="fas fa-chevron-left text-gray-700 text-xs"></i>
         </div>
-        <div class="glass p-5 rounded-[25px] flex items-center justify-between">
-            <div class="flex items-center gap-4"><i class="fas fa-question-circle text-[#a3e635]"></i><span>الدعم الفني</span></div>
-            <i class="fas fa-chevron-left text-gray-600 text-xs"></i>
+        <div class="glass-card p-5 flex items-center justify-between">
+            <div class="flex items-center gap-4"><i class="fas fa-headset text-[#a3e635]"></i><span class="text-sm font-bold">الدعم الفني</span></div>
+            <i class="fas fa-chevron-left text-gray-700 text-xs"></i>
         </div>
         
-        <button onclick="auth.signOut()" class="w-full p-5 rounded-[25px] bg-red-500/10 text-red-500 font-bold mt-10 border border-red-500/10">تسجيل الخروج</button>
+        <button onclick="auth.signOut()" class="w-full p-5 rounded-2xl bg-red-500/10 text-red-500 font-black mt-10 border border-red-500/10 transition active:scale-95">
+            تسجيل الخروج
+        </button>
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
@@ -45,10 +47,13 @@
     <script>
         auth.onAuthStateChanged(user => {
             if(user) {
-                document.getElementById('profEmail').innerText = user.email;
-                db.collection("users").doc(user.uid).get().then(doc => { if(doc.exists) document.getElementById('profName').innerText = doc.data().name; });
+                document.getElementById('userEmail').innerText = user.email;
+                db.collection("users").doc(user.uid).get().then(doc => {
+                    if(doc.exists) document.getElementById('userName').innerText = doc.data().name;
+                });
             } else { window.location.href = "login.html"; }
         });
     </script>
 </body>
 </html>
+ 
