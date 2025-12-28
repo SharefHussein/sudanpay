@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الرئيسية - Sudan Pay</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        body { background: #0f172a; font-family: 'Cairo', sans-serif; color: white; }
+        .glass { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); backdrop-filter: blur(15px); }
+    </style>
+</head>
+<body class="pb-24">
+    <header class="p-6 flex justify-between items-center">
+        <h2 class="text-xl font-black italic">SudanPay</h2>
+        <a href="profile.html" class="w-10 h-10 glass rounded-full flex items-center justify-center text-[#a3e635]"><i class="fas fa-user"></i></a>
+    </header>
+
+    <main class="px-6">
+        <div class="glass p-8 rounded-[40px] text-center mb-8 relative overflow-hidden">
+            <p class="text-gray-400 text-xs mb-2 italic">رصيدك المتوفر</p>
+            <h1 id="balance" class="text-4xl font-black tracking-tighter italic">0.00 <span class="text-sm text-[#a3e635]">SDG</span></h1>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4 mb-10 text-center">
+            <a href="send.html" class="glass p-6 rounded-[30px] text-[#a3e635]"><i class="fas fa-paper-plane mb-2 text-xl"></i><br><span class="text-xs font-bold text-white">إرسال</span></a>
+            <a href="receive.html" class="glass p-6 rounded-[30px] text-[#a3e635]"><i class="fas fa-qrcode mb-2 text-xl"></i><br><span class="text-xs font-bold text-white">استلام</span></a>
+        </div>
+    </main>
+
+    <nav class="fixed bottom-6 left-6 right-6 h-20 glass rounded-[30px] flex items-center justify-around z-50">
+        <a href="dashboard.html" class="text-[#a3e635]"><i class="fas fa-home text-xl"></i></a>
+        <a href="profile.html" class="text-gray-500"><i class="fas fa-user text-xl"></i></a>
+    </nav>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="app.js"></script>
+    <script>
+        auth.onAuthStateChanged(user => {
+            if(user) {
+                db.collection("users").doc(user.uid).onSnapshot(doc => {
+                    if(doc.exists) document.getElementById('balance').innerText = (doc.data().balance || 0).toLocaleString();
+                });
+            }
+        });
+    </script>
+</body>
+</html>
