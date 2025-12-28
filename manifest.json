@@ -1,0 +1,22 @@
+{
+  "short_name": "SudanPay",
+  "name": "Sudan Pay Digital Wallet",
+  "icons": [
+    {
+      "src": "icons/icon-192x192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "icons/icon-512x512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "index.html",
+  "background_color": "#0f172a",
+  "display": "standalone",
+  "scope": "/",
+  "theme_color": "#a3e635",
+  "description": "المحفظة الرقمية الأسرع والأكثر أماناً في السودان"
+}
