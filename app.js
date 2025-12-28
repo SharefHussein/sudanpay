@@ -1,5 +1,5 @@
 // ============================================
-// SUDAN PAY - النسخة النهائية المستقرة
+// SUDAN PAY - نسخة مبسطة 100% تعمل
 // ============================================
 
 // 1. 🔧 إعدادات Firebase
@@ -14,229 +14,174 @@ const firebaseConfig = {
 
 // 2. ⚡ تهيئة Firebase
 let auth, db;
-let isInitialized = false;
 
-function initializeFirebase() {
-    try {
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-            console.log("✅ Firebase initialized");
-        }
-        
-        auth = firebase.auth();
-        db = firebase.firestore();
-        isInitialized = true;
-        
-        console.log("✅ الخدمات جاهزة");
-        return true;
-    } catch (error) {
-        console.error("❌ خطأ في تهيئة Firebase:", error);
-        return false;
+// تهيئة فورية
+if (typeof firebase !== 'undefined') {
+    if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+        console.log("✅ Firebase initialized");
     }
+    
+    auth = firebase.auth();
+    db = firebase.firestore();
+    console.log("✅ النظام جاهز");
 }
 
-// 3. 🔔 نظام الإشعارات
-window.showNotify = function(message, type = "success") {
-    console.log("🔔:", message);
-    
-    // عرض إشعار بسيط
+// 3. 🔔 إشعارات بسيطة
+window.showAlert = function(message, type = "success") {
     if (typeof alert !== 'undefined') {
         alert((type === "success" ? "✅ " : "❌ ") + message);
     }
-    
-    // أو إنشاء إشعار مرئي
-    const notif = document.createElement("div");
-    notif.innerHTML = `
-        <div style="
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: ${type === "success" ? "#10b981" : "#ef4444"};
-            color: white;
-            padding: 12px 20px;
-            border-radius: 8px;
-            font-weight: bold;
-            z-index: 9999;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-        ">
-            ${type === "success" ? "✅" : "❌"} ${message}
-        </div>
-    `;
-    
-    document.body.appendChild(notif);
-    setTimeout(() => notif.remove(), 3000);
+    console.log("🔔:", message);
 };
 
-// 4. 🔐 إعادة تعيين كامل للمصادقة
-window.hardResetAuth = function() {
-    console.log("🔄 إعادة تعيين كاملة للمصادقة");
-    
-    // مسح جميع التخزين المحلي
-    localStorage.clear();
-    sessionStorage.clear();
-    
-    // تسجيل الخروج من Firebase
-    if (auth) {
-        auth.signOut().then(() => {
-            console.log("✅ تم تسجيل الخروج");
-            window.location.href = "index.html?reset=complete";
-        });
-    } else {
-        window.location.href = "index.html?reset=complete";
-    }
-};
-
-// 5. 🔐 الدخول بجوجل (مع تحسين)
+// 4. 🔐 الدخول بجوجل - نسخة مبسطة تعمل
 window.signInWithGoogle = async function() {
-    if (!initializeFirebase()) {
-        showNotify("خطأ في النظام", "error");
+    console.log("🔐 محاولة الدخول بجوجل...");
+    
+    // تأكد من تحميل Firebase
+    if (typeof firebase === 'undefined') {
+        showAlert("جاري تحميل النظام...", "error");
         return;
     }
     
     try {
-        // إعادة تعيين قبل الدخول
-        await auth.signOut();
+        // إعادة تهيئة للتحقق
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
         
+        const auth = firebase.auth();
         const provider = new firebase.auth.GoogleAuthProvider();
+        
+        // إضافة نطاق للصلاحيات
+        provider.addScope('email');
+        provider.addScope('profile');
+        
+        // الدخول
         const result = await auth.signInWithPopup(provider);
         const user = result.user;
         
-        // تأكد من إنشاء الملف
+        console.log("✅ تم الدخول:", user.email);
+        showAlert(`مرحباً ${user.displayName || user.email}!`, "success");
+        
+        // إنشاء/تحديث ملف المستخدم في Firestore
+        const db = firebase.firestore();
         const userRef = db.collection("users").doc(user.uid);
-        const userDoc = await userRef.get();
         
-        if (!userDoc.exists) {
-            await userRef.set({
-                name: user.displayName || "مستخدم جديد",
-                email: user.email,
-                photoURL: user.photoURL || "",
-                balance: 1000.00,
-                createdAt: new Date().toISOString(),
-                lastLogin: new Date().toISOString(),
-                isActive: true
-            });
-        } else {
-            await userRef.update({
-                lastLogin: new Date().toISOString()
-            });
-        }
+        await userRef.set({
+            name: user.displayName || "مستخدم جديد",
+            email: user.email,
+            photoURL: user.photoURL || "",
+            balance: 1000.00,
+            createdAt: new Date().toISOString(),
+            lastLogin: new Date().toISOString(),
+            isActive: true
+        }, { merge: true });
         
-        showNotify(`مرحباً ${user.displayName || user.email}!`, "success");
+        console.log("✅ تم حفظ بيانات المستخدم");
         
-        // الانتقال بعد 2 ثانية
+        // الانتقال بعد ثانيتين
         setTimeout(() => {
             window.location.href = "dashboard.html";
         }, 2000);
         
     } catch (error) {
-        console.error("Login error:", error);
-        showNotify(`خطأ في الدخول: ${error.message}`, "error");
+        console.error("❌ خطأ في الدخول:", error);
+        
+        // رسائل خطأ واضحة
+        let errorMessage = "حدث خطأ غير معروف";
+        
+        if (error.code === 'auth/popup-blocked') {
+            errorMessage = "تم منع النافذة المنبثقة. يرجى السماح بالنوافذ المنبثقة لهذا الموقع.";
+        } else if (error.code === 'auth/popup-closed-by-user') {
+            errorMessage = "تم إغلاق نافذة الدخول. يرجى المحاولة مرة أخرى.";
+        } else if (error.code === 'auth/network-request-failed') {
+            errorMessage = "خطأ في الاتصال بالشبكة. يرجى التحقق من اتصالك بالإنترنت.";
+        } else if (error.message) {
+            errorMessage = error.message;
+        }
+        
+        showAlert("خطأ في الدخول: " + errorMessage, "error");
     }
 };
 
-// 6. 📊 تحميل بيانات المستخدم
+// 5. 📊 تحميل بيانات المستخدم للوحة التحكم
 window.loadUserData = async function() {
-    if (!auth || !auth.currentUser) {
+    console.log("📊 محاولة تحميل بيانات المستخدم...");
+    
+    if (typeof firebase === 'undefined') {
+        console.log("❌ Firebase غير محمل");
+        return null;
+    }
+    
+    const auth = firebase.auth();
+    const user = auth.currentUser;
+    
+    if (!user) {
         console.log("❌ لا يوجد مستخدم مسجل");
         return null;
     }
     
     try {
-        const user = auth.currentUser;
+        const db = firebase.firestore();
         const userDoc = await db.collection("users").doc(user.uid).get();
         
         if (userDoc.exists) {
             const data = userDoc.data();
-            console.log("📊 بيانات المستخدم:", data);
+            console.log("✅ بيانات المستخدم:", data);
+            
+            // تحديث واجهة لوحة التحكم
+            if (document.getElementById("userName")) {
+                document.getElementById("userName").textContent = data.name || user.email;
+            }
+            if (document.getElementById("userEmail")) {
+                document.getElementById("userEmail").textContent = user.email;
+            }
+            if (document.getElementById("userBalance")) {
+                document.getElementById("userBalance").textContent = 
+                    (data.balance || 0).toFixed(2) + " جنيه";
+            }
+            
             return data;
+        } else {
+            console.log("⚠️ ملف المستخدم غير موجود");
+            return null;
         }
     } catch (error) {
-        console.error("Error loading user data:", error);
-    }
-    
-    return null;
-};
-
-// 7. 🚪 تسجيل الخروج الآمن
-window.logout = async function() {
-    if (auth) {
-        await auth.signOut();
-        localStorage.clear();
-        sessionStorage.clear();
-        window.location.href = "index.html";
+        console.error("❌ خطأ في تحميل البيانات:", error);
+        return null;
     }
 };
 
-// 8. ⚡ نظام توجيه ذكي بدون حلقات
-if (typeof window !== 'undefined' && !window.authListenerSet) {
-    initializeFirebase();
+// 6. 💰 إرسال الأموال
+window.sendMoney = async function() {
+    console.log("💰 محاولة إرسال أموال...");
     
-    if (auth) {
-        auth.onAuthStateChanged(async (user) => {
-            console.log("🔄 تغيير حالة المصادقة:", user ? user.email : "لا يوجد مستخدم");
-            
-            const currentPage = window.location.pathname.split("/").pop();
-            
-            // منع التكرار
-            if (window.authProcessing) return;
-            window.authProcessing = true;
-            
-            setTimeout(() => {
-                if (user) {
-                    // تحقق من وجود الملف في Firestore
-                    db.collection("users").doc(user.uid).get()
-                        .then((doc) => {
-                            if (doc.exists) {
-                                // مستخدم حقيقي
-                                if (currentPage === "index.html" || currentPage === "" || 
-                                    currentPage === "login.html" || currentPage === "register.html") {
-                                    console.log("➡️ توجيه مستخدم حقيقي إلى dashboard");
-                                    window.location.href = "dashboard.html";
-                                }
-                            } else {
-                                // مستخدم بدون ملف - إعادة تعيين
-                                console.log("⚠️ مستخدم بدون ملف - إعادة تعيين");
-                                auth.signOut();
-                                localStorage.clear();
-                                if (currentPage === "dashboard.html") {
-                                    window.location.href = "index.html?error=no_profile";
-                                }
-                            }
-                        })
-                        .catch(() => {
-                            console.log("❌ خطأ في التحقق");
-                            if (currentPage === "dashboard.html") {
-                                window.location.href = "index.html?error=auth_check_failed";
-                            }
-                        });
-                } else {
-                    // لا يوجد مستخدم
-                    if (currentPage === "dashboard.html") {
-                        console.log("⬅️ إعادة توجيه غير المسجل إلى الرئيسية");
-                        window.location.href = "index.html";
-                    }
-                }
-                
-                // إعادة تعيين العلم بعد 3 ثوان
-                setTimeout(() => {
-                    window.authProcessing = false;
-                }, 3000);
-            }, 1000);
-        });
-        
-        window.authListenerSet = true;
+    if (typeof firebase === 'undefined') {
+        showAlert("النظام غير جاهز", "error");
+        return;
     }
-}
-
-// 9. 💰 وظيفة إرسال الأموال (عملية)
-window.sendMoney = async function(toEmail, amount) {
-    if (!auth || !auth.currentUser) {
-        showNotify("يجب تسجيل الدخول أولاً", "error");
-        return false;
+    
+    const auth = firebase.auth();
+    const user = auth.currentUser;
+    
+    if (!user) {
+        showAlert("يجب تسجيل الدخول أولاً", "error");
+        return;
+    }
+    
+    const toEmail = document.getElementById("toEmail")?.value.trim();
+    const amountInput = document.getElementById("amount")?.value;
+    const amount = parseFloat(amountInput);
+    
+    if (!toEmail || !amount || amount <= 0) {
+        showAlert("يرجى إدخال بيانات صحيحة", "error");
+        return;
     }
     
     try {
-        const user = auth.currentUser;
+        const db = firebase.firestore();
         
         // البحث عن المستقبل
         const receiverQuery = await db.collection("users")
@@ -244,16 +189,16 @@ window.sendMoney = async function(toEmail, amount) {
             .get();
         
         if (receiverQuery.empty) {
-            showNotify("المستخدم غير موجود", "error");
-            return false;
+            showAlert("المستخدم غير موجود", "error");
+            return;
         }
         
-        const receiver = receiverQuery.docs[0];
+        const receiverDoc = receiverQuery.docs[0];
         
-        // استخدام Transaction
+        // معالجة التحويل
         await db.runTransaction(async (transaction) => {
             const senderRef = db.collection("users").doc(user.uid);
-            const receiverRef = db.collection("users").doc(receiver.id);
+            const receiverRef = db.collection("users").doc(receiverDoc.id);
             
             const senderDoc = await transaction.get(senderRef);
             const receiverDoc = await transaction.get(receiverRef);
@@ -266,13 +211,8 @@ window.sendMoney = async function(toEmail, amount) {
             }
             
             // تحديث الرصيد
-            transaction.update(senderRef, { 
-                balance: senderBalance - amount 
-            });
-            
-            transaction.update(receiverRef, { 
-                balance: receiverBalance + amount 
-            });
+            transaction.update(senderRef, { balance: senderBalance - amount });
+            transaction.update(receiverRef, { balance: receiverBalance + amount });
             
             // تسجيل المعاملة
             transaction.set(db.collection("transactions").doc(), {
@@ -284,14 +224,74 @@ window.sendMoney = async function(toEmail, amount) {
             });
         });
         
-        showNotify(`تم تحويل ${amount} جنيه بنجاح!`, "success");
-        return true;
+        showAlert(`تم تحويل ${amount.toFixed(2)} جنيه بنجاح!`, "success");
+        
+        // تحديث الرصيد
+        setTimeout(() => {
+            loadUserData();
+            if (document.getElementById("toEmail")) {
+                document.getElementById("toEmail").value = "";
+            }
+            if (document.getElementById("amount")) {
+                document.getElementById("amount").value = "";
+            }
+        }, 1000);
         
     } catch (error) {
-        console.error("Transfer error:", error);
-        showNotify(`خطأ: ${error.message}`, "error");
-        return false;
+        console.error("❌ خطأ في التحويل:", error);
+        showAlert("خطأ: " + error.message, "error");
     }
 };
 
-console.log("🚀 Sudan Pay - النظام جاهز");
+// 7. 🚪 تسجيل الخروج
+window.logout = async function() {
+    console.log("🚪 محاولة تسجيل الخروج...");
+    
+    if (typeof firebase !== 'undefined') {
+        try {
+            await firebase.auth().signOut();
+            console.log("✅ تم تسجيل الخروج");
+        } catch (error) {
+            console.error("❌ خطأ في تسجيل الخروج:", error);
+        }
+    }
+    
+    // مسح التخزين المحلي
+    localStorage.clear();
+    sessionStorage.clear();
+    
+    // الانتقال للرئيسية
+    window.location.href = "index.html";
+};
+
+// 8. 🔄 نظام تحكم بسيط في التوجيه
+if (typeof window !== 'undefined' && typeof firebase !== 'undefined') {
+    const auth = firebase.auth();
+    
+    auth.onAuthStateChanged((user) => {
+        console.log("🔄 تغيير حالة المصادقة:", user ? user.email : "لا يوجد مستخدم");
+        
+        const currentPage = window.location.pathname.split("/").pop();
+        
+        // تأخير 2 ثانية قبل أي إجراء
+        setTimeout(() => {
+            if (user) {
+                // إذا كان مسجلاً وهو في الصفحات العامة
+                if (currentPage === "index.html" || currentPage === "" || 
+                    currentPage === "login.html" || currentPage === "register.html") {
+                    
+                    console.log("➡️ توجيه إلى dashboard");
+                    window.location.href = "dashboard.html";
+                }
+            } else {
+                // إذا لم يكن مسجلاً وهو في dashboard
+                if (currentPage === "dashboard.html") {
+                    console.log("⬅️ إعادة توجيه إلى الرئيسية");
+                    window.location.href = "index.html";
+                }
+            }
+        }, 2000);
+    });
+}
+
+console.log("🚀 Sudan Pay - النظام جاهز للعمل");
