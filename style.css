@@ -1,24 +1,9 @@
-:root {
-    --primary: #a3e635;
-    --bg-dark: #0f172a;
-    --glass: rgba(255, 255, 255, 0.03);
-    --border: rgba(255, 255, 255, 0.1);
-}
-
-body {
-    background-color: var(--bg-dark);
-    font-family: 'Cairo', sans-serif;
-    color: white;
-    margin: 0;
-    -webkit-tap-highlight-color: transparent;
-}
-
+body { font-family: 'Cairo', sans-serif; margin: 0; }
 .glass-card {
-    background: var(--glass);
-    border: 1px solid var(--border);
-    backdrop-filter: blur(15px);
-    border-radius: 30px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
 }
-
-/* تحسين شكل الأزرار */
-button:active { transform: scale(0.98); }
+input::placeholder { color: #4b5563; font-size: 12px; }
+::-webkit-scrollbar { display: none; }
