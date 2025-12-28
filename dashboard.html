@@ -593,5 +593,24 @@
         }, 2000);
     });
     </script>
+    <!-- زر تجريبي (إزاله لاحقاً) -->
+<div style="position: fixed; bottom: 20px; left: 20px; z-index: 9999;">
+    <button onclick="testFunctions()" 
+            style="background: #ff6b6b; color: white; padding: 10px 15px; border-radius: 10px; border: none;">
+        🔧 تجربة الوظائف
+    </button>
+</div>
+
+<script>
+    function testFunctions() {
+        console.log("🔧 اختبار الوظائف:");
+        console.log("- Firebase:", typeof firebase);
+        console.log("- auth:", firebase.auth());
+        console.log("- User:", firebase.auth().currentUser);
+        console.log("- db:", firebase.firestore());
+        
+        alert("✅ اختبار ناجح!\nافتح Console لرؤية التفاصيل");
+    }
+</script>
 </body>
                       </html>
