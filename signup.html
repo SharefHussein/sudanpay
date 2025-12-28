@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حساب جديد - Sudan Pay</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        body { background: #0f172a; font-family: 'Cairo', sans-serif; color: white; }
+        .glass { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); }
+        input::placeholder { color: #4b5563; font-size: 12px; }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-6">
+    <div class="glass w-full max-w-md p-8 rounded-[40px] text-center">
+        <h1 class="text-3xl font-black mb-2 italic">حساب <span class="text-[#a3e635]">جديد</span></h1>
+        <p class="text-gray-500 text-sm mb-8">انضم إلى أسرع محفظة إلكترونية في السودان</p>
+        
+        <div class="space-y-4">
+            <input type="text" id="newName" placeholder="الاسم الكامل" 
+                   class="w-full p-4 rounded-2xl bg-white/5 border border-white/10 outline-none focus:border-[#a3e635] text-sm">
+            
+            <input type="email" id="newEmail" placeholder="البريد الإلكتروني" 
+                   class="w-full p-4 rounded-2xl bg-white/5 border border-white/10 outline-none focus:border-[#a3e635] text-sm">
+            
+            <input type="password" id="newPassword" placeholder="كلمة المرور (6 أحرف فأكثر)" 
+                   class="w-full p-4 rounded-2xl bg-white/5 border border-white/10 outline-none focus:border-[#a3e635] text-sm">
+        </div>
+        
+        <button onclick="signUp()" class="w-full py-4 bg-[#a3e635] text-black font-black rounded-2xl shadow-lg shadow-lime-500/20 mt-8 transition active:scale-95">
+            إنشاء الحساب
+        </button>
+
+        <p class="mt-6 text-xs text-gray-500">
+            لديك حساب بالفعل؟ <a href="login.html" class="text-white font-bold">تسجيل الدخول</a>
+        </p>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="app.js"></script>
+
+    <script>
+        async function signUp() {
+            const name = document.getElementById("newName").value.trim();
+            const email = document.getElementById("newEmail").value.trim();
+            const password = document.getElementById("newPassword").value;
+
+            if (!name || !email || !password) {
+                showNotify("الرجاء ملء جميع الحقول", "error");
+                return;
+            }
+
+            if (password.length < 6) {
+                showNotify("كلمة المرور يجب أن تكون 6 أحرف على الأقل", "error");
+                return;
+            }
+
+            try {
+                // 1. إنشاء الحساب في Firebase Auth
+                const result = await auth.createUserWithEmailAndPassword(email, password);
+                const user = result.user;
+
+                // 2. إنشاء وثيقة المستخدم في Firestore مع رصيد ابتدائي (مثلاً 0)
+                await db.collection("users").doc(user.uid).set({
+                    name: name,
+                    email: email,
+                    balance: 0,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+
+                showNotify("تم إنشاء الحساب بنجاح 🎊", "success");
+                setTimeout(() => window.location.href = "dashboard.html", 1500);
+
+            } catch (error) {
+                let msg = "حدث خطأ أثناء الاشتراك";
+                if (error.code === "auth/email-already-in-use") msg = "هذا البريد مستخدم بالفعل";
+                showNotify(msg, "error");
+            }
+        }
+    </script>
+</body>
+</html>
