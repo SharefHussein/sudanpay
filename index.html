@@ -224,5 +224,21 @@
             });
         });
     </script>
+    <script>
+    // تحقق بسيط في الصفحة الرئيسية
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log("🏠 الصفحة الرئيسية - تحقق...");
+        
+        setTimeout(() => {
+            if (typeof firebase !== 'undefined') {
+                const user = firebase.auth().currentUser;
+                if (user) {
+                    console.log("✅ يوجد مستخدم مسجل:", user.email);
+                    // لا تفعل أي شيء - دع المستخدم يختار
+                }
+            }
+        }, 2000);
+    });
+    </script>
 </body>
                 </html> 
