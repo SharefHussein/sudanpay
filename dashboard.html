@@ -1,53 +1,31 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sudan Pay - Dashboard</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الرئيسية - Sudan Pay</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="p-4">
-    <header class="flex justify-between items-center py-4 mb-6">
-        <div class="flex items-center gap-2">
-            <div class="w-8 h-8 bg-[#a3e635] rounded flex items-center justify-center">
-                <i class="fas fa-leaf text-black text-xs"></i>
-            </div>
-            <span class="font-bold text-lg tracking-tight italic">Sudan<span class="text-[#a3e635]">Pay</span></span>
-        </div>
-        <div class="w-10 h-10 bg-white/5 rounded-full flex items-center justify-center border border-white/10">
-            <i class="fas fa-user text-sm"></i>
-        </div>
-    </header>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-        <div class="neon-card relative overflow-hidden">
-            <p class="text-xs text-gray-400 mb-1 italic">Total Revenue</p>
-            <h2 id="balance" class="text-3xl font-black">0.00 <span class="text-xs text-[#a3e635]">SDG</span></h2>
-            <div class="absolute right-4 bottom-4 w-12 h-8 bg-[#a3e635]/10 rounded-lg flex items-center justify-center">
-                <i class="fas fa-chart-line text-[#a3e635] text-xs"></i>
-            </div>
-        </div>
-        
-        <div class="neon-card bg-[#a3e635]/5 border-[#a3e635]/20">
-            <p class="text-xs text-gray-400 mb-1">Active Users</p>
-            <h2 class="text-2xl font-bold">Live <span class="text-xs bg-[#a3e635] text-black px-2 rounded-full">Secure</span></h2>
-        </div>
+<body class="bg-[#0b0e14] p-6 text-white">
+    <div class="flex justify-between items-center mb-10">
+        <h2 class="text-xl font-bold italic">Sudan <span class="text-[#a3e635]">Pay</span></h2>
+        <button onclick="auth.signOut().then(()=>window.location.href='login.html')" class="text-red-400 font-bold">خروج</button>
     </div>
 
-    <h3 class="text-xs font-bold text-gray-500 mb-4 mr-2 uppercase tracking-widest">Quick Actions</h3>
+    <div class="neon-card bg-gradient-to-br from-[#161b22] to-[#0b0e14] mb-8 text-center py-10">
+        <p class="text-gray-400 text-sm mb-2">الرصيد المتاح</p>
+        <h1 class="text-4xl font-black text-[#a3e635] shadow-lg">0.00 <small class="text-lg uppercase">sdg</small></h1>
+    </div>
+
     <div class="grid grid-cols-2 gap-4">
-        <a href="send.html" class="neon-card flex flex-col items-center gap-3 active:scale-95 transition">
-            <div class="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center border border-white/10 text-[#a3e635]">
-                <i class="fas fa-paper-plane"></i>
-            </div>
-            <span class="text-[10px] font-black uppercase">Send Payment</span>
+        <a href="send.html" class="neon-card text-center flex flex-col items-center gap-2 py-8">
+            <span class="text-2xl">💸</span>
+            <p class="font-bold">تحويل</p>
         </a>
-        <a href="history.html" class="neon-card flex flex-col items-center gap-3 active:scale-95 transition">
-            <div class="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center border border-white/10 text-[#a3e635]">
-                <i class="fas fa-list-ul"></i>
-            </div>
-            <span class="text-[10px] font-black uppercase">Transactions</span>
+        <a href="history.html" class="neon-card text-center flex flex-col items-center gap-2 py-8">
+            <span class="text-2xl">📋</span>
+            <p class="font-bold">السجل</p>
         </a>
     </div>
 
@@ -55,15 +33,6 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
     <script src="app.js"></script>
-    <script>
-        auth.onAuthStateChanged(user => {
-            if(user) {
-                db.collection("users").doc(user.uid).onSnapshot(doc => {
-                    if(doc.exists) document.getElementById('balance').innerText = (doc.data().balance || 0).toLocaleString();
-                });
-            } else { window.location.href = "login.html"; }
-        });
-    </script>
 </body>
 </html>
- 
+
