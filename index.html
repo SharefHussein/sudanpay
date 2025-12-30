@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sudan Pay - واجهة الدخول</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css?v=2">
+    <style>
+        body { background-color: #0f172a; font-family: 'Cairo', sans-serif; color: white; }
+        .hero-glow {
+            position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+            width: 100%; height: 300px; 
+            background: radial-gradient(circle, rgba(163,230,53,0.1) 0%, rgba(15,23,42,0) 70%);
+            z-index: -1;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen items-center justify-center p-6">
+    <div class="hero-glow"></div>
+
+    <div class="flex flex-col items-center mb-12">
+        <div class="w-20 h-20 bg-[#1e293b] rounded-full flex items-center justify-center border-2 border-[#a3e635] shadow-[0_0_20px_rgba(163,230,53,0.4)] mb-4">
+            <span class="text-[#a3e635] text-4xl font-black italic">S</span>
+        </div>
+        <h1 class="text-3xl font-black italic tracking-widest">Sudan <span class="text-[#a3e635]">Pay</span></h1>
+    </div>
+
+    <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold mb-4 leading-tight">مستقبل التحويلات <br> <span class="text-[#a3e635]">بين يديك الآن</span></h2>
+        <p class="text-gray-400 text-sm max-w-xs mx-auto">أسرع وأسهل طريقة لإرسال واستلام الأموال في السودان بكل أمان وثقة.</p>
+    </div>
+
+    <div class="w-full max-w-xs space-y-4">
+        <a href="login.html" class="block w-full py-4 bg-[#a3e635] text-black text-center font-black rounded-2xl shadow-[0_10px_20px_rgba(163,230,53,0.2)] transition active:scale-95">
+            تسجيل الدخول
+        </a>
+        
+        <a href="signup.html" class="block w-full py-4 bg-white/5 border border-white/10 text-white text-center font-bold rounded-2xl transition active:scale-95">
+            إنشاء حساب جديد
+        </a>
+    </div>
+
+    <footer class="mt-20 flex gap-6 text-gray-500 text-xl">
+        <i class="fab fa-facebook"></i>
+        <i class="fab fa-twitter"></i>
+        <i class="fab fa-instagram"></i>
+    </footer>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="app.js"></script>
+    <script>
+        auth.onAuthStateChanged(user => { if (user) window.location.href = "dashboard.html"; });
+    </script>
+</body>
+</html>
+ 
