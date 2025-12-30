@@ -1,33 +1,29 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>دخول - Sudan Pay</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-[#0f172a] flex items-center justify-center min-h-screen p-6">
-    <div class="glass-card w-full max-w-md p-8 text-center shadow-2xl">
-        <div class="w-16 h-16 bg-[#1e293b] rounded-full flex items-center justify-center border-2 border-[#a3e635] mx-auto mb-4">
-            <span class="text-[#a3e635] text-3xl font-black italic">S</span>
-        </div>
-        <h1 class="text-2xl font-black mb-8 italic text-white">Sudan <span class="text-[#a3e635]">Pay</span></h1>
+<body class="bg-[#0b0e14] flex flex-col items-center justify-center min-h-screen p-6">
+    <div class="w-full max-w-sm p-8 bg-[#161b22] border border-[#a3e635]/20 rounded-2xl text-center">
+        <h2 class="text-3xl font-bold mb-8 text-[#a3e635]">تسجيل الدخول</h2>
+        <input type="email" id="email" placeholder="البريد الإلكتروني" class="w-full p-4 mb-4 bg-white/5 border border-white/10 rounded-xl text-white outline-none focus:border-[#a3e635]">
+        <input type="password" id="password" placeholder="كلمة المرور" class="w-full p-4 mb-6 bg-white/5 border border-white/10 rounded-xl text-white outline-none focus:border-[#a3e635]">
         
-        <input type="email" id="email" placeholder="Email address" class="w-full p-4 mb-4 rounded-xl bg-white/5 border border-white/10 text-white outline-none">
-        <input type="password" id="password" placeholder="Password" class="w-full p-4 mb-6 rounded-xl bg-white/5 border border-white/10 text-white outline-none">
+        <button onclick="login()" class="w-full py-4 bg-[#a3e635] text-black font-black rounded-xl mb-4 shadow-[0_0_20px_rgba(163,230,53,0.3)]">دخول</button>
         
-        <button onclick="login()" class="w-full py-4 bg-[#a3e635] text-black font-black rounded-xl mb-4 transition active:scale-95">Sign in</button>
-        <button onclick="loginWithGoogle()" class="w-full py-4 glass-card border border-white/10 text-white text-xs font-bold rounded-xl mb-6 transition active:scale-95 flex items-center justify-center gap-2">
-            <img src="https://www.gstatic.com/images/branding/product/1x/googleg_48dp.png" class="w-4 h-4"> Sign in with Google
+        <button onclick="loginWithGoogle()" class="w-full py-3 bg-white text-black font-bold rounded-xl flex items-center justify-center gap-2">
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20">
+            بواسطة جوجل
         </button>
-
-        <a href="signup.html" class="text-gray-400 text-xs font-bold">Sign up</a>
     </div>
+
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
     <script src="app.js"></script>
 </body>
 </html>
- 
+
