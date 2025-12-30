@@ -3,57 +3,569 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sudan Pay - واجهة الدخول</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css?v=2">
+    <title>تسجيل الدخول - SudanPay</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { background-color: #0f172a; font-family: 'Cairo', sans-serif; color: white; }
-        .hero-glow {
-            position: absolute; top: 0; left: 50%; transform: translateX(-50%);
-            width: 100%; height: 300px; 
-            background: radial-gradient(circle, rgba(163,230,53,0.1) 0%, rgba(15,23,42,0) 70%);
-            z-index: -1;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            display: flex;
+            max-width: 1000px;
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .welcome-section {
+            flex: 1;
+            background: linear-gradient(to bottom right, #4f46e5, #7c3aed);
+            color: white;
+            padding: 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .welcome-section h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .welcome-section p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        .logo {
+            font-size: 3rem;
+            margin-bottom: 30px;
+            color: white;
+        }
+
+        .login-section {
+            flex: 1;
+            padding: 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .login-section h2 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .login-section p {
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 600;
+        }
+
+        .input-with-icon {
+            position: relative;
+        }
+
+        .input-with-icon i {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+        }
+
+        .input-with-icon input {
+            width: 100%;
+            padding: 15px 45px 15px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            outline: none;
+        }
+
+        .input-with-icon input:focus {
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        .login-btn {
+            background: linear-gradient(to right, #4f46e5, #7c3aed);
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .login-btn:hover {
+            background: linear-gradient(to right, #4338ca, #6d28d9);
+            transform: translateY(-2px);
+            box-shadow: 0 7px 14px rgba(79, 70, 229, 0.2);
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 25px 0;
+            color: #888;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .divider span {
+            padding: 0 15px;
+        }
+
+        .google-btn {
+            background: white;
+            color: #333;
+            border: 2px solid #e0e0e0;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .google-btn:hover {
+            background: #f8f8f8;
+            border-color: #d0d0d0;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .google-icon {
+            color: #DB4437;
+            font-size: 1.2rem;
+        }
+
+        .forgot-password {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+        }
+
+        .forgot-password a {
+            color: #4f46e5;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .forgot-password a:hover {
+            text-decoration: underline;
+        }
+
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                max-width: 450px;
+            }
+            
+            .welcome-section {
+                padding: 30px;
+            }
+            
+            .login-section {
+                padding: 30px;
+            }
+        }
+
+        .password-toggle {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #888;
+            cursor: pointer;
+            font-size: 1.2rem;
         }
     </style>
 </head>
-<body class="flex flex-col min-h-screen items-center justify-center p-6">
-    <div class="hero-glow"></div>
-
-    <div class="flex flex-col items-center mb-12">
-        <div class="w-20 h-20 bg-[#1e293b] rounded-full flex items-center justify-center border-2 border-[#a3e635] shadow-[0_0_20px_rgba(163,230,53,0.4)] mb-4">
-            <span class="text-[#a3e635] text-4xl font-black italic">S</span>
+<body>
+    <div class="container">
+        <!-- قسم الترحيب -->
+        <div class="welcome-section">
+            <div class="logo">
+                <i class="fas fa-wallet"></i>
+            </div>
+            <h1>مرحباً بك في SudanPay</h1>
+            <p>
+                نظام الدفع الإلكتروني الآمن والسريع. 
+                سجل الدخول الآن للاستفادة من جميع خدماتنا المميزة 
+                وإدارة معاملاتك المالية بكل سهولة وأمان.
+            </p>
         </div>
-        <h1 class="text-3xl font-black italic tracking-widest">Sudan <span class="text-[#a3e635]">Pay</span></h1>
+
+        <!-- قسم تسجيل الدخول -->
+        <div class="login-section">
+            <h2>تسجيل الدخول</h2>
+            <p>أدخل بياناتك للوصول إلى حسابك</p>
+            
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="email">البريد الإلكتروني</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="email" placeholder="أدخل بريدك الإلكتروني" required value="Wdalheussien@gmail.com">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">كلمة المرور</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-lock"></i>
+                        <button type="button" class="password-toggle" onclick="togglePassword()">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <input type="password" id="password" placeholder="أدخل كلمة المرور" required>
+                    </div>
+                </div>
+                
+                <button type="button" class="login-btn" onclick="login()">
+                    <i class="fas fa-sign-in-alt"></i> دخول
+                </button>
+            </form>
+            
+            <div class="divider">
+                <span>أو</span>
+            </div>
+            
+            <button class="google-btn" onclick="loginWithGoogle()">
+                <i class="fab fa-google google-icon"></i>
+                بواسطة جوجل
+            </button>
+            
+            <div class="forgot-password">
+                <a href="#" onclick="forgotPassword()">نسيت كلمة المرور؟</a>
+            </div>
+            
+            <div class="footer">
+                © 2025 SudanPay. جميع الحقوق محفوظة.
+            </div>
+        </div>
     </div>
 
-    <div class="text-center mb-12">
-        <h2 class="text-3xl font-bold mb-4 leading-tight">مستقبل التحويلات <br> <span class="text-[#a3e635]">بين يديك الآن</span></h2>
-        <p class="text-gray-400 text-sm max-w-xs mx-auto">أسرع وأسهل طريقة لإرسال واستلام الأموال في السودان بكل أمان وثقة.</p>
-    </div>
-
-    <div class="w-full max-w-xs space-y-4">
-        <a href="login.html" class="block w-full py-4 bg-[#a3e635] text-black text-center font-black rounded-2xl shadow-[0_10px_20px_rgba(163,230,53,0.2)] transition active:scale-95">
-            تسجيل الدخول
-        </a>
-        
-        <a href="signup.html" class="block w-full py-4 bg-white/5 border border-white/10 text-white text-center font-bold rounded-2xl transition active:scale-95">
-            إنشاء حساب جديد
-        </a>
-    </div>
-
-    <footer class="mt-20 flex gap-6 text-gray-500 text-xl">
-        <i class="fab fa-facebook"></i>
-        <i class="fab fa-twitter"></i>
-        <i class="fab fa-instagram"></i>
-    </footer>
-
+    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-    <script src="app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
     <script>
-        auth.onAuthStateChanged(user => { if (user) window.location.href = "dashboard.html"; });
+        // إعدادات Firebase - سيتم استبدال القيم تلقائياً بواسطة GitHub Actions
+        const firebaseConfig = {
+            apiKey: "REPLACE_WITH_API_KEY",
+            authDomain: "REPLACE_WITH_AUTH_DOMAIN",
+            projectId: "REPLACE_WITH_PROJECT_ID",
+            storageBucket: "sudanpay-e332a.appspot.com",
+            messagingSenderId: "699809447272",
+            appId: "1:699809447272:web:90f3780ed6c768c4322add"
+        };
+
+        // تهيئة Firebase
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // دالة تسجيل الدخول بالبريد
+        window.login = function() {
+            const email = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value;
+            
+            // التحقق من المدخلات
+            if (!email || !password) {
+                showAlert("خطأ", "الرجاء إدخال البريد الإلكتروني وكلمة المرور", "error");
+                return;
+            }
+            
+            // تعطيل الزر أثناء المعالجة
+            const loginBtn = document.querySelector('.login-btn');
+            const originalText = loginBtn.innerHTML;
+            loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري تسجيل الدخول...';
+            loginBtn.disabled = true;
+            
+            auth.signInWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    // تسجيل الدخول نجح
+                    showAlert("تم بنجاح", "تم تسجيل الدخول بنجاح!", "success");
+                    
+                    // الانتقال للوحة التحكم بعد تأخير قصير
+                    setTimeout(() => {
+                        window.location.href = "dashboard.html";
+                    }, 1000);
+                })
+                .catch((error) => {
+                    // إعادة تمكين الزر
+                    loginBtn.innerHTML = originalText;
+                    loginBtn.disabled = false;
+                    
+                    // عرض رسالة الخطأ المناسبة
+                    let errorMessage = "حدث خطأ أثناء تسجيل الدخول";
+                    
+                    switch(error.code) {
+                        case 'auth/user-not-found':
+                            errorMessage = "البريد الإلكتروني غير مسجل";
+                            break;
+                        case 'auth/wrong-password':
+                            errorMessage = "كلمة المرور غير صحيحة";
+                            break;
+                        case 'auth/invalid-email':
+                            errorMessage = "البريد الإلكتروني غير صالح";
+                            break;
+                        case 'auth/user-disabled':
+                            errorMessage = "تم تعطيل هذا الحساب";
+                            break;
+                        case 'auth/too-many-requests':
+                            errorMessage = "محاولات كثيرة جداً، حاول لاحقاً";
+                            break;
+                    }
+                    
+                    showAlert("خطأ في تسجيل الدخول", errorMessage, "error");
+                });
+        };
+
+        // دالة الدخول بجوجل
+        window.loginWithGoogle = function() {
+            const googleBtn = document.querySelector('.google-btn');
+            const originalText = googleBtn.innerHTML;
+            googleBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الاتصال بجوجل...';
+            googleBtn.disabled = true;
+            
+            const provider = new firebase.auth.GoogleAuthProvider();
+            auth.signInWithPopup(provider)
+                .then((result) => {
+                    showAlert("تم بنجاح", "تم تسجيل الدخول بحساب جوجل بنجاح!", "success");
+                    
+                    setTimeout(() => {
+                        window.location.href = "dashboard.html";
+                    }, 1000);
+                })
+                .catch((error) => {
+                    googleBtn.innerHTML = originalText;
+                    googleBtn.disabled = false;
+                    
+                    let errorMessage = "حدث خطأ أثناء تسجيل الدخول بجوجل";
+                    
+                    if (error.code === 'auth/popup-closed-by-user') {
+                        errorMessage = "تم إغلاق نافذة تسجيل الدخول";
+                    } else if (error.code === 'auth/cancelled-popup-request') {
+                        errorMessage = "تم إلغاء عملية تسجيل الدخول";
+                    }
+                    
+                    showAlert("خطأ في جوجل", errorMessage, "error");
+                });
+        };
+
+        // دالة عرض الإشعارات
+        function showAlert(title, message, type) {
+            // إزالة أي إشعارات سابقة
+            const existingAlert = document.querySelector('.custom-alert');
+            if (existingAlert) {
+                existingAlert.remove();
+            }
+            
+            const alert = document.createElement('div');
+            alert.className = `custom-alert alert-${type}`;
+            
+            const icon = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
+            
+            alert.innerHTML = `
+                <div class="alert-content">
+                    <i class="fas ${icon}"></i>
+                    <div>
+                        <h4>${title}</h4>
+                        <p>${message}</p>
+                    </div>
+                    <button class="alert-close" onclick="this.parentElement.parentElement.remove()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+            
+            document.body.appendChild(alert);
+            
+            // إزالة الإشعار تلقائياً بعد 5 ثواني
+            setTimeout(() => {
+                if (alert.parentElement) {
+                    alert.remove();
+                }
+            }, 5000);
+        }
+
+        // إضافة أنماط الإشعارات
+        const alertStyles = document.createElement('style');
+        alertStyles.textContent = `
+            .custom-alert {
+                position: fixed;
+                top: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                min-width: 300px;
+                max-width: 500px;
+                width: 90%;
+                z-index: 1000;
+                animation: slideDown 0.3s ease-out;
+            }
+            
+            .alert-content {
+                display: flex;
+                align-items: center;
+                padding: 15px 20px;
+                border-radius: 10px;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+                background: white;
+                gap: 15px;
+            }
+            
+            .alert-success .alert-content {
+                border-right: 5px solid #10b981;
+            }
+            
+            .alert-error .alert-content {
+                border-right: 5px solid #ef4444;
+            }
+            
+            .alert-success .fas {
+                color: #10b981;
+                font-size: 1.5rem;
+            }
+            
+            .alert-error .fas {
+                color: #ef4444;
+                font-size: 1.5rem;
+            }
+            
+            .alert-content h4 {
+                margin: 0 0 5px 0;
+                color: #333;
+            }
+            
+            .alert-content p {
+                margin: 0;
+                color: #666;
+                font-size: 0.9rem;
+            }
+            
+            .alert-close {
+                margin-right: auto;
+                background: none;
+                border: none;
+                color: #888;
+                cursor: pointer;
+                font-size: 1rem;
+                padding: 5px;
+            }
+            
+            @keyframes slideDown {
+                from {
+                    transform: translate(-50%, -100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translate(-50%, 0);
+                    opacity: 1;
+                }
+            }
+        `;
+        document.head.appendChild(alertStyles);
+
+        // دالة عرض/إخفاء كلمة المرور
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const toggleIcon = document.querySelector('.password-toggle i');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.className = 'fas fa-eye-slash';
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.className = 'fas fa-eye';
+            }
+        }
+
+        // دالة نسيت كلمة المرور
+        window.forgotPassword = function() {
+            const email = document.getElementById('email').value.trim();
+            
+            if (!email) {
+                showAlert("معلومات ناقصة", "الرجاء إدخال البريد الإلكتروني أولاً", "error");
+                return;
+            }
+            
+            auth.sendPasswordResetEmail(email)
+                .then(() => {
+                    showAlert("تم الإرسال", "تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني", "success");
+                })
+                .catch((error) => {
+                    showAlert("خطأ", "حدث خطأ أثناء إرسال رابط إعادة التعيين", "error");
+                });
+        };
+
+        // السماح بتسجيل الدخول بالضغط على Enter
+        document.getElementById('password').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                login();
+            }
+        });
     </script>
 </body>
-</html>
- 
+                </html>
