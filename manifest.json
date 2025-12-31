@@ -3,20 +3,20 @@
   "name": "Sudan Pay Digital Wallet",
   "icons": [
     {
-      "src": "icons/icon-192x192.png",
+      "src": "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "icons/icon-512x512.png",
+      "src": "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
       "type": "image/png",
       "sizes": "512x512"
     }
   ],
-  "start_url": "index.html",
+  "start_url": "/",
   "background_color": "#0f172a",
   "display": "standalone",
   "scope": "/",
-  "theme_color": "#a3e635",
+  "theme_color": "#4f46e5",
   "description": "المحفظة الرقمية الأسرع والأكثر أماناً في السودان"
 }
