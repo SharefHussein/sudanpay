@@ -7,213 +7,140 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap');
-        body { font-family: 'Cairo', sans-serif; background-color: #0b0e14; color: white; overflow-x: hidden; }
-        .sidebar { background-color: #161b22; height: 100vh; position: fixed; right: 0; width: 260px; border-left: 1px solid #30363d; z-index: 50; transition: 0.3s; }
-        .main-content { margin-right: 260px; padding: 30px; transition: 0.3s; }
-        .card { background-color: #161b22; border: 1px solid #30363d; border-radius: 16px; padding: 24px; }
-        .accent-green { color: #a3e635; }
-        .btn-green { background-color: #a3e635; color: black; font-weight: bold; border-radius: 12px; transition: 0.3s; }
-        .btn-green:hover { background-color: #8cbd2b; transform: translateY(-2px); shadow: 0 4px 15px rgba(163, 230, 53, 0.3); }
-        .hidden-page { display: none; }
-        input { background-color: #0d1117 !important; border: 1px solid #30363d !important; color: white !important; }
-        input:focus { border-color: #a3e635 !important; outline: none; }
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap');
+        body { font-family: 'Cairo', sans-serif; background: linear-gradient(to bottom, #0f172a, #1e293b); color: #e2e8f0; min-height: 100vh; }
+        .sidebar { background: #1e293b; border-left: 1px solid #334155; }
+        .card { background: #1e293b; border: 1px solid #334155; border-radius: 1rem; }
+        .accent-green { background: #84cc16; color: #000; }
+        .accent-green-text { color: #a3e635; }
+        .btn-accent { @apply bg-lime-500 text-black font-bold hover:bg-lime-400; }
+        .chart-line { height: 60px; background: linear-gradient(to right, transparent, #84cc16 50%, transparent); }
+        .hidden-section { display: none; }
+        input { @apply bg-slate-800 border border-slate-700 text-white rounded-lg p-3 focus:border-lime-500; }
     </style>
 </head>
 <body>
 
-    <div id="authPage" class="flex items-center justify-center min-h-screen">
-        <div class="card w-full max-w-md mx-4 shadow-2xl text-center">
-            <div class="mb-6">
-                <i class="fas fa-wallet text-5xl accent-green"></i>
+    <!-- صفحة الدخول (للموبايل أو غير مسجل) -->
+    <div id="authPage" class="flex items-center justify-center min-h-screen bg-gradient-to-br from-slate-900 to-slate-800">
+        <div class="card w-full max-w-md mx-8 p-8 shadow-2xl">
+            <div class="text-center mb-8">
+                <div class="w-20 h-20 mx-auto bg-lime-500 rounded-full flex items-center justify-center text-4xl">🍃</div>
                 <h1 class="text-3xl font-bold mt-4">Sudan Pay</h1>
-                <p class="text-gray-400 mt-2">مرحباً بك في مستقبل الدفع الإلكتروني</p>
+                <p class="text-slate-400 mt-2">مرحباً بك في مستقبل الدفع الإلكتروني</p>
             </div>
-
-            <div id="loginFields">
-                <input type="email" id="email" placeholder="البريد الإلكتروني" class="w-full p-4 mb-4 rounded-xl">
-                <input type="password" id="pass" placeholder="كلمة المرور" class="w-full p-4 mb-6 rounded-xl">
-                <button onclick="loginEmail()" class="w-full btn-green py-4 mb-4 text-lg">دخول</button>
-            </div>
-
-            <div class="flex items-center my-4 text-gray-500">
-                <hr class="flex-grow border-gray-700"> <span class="px-3">أو عبر</span> <hr class="flex-grow border-gray-700">
-            </div>
-
-            <button onclick="loginWithGoogle()" class="w-full bg-white text-black font-bold py-4 rounded-xl flex items-center justify-center gap-3 hover:bg-gray-200 transition">
+            <input type="email" id="email" placeholder="البريد الإلكتروني" class="w-full mb-4">
+            <input type="password" id="pass" placeholder="كلمة المرور" class="w-full mb-6">
+            <button onclick="loginEmail()" class="w-full btn-accent py-4 rounded-lg text-lg mb-4">تسجيل الدخول</button>
+            <button onclick="loginWithGoogle()" class="w-full bg-white text-black py-4 rounded-lg flex items-center justify-center gap-3">
                 <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-6" alt="Google">
                 الدخول بواسطة جوجل
             </button>
-            
-            <p class="mt-6 text-gray-400">ليس لديك حساب؟ <a href="#" onclick="alert('خدمة إنشاء الحساب ستتوفر قريباً، حالياً استخدم جوجل')" class="accent-green">أنشئ حساباً</a></p>
+            <p class="text-center mt-6 text-slate-400">ليس لديك حساب؟ <a href="#" class="accent-green-text">إنشاء حساب</a></p>
         </div>
     </div>
 
-    <div id="dashboardPage" class="hidden-page">
-        <aside class="sidebar p-6 shadow-xl">
-            <div class="flex items-center gap-3 mb-12 accent-green text-2xl font-bold">
-                <i class="fas fa-shield-halved"></i> SudanPay
+    <!-- الداشبورد الرئيسي -->
+    <div id="dashboardPage" class="hidden-section">
+        <aside class="sidebar fixed right-0 top-0 w-64 h-full p-6">
+            <div class="flex items-center gap-3 mb-12 text-2xl font-bold">
+                <div class="w-10 h-10 bg-lime-500 rounded-full flex items-center justify-center">🍃</div>
+                SudanPay
             </div>
-            <nav class="space-y-4">
-                <button onclick="showSection('overview')" class="w-full text-right p-4 hover:bg-gray-800 rounded-xl flex items-center gap-4 transition">
-                    <i class="fas fa-chart-pie"></i> الرئيسية
-                </button>
-                <button onclick="showSection('send')" class="w-full text-right p-4 hover:bg-gray-800 rounded-xl flex items-center gap-4 transition">
-                    <i class="fas fa-paper-plane"></i> إرسال أموال
-                </button>
-                <button onclick="showSection('history')" class="w-full text-right p-4 hover:bg-gray-800 rounded-xl flex items-center gap-4 transition">
-                    <i class="fas fa-history"></i> المعاملات
-                </button>
-                <div class="pt-10">
-                    <button onclick="logout()" class="w-full text-right p-4 hover:bg-red-900/30 rounded-xl flex items-center gap-4 text-red-500 transition">
-                        <i class="fas fa-right-from-bracket"></i> تسجيل الخروج
-                    </button>
-                </div>
+            <nav class="space-y-3">
+                <button onclick="showSection('dashboard')" class="w-full text-right p-4 rounded-xl bg-lime-500 text-black flex items-center gap-3"> <i class="fas fa-home"></i> Dashboard</button>
+                <button onclick="showSection('transactions')" class="w-full text-right p-4 rounded-xl hover:bg-slate-700 flex items-center gap-3"> <i class="fas fa-exchange-alt"></i> Transactions</button>
+                <button onclick="showSection('payments')" class="w-full text-right p-4 rounded-xl hover:bg-slate-700 flex items-center gap-3"> <i class="fas fa-credit-card"></i> Payments</button>
+                <button onclick="showSection('reports')" class="w-full text-right p-4 rounded-xl hover:bg-slate-700 flex items-center gap-3"> <i class="fas fa-chart-bar"></i> Reports</button>
+                <button onclick="showSection('settings')" class="w-full text-right p-4 rounded-xl hover:bg-slate-700 flex items-center gap-3"> <i class="fas fa-cog"></i> Settings</button>
+                <button class="w-full text-right p-4 rounded-xl hover:bg-slate-700 flex items-center gap-3"> <i class="fas fa-question-circle"></i> Help & Support</button>
+                <button onclick="logout()" class="w-full text-right p-4 rounded-xl text-red-500 hover:bg-red-900/20 flex items-center gap-3 mt-8"> <i class="fas fa-sign-out-alt"></i> تسجيل الخروج</button>
             </nav>
         </aside>
 
-        <main class="main-content">
-            <header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4">
-                <div>
-                    <h1 class="text-3xl font-bold">أهلاً، <span id="userName" class="accent-green">...</span></h1>
-                    <p class="text-gray-400 mt-1">طاب يومك، إليك ملخص محفظتك</p>
-                </div>
-                <div class="card py-3 px-6 border-l-4 border-l-[#a3e635]">
-                    <p class="text-xs text-gray-400 uppercase">الرصيد المتوفر</p>
-                    <div id="userBalance" class="text-2xl font-bold accent-green">0.00 SDG</div>
-                </div>
-            </header>
+        <main class="mr-64 p-8">
+            <h1 class="text-3xl font-bold mb-8">مرحباً، <span id="userName" class="accent-green-text">مستخدم</span></h1>
 
-            <div id="overviewSection" class="space-y-8">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div class="card bg-gradient-to-br from-[#161b22] to-[#1c2128]">
-                        <p class="text-gray-400 flex items-center gap-2"><i class="fas fa-arrow-up text-green-500"></i> إجمالي الدخل</p>
-                        <h3 class="text-2xl font-bold mt-2">1,250,000 <span class="text-sm">SDG</span></h3>
+            <!-- Dashboard Section -->
+            <div id="dashboardSection">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="card p-6">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-slate-400">إجمالي الإيرادات</p>
+                                <h3 class="text-2xl font-bold mt-2">5.43 مليون SDG</h3>
+                            </div>
+                            <div class="chart-line w-20"></div>
+                        </div>
                     </div>
-                    <div class="card">
-                        <p class="text-gray-400 flex items-center gap-2"><i class="fas fa-arrow-down text-red-500"></i> إجمالي المصاريف</p>
-                        <h3 class="text-2xl font-bold mt-2">450,000 <span class="text-sm">SDG</span></h3>
+                    <div class="card p-6">
+                        <div class="flex justify-between">
+                            <div>
+                                <p class="text-slate-400">إجمالي المعاملات</p>
+                                <h3 class="text-2xl font-bold mt-2">42.30</h3>
+                            </div>
+                            <i class="fas fa-wallet text-3xl text-lime-500"></i>
+                        </div>
                     </div>
-                    <div class="card border-dashed border-gray-600 flex items-center justify-center">
-                        <button onclick="showSection('send')" class="btn-green px-8 py-3">+ عملية جديدة</button>
+                    <div class="card p-6">
+                        <div class="flex justify-between">
+                            <div>
+                                <p class="text-slate-400">المستخدمين النشطين</p>
+                                <h3 class="text-2xl font-bold mt-2">57</h3>
+                            </div>
+                            <i class="fas fa-users text-3xl text-lime-500"></i>
+                        </div>
+                    </div>
+                    <div class="card p-6">
+                        <div class="flex justify-between">
+                            <div>
+                                <p class="text-slate-400">المدفوعات المعلقة</p>
+                                <h3 class="text-2xl font-bold mt-2">4</h3>
+                            </div>
+                            <i class="fas fa-clock text-3xl text-yellow-500"></i>
+                        </div>
                     </div>
                 </div>
-                
-                <div class="card">
-                    <h2 class="text-xl font-bold mb-6 flex items-center gap-2"><i class="fas fa-list-ul accent-green"></i> آخر العمليات</h2>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-right">
-                            <thead>
-                                <tr class="text-gray-500 border-b border-gray-800">
-                                    <th class="pb-4">العملية</th>
-                                    <th class="pb-4">التاريخ</th>
-                                    <th class="pb-4">المبلغ</th>
-                                    <th class="pb-4">الحالة</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-gray-800">
-                                <tr>
-                                    <td class="py-4 font-bold">شحن رصيد بنكك</td>
-                                    <td class="py-4 text-gray-400">2025-12-31</td>
-                                    <td class="py-4 accent-green">+50,000</td>
-                                    <td class="py-4"><span class="bg-green-900/30 text-green-500 px-3 py-1 rounded-full text-xs">ناجحة</span></td>
-                                </tr>
-                            </tbody>
-                        </table>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="lg:col-span-2 card p-6">
+                        <h2 class="text-xl font-bold mb-4">المعاملات الأخيرة</h2>
+                        <div class="h-64 bg-slate-800 rounded-lg flex items-center justify-center text-slate-500">رسم بياني هنا (بار/لاين)</div>
                     </div>
+                    <div class="card p-6">
+                        <h2 class="text-xl font-bold mb-4">إجراءات سريعة</h2>
+                        <div class="space-y-3">
+                            <button class="w-full btn-accent py-3 rounded-lg">إرسال دفعة</button>
+                            <button class="w-full btn-accent py-3 rounded-lg">طلب دفعة</button>
+                            <button class="w-full btn-accent py-3 rounded-lg">عرض التقارير</button>
+                            <button class="w-full bg-slate-700 py-3 rounded-lg">تواصل مع الدعم</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card p-6 mt-6">
+                    <h2 class="text-xl font-bold mb-4">أفضل العملاء</h2>
+                    <table class="w-full">
+                        <thead class="text-slate-400">
+                            <tr><th class="text-right pb-3">الاسم</th><th class="pb-3">البريد</th><th class="pb-3">آخر معاملة</th><th class="pb-3">الإجمالي</th></tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-700">
+                            <tr><td class="py-3">أحمد محمد</td><td>ahmed@email.com</td><td>2:92 AM</td><td class="accent-green-text">$122.0M</td></tr>
+                            <tr><td class="py-3">فاطمة علي</td><td>fatima@sudanpay</td><td>3:33 PM</td><td class="accent-green-text">$22.0M</td></tr>
+                            <!-- أضف المزيد -->
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
-            <div id="sendSection" class="hidden-page">
-                <div class="card max-w-2xl mx-auto shadow-2xl">
-                    <h2 class="text-2xl font-bold mb-6 accent-green">إرسال أموال فورياً</h2>
-                    <div class="space-y-6">
-                        <div>
-                            <label class="block mb-2 text-gray-400 text-sm">رقم محفظة المستلم</label>
-                            <input type="text" id="recipient" placeholder="SDP-0000-0000" class="w-full p-4 rounded-xl text-lg">
-                        </div>
-                        <div>
-                            <label class="block mb-2 text-gray-400 text-sm">المبلغ المراد تحويله</label>
-                            <input type="number" id="amount" placeholder="0.00 SDG" class="w-full p-4 rounded-xl text-lg">
-                        </div>
-                        <button onclick="processTransfer()" class="btn-green w-full py-5 text-xl mt-4">تأكيد العملية <i class="fas fa-check-circle mr-2"></i></button>
-                    </div>
-                </div>
-            </div>
+            <!-- Sections أخرى (transactions, payments, etc.) يمكن توسيعها لاحقاً -->
+            <div id="transactionsSection" class="hidden-section card p-8"><h2 class="text-2xl">المعاملات</h2><p>سيتم إضافة التفاصيل قريباً...</p></div>
+            <div id="paymentsSection" class="hidden-section card p-8"><h2 class="text-2xl">المدفوعات</h2><p>قسم المدفوعات...</p></div>
+            <div id="reportsSection" class="hidden-section card p-8"><h2 class="text-2xl">التقارير</h2><p>التقارير الشهرية...</p></div>
+            <div id="settingsSection" class="hidden-section card p-8"><h2 class="text-2xl">الإعدادات</h2><p>تعديل الحساب...</p></div>
         </main>
     </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-        // يتم استبدال هذه القيم تلقائياً عبر GitHub Actions
-        const firebaseConfig = {
-            apiKey: "REPLACE_WITH_API_KEY",
-            authDomain: "REPLACE_WITH_AUTH_DOMAIN",
-            projectId: "REPLACE_WITH_PROJECT_ID",
-            storageBucket: "sudanpay-e332a.appspot.com",
-            messagingSenderId: "699809447272",
-            appId: "1:699809447272:web:90f3780ed6c768c4322add"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-        const provider = new GoogleAuthProvider();
-
-        // مراقبة حالة المستخدم وتحويل الصفحات
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                document.getElementById('authPage').classList.add('hidden-page');
-                document.getElementById('dashboardPage').classList.remove('hidden-page');
-                document.getElementById('userName').innerText = user.displayName || "مستخدم سودان باي";
-                await checkUserAccount(user);
-            } else {
-                document.getElementById('authPage').classList.remove('hidden-page');
-                document.getElementById('dashboardPage').classList.add('hidden-page');
-            }
-        });
-
-        // التأكد من وجود حساب للمستخدم في قاعدة البيانات
-        async function checkUserAccount(user) {
-            const userRef = doc(db, "users", user.uid);
-            const snap = await getDoc(userRef);
-            if (!snap.exists()) {
-                await setDoc(userRef, { name: user.displayName, balance: 1000.00, email: user.email });
-                document.getElementById('userBalance').innerText = "1000.00 SDG";
-            } else {
-                document.getElementById('userBalance').innerText = snap.data().balance.toLocaleString() + " SDG";
-            }
-        }
-
-        // وظائف الأزرار
-        window.loginEmail = () => {
-            const email = document.getElementById('email').value;
-            const pass = document.getElementById('pass').value;
-            signInWithEmailAndPassword(auth, email, pass).catch(e => alert("خطأ: " + e.message));
-        };
-
-        window.loginWithGoogle = () => {
-            signInWithPopup(auth, provider).catch(e => alert("خطأ جوجل: " + e.message));
-        };
-
-        window.logout = () => signOut(auth);
-
-        window.showSection = (sectionId) => {
-            ['overview', 'send'].forEach(s => {
-                document.getElementById(s + 'Section').classList.add('hidden-page');
-            });
-            document.getElementById(sectionId + 'Section').classList.remove('hidden-page');
-        };
-
-        window.processTransfer = () => {
-            const amount = document.getElementById('amount').value;
-            if (!amount || amount <= 0) return alert("الرجاء إدخال مبلغ صحيح");
-            alert("جاري معالجة الطلب... سيتم التحديث فور اكتمال الربط البرمجي الكامل");
-        };
-    </script>
+    <script type="module" src="app.js"></script>
 </body>
-</html>
-
+                                                                                                      </html>
