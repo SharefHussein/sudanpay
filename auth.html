@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>تسجيل الدخول | SudanPay</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="auth-box">
+        <h2 id="authTitle">تسجيل الدخول</h2>
+        <form id="authForm">
+            <input type="text" id="fullName" placeholder="الاسم الكامل" style="display:none;">
+            <input type="email" id="email" placeholder="البريد الإلكتروني" required>
+            <input type="password" id="password" placeholder="كلمة المرور" required>
+            <button type="submit" class="btn-full" id="submitBtn">دخول</button>
+        </form>
+        <hr>
+        <button class="btn-full" style="background:#db4437;" id="googleBtn">
+            <i class="fab fa-google"></i> الدخول بواسطة جوجل
+        </button>
+        <p><a href="#" id="forgotPass">نسيت كلمة المرور؟</a></p>
+        <p id="toggleAuth">ليس لديك حساب؟ <a href="#">إنشاء حساب جديد</a></p>
+    </div>
+
+    <script type="module" src="auth-logic.js"></script>
+</body>
+</html>
