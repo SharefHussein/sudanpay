@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sudan Pay</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap');
+        body { font-family: 'Cairo', sans-serif; background-color: #f8f9fa; }
+        .accent-red { background-color: #C62828; }
+        .accent-red-text { color: #C62828; }
+        .icon-circle { @apply bg-white shadow-lg rounded-full w-20 h-20 flex items-center justify-center text-3xl accent-red-text; }
+        .btn-red { @apply bg-red-600 text-white font-bold rounded-full py-4 px-8 text-lg shadow-lg hover:bg-red-700 transition; }
+        .card-promo { @apply bg-white rounded-2xl shadow-lg p-6 flex items-center gap-6; }
+        .bottom-nav { @apply fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 flex justify-around py-3; }
+        .bottom-icon-active { @apply text-red-600; }
+        .hidden-section { display: none; }
+    </style>
+</head>
+<body class="pb-20">
+
+    <!-- صفحة الدخول -->
+    <div id="authPage" class="flex items-center justify-center min-h-screen bg-gradient-to-b from-red-50 to-white">
+        <div class="bg-white rounded-3xl shadow-2xl p-10 w-full max-w-md mx-8 text-center">
+            <div class="w-32 h-32 bg-red-600 rounded-full mx-auto flex items-center justify-center text-6xl text-white mb-8">
+                <i class="fas fa-wallet"></i>
+            </div>
+            <h1 class="text-4xl font-bold text-gray-800 mb-4">Sudan Pay</h1>
+            <p class="text-gray-600 mb-10 text-lg">محفظتك الإلكترونية الآمنة والسريعة</p>
+
+            <button onclick="loginWithGoogle()" class="w-full btn-red mb-6 flex items-center justify-center gap-4">
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-8" alt="Google">
+                الدخول بواسطة جوجل
+            </button>
+
+            <p class="text-gray-500">أو <a href="#" class="accent-red-text font-bold">إنشاء حساب جديد</a></p>
+        </div>
+    </div>
+
+    <!-- الصفحة الرئيسية بعد الدخول (Mobile Home) -->
+    <div id="dashboardPage" class="hidden-section">
+
+        <!-- Header -->
+        <header class="bg-white shadow-sm py-4 px-6 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <i class="fas fa-bars text-2xl text-gray-700"></i>
+                <h1 class="text-2xl font-bold">إجمالي الأصول</h1>
+            </div>
+            <img src="https://via.placeholder.com/40" alt="Profile" class="w-10 h-10 rounded-full">
+        </header>
+
+        <!-- زر إيداع كبير -->
+        <div class="px-6 mt-6">
+            <button class="w-full btn-red">إيداع</button>
+        </div>
+
+        <!-- Quick Actions Grid -->
+        <div class="grid grid-cols-4 gap-6 px-6 mt-10 text-center">
+            <div>
+                <div class="icon-circle mx-auto mb-2"><i class="fas fa-shopping-bag"></i></div>
+                <p class="text-sm text-gray-700">مشتريات الذهب</p>
+            </div>
+            <div>
+                <div class="icon-circle mx-auto mb-2"><i class="fas fa-star"></i></div>
+                <p class="text-sm text-gray-700">دعوة للكسب</p>
+            </div>
+            <div>
+                <div class="icon-circle mx-auto mb-2"><i class="fas fa-crown"></i></div>
+                <p class="text-sm text-gray-700">مركز المكافآت</p>
+            </div>
+            <div>
+                <div class="icon-circle mx-auto mb-2"><i class="fas fa-plus"></i></div>
+                <p class="text-sm text-gray-700">شراء سريع</p>
+            </div>
+            <div>
+                <div class="icon-circle mx-auto mb-2"><i class="fas fa-ellipsis-h"></i></div>
+                <p class="text-sm text-gray-700">المزيد</p>
+            </div>
+            <div>
+                <div class="icon-circle mx-auto mb-2"><i class="fas fa-ticket-alt"></i></div>
+                <p class="text-sm text-gray-700">تداول تجريبي</p>
+            </div>
+            <div>
+                <div class="icon-circle mx-auto mb-2"><i class="fas fa-envelope"></i></div>
+                <p class="text-sm text-gray-700">نسخ التداول</p>
+            </div>
+            <div>
+                <div class="icon-circle mx-auto mb-2"><i class="fas fa-gift"></i></div>
+                <p class="text-sm text-gray-700">Xpools</p>
+            </div>
+        </div>
+
+        <!-- كارت العرض الترويجي -->
+        <div class="px-6 mt-10">
+            <div class="card-promo">
+                <img src="https://via.placeholder.com/100" alt="Promo" class="rounded-xl">
+                <div class="flex-1">
+                    <p class="text-lg font-bold">شجرة أمنيات نجوم عام جديد: التقط النجوم لمدة 5 أيام لتربح مليون دولار!</p>
+                    <span class="text-sm text-gray-500 mt-2 block">6/2</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- مساحة فارغة للتمرير -->
+        <div class="h-32"></div>
+    </div>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="bottom-nav">
+        <button class="flex flex-col items-center text-gray-500">
+            <i class="fas fa-wallet text-2xl"></i>
+            <span class="text-xs mt-1">الأصول</span>
+        </button>
+        <button class="flex flex-col items-center text-gray-500">
+            <i class="fas fa-sync-alt text-2xl"></i>
+            <span class="text-xs mt-1">فوري</span>
+        </button>
+        <button class="flex flex-col items-center text-gray-500">
+            <i class="fas fa-chart-line text-2xl"></i>
+            <span class="text-xs mt-1">العقود الآجلة</span>
+        </button>
+        <button class="flex flex-col items-center text-gray-500">
+            <i class="fas fa-copy text-2xl"></i>
+            <span class="text-xs mt-1">الأسواق</span>
+        </button>
+        <button class="flex flex-col items-center bottom-icon-active">
+            <i class="fas fa-home text-2xl"></i>
+            <span class="text-xs mt-1">الرئيسية</span>
+        </button>
+    </nav>
+
+    <script type="module" src="app.js"></script>
+</body>
+  </html>
