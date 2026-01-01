@@ -1,45 +1,73 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-// هتتغير تلقائياً بالـ GitHub Actions
 const firebaseConfig = {
-    apiKey: "REPLACE_WITH_API_KEY",
-    authDomain: "REPLACE_WITH_AUTH_DOMAIN",
-    projectId: "REPLACE_WITH_PROJECT_ID",
-    storageBucket: "sudanpay-e332a.appspot.com",
-    messagingSenderId: "699809447272",
-    appId: "1:699809447272:web:90f3780ed6c768c4322add"
+  apiKey: "AIzaSyB3vxJu_et-P80ek30I3MRdC_lGhooCCsc",
+  authDomain: "sudanpay-e332a.firebaseapp.com",
+  projectId: "sudanpay-e332a",
+  storageBucket: "sudanpay-e332a.firebasestorage.app",
+  messagingSenderId: "699809447272",
+  appId: "1:699809447272:web:90f3780ed6c768c4322add",
+  measurementId: "G-XRN6CBLKXY"
 };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const db = getFirestore(app);
 const provider = new GoogleAuthProvider();
 
-onAuthStateChanged(auth, async (user) => {
+onAuthStateChanged(auth, (user) => {
     if (user) {
+        // المستخدم مسجل دخول → اظهر الداشبورد
         document.getElementById('authPage').classList.add('hidden-section');
         document.getElementById('dashboardPage').classList.remove('hidden-section');
-        document.getElementById('userName').innerText = user.displayName || "مستخدم";
+        
+        // تحديث الاسم في الداشبورد لو موجود
+        const userNameEl = document.getElementById('userName');
+        if (userNameEl) {
+            userNameEl.innerText = user.displayName || "مستخدم سودان باي";
+        }
+        
+        // اظهر القسم الرئيسي
         showSection('dashboard');
     } else {
+        // مفيش مستخدم → اظهر صفحة الدخول
         document.getElementById('authPage').classList.remove('hidden-section');
         document.getElementById('dashboardPage').classList.add('hidden-section');
     }
 });
 
 window.loginEmail = () => {
-    const email = document.getElementById('email').value;
+    const email = document.getElementById('email').value.trim();
     const pass = document.getElementById('pass').value;
-    signInWithEmailAndPassword(auth, email, pass).catch(e => alert("خطأ: " + e.message));
+    if (!email || !pass) {
+        alert("الرجاء إدخال البريد الإلكتروني وكلمة المرور");
+        return;
+    }
+    signInWithEmailAndPassword(auth, email, pass)
+        .catch((error) => {
+            alert("خطأ في الدخول: " + error.message);
+        });
 };
 
-window.loginWithGoogle = () => signInWithPopup(auth, provider);
+window.loginWithGoogle = () => {
+    signInWithPopup(auth, provider)
+        .catch((error) => {
+            alert("خطأ في الدخول بجوجل: " + error.message);
+        });
+};
 
-window.logout = () => signOut(auth);
+window.logout = () => {
+    signOut(auth).then(() => {
+        alert("تم تسجيل الخروج بنجاح");
+    });
+};
 
 window.showSection = (id) => {
-    document.querySelectorAll('[id$="Section"]').forEach(sec => sec.classList.add('hidden-section'));
-    document.getElementById(id + 'Section').classList.remove('hidden-section');
+    const sections = ['dashboard', 'transactions', 'payments', 'reports', 'settings'];
+    sections.forEach(s => {
+        const el = document.getElementById(s + 'Section');
+        if (el) el.classList.add('hidden-section');
+    });
+    const target = document.getElementById(id + 'Section');
+    if (target) target.classList.remove('hidden-section');
 };
