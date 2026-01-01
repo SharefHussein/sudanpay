@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sudan Pay - المحفظة</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap');
+        body { font-family: 'Cairo', sans-serif; background-color: #f5f7fa; }
+        .accent-green { background-color: #0d9488; }
+        .btn-green { @apply accent-green text-white font-bold rounded-xl py-4 shadow-lg hover:opacity-90 transition w-full; }
+        .icon-service { @apply bg-white rounded-2xl w-20 h-20 flex items-center justify-center shadow-md text-3xl accent-green-text; }
+        .card { @apply bg-white rounded-2xl shadow-md p-6 mb-6; }
+    </style>
+</head>
+<body class="pb-24">
+    <!-- الرصيد -->
+    <div class="card mx-6 mt-8 text-center">
+        <p class="text-gray-600 mb-2">رصيدك الحالي</p>
+        <h2 id="balance" class="text-5xl font-bold accent-green-text mb-6">جاري التحميل...</h2>
+        <div class="grid grid-cols-2 gap-4">
+            <button onclick="openSendModal()" class="btn-green">إرسال أموال</button>
+            <button onclick="openTransactions()" class="border border-teal-600 text-teal-600 font-bold rounded-xl py-4">كشف الحساب</button>
+        </div>
+    </div>
+
+    <!-- الخدمات -->
+    <div class="mx-6">
+        <h3 class="text-xl font-bold mb-6">الخدمات السريعة</h3>
+        <div class="grid grid-cols-4 gap-6 text-center mb-10">
+            <div><div class="icon-service mx-auto mb-3"><i class="fas fa-paper-plane"></i></div><p class="text-xs">إرسال</p></div>
+            <div><div class="icon-service mx-auto mb-3"><i class="fas fa-qrcode"></i></div><p class="text-xs">استلام</p></div>
+            <div><div class="icon-service mx-auto mb-3"><i class="fas fa-file-invoice-dollar"></i></div><p class="text-xs">فواتير</p></div>
+            <div><div class="icon-service mx-auto mb-3"><i class="fas fa-mobile-alt"></i></div><p class="text-xs">شحن هاتف</p></div>
+            <div><div class="icon-service mx-auto mb-3"><i class="fas fa-university"></i></div><p class="text-xs">بنوك</p></div>
+            <div><div class="icon-service mx-auto mb-3"><i class="fas fa-history"></i></div><p class="text-xs">السجل</p></div>
+            <div><div class="icon-service mx-auto mb-3"><i class="fas fa-gift"></i></div><p class="text-xs">عروض</p></div>
+            <div><div class="icon-service mx-auto mb-3"><i class="fas fa-headset"></i></div><p class="text-xs">دعم</p></div>
+        </div>
+    </div>
+
+    <!-- نموذج إرسال أموال -->
+    <div id="sendModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50 px-6">
+        <div class="bg-white rounded-2xl p-8 w-full max-w-md">
+            <h3 class="text-2xl font-bold mb-6">إرسال أموال</h3>
+            <input type="text" id="recipientPhone" placeholder="رقم الهاتف أو المحفظة" class="input-field">
+            <input type="number" id="sendAmount" placeholder="المبلغ (SDG)" class="input-field">
+            <div class="grid grid-cols-2 gap-4 mt-6">
+                <button onclick="closeModal('sendModal')" class="border border-gray-400 rounded-xl py-4">إلغاء</button>
+                <button onclick="sendMoney()" class="btn-green">تأكيد</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- سجل المعاملات -->
+    <div id="transactionsSection" class="hidden mx-6">
+        <h3 class="text-xl font-bold mb-4">آخر المعاملات</h3>
+        <div id="transactionsList" class="space-y-4">
+            <p class="text-center text-gray-500 py-8">لا توجد معاملات بعد</p>
+        </div>
+    </div>
+
+    <script type="module" src="app.js"></script>
+</body>
+                                                                       </html>
