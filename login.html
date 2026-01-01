@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sudan Pay - تسجيل الدخول</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap');
+        body { font-family: 'Cairo', sans-serif; background: linear-gradient(to bottom, #f0f9f8, #ffffff); }
+        .accent-green { background-color: #0d9488; }
+        .btn-green { @apply accent-green text-white font-bold rounded-xl py-4 text-lg shadow-lg hover:opacity-90 transition w-full; }
+        .input-field { @apply w-full p-4 border border-gray-300 rounded-xl mb-4 focus:border-teal-600 focus:outline-none; }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen px-6">
+    <div class="bg-white rounded-3xl shadow-2xl p-10 w-full max-w-md text-center">
+        <div class="w-28 h-28 accent-green rounded-full mx-auto flex items-center justify-center text-6xl text-white mb-8">
+            <i class="fas fa-wallet"></i>
+        </div>
+        <h1 class="text-4xl font-bold text-gray-800 mb-4">Sudan Pay</h1>
+        <p class="text-gray-600 mb-10 text-lg">محفظتك الإلكترونية الآمنة والسريعة</p>
+
+        <input type="text" id="email" placeholder="البريد الإلكتروني أو رقم الهاتف" class="input-field">
+        <input type="password" id="pass" placeholder="كلمة المرور" class="input-field">
+
+        <button onclick="loginEmail()" class="btn-green mb-6">تسجيل الدخول</button>
+
+        <button onclick="signUpEmail()" class="border border-teal-600 text-teal-600 font-bold rounded-xl py-4 mb-8 hover:bg-teal-50 transition w-full">
+            إنشاء حساب جديد
+        </button>
+
+        <div class="flex items-center mb-8 text-gray-500">
+            <hr class="flex-grow border-gray-300">
+            <span class="px-6">أو</span>
+            <hr class="flex-grow border-gray-300">
+        </div>
+
+        <button onclick="loginWithGoogle()" class="w-full border border-gray-300 rounded-xl py-4 flex items-center justify-center gap-4 hover:bg-gray-50 transition">
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-8" alt="Google">
+            الدخول بواسطة جوجل
+        </button>
+    </div>
+
+    <script type="module" src="app.js"></script>
+</body>
+</html>
