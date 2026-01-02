@@ -1,56 +1,108 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SudanPay | المحفظة الرقمية السودانية</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sudan Pay - تسجيل الدخول</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Cairo', sans-serif; background: #f8f9fa; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+    .login-container {
+      background: white;
+      width: 90%;
+      max-width: 400px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      padding: 40px 30px;
+      text-align: center;
+    }
+    .logo {
+      width: 120px;
+      margin-bottom: 30px;
+    }
+    h1 {
+      font-size: 28px;
+      color: #2c3e50;
+      margin-bottom: 10px;
+    }
+    p {
+      color: #7f8c8d;
+      margin-bottom: 30px;
+      font-size: 16px;
+    }
+    .input-group {
+      margin-bottom: 20px;
+    }
+    input {
+      width: 100%;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      font-size: 16px;
+    }
+    input:focus {
+      border-color: #0d9488;
+      outline: none;
+    }
+    .btn-primary {
+      background: #0d9488;
+      color: white;
+      padding: 15px;
+      border: none;
+      border-radius: 12px;
+      font-size: 18px;
+      width: 100%;
+      cursor: pointer;
+      margin-bottom: 20px;
+    }
+    .btn-google {
+      background: #ffffff;
+      color: #333;
+      border: 1px solid #ddd;
+      padding: 15px;
+      border-radius: 12px;
+      font-size: 16px;
+      width: 100%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    .link {
+      color: #0d9488;
+      text-decoration: none;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
+  <div class="login-container">
+    <img src="logo.png" alt="Sudan Pay" class="logo">
+    <h1>مرحباً بك في Sudan Pay</h1>
+    <p>سجل دخولك للوصول إلى محفظتك</p>
 
-    <nav class="navbar">
-        <div class="logo">
-            <img src="logo.png" alt="SudanPay">
-            <span>SudanPay</span>
-        </div>
-        <div class="nav-links">
-            <a href="#about">من نحن</a>
-            <a href="#features">كيفية العمل</a>
-            <a href="auth.html" class="btn-login">تسجيل الدخول</a>
-        </div>
-    </nav>
+    <div class="input-group">
+      <input type="email" id="email" placeholder="البريد الإلكتروني أو رقم الهاتف">
+    </div>
+    <div class="input-group">
+      <input type="password" id="password" placeholder="كلمة المرور">
+    </div>
 
-    <section class="hero">
-        <h1>حول أموالك و USDT بكل سهولة في السودان</h1>
-        <p>منصة آمنة، سريعة، وبأفضل أسعار الصرف.</p>
-        <div class="hero-btns">
-            <a href="auth.html" class="btn-main">ابدأ الآن مجاناً</a>
-            <a href="#support" class="btn-sub">تحدث مع الدعم</a>
-        </div>
-    </section>
+    <button id="login-btn" class="btn-primary">تسجيل الدخول</button>
 
-    <section id="features" class="features">
-        <h2>لماذا SudanPay؟</h2>
-        <div class="features-grid">
-            <div class="f-card"><i class="fas fa-shield-alt"></i> <h3>أمان عالي</h3><p>تشفير كامل لبياناتك ومعاملاتك.</p></div>
-            <div class="f-card"><i class="fas fa-coins"></i> <h3>تبديل USDT</h3><p>حول عملاتك الرقمية لجنيه سوداني فوراً.</p></div>
-            <div class="f-card"><i class="fas fa-history"></i> <h3>كشف حساب</h3><p>سجل كامل لكل التحويلات والعمليات.</p></div>
-        </div>
-    </section>
+    <button id="google-btn" class="btn-google">
+      <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20">
+      الدخول بجوجل
+    </button>
 
-    <footer>
-        <div class="footer-content">
-            <p>&copy; 2026 SudanPay. جميع الحقوق محفوظة.</p>
-            <div class="f-links">
-                <a href="privacy.html">سياسة الخصوصية</a>
-                <a href="terms.html">الشروط والأحكام</a>
-            </div>
-        </div>
-    </footer>
+    <p class="mt-20">
+      ليس لديك حساب؟ <a href="#" id="signup-link" class="link">إنشاء حساب جديد</a>
+    </p>
+  </div>
 
-    <script type="module" src="app.js"></script>
+  <script type="module" src="app.js"></script>
 </body>
 </html>
-
