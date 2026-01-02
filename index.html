@@ -1,202 +1,393 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sudan Pay - تسجيل الدخول</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { 
-      font-family: 'Cairo', sans-serif; 
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
-      display: flex; 
-      justify-content: center; 
-      align-items: center; 
-      min-height: 100vh;
-      padding: 20px;
-    }
-    .login-container {
-      background: white;
-      width: 90%;
-      max-width: 400px;
-      border-radius: 20px;
-      box-shadow: 0 15px 30px rgba(0,0,0,0.2);
-      padding: 40px 30px;
-      text-align: center;
-    }
-    .logo {
-      font-size: 48px;
-      color: #0d9488;
-      margin-bottom: 20px;
-    }
-    h1 {
-      font-size: 28px;
-      color: #2c3e50;
-      margin-bottom: 10px;
-    }
-    p {
-      color: #7f8c8d;
-      margin-bottom: 30px;
-      font-size: 16px;
-    }
-    .input-group {
-      margin-bottom: 20px;
-      position: relative;
-    }
-    input {
-      width: 100%;
-      padding: 15px 45px 15px 15px;
-      border: 2px solid #ddd;
-      border-radius: 12px;
-      font-size: 16px;
-      transition: all 0.3s;
-    }
-    input:focus {
-      border-color: #0d9488;
-      outline: none;
-      box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.1);
-    }
-    .input-icon {
-      position: absolute;
-      right: 15px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: #888;
-    }
-    .password-toggle {
-      position: absolute;
-      left: 15px;
-      top: 50%;
-      transform: translateY(-50%);
-      background: none;
-      border: none;
-      color: #888;
-      cursor: pointer;
-      font-size: 16px;
-      padding: 5px;
-    }
-    .btn-primary {
-      background: linear-gradient(to right, #0d9488, #0f766e);
-      color: white;
-      padding: 15px;
-      border: none;
-      border-radius: 12px;
-      font-size: 18px;
-      font-weight: 600;
-      width: 100%;
-      cursor: pointer;
-      margin-bottom: 20px;
-      transition: all 0.3s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-    }
-    .btn-primary:hover:not(:disabled) {
-      transform: translateY(-2px);
-      box-shadow: 0 7px 14px rgba(13, 148, 136, 0.2);
-    }
-    .btn-primary:disabled {
-      opacity: 0.7;
-      cursor: not-allowed;
-    }
-    .btn-google {
-      background: white;
-      color: #333;
-      border: 2px solid #ddd;
-      padding: 15px;
-      border-radius: 12px;
-      font-size: 16px;
-      font-weight: 600;
-      width: 100%;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      transition: all 0.3s;
-    }
-    .btn-google:hover:not(:disabled) {
-      background: #f8f9fa;
-      border-color: #ccc;
-      transform: translateY(-2px);
-    }
-    .btn-google:disabled {
-      opacity: 0.7;
-      cursor: not-allowed;
-    }
-    .divider {
-      display: flex;
-      align-items: center;
-      margin: 20px 0;
-      color: #888;
-    }
-    .divider::before,
-    .divider::after {
-      content: '';
-      flex: 1;
-      border-bottom: 1px solid #ddd;
-    }
-    .divider span {
-      padding: 0 15px;
-    }
-    .link {
-      color: #0d9488;
-      text-decoration: none;
-      font-weight: bold;
-    }
-    .link:hover {
-      text-decoration: underline;
-    }
-    .mt-20 {
-      margin-top: 20px;
-    }
-    .fa-eye, .fa-eye-slash {
-      pointer-events: none;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sudan Pay - تسجيل الدخول</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #0d9488;
+            --primary-dark: #0f766e;
+            --secondary: #0891b2;
+            --accent: #10b981;
+            --dark: #0f172a;
+            --dark-light: #1e293b;
+            --light: #f8fafc;
+            --gray: #94a3b8;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --border: #e2e8f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            background: white;
+            width: 100%;
+            max-width: 450px;
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            padding: 50px 40px;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 4rem;
+            color: var(--primary);
+            margin-bottom: 25px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            color: var(--dark);
+            margin-bottom: 10px;
+            font-weight: 800;
+        }
+
+        .subtitle {
+            color: var(--gray);
+            margin-bottom: 40px;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+            font-size: 1.2rem;
+        }
+
+        input {
+            width: 100%;
+            padding: 18px 60px 18px 20px;
+            border: 2px solid var(--border);
+            border-radius: 14px;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            background: #f8fafc;
+        }
+
+        input:focus {
+            border-color: var(--primary);
+            outline: none;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(13, 148, 136, 0.1);
+        }
+
+        .password-toggle {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--gray);
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 5px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(to right, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: 14px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            margin: 10px 0 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            box-shadow: 0 8px 20px rgba(13, 148, 136, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(13, 148, 136, 0.4);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 30px 0;
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .divider span {
+            padding: 0 20px;
+        }
+
+        .btn-google {
+            background: white;
+            color: var(--dark);
+            border: 2px solid var(--border);
+            padding: 18px;
+            border-radius: 14px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .btn-google:hover {
+            background: #f8fafc;
+            border-color: #cbd5e1;
+            transform: translateY(-2px);
+        }
+
+        .btn-google:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .auth-footer {
+            text-align: center;
+            color: var(--gray);
+            font-size: 1rem;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        .auth-footer a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 700;
+            transition: color 0.3s;
+        }
+
+        .auth-footer a:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 40px 25px;
+                margin: 10px;
+            }
+            
+            .logo {
+                font-size: 3.5rem;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            input, .btn-primary, .btn-google {
+                padding: 16px;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="login-container">
-    <div class="logo">
-      <i class="fas fa-wallet"></i>
+    <div class="login-container">
+        <div class="logo">
+            <i class="fas fa-wallet"></i>
+        </div>
+        
+        <h1>مرحباً بك في Sudan Pay</h1>
+        <p class="subtitle">سجل دخولك للوصول إلى محفظتك الرقمية الآمنة</p>
+        
+        <div class="input-group">
+            <i class="fas fa-envelope input-icon"></i>
+            <input type="email" id="email" placeholder="البريد الإلكتروني" required>
+        </div>
+        
+        <div class="input-group">
+            <i class="fas fa-lock input-icon"></i>
+            <button type="button" class="password-toggle" onclick="togglePassword()">
+                <i class="fas fa-eye"></i>
+            </button>
+            <input type="password" id="password" placeholder="كلمة المرور" required>
+        </div>
+        
+        <button id="login-btn" class="btn-primary">
+            <i class="fas fa-sign-in-alt"></i> تسجيل الدخول
+        </button>
+        
+        <div class="divider">
+            <span>أو</span>
+        </div>
+        
+        <button id="google-btn" class="btn-google">
+            <i class="fab fa-google"></i> الدخول بجوجل
+        </button>
+        
+        <div class="auth-footer">
+            <p>ليس لديك حساب؟ <a href="auth.html" id="signup-link">إنشاء حساب جديد</a></p>
+        </div>
     </div>
-    <h1>مرحباً بك في Sudan Pay</h1>
-    <p>سجل دخولك للوصول إلى محفظتك</p>
-    
-    <div class="input-group">
-      <i class="fas fa-envelope input-icon"></i>
-      <input type="email" id="email" placeholder="البريد الإلكتروني" required>
-    </div>
-    
-    <div class="input-group">
-      <i class="fas fa-lock input-icon"></i>
-      <button type="button" class="password-toggle">
-        <i class="fas fa-eye"></i>
-      </button>
-      <input type="password" id="password" placeholder="كلمة المرور" required>
-    </div>
-    
-    <button id="login-btn" class="btn-primary">
-      <i class="fas fa-sign-in-alt"></i> تسجيل الدخول
-    </button>
-    
-    <div class="divider">
-      <span>أو</span>
-    </div>
-    
-    <button id="google-btn" class="btn-google">
-      <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20">
-      الدخول بجوجل
-    </button>
-    
-    <p class="mt-20">
-      ليس لديك حساب؟ <a href="signup.html" id="signup-link" class="link">إنشاء حساب جديد</a>
-    </p>
-  </div>
 
-  <script type="module" src="app.js"></script>
+    <script type="module">
+        import { loginWithEmail, loginWithGoogle, showAlert } from './app.js';
+        
+        // دالة تبديل كلمة المرور
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const toggleIcon = document.querySelector('.password-toggle i');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.className = 'fas fa-eye-slash';
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.className = 'fas fa-eye';
+            }
+        }
+        
+        // دالة تسجيل الدخول
+        async function handleLogin() {
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const loginBtn = document.getElementById('login-btn');
+            
+            if (!email || !password) {
+                showAlert('الرجاء إدخال البريد الإلكتروني وكلمة المرور');
+                return;
+            }
+            
+            try {
+                loginBtn.innerHTML = '<div class="loading"></div> جاري تسجيل الدخول...';
+                loginBtn.disabled = true;
+                
+                await loginWithEmail(email, password);
+                showAlert('تم تسجيل الدخول بنجاح!', 'success');
+                
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 1500);
+                
+            } catch (error) {
+                loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> تسجيل الدخول';
+                loginBtn.disabled = false;
+                
+                let errorMessage = 'حدث خطأ أثناء تسجيل الدخول';
+                if (error.code === 'auth/user-not-found') {
+                    errorMessage = 'البريد الإلكتروني غير مسجل';
+                } else if (error.code === 'auth/wrong-password') {
+                    errorMessage = 'كلمة المرور غير صحيحة';
+                } else if (error.code === 'auth/invalid-email') {
+                    errorMessage = 'البريد الإلكتروني غير صالح';
+                }
+                
+                showAlert(errorMessage);
+            }
+        }
+        
+        // دالة تسجيل الدخول بجوجل
+        async function handleGoogleLogin() {
+            const googleBtn = document.getElementById('google-btn');
+            
+            try {
+                googleBtn.innerHTML = '<div class="loading"></div> جاري الاتصال بجوجل...';
+                googleBtn.disabled = true;
+                
+                await loginWithGoogle();
+                showAlert('تم تسجيل الدخول بجوجل بنجاح!', 'success');
+                
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 1500);
+                
+            } catch (error) {
+                googleBtn.innerHTML = '<i class="fab fa-google"></i> الدخول بجوجل';
+                googleBtn.disabled = false;
+                
+                let errorMessage = 'حدث خطأ أثناء تسجيل الدخول بجوجل';
+                if (error.code === 'auth/popup-closed-by-user') {
+                    errorMessage = 'تم إغلاق نافذة تسجيل الدخول';
+                }
+                
+                showAlert(errorMessage);
+            }
+        }
+        
+        // ربط الأحداث
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('login-btn').addEventListener('click', handleLogin);
+            document.getElementById('google-btn').addEventListener('click', handleGoogleLogin);
+            
+            // تسجيل الدخول بالضغط على Enter
+            document.getElementById('password').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    handleLogin();
+                }
+            });
+            
+            // رابط إنشاء حساب
+            document.getElementById('signup-link').addEventListener('click', (e) => {
+                e.preventDefault();
+                window.location.href = 'auth.html';
+            });
+        });
+        
+        // جعل الدوال متاحة عالمياً
+        window.togglePassword = togglePassword;
+    </script>
 </body>
-</html>
+          </html> 
