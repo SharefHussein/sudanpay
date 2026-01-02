@@ -1,42 +1,32 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>السودان بي - تسجيل الدخول</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-    <style>
-        body { background-color: #f8f9fa; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; }
-        .auth-card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 400px; text-align: center; }
-        .btn-google { background-color: #df4b3b; color: white; margin-top: 10px; }
-        .btn-google:hover { background-color: #c53929; color: white; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SudanPay | تسجيل الدخول</title>
+<link rel="stylesheet" href="style.css">
 </head>
-<body>
-    <div class="auth-card">
-        <img src="logo.png" alt="SudanPay" style="width: 120px; margin-bottom: 20px;">
-        <h4 id="auth-title" class="mb-4">تسجيل الدخول</h4>
-        
-        <div class="mb-3">
-            <input type="email" id="email" class="form-control text-end" placeholder="البريد الإلكتروني">
-        </div>
-        <div class="mb-3">
-            <input type="password" id="password" class="form-control text-end" placeholder="كلمة المرور">
-        </div>
-        
-        <button id="login-btn" class="btn btn-primary w-100 mb-2">دخول</button>
-        <button id="google-btn" class="btn btn-google w-100">الدخول بواسطة جوجل</button>
-        
-        <div class="mt-3">
-            <a href="#" id="toggle-auth" class="text-decoration-none small">ليس لديك حساب؟ إنشاء حساب جديد</a>
-        </div>
-    </div>
 
-    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth-compat.js"></script>
-    <script src="app.js"></script>
-    <script src="auth-logic.js"></script>
+<body style="display:flex;justify-content:center;align-items:center;height:100vh;background:#f5f5f5;">
+
+<div style="background:white;padding:25px;border-radius:10px;width:320px;text-align:center;">
+  <img src="logo.png" width="120"><br><br>
+
+  <h3 id="auth-title">تسجيل الدخول</h3>
+
+  <input id="email" type="email" placeholder="البريد الإلكتروني" style="width:100%;padding:8px;margin:5px 0;">
+  <input id="password" type="password" placeholder="كلمة المرور" style="width:100%;padding:8px;margin:5px 0;">
+
+  <button id="login-btn" style="width:100%;padding:10px;">دخول</button>
+  <button id="google-btn" style="width:100%;padding:10px;margin-top:5px;background:#db4437;color:white;">
+    الدخول عبر Google
+  </button>
+
+  <a href="#" id="toggle-auth" style="display:block;margin-top:10px;">
+    ليس لديك حساب؟ إنشاء حساب
+  </a>
+</div>
+
+<script type="module" src="auth-logic.js"></script>
 </body>
 </html>
-
