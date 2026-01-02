@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SudanPay | تسجيل الدخول</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="auth-body">
+  <div class="auth-container">
+    <img src="logo.png" alt="SudanPay" class="auth-logo">
+    <h2 class="text-3xl font-bold mb-8">تسجيل الدخول</h2>
+
+    <input id="email" type="email" placeholder="البريد الإلكتروني" class="auth-input">
+    <input id="password" type="password" placeholder="كلمة المرور" class="auth-input">
+
+    <button onclick="loginEmail()" class="btn-main mb-6">دخول</button>
+
+    <button onclick="loginWithGoogle()" class="btn-google mb-6">
+      <i class="fab fa-google"></i> الدخول عبر Google
+    </button>
+
+    <p class="toggle-link">
+      ليس لديك حساب؟ <a href="auth.html" class="text-teal-600 font-bold">إنشاء حساب جديد</a>
+    </p>
+  </div>
+
+  <script type="module" src="login-logic.js"></script>
+</body>
+</html>
