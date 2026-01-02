@@ -1,32 +1,26 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SudanPay | تسجيل الدخول</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SudanPay | إنشاء حساب</title>
+  <link rel="stylesheet" href="style.css">
 </head>
+<body class="auth-body">
+  <div class="auth-container">
+    <img src="logo.png" alt="SudanPay" class="auth-logo">
+    <h2 class="text-3xl font-bold mb-8">إنشاء حساب جديد</h2>
 
-<body style="display:flex;justify-content:center;align-items:center;height:100vh;background:#f5f5f5;">
+    <input id="email" type="email" placeholder="البريد الإلكتروني" class="auth-input">
+    <input id="password" type="password" placeholder="كلمة المرور (6 أحرف على الأقل)" class="auth-input">
 
-<div style="background:white;padding:25px;border-radius:10px;width:320px;text-align:center;">
-  <img src="logo.png" width="120"><br><br>
+    <button onclick="signUpEmail()" class="btn-main mb-6">إنشاء الحساب</button>
 
-  <h3 id="auth-title">تسجيل الدخول</h3>
+    <p class="toggle-link">
+      لديك حساب بالفعل؟ <a href="login.html" class="text-teal-600 font-bold">تسجيل الدخول</a>
+    </p>
+  </div>
 
-  <input id="email" type="email" placeholder="البريد الإلكتروني" style="width:100%;padding:8px;margin:5px 0;">
-  <input id="password" type="password" placeholder="كلمة المرور" style="width:100%;padding:8px;margin:5px 0;">
-
-  <button id="login-btn" style="width:100%;padding:10px;">دخول</button>
-  <button id="google-btn" style="width:100%;padding:10px;margin-top:5px;background:#db4437;color:white;">
-    الدخول عبر Google
-  </button>
-
-  <a href="#" id="toggle-auth" style="display:block;margin-top:10px;">
-    ليس لديك حساب؟ إنشاء حساب
-  </a>
-</div>
-
-<script type="module" src="auth-logic.js"></script>
+  <script type="module" src="auth-logic.js"></script>
 </body>
 </html>
