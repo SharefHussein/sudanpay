@@ -1,7 +1,28 @@
-<div class="auth-box">
-    <h3>إرسال أموال (SDG)</h3>
-    <input type="text" id="receiverID" placeholder="أدخل ID المستلم (مثلاً SP-123456)">
-    <input type="number" id="sendAmount" placeholder="المبلغ">
-    <button onclick="processTransfer()" class="btn-full">تأكيد الإرسال</button>
-    <div id="transferStatus"></div>
-</div>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sudan Pay - إرسال أموال</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="dashboard-body">
+  <div class="container">
+    <h2 class="text-3xl font-bold text-center mb-10">إرسال أموال</h2>
+
+    <div class="card">
+      <p class="text-lg text-gray-600 mb-4">رصيدك الحالي: <strong id="currentBalance" class="text-teal-600 text-2xl">جاري التحميل...</strong></p>
+
+      <input type="text" id="recipientID" placeholder="رقم حساب المستلم (SP-XXXXXX)" class="auth-input mb-6">
+      <input type="number" id="sendAmount" placeholder="المبلغ بالجنيه السوداني" class="auth-input mb-10">
+
+      <button onclick="sendMoney()" class="btn-main text-xl py-6">تأكيد الإرسال</button>
+      <div id="sendStatus" class="mt-6 text-center text-lg"></div>
+    </div>
+
+    <a href="dashboard.html" class="block text-center text-teal-600 mt-8 text-lg">العودة للمحفظة</a>
+  </div>
+
+  <script type="module" src="send-logic.js"></script>
+</body>
+</html>
