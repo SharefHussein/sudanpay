@@ -1,7 +1,5 @@
-// app.js - كامل لكل الصفحات
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, doc, setDoc, getDoc, updateDoc, arrayUnion, serverTimestamp, increment } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyB3vxJu_et-P80ek30I3MRdC_lGhooCCsc",
@@ -14,28 +12,42 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-export const auth = getAuth(app);
-export const db = getFirestore(app);
-export const provider = new GoogleAuthProvider();
+const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
 
-// توليد ID عشوائي لكل مستخدم
-export function generateAccountID() {
-  const random = Math.floor(100000 + Math.random() * 900000);
-  return `SP-${random}`;
-}
-
-// مراقبة الدخول (حماية الصفحات)
-onAuthStateChanged(auth, (user) => {
-  const protectedPages = ['dashboard.html', 'profile.html', 'send.html', 'receive.html', 'transactions.html', 'settings.html', 'support.html'];
-  const authPages = ['auth.html', 'login.html'];
-
-  if (user) {
-    if (authPages.some(page => window.location.pathname.includes(page))) {
-      window.location.href = "dashboard.html";
-    }
-  } else {
-    if (protectedPages.some(page => window.location.pathname.includes(page))) {
-      window.location.href = "login.html";
-    }
+// تسجيل الدخول بالإيميل
+document.getElementById("login-btn").onclick = () => {
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+  if (!email || !password) {
+    alert("أدخل البريد وكلمة المرور");
+    return;
   }
-});
+  signInWithEmailAndPassword(auth, email, password)
+    .then(() => window.location.href = "dashboard.html")
+    .catch(e => alert("خطأ: " + e.message));
+};
+
+// الدخول بجوجل
+document.getElementById("google-btn").onclick = () => {
+  signInWithPopup(auth, provider)
+    .then(() => window.location.href = "dashboard.html")
+    .catch(e => alert("خطأ في الدخول بجوجل: " + e.message));
+};
+
+// إنشاء حساب (لو عايز زر منفصل)
+document.getElementById("signup-link").onclick = (e) => {
+  e.preventDefault();
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+  if (!email || !password) {
+    alert("أدخل البريد وكلمة المرور");
+    return;
+  }
+  createUserWithEmailAndPassword(auth, email, password)
+    .then(() => {
+      alert("تم إنشاء الحساب!");
+      window.location.href = "dashboard.html";
+    })
+    .catch(e => alert("خطأ: " + e.message));
+};
