@@ -150,35 +150,6 @@
     .link:hover {
       text-decoration: underline;
     }
-    .alert {
-      padding: 12px 15px;
-      border-radius: 10px;
-      margin-bottom: 20px;
-      display: none;
-      align-items: center;
-      gap: 10px;
-      animation: slideIn 0.3s ease;
-    }
-    .alert.error {
-      background: #fee;
-      border: 1px solid #fcc;
-      color: #c00;
-    }
-    .alert.success {
-      background: #efffef;
-      border: 1px solid #cfc;
-      color: #090;
-    }
-    @keyframes slideIn {
-      from {
-        transform: translateY(-20px);
-        opacity: 0;
-      }
-      to {
-        transform: translateY(0);
-        opacity: 1;
-      }
-    }
     .mt-20 {
       margin-top: 20px;
     }
@@ -195,8 +166,6 @@
     <h1>مرحباً بك في Sudan Pay</h1>
     <p>سجل دخولك للوصول إلى محفظتك</p>
     
-    <div id="alert" class="alert" style="display: none;"></div>
-    
     <div class="input-group">
       <i class="fas fa-envelope input-icon"></i>
       <input type="email" id="email" placeholder="البريد الإلكتروني" required>
@@ -204,7 +173,7 @@
     
     <div class="input-group">
       <i class="fas fa-lock input-icon"></i>
-      <button type="button" class="password-toggle" onclick="togglePassword()">
+      <button type="button" class="password-toggle">
         <i class="fas fa-eye"></i>
       </button>
       <input type="password" id="password" placeholder="كلمة المرور" required>
@@ -219,7 +188,7 @@
     </div>
     
     <button id="google-btn" class="btn-google">
-      <img src="https://www.gstatic.com/firebasejs/ui/10.12.2/images/auth/google.svg" width="20">
+      <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20">
       الدخول بجوجل
     </button>
     
@@ -228,213 +197,6 @@
     </p>
   </div>
 
-  <!-- Firebase SDK v10.12.2 -->
-  <script type="module">
-    // Import the functions you need from the SDKs you need
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { 
-      getAuth, 
-      signInWithEmailAndPassword, 
-      signInWithPopup, 
-      GoogleAuthProvider,
-      onAuthStateChanged 
-    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-    import { 
-      getFirestore, 
-      doc, 
-      setDoc, 
-      getDoc 
-    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-    // Your web app's Firebase configuration
-    const firebaseConfig = {
-      apiKey: "AIzaSyB3vxJu_et-P80ek30I3MRdC_lGhooCCsc",
-      authDomain: "sudanpay-e332a.firebaseapp.com",
-      projectId: "sudanpay-e332a",
-      storageBucket: "sudanpay-e332a.firebasestorage.app",
-      messagingSenderId: "699809447272",
-      appId: "1:699809447272:web:90f3780ed6c768c4322add",
-      measurementId: "G-XRN6CBLKXY"
-    };
-
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-    const googleProvider = new GoogleAuthProvider();
-
-    // دالة لعرض التنبيهات
-    function showAlert(message, type = 'error') {
-      const alertDiv = document.getElementById('alert');
-      alertDiv.textContent = message;
-      alertDiv.className = `alert ${type}`;
-      alertDiv.style.display = 'flex';
-      
-      setTimeout(() => {
-        alertDiv.style.display = 'none';
-      }, 5000);
-    }
-
-    // دالة تبديل رؤية كلمة المرور
-    function togglePassword() {
-      const passwordInput = document.getElementById('password');
-      const toggleIcon = document.querySelector('.password-toggle i');
-      
-      if (passwordInput.type === 'password') {
-        passwordInput.type = 'text';
-        toggleIcon.className = 'fas fa-eye-slash';
-      } else {
-        passwordInput.type = 'password';
-        toggleIcon.className = 'fas fa-eye';
-      }
-    }
-
-    // دالة تسجيل الدخول بالبريد الإلكتروني
-    async function loginWithEmail() {
-      const email = document.getElementById('email').value.trim();
-      const password = document.getElementById('password').value;
-      const loginBtn = document.getElementById('login-btn');
-      
-      if (!email || !password) {
-        showAlert('الرجاء إدخال البريد الإلكتروني وكلمة المرور');
-        return;
-      }
-      
-      try {
-        // عرض حالة التحميل
-        loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري تسجيل الدخول...';
-        loginBtn.disabled = true;
-        
-        const userCredential = await signInWithEmailAndPassword(auth, email, password);
-        const user = userCredential.user;
-        
-        showAlert('تم تسجيل الدخول بنجاح!', 'success');
-        
-        // الانتقال إلى لوحة التحكم
-        setTimeout(() => {
-          window.location.href = 'dashboard.html';
-        }, 1500);
-        
-      } catch (error) {
-        // إعادة تعيين الزر
-        loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> تسجيل الدخول';
-        loginBtn.disabled = false;
-        
-        let errorMessage = 'حدث خطأ أثناء تسجيل الدخول';
-        
-        switch(error.code) {
-          case 'auth/invalid-email':
-            errorMessage = 'البريد الإلكتروني غير صالح';
-            break;
-          case 'auth/user-not-found':
-            errorMessage = 'البريد الإلكتروني غير مسجل';
-            break;
-          case 'auth/wrong-password':
-            errorMessage = 'كلمة المرور غير صحيحة';
-            break;
-          case 'auth/user-disabled':
-            errorMessage = 'تم تعطيل هذا الحساب';
-            break;
-          case 'auth/too-many-requests':
-            errorMessage = 'محاولات كثيرة جداً، حاول لاحقاً';
-            break;
-          default:
-            errorMessage = error.message;
-        }
-        
-        showAlert(errorMessage);
-        console.error('خطأ تسجيل الدخول:', error);
-      }
-    }
-
-    // دالة تسجيل الدخول بجوجل
-    async function loginWithGoogle() {
-      const googleBtn = document.getElementById('google-btn');
-      
-      try {
-        // عرض حالة التحميل
-        googleBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الاتصال بجوجل...';
-        googleBtn.disabled = true;
-        
-        const result = await signInWithPopup(auth, googleProvider);
-        const user = result.user;
-        
-        // التحقق مما إذا كان المستخدم موجوداً في قاعدة البيانات
-        const userDocRef = doc(db, 'users', user.uid);
-        const userDoc = await getDoc(userDocRef);
-        
-        if (!userDoc.exists()) {
-          // إنشاء مستخدم جديد في Firestore
-          await setDoc(userDocRef, {
-            name: user.displayName || user.email.split('@')[0],
-            email: user.email,
-            balance: 1000,
-            photoURL: user.photoURL || '',
-            createdAt: new Date().toISOString(),
-            provider: 'google'
-          });
-        }
-        
-        showAlert('تم تسجيل الدخول بجوجل بنجاح!', 'success');
-        
-        // الانتقال إلى لوحة التحكم
-        setTimeout(() => {
-          window.location.href = 'dashboard.html';
-        }, 1500);
-        
-      } catch (error) {
-        // إعادة تعيين الزر
-        googleBtn.innerHTML = '<img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20"> الدخول بجوجل';
-        googleBtn.disabled = false;
-        
-        let errorMessage = 'حدث خطأ أثناء تسجيل الدخول بجوجل';
-        
-        if (error.code === 'auth/popup-closed-by-user') {
-          errorMessage = 'تم إغلاق نافذة تسجيل الدخول';
-        } else if (error.code === 'auth/cancelled-popup-request') {
-          errorMessage = 'تم إلغاء عملية تسجيل الدخول';
-        } else if (error.code === 'auth/account-exists-with-different-credential') {
-          errorMessage = 'هذا الحساب موجود بالفعل بمصادقة أخرى';
-        }
-        
-        showAlert(errorMessage);
-        console.error('خطأ جوجل:', error);
-      }
-    }
-
-    // التحقق مما إذا كان المستخدم مسجلاً بالفعل
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        console.log('المستخدم مسجل بالفعل:', user.email);
-        // يمكنك إلغاء التعليق من السطر التالي إذا أردت الانتقال التلقائي
-        // window.location.href = 'dashboard.html';
-      }
-    });
-
-    // ربط الأحداث عند تحميل الصفحة
-    document.addEventListener('DOMContentLoaded', () => {
-      // ربط زر تسجيل الدخول
-      document.getElementById('login-btn').addEventListener('click', loginWithEmail);
-      
-      // ربط زر جوجل
-      document.getElementById('google-btn').addEventListener('click', loginWithGoogle);
-      
-      // السماح بتسجيل الدخول بالضغط على Enter
-      document.getElementById('password').addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-          loginWithEmail();
-        }
-      });
-      
-      // رابط إنشاء حساب جديد (التوجيه لصفحة التسجيل)
-      document.getElementById('signup-link').addEventListener('click', (e) => {
-        e.preventDefault();
-        window.location.href = 'signup.html';
-      });
-    });
-
-    // جعل الدوال متاحة عالمياً
-    window.togglePassword = togglePassword;
-  </script>
+  <script type="module" src="app.js"></script>
 </body>
-  </html> 
+</html>
