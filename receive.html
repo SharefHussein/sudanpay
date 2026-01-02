@@ -1,10 +1,29 @@
-<div class="auth-box" style="text-align:center;">
-    <h3>استلام أموال</h3>
-    <p>معرفك الرقمي (ID):</p>
-    <h2 id="myID" style="color:#2196F3;">جاري التحميل...</h2>
-    <hr>
-    <p>استلام USDT (شبكة TRC20):</p>
-    <img src="qr-placeholder.png" alt="QR Code" width="150">
-    <code id="walletAddr">TY7xxxxxxxxxxxxxxxxxxxxxxxx</code>
-    <button onclick="copyWallet()" class="btn-sub">نسخ العنوان</button>
-</div>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sudan Pay - استلام أموال</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="dashboard-body">
+  <div class="container">
+    <h2 class="text-3xl font-bold text-center mb-10">استلام أموال</h2>
+
+    <div class="card text-center">
+      <p class="text-lg text-gray-600 mb-4">شارك رقم حسابك لاستلام الأموال</p>
+      <h3 id="myAccountID" class="text-3xl font-bold text-teal-600 mb-8">جاري التحميل...</h3>
+
+      <div class="bg-gray-200 border-2 border-dashed rounded-xl w-64 h-64 mx-auto mb-8 flex items-center justify-center">
+        <p class="text-gray-500">QR Code هنا (قريباً)</p>
+      </div>
+
+      <button onclick="copyID()" class="btn-main py-5 text-xl">نسخ رقم الحساب</button>
+    </div>
+
+    <a href="dashboard.html" class="block text-center text-teal-600 mt-8 text-lg">العودة للمحفظة</a>
+  </div>
+
+  <script type="module" src="receive-logic.js"></script>
+</body>
+</html>
