@@ -1,21 +1,35 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<title>SudanPay | لوحة التحكم</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SudanPay | المحفظة</title>
+  <link rel="stylesheet" href="style.css">
 </head>
+<body class="dashboard-body">
+  <div class="container">
+    <h2 class="text-3xl font-bold mb-8 text-center">محفظتي</h2>
 
-<body>
+    <div class="card text-center">
+      <p class="text-lg text-gray-600">رقم الحساب</p>
+      <h3 id="accountID" class="text-2xl font-bold mb-4">جاري التحميل...</h3>
+      <p class="text-lg text-gray-600 mb-4">الرصيد الحالي</p>
+      <h1 id="balanceSDG" class="text-5xl font-bold text-teal-600 mb-8">0.00 SDG</h1>
+      <p id="balanceUSDT" class="text-2xl text-blue-600 mb-8">0.00 USDT</p>
+    </div>
 
-<h2>لوحة التحكم</h2>
+    <div class="grid grid-cols-2 gap-6">
+      <a href="send.html" class="btn-main text-center py-6 text-xl">إرسال أموال</a>
+      <a href="receive.html" class="btn-sub text-center py-6 text-xl">استلام أموال</a>
+      <a href="transactions.html" class="btn-sub text-center py-6 text-xl">آخر المعاملات</a>
+      <a href="profile.html" class="btn-sub text-center py-6 text-xl">الملف الشخصي</a>
+      <a href="settings.html" class="btn-sub text-center py-6 text-xl">الإعدادات</a>
+      <a href="support.html" class="btn-sub text-center py-6 text-xl">الدعم</a>
+    </div>
 
-<p>رقم الحساب: <strong><span id="displayID">...</span></strong></p>
-<p>رصيد SDG: <strong><span id="sdgBalance">0</span></strong></p>
-<p>رصيد USDT: <strong><span id="usdtBalance">0</span></strong></p>
+    <button onclick="logout()" class="btn-logout mt-12">تسجيل الخروج</button>
+  </div>
 
-<button id="logoutBtn">تسجيل الخروج</button>
-
-<script type="module" src="dashboard-logic.js"></script>
+  <script type="module" src="dashboard-logic.js"></script>
 </body>
 </html>
