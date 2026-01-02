@@ -1,7 +1,7 @@
-// app.js
+// app.js - كامل لكل الصفحات
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, doc, setDoc, getDoc, updateDoc, arrayUnion, serverTimestamp, increment } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyB3vxJu_et-P80ek30I3MRdC_lGhooCCsc",
@@ -13,7 +13,29 @@ const firebaseConfig = {
   measurementId: "G-XRN6CBLKXY"
 };
 
-export const app = initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const provider = new GoogleAuthProvider();
+
+// توليد ID عشوائي لكل مستخدم
+export function generateAccountID() {
+  const random = Math.floor(100000 + Math.random() * 900000);
+  return `SP-${random}`;
+}
+
+// مراقبة الدخول (حماية الصفحات)
+onAuthStateChanged(auth, (user) => {
+  const protectedPages = ['dashboard.html', 'profile.html', 'send.html', 'receive.html', 'transactions.html', 'settings.html', 'support.html'];
+  const authPages = ['auth.html', 'login.html'];
+
+  if (user) {
+    if (authPages.some(page => window.location.pathname.includes(page))) {
+      window.location.href = "dashboard.html";
+    }
+  } else {
+    if (protectedPages.some(page => window.location.pathname.includes(page))) {
+      window.location.href = "login.html";
+    }
+  }
+});
