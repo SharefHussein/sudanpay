@@ -1,55 +1,21 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <title>لوحة التحكم | SudanPay</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<meta charset="UTF-8">
+<title>SudanPay | لوحة التحكم</title>
+<link rel="stylesheet" href="style.css">
 </head>
-<body class="dashboard-body">
 
-    <nav class="navbar">
-        <div class="logo"><span>SudanPay</span></div>
-        <div class="user-nav">
-            <span id="displayID" class="sp-id-badge">جاري التحميل...</span>
-            <button id="logoutBtn" class="btn-logout"><i class="fas fa-sign-out-alt"></i></button>
-        </div>
-    </nav>
+<body>
 
-    <div class="dashboard-container">
-        <div class="wallet-section">
-            <div class="wallet-card main-balance">
-                <p>إجمالي الرصيد (SDG)</p>
-                <h1 id="sdgBalance">0.00</h1>
-            </div>
-            <div class="wallet-card crypto-balance">
-                <p>رصيد USDT</p>
-                <h2 id="usdtBalance">0.00</h2>
-            </div>
-        </div>
+<h2>لوحة التحكم</h2>
 
-        <div class="actions-grid">
-            <button onclick="showSection('send')"><i class="fas fa-paper-plane"></i> إرسال</button>
-            <button onclick="showSection('receive')"><i class="fas fa-qrcode"></i> استلام</button>
-            <button onclick="showSection('swap')"><i class="fas fa-sync"></i> تحويل USDT</button>
-            <button onclick="showSection('history')"><i class="fas fa-list"></i> السجل</button>
-        </div>
+<p>رقم الحساب: <strong><span id="displayID">...</span></strong></p>
+<p>رصيد SDG: <strong><span id="sdgBalance">0</span></strong></p>
+<p>رصيد USDT: <strong><span id="usdtBalance">0</span></strong></p>
 
-        <div id="actionContent" class="action-box">
-            <p class="placeholder-text">اختر عملية من الأعلى للبدء</p>
-        </div>
+<button id="logoutBtn">تسجيل الخروج</button>
 
-        <div id="receiptArea" class="receipt-style" style="display:none;">
-            <h3>إيصال تحويل SudanPay</h3>
-            <p id="receiptDetails"></p>
-            <small id="receiptDate"></small>
-            <button onclick="downloadReceipt()" class="btn-full">حفظ كصورة</button>
-        </div>
-    </div>
-
-    <script type="module" src="dashboard-logic.js"></script>
+<script type="module" src="dashboard-logic.js"></script>
 </body>
 </html>
-
