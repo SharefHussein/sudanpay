@@ -1,28 +1,31 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <title>الدعم الفني | SudanPay</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sudan Pay - الدعم</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-<body>
-    <div class="auth-box">
-        <h3>تأكيد إيداع USDT</h3>
-        <p>بعد التحويل لمحفظتنا، ارفع صورة الإيصال هنا:</p>
-        <input type="file" id="receiptImg" accept="image/*">
-        <input type="number" id="depAmount" placeholder="المبلغ الذي حولته">
-        <button id="uploadBtn" class="btn-full">إرسال للمراجعة</button>
-        <hr>
-        <p>أو تواصل معنا عبر واتساب:</p>
-        <a href="https://wa.me/249123456789" class="btn-sub">فتح واتساب الدعم</a>
+<body class="dashboard-body">
+  <div class="container">
+    <h2 class="text-3xl font-bold text-center mb-10">التواصل مع الدعم</h2>
+
+    <div class="card">
+      <p class="text-lg mb-6">إذا واجهت أي مشكلة، تواصل معنا عبر:</p>
+      <div class="space-y-6">
+        <a href="tel:+249123456789" class="block btn-main py-5 text-xl text-center">
+          <i class="fas fa-phone"></i> اتصل بنا: +249 123 456 789
+        </a>
+        <a href="https://wa.me/249123456789" class="block btn-main py-5 text-xl text-center">
+          <i class="fab fa-whatsapp"></i> واتساب الدعم
+        </a>
+        <a href="mailto:support@sudanpay.sd" class="block btn-main py-5 text-xl text-center">
+          <i class="fas fa-envelope"></i> البريد الإلكتروني: support@sudanpay.sd
+        </a>
+      </div>
     </div>
 
-    <script type="module">
-        import { db, auth } from './app.js';
-        // هنا نستخدم Firebase Storage لرفع الصورة
-        document.getElementById('uploadBtn').onclick = () => {
-            alert("تم إرسال طلبك، سيقوم المسؤول بمراجعة الإيصال وإضافة الرصيد لمحفظتك خلال 30 دقيقة.");
-        };
-    </script>
+    <a href="dashboard.html" class="block text-center text-teal-600 mt-8 text-lg">العودة للمحفظة</a>
+  </div>
 </body>
 </html>
