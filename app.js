@@ -5,13 +5,18 @@ import {
     GoogleAuthProvider, 
     signInWithPopup,
     createUserWithEmailAndPassword,
-    onAuthStateChanged
+    onAuthStateChanged,
+    signOut
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { 
     getFirestore, 
     doc, 
     setDoc, 
-    getDoc 
+    getDoc,
+    updateDoc,
+    increment,
+    arrayUnion,
+    serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -29,9 +34,13 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 const provider = new GoogleAuthProvider();
 
+// دالة لإنشاء رقم حساب فريد
+function generateAccountID() {
+    return 'SP-' + Math.random().toString(36).substr(2, 6).toUpperCase();
+}
+
 // دالة لعرض التنبيهات
 function showAlert(message, type = 'error') {
-    // إزالة أي تنبيهات سابقة
     const existingAlert = document.querySelector('.custom-alert');
     if (existingAlert) {
         existingAlert.remove();
@@ -65,6 +74,131 @@ function showAlert(message, type = 'error') {
             alertDiv.remove();
         }
     }, 5000);
+}
+
+// تسجيل الدخول بالبريد
+async function loginWithEmail(email, password) {
+    try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        return userCredential.user;
+    } catch (error) {
+        throw error;
+    }
+}
+
+// تسجيل الدخول بجوجل
+async function loginWithGoogle() {
+    try {
+        const result = await signInWithPopup(auth, provider);
+        const user = result.user;
+        
+        // التحقق من وجود المستخدم في قاعدة البيانات
+        const userDocRef = doc(db, 'users', user.uid);
+        const userDoc = await getDoc(userDocRef);
+        
+        if (!userDoc.exists()) {
+            await setDoc(userDocRef, {
+                name: user.displayName || user.email.split('@')[0],
+                email: user.email,
+                accountID: generateAccountID(),
+                balanceSDG: 1000.00,
+                balanceUSDT: 0.00,
+                photoURL: user.photoURL || '',
+                createdAt: serverTimestamp(),
+                updatedAt: serverTimestamp(),
+                provider: 'google'
+            });
+        }
+        
+        return user;
+    } catch (error) {
+        throw error;
+    }
+}
+
+// إنشاء حساب جديد
+async function signUpWithEmail(email, password, name = '') {
+    try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+        const accountID = generateAccountID();
+        
+        await setDoc(doc(db, 'users', user.uid), {
+            name: name || user.email.split('@')[0],
+            email: email,
+            accountID: accountID,
+            balanceSDG: 1000.00,
+            balanceUSDT: 0.00,
+            phone: '',
+            photoURL: '',
+            createdAt: serverTimestamp(),
+            updatedAt: serverTimestamp(),
+            transactions: [],
+            provider: 'email'
+        });
+        
+        return { user, accountID };
+    } catch (error) {
+        throw error;
+    }
+}
+
+// تسجيل الخروج
+async function logoutUser() {
+    try {
+        await signOut(auth);
+        return true;
+    } catch (error) {
+        throw error;
+    }
+}
+
+// جلب بيانات المستخدم
+async function getUserData(userId) {
+    try {
+        const userDoc = await getDoc(doc(db, 'users', userId));
+        if (userDoc.exists()) {
+            return userDoc.data();
+        }
+        return null;
+    } catch (error) {
+        throw error;
+    }
+}
+
+// تحديث رصيد المستخدم
+async function updateUserBalance(userId, amount, type = 'send', description = '') {
+    try {
+        const userRef = doc(db, 'users', userId);
+        const userDoc = await getDoc(userRef);
+        
+        if (!userDoc.exists()) {
+            throw new Error('المستخدم غير موجود');
+        }
+        
+        const currentBalance = userDoc.data().balanceSDG || 0;
+        
+        if (type === 'send' && amount > currentBalance) {
+            throw new Error('الرصيد غير كافي');
+        }
+        
+        const newBalance = type === 'send' ? currentBalance - amount : currentBalance + amount;
+        
+        await updateDoc(userRef, {
+            balanceSDG: newBalance,
+            transactions: arrayUnion({
+                type: type,
+                amount: amount,
+                description: description || `${type === 'send' ? 'إرسال' : 'استلام'} أموال`,
+                timestamp: serverTimestamp(),
+                status: 'completed'
+            })
+        });
+        
+        return newBalance;
+    } catch (error) {
+        throw error;
+    }
 }
 
 // إضافة أنماط التنبيهات
@@ -157,186 +291,40 @@ function addAlertStyles() {
     document.head.appendChild(style);
 }
 
-// تسجيل الدخول بالإيميل
-async function loginWithEmail() {
-    const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value;
-    const loginBtn = document.getElementById("login-btn");
-    
-    if (!email || !password) {
-        showAlert("أدخل البريد الإلكتروني وكلمة المرور");
-        return;
-    }
-    
-    try {
-        const originalText = loginBtn.innerHTML;
-        loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري تسجيل الدخول...';
-        loginBtn.disabled = true;
-        
-        const userCredential = await signInWithEmailAndPassword(auth, email, password);
-        const user = userCredential.user;
-        
-        showAlert("تم تسجيل الدخول بنجاح!", "success");
-        
-        setTimeout(() => {
-            window.location.href = "dashboard.html";
-        }, 1500);
-        
-    } catch (error) {
-        loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> تسجيل الدخول';
-        loginBtn.disabled = false;
-        
-        let errorMessage = "حدث خطأ أثناء تسجيل الدخول";
-        
-        switch(error.code) {
-            case 'auth/invalid-email':
-                errorMessage = 'البريد الإلكتروني غير صالح';
-                break;
-            case 'auth/user-not-found':
-                errorMessage = 'البريد الإلكتروني غير مسجل';
-                break;
-            case 'auth/wrong-password':
-                errorMessage = 'كلمة المرور غير صحيحة';
-                break;
-            case 'auth/user-disabled':
-                errorMessage = 'تم تعطيل هذا الحساب';
-                break;
-            case 'auth/too-many-requests':
-                errorMessage = 'محاولات كثيرة جداً، حاول لاحقاً';
-                break;
-            default:
-                errorMessage = error.message;
-        }
-        
-        showAlert(errorMessage);
-        console.error('خطأ تسجيل الدخول:', error);
-    }
-}
-
-// الدخول بجوجل
-async function loginWithGoogle() {
-    const googleBtn = document.getElementById("google-btn");
-    
-    try {
-        const originalText = googleBtn.innerHTML;
-        googleBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الاتصال بجوجل...';
-        googleBtn.disabled = true;
-        
-        const result = await signInWithPopup(auth, provider);
-        const user = result.user;
-        
-        // التحقق مما إذا كان المستخدم موجوداً في قاعدة البيانات
-        const userDocRef = doc(db, 'users', user.uid);
-        const userDoc = await getDoc(userDocRef);
-        
-        if (!userDoc.exists()) {
-            await setDoc(userDocRef, {
-                name: user.displayName || user.email.split('@')[0],
-                email: user.email,
-                balance: 1000,
-                photoURL: user.photoURL || '',
-                createdAt: new Date().toISOString(),
-                provider: 'google'
-            });
-        }
-        
-        showAlert("تم تسجيل الدخول بجوجل بنجاح!", "success");
-        
-        setTimeout(() => {
-            window.location.href = "dashboard.html";
-        }, 1500);
-        
-    } catch (error) {
-        googleBtn.innerHTML = '<img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20"> الدخول بجوجل';
-        googleBtn.disabled = false;
-        
-        let errorMessage = "حدث خطأ أثناء تسجيل الدخول بجوجل";
-        
-        if (error.code === 'auth/popup-closed-by-user') {
-            errorMessage = 'تم إغلاق نافذة تسجيل الدخول';
-        } else if (error.code === 'auth/cancelled-popup-request') {
-            errorMessage = 'تم إلغاء عملية تسجيل الدخول';
-        } else if (error.code === 'auth/account-exists-with-different-credential') {
-            errorMessage = 'هذا الحساب موجود بالفعل بمصادقة أخرى';
-        }
-        
-        showAlert(errorMessage);
-        console.error('خطأ جوجل:', error);
-    }
-}
-
-// دالة تبديل رؤية كلمة المرور
-function togglePassword() {
-    const passwordInput = document.getElementById('password');
-    const toggleIcon = document.querySelector('.password-toggle i');
-    
-    if (!passwordInput || !toggleIcon) return;
-    
-    if (passwordInput.type === 'password') {
-        passwordInput.type = 'text';
-        toggleIcon.className = 'fas fa-eye-slash';
-    } else {
-        passwordInput.type = 'password';
-        toggleIcon.className = 'fas fa-eye';
-    }
-}
-
-// تحميل التطبيق
+// تهيئة التطبيق
 function initApp() {
     addAlertStyles();
     
-    // التحقق من حالة المصادقة
+    // مراقبة حالة المصادقة
     onAuthStateChanged(auth, (user) => {
         if (user) {
-            console.log('المستخدم مسجل بالفعل:', user.email);
-        }
-    });
-    
-    // ربط الأحداث
-    document.addEventListener('DOMContentLoaded', () => {
-        // ربط زر تسجيل الدخول
-        const loginBtn = document.getElementById("login-btn");
-        if (loginBtn) {
-            loginBtn.addEventListener('click', loginWithEmail);
-        }
-        
-        // ربط زر جوجل
-        const googleBtn = document.getElementById("google-btn");
-        if (googleBtn) {
-            googleBtn.addEventListener('click', loginWithGoogle);
-        }
-        
-        // ربط رابط إنشاء حساب جديد
-        const signupLink = document.getElementById("signup-link");
-        if (signupLink) {
-            signupLink.addEventListener('click', (e) => {
-                e.preventDefault();
-                window.location.href = "signup.html";
-            });
-        }
-        
-        // السماح بتسجيل الدخول بالضغط على Enter
-        const passwordInput = document.getElementById("password");
-        if (passwordInput) {
-            passwordInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    loginWithEmail();
-                }
-            });
-        }
-        
-        // دالة تبديل كلمة المرور
-        const toggleBtn = document.querySelector('.password-toggle');
-        if (toggleBtn) {
-            toggleBtn.addEventListener('click', togglePassword);
+            console.log('المستخدم مسجل:', user.email);
         }
     });
 }
 
-// تهيئة التطبيق
+// تصدير الدوال والمتغيرات
+export { 
+    auth, 
+    db, 
+    app, 
+    provider,
+    generateAccountID,
+    loginWithEmail, 
+    loginWithGoogle, 
+    signUpWithEmail, 
+    logoutUser, 
+    getUserData,
+    updateUserBalance,
+    showAlert,
+    initApp 
+};
+
+// تهيئة التطبيق تلقائياً
 initApp();
 
 // جعل الدوال متاحة عالمياً
 window.loginWithEmail = loginWithEmail;
 window.loginWithGoogle = loginWithGoogle;
-window.togglePassword = togglePassword;
+window.logoutUser = logoutUser;
+window.showAlert = showAlert; 
