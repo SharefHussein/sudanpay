@@ -3,33 +3,55 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SudanPay | المحفظة</title>
+  <title>Sudan Pay - محفظتي</title>
   <link rel="stylesheet" href="style.css">
 </head>
-<body class="dashboard-body">
+<body>
   <div class="container">
-    <h2 class="text-3xl font-bold mb-8 text-center">محفظتي</h2>
-
-    <div class="card text-center">
-      <p class="text-lg text-gray-600">رقم الحساب</p>
-      <h3 id="accountID" class="text-2xl font-bold mb-4">جاري التحميل...</h3>
-      <p class="text-lg text-gray-600 mb-4">الرصيد الحالي</p>
-      <h1 id="balanceSDG" class="text-5xl font-bold text-teal-600 mb-8">0.00 SDG</h1>
-      <p id="balanceUSDT" class="text-2xl text-blue-600 mb-8">0.00 USDT</p>
+    <div class="balance-card">
+      <p class="text-xl">رصيدك الحالي</p>
+      <h1 id="balanceSDG">جاري التحميل...</h1>
+      <p class="text-xl" id="balanceUSDT">0.00 USDT</p>
     </div>
 
-    <div class="grid grid-cols-2 gap-6">
-      <a href="send.html" class="btn-main text-center py-6 text-xl">إرسال أموال</a>
-      <a href="receive.html" class="btn-sub text-center py-6 text-xl">استلام أموال</a>
-      <a href="transactions.html" class="btn-sub text-center py-6 text-xl">آخر المعاملات</a>
-      <a href="profile.html" class="btn-sub text-center py-6 text-xl">الملف الشخصي</a>
-      <a href="settings.html" class="btn-sub text-center py-6 text-xl">الإعدادات</a>
-      <a href="support.html" class="btn-sub text-center py-6 text-xl">الدعم</a>
+    <div class="grid-services">
+      <div class="service-item">
+        <div class="service-icon"><i class="fas fa-paper-plane"></i></div>
+        <p>إرسال</p>
+      </div>
+      <div class="service-item">
+        <div class="service-icon"><i class="fas fa-qrcode"></i></div>
+        <p>استلام</p>
+      </div>
+      <div class="service-item">
+        <div class="service-icon"><i class="fas fa-file-invoice"></i></div>
+        <p>فواتير</p>
+      </div>
+      <div class="service-item">
+        <div class="service-icon"><i class="fas fa-mobile-alt"></i></div>
+        <p>شحن هاتف</p>
+      </div>
+      <div class="service-item">
+        <div class="service-icon"><i class="fas fa-exchange-alt"></i></div>
+        <p>تحويل بنكي</p>
+      </div>
+      <div class="service-item">
+        <div class="service-icon"><i class="fas fa-history"></i></div>
+        <p>السجل</p>
+      </div>
+      <div class="service-item">
+        <div class="service-icon"><i class="fas fa-cog"></i></div>
+        <p>الإعدادات</p>
+      </div>
+      <div class="service-item">
+        <div class="service-icon"><i class="fas fa-headset"></i></div>
+        <p>الدعم</p>
+      </div>
     </div>
 
-    <button onclick="logout()" class="btn-logout mt-12">تسجيل الخروج</button>
+    <button onclick="logout()" class="btn-main">تسجيل الخروج</button>
   </div>
 
-  <script type="module" src="dashboard-logic.js"></script>
+  <script type="module" src="app.js"></script>
 </body>
 </html>
