@@ -1,57 +1,652 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sudan Pay - محفظتي</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sudan Pay - لوحة التحكم</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #0d9488;
+            --primary-dark: #0f766e;
+            --secondary: #0891b2;
+            --accent: #10b981;
+            --dark: #0f172a;
+            --dark-light: #1e293b;
+            --light: #f8fafc;
+            --gray: #94a3b8;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --border: #e2e8f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .dashboard-container {
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .logo i {
+            font-size: 2rem;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        .logout-btn {
+            background: rgba(239, 68, 68, 0.2);
+            color: white;
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            padding: 10px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logout-btn:hover {
+            background: rgba(239, 68, 68, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .balance-card {
+            background: linear-gradient(135deg, #0d9488, #08977f);
+            color: white;
+            border-radius: 24px;
+            padding: 30px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 15px 30px rgba(13, 148, 136, 0.3);
+        }
+
+        .balance-label {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+
+        .balance-amount {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin: 15px 0;
+            direction: ltr;
+        }
+
+        .balance-sub {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .balance-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .balance-btn {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 15px;
+            border-radius: 14px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .balance-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-3px);
+        }
+
+        .quick-actions {
+            background: white;
+            border-radius: 24px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            color: var(--dark);
+            margin-bottom: 25px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .section-title a {
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .action-item {
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            padding: 15px 5px;
+            border-radius: 16px;
+        }
+
+        .action-item:hover {
+            background: #f8fafc;
+            transform: translateY(-5px);
+        }
+
+        .action-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            color: var(--primary);
+            font-size: 1.8rem;
+        }
+
+        .action-label {
+            font-size: 0.95rem;
+            color: var(--dark);
+            font-weight: 600;
+        }
+
+        .recent-transactions {
+            background: white;
+            border-radius: 24px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .transactions-list {
+            max-height: 300px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .transaction-item {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+            transition: all 0.3s;
+        }
+
+        .transaction-item:hover {
+            background: #f8fafc;
+            border-radius: 12px;
+        }
+
+        .transaction-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 15px;
+            font-size: 1.3rem;
+        }
+
+        .transaction-icon.send {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+        }
+
+        .transaction-icon.receive {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+
+        .transaction-details {
+            flex: 1;
+        }
+
+        .transaction-title {
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+
+        .transaction-date {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .transaction-amount {
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .transaction-amount.positive {
+            color: var(--success);
+        }
+
+        .transaction-amount.negative {
+            color: var(--danger);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--gray);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--gray);
+        }
+
+        .loading i {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+
+        .refresh-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .refresh-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 480px) {
+            .actions-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+            
+            .balance-amount {
+                font-size: 2.8rem;
+            }
+            
+            .balance-actions {
+                flex-direction: column;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .user-menu {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* Scrollbar styling */
+        .transactions-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .transactions-list::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .transactions-list::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <div class="balance-card">
-      <p class="text-xl">رصيدك الحالي</p>
-      <h1 id="balanceSDG">جاري التحميل...</h1>
-      <p class="text-xl" id="balanceUSDT">0.00 USDT</p>
+    <div class="dashboard-container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">
+                <i class="fas fa-wallet"></i>
+                <span>Sudan Pay</span>
+            </div>
+            
+            <div class="user-menu">
+                <div class="user-avatar" id="userAvatar" onclick="window.location.href='profile.html'">
+                    <i class="fas fa-user"></i>
+                </div>
+                <button class="logout-btn" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                    خروج
+                </button>
+            </div>
+        </div>
+
+        <!-- Balance Card -->
+        <div class="balance-card">
+            <div class="balance-label">رصيدك الحالي</div>
+            <div class="balance-amount" id="balanceSDG">0.00 <span style="font-size: 2rem;">SDG</span></div>
+            <div class="balance-sub" id="balanceUSDT">0.00 USDT</div>
+            <div class="account-id" style="margin-top: 15px; font-size: 0.9rem; opacity: 0.8;">
+                رقم الحساب: <span id="accountID">جاري التحميل...</span>
+            </div>
+            
+            <div class="balance-actions">
+                <button class="balance-btn" onclick="window.location.href='send.html'">
+                    <i class="fas fa-paper-plane"></i>
+                    إرسال
+                </button>
+                <button class="balance-btn" onclick="window.location.href='receive.html'">
+                    <i class="fas fa-qrcode"></i>
+                    استلام
+                </button>
+                <button class="balance-btn" onclick="refreshBalance()">
+                    <i class="fas fa-sync-alt"></i>
+                    تحديث
+                </button>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+            <h2 class="section-title">
+                <span>الخدمات السريعة</span>
+            </h2>
+            
+            <div class="actions-grid">
+                <div class="action-item" onclick="window.location.href='send.html'">
+                    <div class="action-icon">
+                        <i class="fas fa-paper-plane"></i>
+                    </div>
+                    <div class="action-label">إرسال</div>
+                </div>
+                
+                <div class="action-item" onclick="window.location.href='receive.html'">
+                    <div class="action-icon">
+                        <i class="fas fa-qrcode"></i>
+                    </div>
+                    <div class="action-label">استلام</div>
+                </div>
+                
+                <div class="action-item" onclick="window.location.href='transactions.html'">
+                    <div class="action-icon">
+                        <i class="fas fa-history"></i>
+                    </div>
+                    <div class="action-label">السجل</div>
+                </div>
+                
+                <div class="action-item" onclick="window.location.href='profile.html'">
+                    <div class="action-icon">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="action-label">الملف</div>
+                </div>
+                
+                <div class="action-item" onclick="showComingSoon('فواتير')">
+                    <div class="action-icon">
+                        <i class="fas fa-file-invoice"></i>
+                    </div>
+                    <div class="action-label">فواتير</div>
+                </div>
+                
+                <div class="action-item" onclick="showComingSoon('شحن هاتف')">
+                    <div class="action-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <div class="action-label">شحن هاتف</div>
+                </div>
+                
+                <div class="action-item" onclick="showComingSoon('تحويل بنكي')">
+                    <div class="action-icon">
+                        <i class="fas fa-exchange-alt"></i>
+                    </div>
+                    <div class="action-label">تحويل بنكي</div>
+                </div>
+                
+                <div class="action-item" onclick="window.location.href='support.html'">
+                    <div class="action-icon">
+                        <i class="fas fa-headset"></i>
+                    </div>
+                    <div class="action-label">الدعم</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Transactions -->
+        <div class="recent-transactions">
+            <h2 class="section-title">
+                <span>آخر العمليات</span>
+                <a href="transactions.html">عرض الكل</a>
+            </h2>
+            
+            <div id="transactionsList" class="transactions-list">
+                <div class="loading">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <p>جاري تحميل العمليات...</p>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div class="grid-services">
-      <div class="service-item">
-        <div class="service-icon"><i class="fas fa-paper-plane"></i></div>
-        <p>إرسال</p>
-      </div>
-      <div class="service-item">
-        <div class="service-icon"><i class="fas fa-qrcode"></i></div>
-        <p>استلام</p>
-      </div>
-      <div class="service-item">
-        <div class="service-icon"><i class="fas fa-file-invoice"></i></div>
-        <p>فواتير</p>
-      </div>
-      <div class="service-item">
-        <div class="service-icon"><i class="fas fa-mobile-alt"></i></div>
-        <p>شحن هاتف</p>
-      </div>
-      <div class="service-item">
-        <div class="service-icon"><i class="fas fa-exchange-alt"></i></div>
-        <p>تحويل بنكي</p>
-      </div>
-      <div class="service-item">
-        <div class="service-icon"><i class="fas fa-history"></i></div>
-        <p>السجل</p>
-      </div>
-      <div class="service-item">
-        <div class="service-icon"><i class="fas fa-cog"></i></div>
-        <p>الإعدادات</p>
-      </div>
-      <div class="service-item">
-        <div class="service-icon"><i class="fas fa-headset"></i></div>
-        <p>الدعم</p>
-      </div>
-    </div>
+    <script type="module">
+        import { auth, db, logoutUser, getUserData, showAlert } from './app.js';
+        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-    <button onclick="logout()" class="btn-main">تسجيل الخروج</button>
-  </div>
+        // دالة تسجيل الخروج
+        async function logout() {
+            try {
+                await logoutUser();
+                showAlert('تم تسجيل الخروج بنجاح', 'success');
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 1000);
+            } catch (error) {
+                showAlert('حدث خطأ أثناء تسجيل الخروج');
+            }
+        }
 
-  <script type="module" src="app.js"></script>
+        // دالة تحديث الرصيد
+        async function refreshBalance() {
+            const user = auth.currentUser;
+            if (user) {
+                await loadUserData(user.uid);
+                showAlert('تم تحديث البيانات', 'success');
+            }
+        }
+
+        // دالة تحميل بيانات المستخدم
+        async function loadUserData(userId) {
+            try {
+                const userData = await getUserData(userId);
+                if (userData) {
+                    // تحديث الرصيد
+                    document.getElementById('balanceSDG').textContent = 
+                        `${userData.balanceSDG?.toFixed(2) || '0.00'} SDG`;
+                    document.getElementById('balanceUSDT').textContent = 
+                        `${userData.balanceUSDT?.toFixed(2) || '0.00'} USDT`;
+                    document.getElementById('accountID').textContent = 
+                        userData.accountID || 'غير متوفر';
+                    
+                    // تحديث الصورة الرمزية
+                    const avatar = document.getElementById('userAvatar');
+                    if (userData.name) {
+                        avatar.innerHTML = userData.name.charAt(0).toUpperCase();
+                    }
+                    
+                    // تحميل العمليات الأخيرة
+                    await loadRecentTransactions(userData.transactions || []);
+                }
+            } catch (error) {
+                console.error('خطأ في تحميل البيانات:', error);
+            }
+        }
+
+        // دالة تحميل العمليات الأخيرة
+        async function loadRecentTransactions(transactions) {
+            const transactionsList = document.getElementById('transactionsList');
+            
+            if (!transactions || transactions.length === 0) {
+                transactionsList.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-inbox"></i>
+                        <p>لا توجد عمليات سابقة</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // ترتيب العمليات من الأحدث إلى الأقدم
+            const sortedTransactions = [...transactions]
+                .sort((a, b) => {
+                    const timeA = a.timestamp?.seconds || 0;
+                    const timeB = b.timestamp?.seconds || 0;
+                    return timeB - timeA;
+                })
+                .slice(0, 5); // آخر 5 عمليات فقط
+            
+            let html = '';
+            sortedTransactions.forEach(transaction => {
+                const isSend = transaction.type === 'send';
+                const amount = transaction.amount || 0;
+                const description = transaction.description || 'عملية غير معروفة';
+                const date = transaction.timestamp?.seconds 
+                    ? new Date(transaction.timestamp.seconds * 1000)
+                    : new Date();
+                
+                const formattedDate = date.toLocaleDateString('ar-SA', {
+                    month: 'short',
+                    day: 'numeric'
+                });
+                
+                html += `
+                    <div class="transaction-item">
+                        <div class="transaction-icon ${isSend ? 'send' : 'receive'}">
+                            <i class="fas fa-${isSend ? 'paper-plane' : 'money-bill-wave'}"></i>
+                        </div>
+                        <div class="transaction-details">
+                            <div class="transaction-title">${description}</div>
+                            <div class="transaction-date">${formattedDate}</div>
+                        </div>
+                        <div class="transaction-amount ${isSend ? 'negative' : 'positive'}">
+                            ${isSend ? '-' : '+'} ${amount.toFixed(2)} SDG
+                        </div>
+                    </div>
+                `;
+            });
+            
+            transactionsList.innerHTML = html;
+        }
+
+        // دالة عرض رسالة للميزات القادمة
+        function showComingSoon(feature) {
+            showAlert(`ميزة "${feature}" قريباً`, 'info');
+        }
+
+        // مراقبة حالة المصادقة
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                await loadUserData(user.uid);
+            } else {
+                window.location.href = 'index.html';
+            }
+        });
+
+        // ربط الأحداث
+        document.addEventListener('DOMContentLoaded', () => {
+            // زر التحديث
+            const refreshBtn = document.querySelector('.refresh-btn');
+            if (refreshBtn) {
+                refreshBtn.addEventListener('click', refreshBalance);
+            }
+        });
+
+        // جعل الدوال متاحة عالمياً
+        window.logout = logout;
+        window.refreshBalance = refreshBalance;
+        window.showComingSoon = showComingSoon;
+    </script>
 </body>
-</html>
+  </html>
