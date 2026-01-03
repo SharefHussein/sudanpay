@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sudan Pay - الرئيسية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Reset & Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(135deg, #f6f9fc 0%, #f1f5f9 100%);
+            color: #1e293b;
+            line-height: 1.5;
+            min-height: 100vh;
+            overflow-x: hidden;
+            padding-bottom: 80px;
+        }
+
+        .container {
+            max-width: 100%;
+            padding: 0;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #0d9488, #0891b2);
+            color: white;
+            padding: 15px;
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 15px;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo i {
+            font-size: 1.6rem;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        /* Balance Card */
+        .balance-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 5px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            backdrop-filter: blur(10px);
+        }
+
+        .balance-label {
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .balance-amount {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #1e293b;
+            line-height: 1.2;
+            margin-bottom: 5px;
+        }
+
+        .balance-subtitle {
+            font-size: 0.8rem;
+            color: #64748b;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .account-number {
+            background: #f1f5f9;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            padding: 0 15px;
+            margin-bottom: 20px;
+        }
+
+        .action-btn {
+            background: white;
+            border: none;
+            border-radius: 12px;
+            padding: 16px 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            color: #1e293b;
+            text-decoration: none;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .action-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            color: white;
+        }
+
+        .action-send .action-icon { background: #0d9488; }
+        .action-receive .action-icon { background: #10b981; }
+        .action-update .action-icon { background: #3b82f6; }
+
+        .action-title {
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        /* Services Section */
+        .services-section {
+            padding: 0 15px;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-title i {
+            color: #0d9488;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .service-item {
+            background: white;
+            border-radius: 12px;
+            padding: 12px 6px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: #1e293b;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .service-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .service-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            color: white;
+        }
+
+        .service-1 .service-icon { background: #0d9488; }
+        .service-2 .service-icon { background: #10b981; }
+        .service-3 .service-icon { background: #f59e0b; }
+        .service-4 .service-icon { background: #3b82f6; }
+        .service-5 .service-icon { background: #8b5cf6; }
+        .service-6 .service-icon { background: #ec4899; }
+        .service-7 .service-icon { background: #14b8a6; }
+        .service-8 .service-icon { background: #f97316; }
+
+        .service-name {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        /* Transactions */
+        .transactions-section {
+            padding: 0 15px;
+            margin-bottom: 20px;
+        }
+
+        .transactions-list {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .transaction-item {
+            display: flex;
+            align-items: center;
+            padding: 14px;
+            border-bottom: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+
+        .transaction-item:last-child {
+            border-bottom: none;
+        }
+
+        .transaction-item:hover {
+            background: #f8fafc;
+        }
+
+        .transaction-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.95rem;
+            margin-left: 10px;
+            color: white;
+        }
+
+        .transaction-details {
+            flex: 1;
+        }
+
+        .transaction-title {
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 3px;
+        }
+
+        .transaction-meta {
+            font-size: 0.75rem;
+            color: #64748b;
+        }
+
+        .transaction-amount {
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
+        .positive {
+            color: #10b981;
+        }
+
+        .negative {
+            color: #ef4444;
+        }
+
+        /* View All Button */
+        .view-all-btn {
+            display: block;
+            text-align: center;
+            margin-top: 15px;
+            padding: 12px;
+            background: #f1f5f9;
+            border-radius: 12px;
+            color: #0d9488;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .view-all-btn:hover {
+            background: #e2e8f0;
+        }
+
+        .view-all-btn i {
+            margin-left: 5px;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.08);
+            z-index: 1000;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #64748b;
+            font-size: 0.7rem;
+            gap: 4px;
+            transition: all 0.3s ease;
+            flex: 1;
+        }
+
+        .nav-item.active {
+            color: #0d9488;
+        }
+
+        .nav-item i {
+            font-size: 1.1rem;
+        }
+
+        .nav-item:hover {
+            color: #0d9488;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.4s ease forwards;
+        }
+
+        /* Responsive */
+        @media (max-width: 360px) {
+            .services-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .balance-amount {
+                font-size: 1.8rem;
+            }
+            
+            .action-btn {
+                padding: 14px 6px;
+            }
+        }
+
+        @media (min-width: 768px) {
+            body {
+                max-width: 450px;
+                margin: 0 auto;
+                border-left: 1px solid #e2e8f0;
+                border-right: 1px solid #e2e8f0;
+            }
+        }
+
+        /* Loading Animation */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .fa-spinner {
+            animation: spin 1s linear infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-top">
+                <div class="logo">
+                    <i class="fas fa-wallet"></i>
+                    Sudan Pay
+                </div>
+                <div class="user-info">
+                    <span style="font-weight: 600; font-size: 0.9rem;">أحمد</span>
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Balance Card -->
+            <div class="balance-card">
+                <div class="balance-label">
+                    <i class="fas fa-wallet"></i>
+                    رصيدك الحالي
+                </div>
+                <div class="balance-amount" id="balanceAmount">
+                    0.00 <small style="font-size: 1.4rem;">SDG</small>
+                </div>
+                
+                <div class="balance-subtitle">
+                    <div>
+                        <i class="fas fa-coins"></i>
+                        USDT 0.00
+                    </div>
+                    <div class="account-number" id="accountNumber">
+                        <i class="fas fa-credit-card"></i>
+                        **** 5678
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+            <a href="send.html" class="action-btn action-send">
+                <div class="action-icon">
+                    <i class="fas fa-paper-plane"></i>
+                </div>
+                <div class="action-title">إرسال</div>
+            </a>
+            
+            <a href="receive.html" class="action-btn action-receive">
+                <div class="action-icon">
+                    <i class="fas fa-qrcode"></i>
+                </div>
+                <div class="action-title">استلام</div>
+            </a>
+            
+            <button class="action-btn action-update" id="updateBalanceBtn">
+                <div class="action-icon">
+                    <i class="fas fa-sync-alt"></i>
+                </div>
+                <div class="action-title">تحديث</div>
+            </button>
+        </div>
+
+        <!-- Services Section -->
+        <div class="services-section">
+            <h3 class="section-title">
+                <i class="fas fa-bolt"></i>
+                الخدمات السريعة
+            </h3>
+            
+            <div class="services-grid">
+                <a href="send.html" class="service-item service-1">
+                    <div class="service-icon">
+                        <i class="fas fa-paper-plane"></i>
+                    </div>
+                    <div class="service-name">إرسال</div>
+                </a>
+                
+                <a href="receive.html" class="service-item service-2">
+                    <div class="service-icon">
+                        <i class="fas fa-qrcode"></i>
+                    </div>
+                    <div class="service-name">استلام</div>
+                </a>
+                
+                <a href="transactions.html" class="service-item service-3">
+                    <div class="service-icon">
+                        <i class="fas fa-history"></i>
+                    </div>
+                    <div class="service-name">المعاملات</div>
+                </a>
+                
+                <a href="shopping.html" class="service-item service-4">
+                    <div class="service-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <div class="service-name">شحن رصيد</div>
+                </a>
+                
+                <a href="electricity.html" class="service-item service-5">
+                    <div class="service-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <div class="service-name">الكهرباء</div>
+                </a>
+                
+                <a href="water.html" class="service-item service-6">
+                    <div class="service-icon">
+                        <i class="fas fa-tint"></i>
+                    </div>
+                    <div class="service-name">المياه</div>
+                </a>
+                
+                <a href="transfer.html" class="service-item service-7">
+                    <div class="service-icon">
+                        <i class="fas fa-exchange-alt"></i>
+                    </div>
+                    <div class="service-name">تحويل بين</div>
+                </a>
+                
+                <a href="bank-transfer.html" class="service-item service-8">
+                    <div class="service-icon">
+                        <i class="fas fa-university"></i>
+                    </div>
+                    <div class="service-name">تحويل بنكي</div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Transactions Section -->
+        <div class="transactions-section">
+            <h3 class="section-title">
+                <i class="fas fa-clock"></i>
+                آخر العمليات
+            </h3>
+            
+            <div class="transactions-list">
+                <!-- Transaction 1 -->
+                <div class="transaction-item">
+                    <div class="transaction-icon" style="background: #0d9488;">
+                        <i class="fas fa-paper-plane"></i>
+                    </div>
+                    <div class="transaction-details">
+                        <div class="transaction-title">تحويل إلى محمد أحمد</div>
+                        <div class="transaction-meta">اليوم - 10:30 ص</div>
+                    </div>
+                    <div class="transaction-amount negative">
+                        - 500 SDG
+                    </div>
+                </div>
+                
+                <!-- Transaction 2 -->
+                <div class="transaction-item">
+                    <div class="transaction-icon" style="background: #10b981;">
+                        <i class="fas fa-qrcode"></i>
+                    </div>
+                    <div class="transaction-details">
+                        <div class="transaction-title">استلام من عمر خالد</div>
+                        <div class="transaction-meta">أمس - 03:45 م</div>
+                    </div>
+                    <div class="transaction-amount positive">
+                        + 1,200 SDG
+                    </div>
+                </div>
+                
+                <!-- Transaction 3 -->
+                <div class="transaction-item">
+                    <div class="transaction-icon" style="background: #f59e0b;">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <div class="transaction-details">
+                        <div class="transaction-title">دفع فاتورة كهرباء</div>
+                        <div class="transaction-meta">أمس - 11:20 ص</div>
+                    </div>
+                    <div class="transaction-amount negative">
+                        - 350 SDG
+                    </div>
+                </div>
+                
+                <!-- Transaction 4 -->
+                <div class="transaction-item">
+                    <div class="transaction-icon" style="background: #3b82f6;">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <div class="transaction-details">
+                        <div class="transaction-title">شحن رصيد موبايل</div>
+                        <div class="transaction-meta">قبل يومين - 09:15 ص</div>
+                    </div>
+                    <div class="transaction-amount negative">
+                        - 100 SDG
+                    </div>
+                </div>
+            </div>
+            
+            <!-- View All Button -->
+            <a href="transactions.html" class="view-all-btn">
+                <i class="fas fa-list"></i>
+                عرض جميع المعاملات
+            </a>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="dashboard.html" class="nav-item active">
+            <i class="fas fa-home"></i>
+            الرئيسية
+        </a>
+        <a href="transactions.html" class="nav-item">
+            <i class="fas fa-exchange-alt"></i>
+            المعاملات
+        </a>
+        <a href="receive.html" class="nav-item">
+            <i class="fas fa-qrcode"></i>
+            الاستلام
+        </a>
+        <a href="send.html" class="nav-item">
+            <i class="fas fa-paper-plane"></i>
+            الإرسال
+        </a>
+        <a href="profile.html" class="nav-item">
+            <i class="fas fa-user"></i>
+            الملف
+        </a>
+    </nav>
+
+    <script>
+        // تحديث الرصيد
+        document.getElementById('updateBalanceBtn').addEventListener('click', function() {
+            const balanceAmount = document.getElementById('balanceAmount');
+            const btnIcon = this.querySelector('.action-icon i');
+            const accountNumber = document.getElementById('accountNumber');
+            
+            // إضافة تأثير التحميل
+            btnIcon.className = 'fas fa-spinner fa-spin';
+            this.style.opacity = '0.7';
+            this.disabled = true;
+            
+            // محاكاة تحديث الرصيد (API call)
+            setTimeout(() => {
+                // إعادة تعيين الأيقونة
+                btnIcon.className = 'fas fa-sync-alt';
+                this.style.opacity = '1';
+                this.disabled = false;
+                
+                // تحديث الرصيد بشكل عشوائي لمحاكاة الاستجابة
+                const randomAmount = (Math.random() * 1000 + 500).toFixed(2);
+                balanceAmount.innerHTML = `${randomAmount} <small style="font-size: 1.4rem;">SDG</small>`;
+                
+                // تحديث رقم الحساب (عشوائي)
+                const lastFourDigits = Math.floor(1000 + Math.random() * 9000);
+                accountNumber.innerHTML = `<i class="fas fa-credit-card"></i> **** ${lastFourDigits}`;
+                
+                // إشعار للمستخدم
+                showNotification('تم تحديث الرصيد بنجاح!', 'success');
+            }, 1500);
+        });
+        
+        // إضافة تأثيرات ظهور للعناصر
+        document.addEventListener('DOMContentLoaded', function() {
+            const items = document.querySelectorAll('.balance-card, .action-btn, .service-item, .transaction-item');
+            items.forEach((item, index) => {
+                item.style.animationDelay = `${index * 0.05}s`;
+                item.classList.add('fade-in');
+            });
+        });
+        
+        // وظيفة عرض الإشعارات
+        function showNotification(message, type) {
+            // إنشاء عنصر الإشعار
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                left: 20px;
+                background: ${type === 'success' ? '#10b981' : '#ef4444'};
+                color: white;
+                padding: 12px 16px;
+                border-radius: 10px;
+                font-weight: 600;
+                text-align: center;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                z-index: 10000;
+                animation: slideIn 0.3s ease;
+            `;
+            
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            // إزالة الإشعار بعد 3 ثواني
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            }, 3000);
+            
+            // إضافة أنماط CSS للتحريك
+            if (!document.getElementById('notification-styles')) {
+                const style = document.createElement('style');
+                style.id = 'notification-styles';
+                style.textContent = `
+                    @keyframes slideIn {
+                        from { transform: translateY(-100px); opacity: 0; }
+                        to { transform: translateY(0); opacity: 1; }
+                    }
+                    @keyframes slideOut {
+                        from { transform: translateY(0); opacity: 1; }
+                        to { transform: translateY(-100px); opacity: 0; }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+        }
+        
+        // جعل عناصر الخدمات تفاعلية
+        document.querySelectorAll('.service-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                if (!this.getAttribute('href')) {
+                    e.preventDefault();
+                    const serviceName = this.querySelector('.service-name').textContent;
+                    showNotification(`سيتم فتح خدمة "${serviceName}" قريباً`, 'success');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
