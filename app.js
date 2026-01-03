@@ -16,7 +16,11 @@ import {
     updateDoc,
     increment,
     arrayUnion,
-    serverTimestamp
+    serverTimestamp,
+    collection,
+    query,
+    where,
+    getDocs
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -34,7 +38,7 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 const provider = new GoogleAuthProvider();
 
-// دالة لإنشاء رقم حساب فريد (تم تعديلها لتعطي رقم حساب بنكي مميز)
+// دالة لإنشاء رقم حساب فريد للموقع
 function generateAccountID() {
     return 'SP-' + Math.floor(100000 + Math.random() * 900000);
 }
@@ -91,13 +95,12 @@ async function loginWithEmail(email, password) {
     }
 }
 
-// تسجيل الدخول بجوجل (تم التعديل لإضافة البيانات الجديدة للمستخدم الجديد)
+// تسجيل الدخول بجوجل
 async function loginWithGoogle() {
     try {
         const result = await signInWithPopup(auth, provider);
         const user = result.user;
         
-        // التحقق من وجود المستخدم في قاعدة البيانات
         const userDocRef = doc(db, 'users', user.uid);
         const userDoc = await getDoc(userDocRef);
         
@@ -106,7 +109,7 @@ async function loginWithGoogle() {
                 name: user.displayName || user.email.split('@')[0],
                 email: user.email,
                 accountID: generateAccountID(),
-                usdtAddress: generateUSDTAddressPlaceholder(), // عنوان المحفظة المخصص
+                usdtAddress: generateUSDTAddressPlaceholder(),
                 balanceSDG: 0.00,
                 balanceUSDT: 0.00,
                 photoURL: user.photoURL || '',
@@ -122,7 +125,7 @@ async function loginWithGoogle() {
     }
 }
 
-// إنشاء حساب جديد (تم التعديل لإضافة الحساب والأرصدة والمحفظة)
+// إنشاء حساب جديد
 async function signUpWithEmail(email, password, name = '') {
     try {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -133,7 +136,7 @@ async function signUpWithEmail(email, password, name = '') {
             name: name || user.email.split('@')[0],
             email: email,
             accountID: accountID,
-            usdtAddress: generateUSDTAddressPlaceholder(), // توليد عنوان محفظة فريد
+            usdtAddress: generateUSDTAddressPlaceholder(),
             balanceSDG: 0.00,
             balanceUSDT: 0.00,
             phone: '',
@@ -173,40 +176,66 @@ async function getUserData(userId) {
     }
 }
 
-// تحديث رصيد المستخدم (تم التعديل لدعم SDG و USDT)
+// تحديث رصيد المستخدم
 async function updateUserBalance(userId, amount, currency = 'SDG', type = 'deposit', description = '') {
     try {
         const userRef = doc(db, 'users', userId);
-        const userDoc = await getDoc(userRef);
-        
-        if (!userDoc.exists()) {
-            throw new Error('المستخدم غير موجود');
-        }
-
-        // اختيار الحقل المطلوب بناءً على العملة
         const balanceField = currency === 'SDG' ? 'balanceSDG' : 'balanceUSDT';
-        const currentBalance = userDoc.data()[balanceField] || 0;
-        
-        if (type === 'send' && amount > currentBalance) {
-            throw new Error('الرصيد غير كافي');
-        }
-        
-        const newBalance = type === 'send' ? currentBalance - amount : currentBalance + amount;
         
         await updateDoc(userRef, {
-            [balanceField]: newBalance,
+            [balanceField]: increment(type === 'send' ? -amount : amount),
             transactions: arrayUnion({
                 type: type,
                 amount: amount,
                 currency: currency,
-                description: description || `${type === 'send' ? 'إرسال' : 'استلام'} أموال`,
+                description: description,
                 timestamp: new Date().toISOString(),
                 status: 'completed'
             }),
             updatedAt: serverTimestamp()
         });
+    } catch (error) {
+        throw error;
+    }
+}
+
+// دالة التحويل بين المستخدمين باستخدام رقم الحساب (تُستخدم في صفحة send)
+async function transferByAccountID(receiverAccountID, amount, currency = 'SDG') {
+    try {
+        const currentUser = auth.currentUser;
+        if (!currentUser) throw new Error('يجب تسجيل الدخول أولاً');
+
+        // 1. البحث عن المستلم بواسطة accountID
+        const usersRef = collection(db, "users");
+        const q = query(usersRef, where("accountID", "==", receiverAccountID));
+        const querySnapshot = await getDocs(q);
         
-        return newBalance;
+        if (querySnapshot.empty) {
+            throw new Error('عذراً، رقم الحساب هذا غير موجود في النظام');
+        }
+
+        const receiverDoc = querySnapshot.docs[0];
+        const receiverId = receiverDoc.id;
+        const receiverData = receiverDoc.data();
+
+        if (currentUser.uid === receiverId) {
+            throw new Error('لا يمكنك التحويل إلى حسابك الشخصي');
+        }
+
+        // 2. التحقق من رصيد المرسل
+        const senderData = await getUserData(currentUser.uid);
+        const balanceField = currency === 'SDG' ? 'balanceSDG' : 'balanceUSDT';
+        if (senderData[balanceField] < amount) {
+            throw new Error('عذراً، رصيدك غير كافٍ لإتمام هذه العملية');
+        }
+
+        // 3. تنفيذ عملية الخصم من المرسل
+        await updateUserBalance(currentUser.uid, amount, currency, 'send', `تحويل إلى ${receiverAccountID}`);
+
+        // 4. تنفيذ عملية الإضافة للمستلم
+        await updateUserBalance(receiverId, amount, currency, 'receive', `استلام من ${senderData.accountID}`);
+
+        return { success: true, receiverName: receiverData.name };
     } catch (error) {
         throw error;
     }
@@ -230,7 +259,6 @@ function addAlertStyles() {
             z-index: 9999;
             animation: slideDown 0.3s ease;
         }
-        
         .alert-content {
             display: flex;
             align-items: center;
@@ -241,63 +269,12 @@ function addAlertStyles() {
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             gap: 15px;
         }
-        
-        .alert-success .alert-content {
-            border-right: 4px solid #10b981;
-        }
-        
-        .alert-error .alert-content {
-            border-right: 4px solid #ef4444;
-        }
-        
-        .alert-warning .alert-content {
-            border-right: 4px solid #f59e0b;
-        }
-        
-        .alert-success .fas {
-            color: #10b981;
-        }
-        
-        .alert-error .fas {
-            color: #ef4444;
-        }
-        
-        .alert-warning .fas {
-            color: #f59e0b;
-        }
-        
-        .alert-content h4 {
-            margin: 0 0 5px 0;
-            color: white;
-            font-size: 1rem;
-        }
-        
-        .alert-content p {
-            margin: 0;
-            color: #94a3b8;
-            font-size: 0.9rem;
-        }
-        
-        .alert-close {
-            margin-right: auto;
-            background: none;
-            border: none;
-            color: #94a3b8;
-            cursor: pointer;
-            font-size: 1rem;
-            padding: 5px;
-        }
-        
-        @keyframes slideDown {
-            from {
-                transform: translate(-50%, -100%);
-                opacity: 0;
-            }
-            to {
-                transform: translate(-50%, 0);
-                opacity: 1;
-            }
-        }
+        .alert-success .alert-content { border-right: 4px solid #10b981; }
+        .alert-error .alert-content { border-right: 4px solid #ef4444; }
+        .alert-content h4 { margin: 0 0 5px 0; color: white; font-size: 1rem; }
+        .alert-content p { margin: 0; color: #94a3b8; font-size: 0.9rem; }
+        .alert-close { margin-right: auto; background: none; border: none; color: #94a3b8; cursor: pointer; }
+        @keyframes slideDown { from { transform: translate(-50%, -100%); opacity: 0; } to { transform: translate(-50%, 0); opacity: 1; } }
     `;
     document.head.appendChild(style);
 }
@@ -305,8 +282,6 @@ function addAlertStyles() {
 // تهيئة التطبيق
 function initApp() {
     addAlertStyles();
-    
-    // مراقبة حالة المصادقة
     onAuthStateChanged(auth, (user) => {
         if (user) {
             console.log('المستخدم مسجل:', user.email);
@@ -314,12 +289,9 @@ function initApp() {
     });
 }
 
-// تصدير الدوال والمتغيرات
+// تصدير الدوال
 export { 
-    auth, 
-    db, 
-    app, 
-    provider,
+    auth, db, app, provider,
     generateAccountID,
     loginWithEmail, 
     loginWithGoogle, 
@@ -327,16 +299,17 @@ export {
     logoutUser, 
     getUserData,
     updateUserBalance,
+    transferByAccountID,
     showAlert,
     initApp 
 };
 
-// تهيئة التطبيق تلقائياً
 initApp();
 
-// جعل الدوال متاحة عالمياً
+// جعل الدوال متاحة عالمياً لصفحة html
 window.loginWithEmail = loginWithEmail;
 window.loginWithGoogle = loginWithGoogle;
 window.logoutUser = logoutUser;
 window.showAlert = showAlert;
- 
+window.transferByAccountID = transferByAccountID;
+
