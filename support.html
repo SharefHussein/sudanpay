@@ -1,31 +1,191 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sudan Pay - الدعم</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sudan Pay - الدعم الفني</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
 </head>
-<body class="dashboard-body">
-  <div class="container">
-    <h2 class="text-3xl font-bold text-center mb-10">التواصل مع الدعم</h2>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <nav class="navbar">
+            <a href="dashboard.html" class="navbar-brand">
+                <i class="fas fa-arrow-right"></i>
+                العودة
+            </a>
+            <div class="navbar-menu">
+                <span class="text-primary font-bold">الدعم الفني</span>
+            </div>
+        </nav>
 
-    <div class="card">
-      <p class="text-lg mb-6">إذا واجهت أي مشكلة، تواصل معنا عبر:</p>
-      <div class="space-y-6">
-        <a href="tel:+249123456789" class="block btn-main py-5 text-xl text-center">
-          <i class="fas fa-phone"></i> اتصل بنا: +249 123 456 789
-        </a>
-        <a href="https://wa.me/249123456789" class="block btn-main py-5 text-xl text-center">
-          <i class="fab fa-whatsapp"></i> واتساب الدعم
-        </a>
-        <a href="mailto:support@sudanpay.sd" class="block btn-main py-5 text-xl text-center">
-          <i class="fas fa-envelope"></i> البريد الإلكتروني: support@sudanpay.sd
-        </a>
-      </div>
-    </div>
+        <!-- Hero Section -->
+        <div class="card bg-gradient" style="background: linear-gradient(135deg, #0d9488, #0891b2);">
+            <div class="text-center text-white p-6">
+                <div class="text-4xl mb-4">
+                    <i class="fas fa-headset"></i>
+                </div>
+                <h2 class="text-2xl font-bold mb-3">كيف يمكننا مساعدتك؟</h2>
+                <p class="opacity-90">فريق الدعم الفني جاهز لمساعدتك على مدار الساعة</p>
+            </div>
+        </div>
 
-    <a href="dashboard.html" class="block text-center text-teal-600 mt-8 text-lg">العودة للمحفظة</a>
-  </div>
-</body>
-</html>
+        <!-- Quick Help -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-question-circle"></i>
+                    مساعدة سريعة
+                </h3>
+            </div>
+            
+            <div class="faq-list">
+                <div class="faq-item" onclick="toggleFAQ(1)">
+                    <div class="faq-question">
+                        <span>كيف أقوم بإنشاء حساب جديد؟</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>انقر على زر "إنشاء حساب جديد" في صفحة تسجيل الدخول، ثم اتبع الخطوات:</p>
+                        <ol>
+                            <li>أدخل اسمك الكامل</li>
+                            <li>أدخل بريدك الإلكتروني</li>
+                            <li>اختر كلمة مرور قوية</li>
+                            <li>اضغط على إنشاء الحساب</li>
+                            <li>ستتلقى رسالة تأكيد على بريدك</li>
+                        </ol>
+                    </div>
+                </div>
+                
+                <div class="faq-item" onclick="toggleFAQ(2)">
+                    <div class="faq-question">
+                        <span>نسيت كلمة المرور، ماذا أفعل؟</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>يمكنك استعادة كلمة المرور بسهولة:</p>
+                        <ul>
+                            <li>في صفحة تسجيل الدخول، انقر على "نسيت كلمة المرور"</li>
+                            <li>أدخل بريدك الإلكتروني المسجل</li>
+                            <li>ستتلقى رسالة بإعادة تعيين كلمة المرور</li>
+                            <li>اتبع الرابط في الرسالة لتعيين كلمة مرور جديدة</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="faq-item" onclick="toggleFAQ(3)">
+                    <div class="faq-question">
+                        <span>كيف أرسل أموال لشخص آخر؟</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>لإرسال أموال لمستخدم آخر:</p>
+                        <ol>
+                            <li>اذهب إلى صفحة "إرسال أموال"</li>
+                            <li>أدخل رقم حساب المستلم أو مسح QR</li>
+                            <li>أدخل المبلغ المراد إرساله</li>
+                            <li>أضف وصفاً (اختياري)</li>
+                            <li>اضغط على تأكيد الإرسال</li>
+                            <li>أدخل رمز التحقق المرسل إليك</li>
+                        </ol>
+                    </div>
+                </div>
+                
+                <div class="faq-item" onclick="toggleFAQ(4)">
+                    <div class="faq-question">
+                        <span>كم تستغرق المعاملات؟</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>معاملات Sudan Pay فورية:</p>
+                        <ul>
+                            <li>التحويلات بين حسابات Sudan Pay: فورية</li>
+                            <li>التحويلات البنكية: 1-2 يوم عمل</li>
+                            <li>سحب الأموال: فوري إلى 24 ساعة</li>
+                            <li>الرسوم: 1% من المبلغ المحول</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Methods -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-phone-alt"></i>
+                    طرق التواصل
+                </h3>
+            </div>
+            
+            <div class="contact-methods">
+                <a href="tel:+249123456789" class="contact-method">
+                    <div class="contact-icon bg-primary">
+                        <i class="fas fa-phone"></i>
+                    </div>
+                    <div class="contact-details">
+                        <div class="contact-title">الاتصال الهاتفي</div>
+                        <div class="contact-info">+249 123 456 789</div>
+                        <div class="contact-time">24/7 متوفر على مدار الساعة</div>
+                    </div>
+                    <i class="fas fa-chevron-left contact-arrow"></i>
+                </a>
+                
+                <a href="https://wa.me/249123456789" class="contact-method" target="_blank">
+                    <div class="contact-icon bg-success">
+                        <i class="fab fa-whatsapp"></i>
+                    </div>
+                    <div class="contact-details">
+                        <div class="contact-title">واتساب الدعم</div>
+                        <div class="contact-info">+249 123 456 789</div>
+                        <div class="contact-time">رد سريع خلال دقائق</div>
+                    </div>
+                    <i class="fas fa-chevron-left contact-arrow"></i>
+                </a>
+                
+                <a href="mailto:support@sudanpay.sd" class="contact-method">
+                    <div class="contact-icon bg-warning">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div class="contact-details">
+                        <div class="contact-title">البريد الإلكتروني</div>
+                        <div class="contact-info">support@sudanpay.sd</div>
+                        <div class="contact-time">رد خلال 24 ساعة عمل</div>
+                    </div>
+                    <i class="fas fa-chevron-left contact-arrow"></i>
+                </a>
+                
+                <div class="contact-method" onclick="openLiveChat()">
+                    <div class="contact-icon bg-info">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <div class="contact-details">
+                        <div class="contact-title">الدردشة المباشرة</div>
+                        <div class="contact-info">محادثة فورية</div>
+                        <div class="contact-time">متوفر الآن</div>
+                    </div>
+                    <i class="fas fa-chevron-left contact-arrow"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Form -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-paper-plane"></i>
+                    أرسل رسالة
+                </h3>
+            </div>
+            
+            <form id="supportForm">
+                <div class="form-group">
+                    <label class="form-label">الاسم الكامل</label>
+                    <input type="text" class="form-control" id="supportName" placeholder="أدخل اسمك" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">البريد الإلكتروني</label>
+                    <input type="email" class="form-control" id="supportEmail" placeholder="أدخل بريدك"
