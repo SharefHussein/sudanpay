@@ -6,7 +6,420 @@
     <title>Sudan Pay - الدعم الفني</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
+    <style>
+        /* CSS Variables */
+        :root {
+            --primary: #0d9488;
+            --primary-dark: #0f766e;
+            --secondary: #0891b2;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --info: #3b82f6;
+            --light: #f8fafc;
+            --dark: #1e293b;
+            --gray: #64748b;
+            --gray-light: #e2e8f0;
+            --border-radius: 12px;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --transition: all 0.3s ease;
+        }
+
+        /* Reset & Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #f1f5f9;
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding-bottom: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        /* Typography */
+        .text-center { text-align: center; }
+        .text-primary { color: var(--primary); }
+        .text-white { color: white; }
+        .font-bold { font-weight: 700; }
+        .text-2xl { font-size: 1.75rem; }
+        .text-4xl { font-size: 2.5rem; }
+        .opacity-90 { opacity: 0.9; }
+        .mb-3 { margin-bottom: 0.75rem; }
+        .mb-4 { margin-bottom: 1rem; }
+        .p-6 { padding: 1.5rem; }
+
+        /* Navbar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            margin-bottom: 1.5rem;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .navbar-brand:hover {
+            color: var(--primary-dark);
+        }
+
+        .navbar-menu {
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        /* Cards */
+        .card {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+
+        .card-header {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--gray-light);
+        }
+
+        .card-title {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .card-title i {
+            color: var(--primary);
+        }
+
+        .bg-gradient {
+            background: linear-gradient(135deg, var(--primary), var(--secondary)) !important;
+        }
+
+        /* FAQ */
+        .faq-list {
+            padding: 0 1.5rem;
+        }
+
+        .faq-item {
+            border-bottom: 1px solid var(--gray-light);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+
+        .faq-question {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.25rem 0;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .faq-question i {
+            transition: var(--transition);
+            color: var(--gray);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            color: var(--gray);
+        }
+
+        .faq-answer.active {
+            max-height: 500px;
+            padding-bottom: 1.25rem;
+        }
+
+        .faq-answer p {
+            margin-bottom: 0.75rem;
+        }
+
+        .faq-answer ol, .faq-answer ul {
+            padding-right: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .faq-answer li {
+            margin-bottom: 0.5rem;
+        }
+
+        .faq-item:hover .faq-question {
+            color: var(--primary);
+        }
+
+        /* Contact Methods */
+        .contact-methods {
+            padding: 0 1.5rem 1.5rem;
+        }
+
+        .contact-method {
+            display: flex;
+            align-items: center;
+            padding: 1.25rem;
+            border-radius: var(--border-radius);
+            background: white;
+            border: 1px solid var(--gray-light);
+            margin-bottom: 1rem;
+            text-decoration: none;
+            color: var(--dark);
+            transition: var(--transition);
+        }
+
+        .contact-method:hover {
+            transform: translateX(-5px);
+            box-shadow: var(--shadow);
+            border-color: var(--primary);
+        }
+
+        .contact-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            color: white;
+            font-size: 1.25rem;
+            margin-left: 1rem;
+        }
+
+        .contact-details {
+            flex: 1;
+        }
+
+        .contact-title {
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .contact-info {
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .contact-time {
+            font-size: 0.875rem;
+            color: var(--gray);
+        }
+
+        .contact-arrow {
+            color: var(--gray);
+            transition: var(--transition);
+        }
+
+        .contact-method:hover .contact-arrow {
+            color: var(--primary);
+            transform: translateX(-3px);
+        }
+
+        /* Color Classes */
+        .bg-primary { background-color: var(--primary); }
+        .bg-success { background-color: var(--success); }
+        .bg-warning { background-color: var(--warning); }
+        .bg-info { background-color: var(--info); }
+
+        /* Form */
+        form {
+            padding: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border: 1px solid var(--gray-light);
+            border-radius: var(--border-radius);
+            font-family: 'Cairo', sans-serif;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.1);
+        }
+
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            width: 100%;
+            padding: 1rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            font-family: 'Cairo', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn i {
+            font-size: 1.1rem;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: var(--border-radius);
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            animation: modalFade 0.3s ease;
+        }
+
+        @keyframes modalFade {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--gray-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--gray);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .modal-close:hover {
+            color: var(--dark);
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .modal-message {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .modal-icon {
+            font-size: 4rem;
+            color: var(--success);
+            margin-bottom: 1rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .contact-method {
+                padding: 1rem;
+            }
+            
+            .contact-icon {
+                width: 45px;
+                height: 45px;
+                font-size: 1.1rem;
+            }
+            
+            .card-header, .faq-list, .contact-methods, form {
+                padding-right: 1rem;
+                padding-left: 1rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .navbar {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            
+            .contact-method {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .contact-icon {
+                margin-left: 0;
+                margin-bottom: 1rem;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -14,21 +427,21 @@
         <nav class="navbar">
             <a href="dashboard.html" class="navbar-brand">
                 <i class="fas fa-arrow-right"></i>
-                العودة
+                العودة للرئيسية
             </a>
             <div class="navbar-menu">
-                <span class="text-primary font-bold">الدعم الفني</span>
+                <span class="text-primary font-bold">الدعم الفني - Sudan Pay</span>
             </div>
         </nav>
 
         <!-- Hero Section -->
-        <div class="card bg-gradient" style="background: linear-gradient(135deg, #0d9488, #0891b2);">
+        <div class="card bg-gradient">
             <div class="text-center text-white p-6">
                 <div class="text-4xl mb-4">
                     <i class="fas fa-headset"></i>
                 </div>
                 <h2 class="text-2xl font-bold mb-3">كيف يمكننا مساعدتك؟</h2>
-                <p class="opacity-90">فريق الدعم الفني جاهز لمساعدتك على مدار الساعة</p>
+                <p class="opacity-90">فريق الدعم الفني جاهز لمساعدتك على مدار الساعة طوال أيام الأسبوع</p>
             </div>
         </div>
 
@@ -37,24 +450,26 @@
             <div class="card-header">
                 <h3 class="card-title">
                     <i class="fas fa-question-circle"></i>
-                    مساعدة سريعة
+                    مساعدة سريعة - الأسئلة الشائعة
                 </h3>
             </div>
             
             <div class="faq-list">
                 <div class="faq-item" onclick="toggleFAQ(1)">
                     <div class="faq-question">
-                        <span>كيف أقوم بإنشاء حساب جديد؟</span>
+                        <span>كيف أقوم بإنشاء حساب جديد في Sudan Pay؟</span>
                         <i class="fas fa-chevron-down"></i>
                     </div>
-                    <div class="faq-answer">
-                        <p>انقر على زر "إنشاء حساب جديد" في صفحة تسجيل الدخول، ثم اتبع الخطوات:</p>
+                    <div class="faq-answer" id="faq-1">
+                        <p>إنشاء حساب جديد في Sudan Pay سهل جداً، فقط اتبع الخطوات التالية:</p>
                         <ol>
-                            <li>أدخل اسمك الكامل</li>
-                            <li>أدخل بريدك الإلكتروني</li>
-                            <li>اختر كلمة مرور قوية</li>
-                            <li>اضغط على إنشاء الحساب</li>
-                            <li>ستتلقى رسالة تأكيد على بريدك</li>
+                            <li>انقر على زر "إنشاء حساب جديد" في صفحة تسجيل الدخول</li>
+                            <li>أدخل اسمك الكامل كما هو في الهوية</li>
+                            <li>أدخل بريدك الإلكتروني الصحيح</li>
+                            <li>اختر كلمة مرور قوية (مزيج من حروف وأرقام)</li>
+                            <li>اضغط على زر إنشاء الحساب</li>
+                            <li>ستتلقى رسالة تأكيد على بريدك الإلكتروني</li>
+                            <li>انقر على رابط التفعيل في الرسالة</li>
                         </ol>
                     </div>
                 </div>
@@ -64,47 +479,53 @@
                         <span>نسيت كلمة المرور، ماذا أفعل؟</span>
                         <i class="fas fa-chevron-down"></i>
                     </div>
-                    <div class="faq-answer">
-                        <p>يمكنك استعادة كلمة المرور بسهولة:</p>
+                    <div class="faq-answer" id="faq-2">
+                        <p>يمكنك استعادة كلمة المرور بسهولة عبر اتباع هذه الخطوات:</p>
                         <ul>
                             <li>في صفحة تسجيل الدخول، انقر على "نسيت كلمة المرور"</li>
-                            <li>أدخل بريدك الإلكتروني المسجل</li>
-                            <li>ستتلقى رسالة بإعادة تعيين كلمة المرور</li>
-                            <li>اتبع الرابط في الرسالة لتعيين كلمة مرور جديدة</li>
+                            <li>أدخل بريدك الإلكتروني المسجل في النظام</li>
+                            <li>ستتلقى رسالة بريد إلكتروني تحتوي على رابط إعادة تعيين كلمة المرور</li>
+                            <li>انقر على الرابط وسيتم توجيهك إلى صفحة تعيين كلمة مرور جديدة</li>
+                            <li>أدخل كلمة المرور الجديدة وقم بتأكيدها</li>
+                            <li>احفظ كلمة المرور الجديدة في مكان آمن</li>
                         </ul>
                     </div>
                 </div>
                 
                 <div class="faq-item" onclick="toggleFAQ(3)">
                     <div class="faq-question">
-                        <span>كيف أرسل أموال لشخص آخر؟</span>
+                        <span>كيف أرسل أموال لشخص آخر عبر Sudan Pay؟</span>
                         <i class="fas fa-chevron-down"></i>
                     </div>
-                    <div class="faq-answer">
-                        <p>لإرسال أموال لمستخدم آخر:</p>
+                    <div class="faq-answer" id="faq-3">
+                        <p>لإرسال أموال لمستخدم آخر في Sudan Pay:</p>
                         <ol>
-                            <li>اذهب إلى صفحة "إرسال أموال"</li>
-                            <li>أدخل رقم حساب المستلم أو مسح QR</li>
+                            <li>اذهب إلى صفحة "إرسال أموال" من القائمة الرئيسية</li>
+                            <li>أدخل رقم حساب المستلم أو مسح QR كود حسابه</li>
                             <li>أدخل المبلغ المراد إرساله</li>
-                            <li>أضف وصفاً (اختياري)</li>
-                            <li>اضغط على تأكيد الإرسال</li>
-                            <li>أدخل رمز التحقق المرسل إليك</li>
+                            <li>اختر نوع العملة (جنيه سوداني، دولار، إلخ)</li>
+                            <li>أضف وصفاً للمعاملة (اختياري)</li>
+                            <li>اضغط على زر تأكيد الإرسال</li>
+                            <li>أدخل رمز التحقق المرسل إلى هاتفك المحمول</li>
+                            <li>سيتم إتمام العملية فوراً وستتلقى إشعاراً بتأكيدها</li>
                         </ol>
                     </div>
                 </div>
                 
                 <div class="faq-item" onclick="toggleFAQ(4)">
                     <div class="faq-question">
-                        <span>كم تستغرق المعاملات؟</span>
+                        <span>كم تستغرق المعاملات في Sudan Pay؟</span>
                         <i class="fas fa-chevron-down"></i>
                     </div>
-                    <div class="faq-answer">
-                        <p>معاملات Sudan Pay فورية:</p>
+                    <div class="faq-answer" id="faq-4">
+                        <p>معاملات Sudan Pay سريعة وآمنة:</p>
                         <ul>
-                            <li>التحويلات بين حسابات Sudan Pay: فورية</li>
-                            <li>التحويلات البنكية: 1-2 يوم عمل</li>
-                            <li>سحب الأموال: فوري إلى 24 ساعة</li>
-                            <li>الرسوم: 1% من المبلغ المحول</li>
+                            <li><strong>التحويلات بين حسابات Sudan Pay:</strong> فورية (لحظية)</li>
+                            <li><strong>التحويلات البنكية:</strong> من 1 إلى 2 يوم عمل</li>
+                            <li><strong>سحب الأموال من الصراف الآلي:</strong> فوري إلى 24 ساعة</li>
+                            <li><strong>إيداع الأموال:</strong> فوري عند استخدام قنوات الدعم</li>
+                            <li><strong>الرسوم:</strong> 1% من المبلغ المحول للتحويلات البنكية (بحد أقصى 1000 جنيه)</li>
+                            <li><strong>التحويلات الداخلية:</strong> بدون رسوم</li>
                         </ul>
                     </div>
                 </div>
@@ -116,7 +537,7 @@
             <div class="card-header">
                 <h3 class="card-title">
                     <i class="fas fa-phone-alt"></i>
-                    طرق التواصل
+                    طرق التواصل مع الدعم الفني
                 </h3>
             </div>
             
@@ -126,9 +547,9 @@
                         <i class="fas fa-phone"></i>
                     </div>
                     <div class="contact-details">
-                        <div class="contact-title">الاتصال الهاتفي</div>
+                        <div class="contact-title">الاتصال الهاتفي المباشر</div>
                         <div class="contact-info">+249 123 456 789</div>
-                        <div class="contact-time">24/7 متوفر على مدار الساعة</div>
+                        <div class="contact-time">متوفر على مدار الساعة طوال الأسبوع</div>
                     </div>
                     <i class="fas fa-chevron-left contact-arrow"></i>
                 </a>
@@ -138,9 +559,9 @@
                         <i class="fab fa-whatsapp"></i>
                     </div>
                     <div class="contact-details">
-                        <div class="contact-title">واتساب الدعم</div>
+                        <div class="contact-title">الدعم عبر واتساب</div>
                         <div class="contact-info">+249 123 456 789</div>
-                        <div class="contact-time">رد سريع خلال دقائق</div>
+                        <div class="contact-time">رد سريع خلال دقائق معدودة</div>
                     </div>
                     <i class="fas fa-chevron-left contact-arrow"></i>
                 </a>
@@ -150,9 +571,9 @@
                         <i class="fas fa-envelope"></i>
                     </div>
                     <div class="contact-details">
-                        <div class="contact-title">البريد الإلكتروني</div>
+                        <div class="contact-title">البريد الإلكتروني الرسمي</div>
                         <div class="contact-info">support@sudanpay.sd</div>
-                        <div class="contact-time">رد خلال 24 ساعة عمل</div>
+                        <div class="contact-time">رد خلال 24 ساعة عمل كحد أقصى</div>
                     </div>
                     <i class="fas fa-chevron-left contact-arrow"></i>
                 </a>
@@ -162,9 +583,9 @@
                         <i class="fas fa-comments"></i>
                     </div>
                     <div class="contact-details">
-                        <div class="contact-title">الدردشة المباشرة</div>
-                        <div class="contact-info">محادثة فورية</div>
-                        <div class="contact-time">متوفر الآن</div>
+                        <div class="contact-title">الدردشة المباشرة الفورية</div>
+                        <div class="contact-info">محادثة مباشرة مع أحد ممثلي الدعم</div>
+                        <div class="contact-time">متوفر الآن - اضغط لبدء المحادثة</div>
                     </div>
                     <i class="fas fa-chevron-left contact-arrow"></i>
                 </div>
@@ -176,16 +597,204 @@
             <div class="card-header">
                 <h3 class="card-title">
                     <i class="fas fa-paper-plane"></i>
-                    أرسل رسالة
+                    أرسل رسالة للدعم الفني
                 </h3>
             </div>
             
             <form id="supportForm">
                 <div class="form-group">
-                    <label class="form-label">الاسم الكامل</label>
-                    <input type="text" class="form-control" id="supportName" placeholder="أدخل اسمك" required>
+                    <label class="form-label">الاسم الكامل *</label>
+                    <input type="text" class="form-control" id="supportName" placeholder="أدخل اسمك الكامل" required>
                 </div>
                 
                 <div class="form-group">
-                    <label class="form-label">البريد الإلكتروني</label>
-                    <input type="email" class="form-control" id="supportEmail" placeholder="أدخل بريدك"
+                    <label class="form-label">البريد الإلكتروني *</label>
+                    <input type="email" class="form-control" id="supportEmail" placeholder="أدخل بريدك الإلكتروني" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">رقم الهاتف</label>
+                    <input type="tel" class="form-control" id="supportPhone" placeholder="أدخل رقم هاتفك (اختياري)">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">نوع الاستفسار *</label>
+                    <select class="form-control" id="supportType" required>
+                        <option value="">اختر نوع الاستفسار</option>
+                        <option value="technical">مشكلة تقنية</option>
+                        <option value="account">مشكلة في الحساب</option>
+                        <option value="transaction">مشكلة في معاملة</option>
+                        <option value="security">استفسار أمني</option>
+                        <option value="other">استفسار آخر</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">الرسالة *</label>
+                    <textarea class="form-control" id="supportMessage" placeholder="اشرح مشكلتك أو استفسارك بالتفصيل..." rows="4" required></textarea>
+                </div>
+                
+                <button type="submit" class="btn">
+                    <i class="fas fa-paper-plane"></i>
+                    إرسال الرسالة
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal for Live Chat -->
+    <div class="modal" id="liveChatModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">الدردشة المباشرة</h3>
+                <button class="modal-close" onclick="closeLiveChat()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-message">
+                    <div class="modal-icon">
+                        <i class="fas fa-comment-dots"></i>
+                    </div>
+                    <h3 class="mb-3">الدردشة المباشرة قريباً!</h3>
+                    <p>نعمل حالياً على تفعيل خدمة الدردشة المباشرة. في الوقت الحالي، يمكنك التواصل معنا عبر الهاتف أو الواتساب أو البريد الإلكتروني.</p>
+                    <div style="margin-top: 1.5rem;">
+                        <a href="tel:+249123456789" class="btn" style="margin-bottom: 0.75rem;">
+                            <i class="fas fa-phone"></i>
+                            الاتصال الهاتفي
+                        </a>
+                        <a href="https://wa.me/249123456789" class="btn" style="background: var(--success);">
+                            <i class="fab fa-whatsapp"></i>
+                            الواتساب
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Form Submission -->
+    <div class="modal" id="successModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">تم إرسال رسالتك</h3>
+                <button class="modal-close" onclick="closeSuccessModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-message">
+                    <div class="modal-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <h3 class="mb-3">شكراً لتواصلك معنا!</h3>
+                    <p>لقد تم استلام رسالتك بنجاح وسيقوم فريق الدعم الفني بالرد عليك في أقرب وقت ممكن.</p>
+                    <p style="margin-top: 1rem; font-weight: 600;">رقم تذكرة الدعم: <span id="ticketNumber">SUD-2023-5876</span></p>
+                    <button class="btn" onclick="closeSuccessModal()" style="margin-top: 1.5rem;">
+                        <i class="fas fa-check"></i>
+                        حسناً
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // FAQ Toggle Functionality
+        function toggleFAQ(id) {
+            const answer = document.getElementById(`faq-${id}`);
+            const icon = answer.previousElementSibling.querySelector('i');
+            
+            // Toggle active class
+            answer.classList.toggle('active');
+            
+            // Rotate icon
+            if (answer.classList.contains('active')) {
+                icon.style.transform = 'rotate(180deg)';
+            } else {
+                icon.style.transform = 'rotate(0deg)';
+            }
+            
+            // Close other FAQs
+            const allFAQs = document.querySelectorAll('.faq-answer');
+            const allIcons = document.querySelectorAll('.faq-question i');
+            
+            allFAQs.forEach((faq, index) => {
+                if (faq.id !== `faq-${id}` && faq.classList.contains('active')) {
+                    faq.classList.remove('active');
+                    allIcons[index].style.transform = 'rotate(0deg)';
+                }
+            });
+        }
+        
+        // Open Live Chat Modal
+        function openLiveChat() {
+            document.getElementById('liveChatModal').classList.add('active');
+        }
+        
+        // Close Live Chat Modal
+        function closeLiveChat() {
+            document.getElementById('liveChatModal').classList.remove('active');
+        }
+        
+        // Open Success Modal
+        function openSuccessModal() {
+            // Generate random ticket number
+            const ticketNumber = 'SUD-' + new Date().getFullYear() + '-' + Math.floor(1000 + Math.random() * 9000);
+            document.getElementById('ticketNumber').textContent = ticketNumber;
+            
+            document.getElementById('successModal').classList.add('active');
+        }
+        
+        // Close Success Modal
+        function closeSuccessModal() {
+            document.getElementById('successModal').classList.remove('active');
+        }
+        
+        // Form Submission
+        document.getElementById('supportForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form values
+            const name = document.getElementById('supportName').value;
+            const email = document.getElementById('supportEmail').value;
+            const phone = document.getElementById('supportPhone').value;
+            const type = document.getElementById('supportType').value;
+            const message = document.getElementById('supportMessage').value;
+            
+            // In a real application, you would send this data to a server
+            console.log({
+                name,
+                email,
+                phone,
+                type,
+                message
+            });
+            
+            // Show success modal
+            openSuccessModal();
+            
+            // Reset form
+            this.reset();
+        });
+        
+        // Close modals when clicking outside
+        window.addEventListener('click', function(e) {
+            const liveChatModal = document.getElementById('liveChatModal');
+            const successModal = document.getElementById('successModal');
+            
+            if (e.target === liveChatModal) {
+                closeLiveChat();
+            }
+            
+            if (e.target === successModal) {
+                closeSuccessModal();
+            }
+        });
+        
+        // Initialize FAQs to be closed
+        document.addEventListener('DOMContentLoaded', function() {
+            const faqAnswers = document.querySelectorAll('.faq-answer');
+            faqAnswers.forEach(answer => {
+                answer.style.maxHeight = '0';
+            });
+        });
+    </script>
+</body>
+    </html> 
