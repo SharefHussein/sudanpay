@@ -34,9 +34,14 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 const provider = new GoogleAuthProvider();
 
-// دالة لإنشاء رقم حساب فريد
+// دالة لإنشاء رقم حساب فريد (تم تعديلها لتعطي رقم حساب بنكي مميز)
 function generateAccountID() {
-    return 'SP-' + Math.random().toString(36).substr(2, 6).toUpperCase();
+    return 'SP-' + Math.floor(100000 + Math.random() * 900000);
+}
+
+// دالة مؤقتة لتوليد عنوان USDT (سيتم استبدالها لاحقاً بـ API Coinremitter)
+function generateUSDTAddressPlaceholder() {
+    return "T" + Math.random().toString(36).substr(2, 33).toUpperCase();
 }
 
 // دالة لعرض التنبيهات
@@ -86,7 +91,7 @@ async function loginWithEmail(email, password) {
     }
 }
 
-// تسجيل الدخول بجوجل
+// تسجيل الدخول بجوجل (تم التعديل لإضافة البيانات الجديدة للمستخدم الجديد)
 async function loginWithGoogle() {
     try {
         const result = await signInWithPopup(auth, provider);
@@ -101,7 +106,8 @@ async function loginWithGoogle() {
                 name: user.displayName || user.email.split('@')[0],
                 email: user.email,
                 accountID: generateAccountID(),
-                balanceSDG: 1000.00,
+                usdtAddress: generateUSDTAddressPlaceholder(), // عنوان المحفظة المخصص
+                balanceSDG: 0.00,
                 balanceUSDT: 0.00,
                 photoURL: user.photoURL || '',
                 createdAt: serverTimestamp(),
@@ -116,7 +122,7 @@ async function loginWithGoogle() {
     }
 }
 
-// إنشاء حساب جديد
+// إنشاء حساب جديد (تم التعديل لإضافة الحساب والأرصدة والمحفظة)
 async function signUpWithEmail(email, password, name = '') {
     try {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -127,7 +133,8 @@ async function signUpWithEmail(email, password, name = '') {
             name: name || user.email.split('@')[0],
             email: email,
             accountID: accountID,
-            balanceSDG: 1000.00,
+            usdtAddress: generateUSDTAddressPlaceholder(), // توليد عنوان محفظة فريد
+            balanceSDG: 0.00,
             balanceUSDT: 0.00,
             phone: '',
             photoURL: '',
@@ -166,8 +173,8 @@ async function getUserData(userId) {
     }
 }
 
-// تحديث رصيد المستخدم
-async function updateUserBalance(userId, amount, type = 'send', description = '') {
+// تحديث رصيد المستخدم (تم التعديل لدعم SDG و USDT)
+async function updateUserBalance(userId, amount, currency = 'SDG', type = 'deposit', description = '') {
     try {
         const userRef = doc(db, 'users', userId);
         const userDoc = await getDoc(userRef);
@@ -175,8 +182,10 @@ async function updateUserBalance(userId, amount, type = 'send', description = ''
         if (!userDoc.exists()) {
             throw new Error('المستخدم غير موجود');
         }
-        
-        const currentBalance = userDoc.data().balanceSDG || 0;
+
+        // اختيار الحقل المطلوب بناءً على العملة
+        const balanceField = currency === 'SDG' ? 'balanceSDG' : 'balanceUSDT';
+        const currentBalance = userDoc.data()[balanceField] || 0;
         
         if (type === 'send' && amount > currentBalance) {
             throw new Error('الرصيد غير كافي');
@@ -185,14 +194,16 @@ async function updateUserBalance(userId, amount, type = 'send', description = ''
         const newBalance = type === 'send' ? currentBalance - amount : currentBalance + amount;
         
         await updateDoc(userRef, {
-            balanceSDG: newBalance,
+            [balanceField]: newBalance,
             transactions: arrayUnion({
                 type: type,
                 amount: amount,
+                currency: currency,
                 description: description || `${type === 'send' ? 'إرسال' : 'استلام'} أموال`,
-                timestamp: serverTimestamp(),
+                timestamp: new Date().toISOString(),
                 status: 'completed'
-            })
+            }),
+            updatedAt: serverTimestamp()
         });
         
         return newBalance;
@@ -327,4 +338,5 @@ initApp();
 window.loginWithEmail = loginWithEmail;
 window.loginWithGoogle = loginWithGoogle;
 window.logoutUser = logoutUser;
-window.showAlert = showAlert; 
+window.showAlert = showAlert;
+ 
