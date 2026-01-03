@@ -7,134 +7,109 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
+    <style>
+        .profile-header {
+            text-align: center;
+            padding: 30px 20px;
+            background: white;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        .avatar {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            font-weight: 700;
+        }
+        .profile-name { font-size: 1.4rem; font-weight: 700; color: var(--dark); margin-bottom: 5px; }
+        .profile-email { color: var(--gray); font-size: 0.9rem; }
+        
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        .info-item:last-child { border-bottom: none; }
+        .info-label { color: var(--gray); display: flex; align-items: center; gap: 10px; font-size: 0.9rem; }
+        .info-value { font-weight: 600; color: var(--dark); }
+        
+        .btn-group { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
+        
+        /* Switch Styling */
+        .switch { position: relative; display: inline-block; width: 40px; height: 20px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 20px; }
+        .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 2px; bottom: 2px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--primary); }
+        input:checked + .slider:before { transform: translateX(20px); }
+
+        .dark-mode-active { background: #0f172a !important; color: white !important; }
+        .dark-mode-active .card, .dark-mode-active .profile-header { background: #1e293b; color: white; }
+        .dark-mode-active .info-value { color: white; }
+        .dark-mode-active .profile-name { color: white; }
+    </style>
 </head>
 <body>
     <div class="container">
-        <!-- Header -->
         <nav class="navbar">
             <a href="dashboard.html" class="navbar-brand">
-                <i class="fas fa-arrow-right"></i>
-                العودة
+                <i class="fas fa-arrow-right"></i> العودة
             </a>
             <div class="navbar-menu">
                 <span class="text-primary font-bold">الملف الشخصي</span>
             </div>
         </nav>
 
-        <!-- Profile Header -->
         <div class="profile-header">
-            <div class="avatar" id="userAvatar">
-                <i class="fas fa-user" id="avatarIcon"></i>
-            </div>
-            <h2 class="profile-name" id="userName">جاري التحميل...</h2>
-            <p class="profile-email" id="userEmail">جاري التحميل...</p>
+            <div class="avatar" id="userAvatar">?</div>
+            <h2 class="profile-name" id="userName">...</h2>
+            <p class="profile-email" id="userEmail">...</p>
         </div>
 
-        <!-- Profile Info -->
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">
-                    <i class="fas fa-info-circle"></i>
-                    معلومات الحساب
-                </h3>
+                <h3 class="card-title"><i class="fas fa-info-circle"></i> معلومات الحساب</h3>
             </div>
-            
             <div class="profile-info">
                 <div class="info-item">
-                    <div class="info-label">
-                        <i class="fas fa-id-card"></i>
-                        رقم الحساب
-                    </div>
-                    <div class="info-value" id="accountID">جاري التحميل...</div>
+                    <div class="info-label"><i class="fas fa-id-card"></i> رقم الحساب</div>
+                    <div class="info-value" id="accountID">...</div>
                 </div>
-                
                 <div class="info-item">
-                    <div class="info-label">
-                        <i class="fas fa-calendar"></i>
-                        تاريخ الإنشاء
-                    </div>
-                    <div class="info-value" id="createdAt">جاري التحميل...</div>
+                    <div class="info-label"><i class="fas fa-calendar"></i> تاريخ الإنضمام</div>
+                    <div class="info-value" id="createdAt">...</div>
                 </div>
-                
                 <div class="info-item">
-                    <div class="info-label">
-                        <i class="fas fa-shield-alt"></i>
-                        حالة الحساب
-                    </div>
-                    <div class="info-value">
-                        <span class="badge badge-success" id="accountStatus">نشط</span>
-                    </div>
-                </div>
-                
-                <div class="info-item">
-                    <div class="info-label">
-                        <i class="fas fa-mobile-alt"></i>
-                        رقم الهاتف
-                    </div>
-                    <div class="info-value" id="phoneNumber">
-                        <span id="phoneText">غير مضاف</span>
-                        <button class="btn btn-outline btn-sm" onclick="addPhoneNumber()">
-                            <i class="fas fa-plus"></i> إضافة
-                        </button>
-                    </div>
+                    <div class="info-label"><i class="fas fa-shield-alt"></i> حالة الحساب</div>
+                    <div class="info-value"><span class="text-success">نشط</span></div>
                 </div>
             </div>
         </div>
 
-        <!-- Security Section -->
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">
-                    <i class="fas fa-shield-alt"></i>
-                    الأمان
-                </h3>
+                <h3 class="card-title"><i class="fas fa-cog"></i> الإعدادات والأمان</h3>
             </div>
-            
             <div class="profile-info">
-                <div class="info-item clickable" onclick="changePassword()">
-                    <div class="info-label">
-                        <i class="fas fa-key"></i>
-                        تغيير كلمة المرور
-                    </div>
-                    <div class="info-value">
-                        <i class="fas fa-chevron-left text-primary"></i>
-                    </div>
+                <div class="info-item" onclick="changePassword()" style="cursor: pointer;">
+                    <div class="info-label"><i class="fas fa-key"></i> تغيير كلمة المرور</div>
+                    <div class="info-value"><i class="fas fa-chevron-left"></i></div>
                 </div>
-                
                 <div class="info-item">
-                    <div class="info-label">
-                        <i class="fas fa-bell"></i>
-                        إشعارات التحويلات
-                    </div>
+                    <div class="info-label"><i class="fas fa-moon"></i> الوضع الليلي</div>
                     <div class="info-value">
                         <label class="switch">
-                            <input type="checkbox" id="transferNotifications" checked>
-                            <span class="slider"></span>
-                        </label>
-                    </div>
-                </div>
-                
-                <div class="info-item">
-                    <div class="info-label">
-                        <i class="fas fa-fingerprint"></i>
-                        تفعيل البصمة
-                    </div>
-                    <div class="info-value">
-                        <label class="switch">
-                            <input type="checkbox" id="biometricAuth">
-                            <span class="slider"></span>
-                        </label>
-                    </div>
-                </div>
-                
-                <div class="info-item">
-                    <div class="info-label">
-                        <i class="fas fa-moon"></i>
-                        الوضع الليلي
-                    </div>
-                    <div class="info-value">
-                        <label class="switch">
-                            <input type="checkbox" id="darkMode" onchange="toggleDarkMode()">
+                            <input type="checkbox" id="darkModeToggle" onchange="toggleDarkMode()">
                             <span class="slider"></span>
                         </label>
                     </div>
@@ -142,225 +117,86 @@
             </div>
         </div>
 
-        <!-- Actions -->
         <div class="btn-group">
             <button class="btn btn-primary" onclick="window.location.href='support.html'">
-                <i class="fas fa-headset"></i>
-                الدعم الفني
+                <i class="fas fa-headset"></i> الدعم الفني
             </button>
-            
-            <button class="btn btn-danger" onclick="logout()">
-                <i class="fas fa-sign-out-alt"></i>
-                تسجيل الخروج
+            <button class="btn btn-danger" onclick="handleLogout()">
+                <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
             </button>
         </div>
     </div>
 
     <script type="module">
-        import { auth, db, logoutUser, showAlert } from './app.js';
+        import { auth, db, logoutUser, getUserData, showAlert } from './app.js';
         import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-        // دالة تسجيل الخروج
-        async function logout() {
-            try {
-                await logoutUser();
-                showAlert('تم تسجيل الخروج بنجاح', 'success');
-                setTimeout(() => {
-                    window.location.href = 'index.html';
-                }, 1000);
-            } catch (error) {
-                showAlert('حدث خطأ أثناء تسجيل الخروج');
-            }
-        }
-
-        // دالة تحميل بيانات الملف الشخصي
-        async function loadProfileData() {
+        // تحميل البيانات
+        async function loadProfile() {
             const user = auth.currentUser;
-            if (!user) {
-                window.location.href = 'index.html';
-                return;
-            }
+            if (!user) return;
 
             try {
-                // تحميل بيانات المستخدم من Firestore
-                const userDoc = await getDoc(doc(db, 'users', user.uid));
-                
-                if (userDoc.exists()) {
-                    const userData = userDoc.data();
-                    
-                    // تحديث معلومات المستخدم
-                    document.getElementById('userName').textContent = 
-                        userData.name || user.email.split('@')[0];
+                const data = await getUserData(user.uid);
+                if (data) {
+                    document.getElementById('userName').textContent = data.name || "مستخدم جديد";
                     document.getElementById('userEmail').textContent = user.email;
-                    document.getElementById('accountID').textContent = 
-                        userData.accountID || 'غير متوفر';
+                    document.getElementById('accountID').textContent = data.accountID || "N/A";
                     
-                    // تحديث الصورة الرمزية
-                    const avatar = document.getElementById('userAvatar');
-                    const avatarIcon = document.getElementById('avatarIcon');
-                    if (userData.name) {
-                        const initials = userData.name
-                            .split(' ')
-                            .map(word => word.charAt(0))
-                            .join('')
-                            .toUpperCase()
-                            .substring(0, 2);
-                        avatar.innerHTML = initials;
-                        avatarIcon.style.display = 'none';
+                    // الأيقونة
+                    document.getElementById('userAvatar').textContent = data.name ? data.name.charAt(0).toUpperCase() : "?";
+
+                    // تاريخ الإنشاء
+                    if (data.createdAt) {
+                        const date = new Date(data.createdAt);
+                        document.getElementById('createdAt').textContent = date.toLocaleDateString('ar-EG');
                     }
-                    
-                    // تحديث تاريخ الإنشاء
-                    if (userData.createdAt) {
-                        const date = userData.createdAt.toDate
-                            ? userData.createdAt.toDate()
-                            : new Date(userData.createdAt);
-                        document.getElementById('createdAt').textContent = 
-                            date.toLocaleDateString('ar-SA');
-                    }
-                    
-                    // تحديث رقم الهاتف
-                    if (userData.phone) {
-                        document.getElementById('phoneText').textContent = userData.phone;
-                        document.querySelector('#phoneNumber button').style.display = 'none';
-                    }
-                    
-                    // تحديث إعدادات الوضع الليلي
-                    const darkMode = localStorage.getItem('darkMode') === 'true';
-                    document.getElementById('darkMode').checked = darkMode;
-                    toggleDarkMode(darkMode);
                 }
-                
             } catch (error) {
-                console.error('خطأ في تحميل بيانات الملف الشخصي:', error);
-                showAlert('حدث خطأ في تحميل البيانات');
+                console.error(error);
+                showAlert('خطأ في تحميل البيانات');
             }
         }
 
-        // دالة تبديل الوضع الليلي
-        function toggleDarkMode(force = null) {
-            const darkMode = force !== null ? force : document.getElementById('darkMode').checked;
-            localStorage.setItem('darkMode', darkMode);
-            
-            if (darkMode) {
-                document.body.classList.add('dark-mode');
-                document.body.style.backgroundColor = '#0f172a';
-                document.body.style.color = '#f8fafc';
+        // تسجيل الخروج
+        window.handleLogout = async () => {
+            if(confirm('هل أنت متأكد من تسجيل الخروج؟')) {
+                await logoutUser();
+                window.location.href = 'index.html';
+            }
+        };
+
+        // الوضع الليلي البسيط
+        window.toggleDarkMode = () => {
+            const isDark = document.getElementById('darkModeToggle').checked;
+            if (isDark) {
+                document.body.classList.add('dark-mode-active');
+                localStorage.setItem('theme', 'dark');
             } else {
-                document.body.classList.remove('dark-mode');
-                document.body.style.backgroundColor = '';
-                document.body.style.color = '';
+                document.body.classList.remove('dark-mode-active');
+                localStorage.setItem('theme', 'light');
             }
-        }
+        };
 
-        // دالة تغيير كلمة المرور
-        function changePassword() {
-            showAlert('سيتم تفعيل هذه الميزة قريباً', 'info');
-        }
+        // تغيير كلمة المرور
+        window.changePassword = () => {
+            showAlert('سيتم إرسال رابط تعيين كلمة المرور لبريدك قريباً', 'info');
+        };
 
-        // دالة إضافة رقم الهاتف
-        function addPhoneNumber() {
-            const phone = prompt('أدخل رقم هاتفك (مثال: 0912345678):');
-            if (phone && phone.trim()) {
-                if (/^[0-9]{10}$/.test(phone)) {
-                    document.getElementById('phoneText').textContent = phone;
-                    document.querySelector('#phoneNumber button').style.display = 'none';
-                    showAlert('تم إضافة رقم الهاتف بنجاح', 'success');
-                } else {
-                    showAlert('رقم الهاتف غير صالح. يجب أن يكون 10 أرقام', 'error');
-                }
-            }
-        }
-
-        // مراقبة حالة المصادقة
+        // فحص حالة الدخول
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                loadProfileData();
+                loadProfile();
+                // استرجاع الوضع الليلي المفضل
+                if (localStorage.getItem('theme') === 'dark') {
+                    document.getElementById('darkModeToggle').checked = true;
+                    toggleDarkMode();
+                }
             } else {
                 window.location.href = 'index.html';
             }
         });
-
-        // ربط الأحداث
-        document.addEventListener('DOMContentLoaded', () => {
-            // إضافة تأثير النقر على العناصر القابلة للنقر
-            document.querySelectorAll('.clickable').forEach(item => {
-                item.style.cursor = 'pointer';
-                item.addEventListener('click', function() {
-                    this.style.transform = 'scale(0.98)';
-                    setTimeout(() => {
-                        this.style.transform = '';
-                    }, 200);
-                });
-            });
-            
-            // حفظ إعدادات الإشعارات
-            document.getElementById('transferNotifications').addEventListener('change', function() {
-                localStorage.setItem('transferNotifications', this.checked);
-                showAlert(this.checked ? 'تم تفعيل الإشعارات' : 'تم تعطيل الإشعارات', 'success');
-            });
-            
-            // تحميل إعدادات الإشعارات
-            const notifications = localStorage.getItem('transferNotifications');
-            if (notifications !== null) {
-                document.getElementById('transferNotifications').checked = notifications === 'true';
-            }
-        });
-
-        // جعل الدوال متاحة عالمياً
-        window.logout = logout;
-        window.changePassword = changePassword;
-        window.addPhoneNumber = addPhoneNumber;
-        window.toggleDarkMode = toggleDarkMode;
     </script>
-
-    <style>
-        .clickable {
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-        
-        .clickable:hover {
-            background: #f0f9ff;
-        }
-        
-        .clickable:active {
-            transform: scale(0.98);
-        }
-        
-        .btn-sm {
-            padding: 8px 16px;
-            font-size: 0.9rem;
-        }
-        
-        .dark-mode {
-            background: #0f172a !important;
-            color: #f8fafc !important;
-        }
-        
-        .dark-mode .card {
-            background: #1e293b;
-            border-color: #334155;
-            color: #f8fafc;
-        }
-        
-        .dark-mode .info-item {
-            background: #334155;
-            border-color: #475569;
-        }
-        
-        .dark-mode .info-label {
-            color: #cbd5e1;
-        }
-        
-        .dark-mode .info-value {
-            color: #f8fafc;
-        }
-        
-        .dark-mode .navbar {
-            background: #1e293b;
-            border-color: #334155;
-        }
-    </style>
 </body>
-                  </html>
+</html>
+
