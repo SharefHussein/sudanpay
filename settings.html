@@ -1,44 +1,746 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sudan Pay - الإعدادات</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sudan Pay - الإعدادات</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
 </head>
-<body class="dashboard-body">
-  <div class="container">
-    <h2 class="text-3xl font-bold text-center mb-10">الإعدادات</h2>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <nav class="navbar">
+            <a href="dashboard.html" class="navbar-brand">
+                <i class="fas fa-arrow-right"></i>
+                العودة
+            </a>
+            <div class="navbar-menu">
+                <span class="text-primary font-bold">الإعدادات</span>
+            </div>
+        </nav>
 
-    <div class="card space-y-8">
-      <div class="flex justify-between items-center">
-        <p class="text-lg">إشعارات التحويلات</p>
-        <label class="switch">
-          <input type="checkbox" checked>
-          <span class="slider"></span>
-        </label>
-      </div>
-      <div class="flex justify-between items-center">
-        <p class="text-lg">الوضع الليلي</p>
-        <label class="switch">
-          <input type="checkbox">
-          <span class="slider"></span>
-        </label>
-      </div>
-      <div class="flex justify-between items-center">
-        <p class="text-lg">تغيير كلمة المرور</p>
-        <i class="fas fa-chevron-left text-teal-600 text-2xl"></i>
-      </div>
-      <div class="flex justify-between items-center">
-        <p class="text-lg">تفعيل البصمة</p>
-        <label class="switch">
-          <input type="checkbox">
-          <span class="slider"></span>
-        </label>
-      </div>
+        <!-- Profile Settings -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-user-cog"></i>
+                    إعدادات الحساب
+                </h3>
+            </div>
+            
+            <div class="settings-list">
+                <a href="profile.html" class="settings-item">
+                    <div class="settings-icon">
+                        <i class="fas fa-user-edit"></i>
+                    </div>
+                    <div class="settings-content">
+                        <div class="settings-title">تعديل الملف الشخصي</div>
+                        <div class="settings-description">تغيير الاسم، الصورة، والمعلومات الشخصية</div>
+                    </div>
+                    <i class="fas fa-chevron-left settings-arrow"></i>
+                </a>
+                
+                <div class="settings-item" onclick="toggleSetting('emailNotifications')">
+                    <div class="settings-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div class="settings-content">
+                        <div class="settings-title">الإشعارات البريدية</div>
+                        <div class="settings-description">استلام إشعارات على البريد الإلكتروني</div>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="emailNotifications" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                
+                <div class="settings-item" onclick="toggleSetting('smsNotifications')">
+                    <div class="settings-icon">
+                        <i class="fas fa-sms"></i>
+                    </div>
+                    <div class="settings-content">
+                        <div class="settings-title">إشعارات الرسائل القصيرة</div>
+                        <div class="settings-description">استلام إشعارات عبر الرسائل القصيرة</div>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="smsNotifications">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                
+                <a href="#" class="settings-item" onclick="showComingSoon('تحديث بيانات البطاقة')">
+                    <div class="settings-icon">
+                        <i class="fas fa-credit-card"></i>
+                    </div>
+                    <div class="settings-content">
+                        <div class="settings-title">البطاقات البنكية</div>
+                        <div class="settings-description">إدارة البطاقات المرتبطة بحسابك</div>
+                    </div>
+                    <i class="fas fa-chevron-left settings-arrow"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Security Settings -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-shield-alt"></i>
+                    الأمان والخصوصية
+                </h3>
+            </div>
+            
+            <div class="settings-list">
+                <a href="#" class="settings-item" onclick="changePassword()">
+                    <div class="settings-icon">
+                        <i class="fas fa-key"></i>
+                    </div>
+                    <div class="settings-content">
+                        <div class="settings-title">تغيير كلمة المرور</div>
+                        <div class="settings-description">تحديث كلمة المرور بشكل دوري</div>
+                    </div>
+                    <i class="fas fa-chevron-left settings-arrow"></i>
+                </a>
+                
+                <div class="settings-item" onclick="toggleSetting('twoFactorAuth')">
+                    <div class="settings-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <div class="settings-content">
+                        <div class="settings-title">المصادقة الثنائية</div>
+                        <div class="settings-description">طبقة أمان إضافية لحسابك</div>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="twoFactorAuth">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                
+                <div class="settings-item" onclick="toggleSetting('biometricLogin')">
+                    <div class="settings-icon">
+                        <i class="fas fa-fingerprint"></i>
+                    </div>
+                    <div class="settings-content">
+                        <div class="settings-title">الدخول بالبصمة</div>
+                        <div class="settings-description">تسجيل الدخول باستخدام البصمة</div>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="biometricLogin">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                
+                <a href="#" class="settings-item" onclick="showSessionManagement()">
+                    <div class="settings-icon">
+                        <i class="fas fa-desktop"></i>
+                    </div>
+                    <div class="settings-content">
+                        <div class="settings-title">الجلسات النشطة</div>
+                        <div class="settings-description">إدارة أجهزة تسجيل الدخول</div>
+                    </div>
+                    <i class="fas fa-chevron-left settings-arrow"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- App Settings -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-mobile-alt"></i>
+                    إعدادات التطبيق
+                </h3>
+            </div>
+            
+            <div class="settings-list">
+                <div class="settings-item" onclick="toggleSetting('darkMode')">
+                    <div class="settings-icon">
+                        <i class="fas fa-moon"></i>
+                    </div>
+                    <div class="settings-content">
+                        <div class="settings-title">الوضع الليلي</div>
+                        <div class="settings-description">واجهة داكنة مريحة للعين</div>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="darkMode">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                
+                <div class="settings-item" onclick="toggleSetting('hapticFeedback')">
+                    <div class="settings-icon">
+                        <i class="fas fa-hand-pointer"></i>
+                    </div>
+                    <div class="settings-content">
+                        <div class="settings-title">الاهتزاز التلقائي</div>
+                        <div class="settings-description">رد فعل بالاهتزاز عند النقر</div>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="hapticFeedback" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                
+                <div class="settings-item" onclick="toggleSetting('soundEffects')">
+                    <div class="settings-icon">
+                        <i class="fas fa-volume-up"></i>
+                    </div>
+                    <div class="settings-content">
+                        <div class="settings-title">التأثيرات الصوتية</div>
+                        <div class="settings-description">أصوات التنبيه والتأكيد</div>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="soundEffects" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                
+                <a href="#" class="settings-item" onclick="changeLanguage()">
+                    <div class="settings-icon">
+                        <i class="fas fa-language"></i>
+                    </div>
+                    <div class="settings-content">
+                        <div class="settings-title">اللغة</div>
+                        <div class="settings-description">العربية (المفترضة)</div>
+                    </div>
+                    <i class="fas fa-chevron-left settings-arrow"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Advanced Settings -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-cogs"></i>
+                    إعدادات متقدمة
+                </h3>
+            </div>
+            
+            <div class="settings-list">
+                <a href="#" class="settings-item" onclick="clearCache()">
+                    <div class="settings-icon">
+                        <i class="fas fa-broom"></i>
+                    </div>
+                    <div class="settings-content">
+                        <div class="settings-title">مسح الذاكرة المؤقتة</div>
+                        <div class="settings-description">تحرير مساحة التخزين</div>
+                    </div>
+                    <i class="fas fa-chevron-left settings-arrow"></i>
+                </a>
+                
+                <a href="#" class="settings-item" onclick="exportData()">
+                    <div class="settings-icon">
+                        <i class="fas fa-download"></i>
+                    </div>
+                    <div class="settings-content">
+                        <div class="settings-title">تصدير البيانات</div>
+                        <div class="settings-description">حفظ نسخة من بياناتك</div>
+                    </div>
+                    <i class="fas fa-chevron-left settings-arrow"></i>
+                </a>
+                
+                <a href="#" class="settings-item" onclick="showPrivacyPolicy()">
+                    <div class="settings-icon">
+                        <i class="fas fa-file-contract"></i>
+                    </div>
+                    <div class="settings-content">
+                        <div class="settings-title">سياسة الخصوصية</div>
+                        <div class="settings-description">قراءة سياسة الخصوصية</div>
+                    </div>
+                    <i class="fas fa-chevron-left settings-arrow"></i>
+                </a>
+                
+                <a href="#" class="settings-item" onclick="showTermsOfService()">
+                    <div class="settings-icon">
+                        <i class="fas fa-gavel"></i>
+                    </div>
+                    <div class="settings-content">
+                        <div class="settings-title">الشروط والأحكام</div>
+                        <div class="settings-description">قراءة الشروط والأحكام</div>
+                    </div>
+                    <i class="fas fa-chevron-left settings-arrow"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Dangerous Zone -->
+        <div class="card border-danger">
+            <div class="card-header border-danger">
+                <h3 class="card-title text-danger">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    منطقة خطرة
+                </h3>
+            </div>
+            
+            <div class="settings-list">
+                <a href="#" class="settings-item text-danger" onclick="deactivateAccount()">
+                    <div class="settings-icon bg-danger-light">
+                        <i class="fas fa-user-slash text-danger"></i>
+                    </div>
+                    <div class="settings-content">
+                        <div class="settings-title">تعطيل الحساب مؤقتاً</div>
+                        <div class="settings-description">تعطيل الحساب مع إمكانية الاسترجاع</div>
+                    </div>
+                    <i class="fas fa-chevron-left settings-arrow text-danger"></i>
+                </a>
+                
+                <a href="#" class="settings-item text-danger" onclick="deleteAccount()">
+                    <div class="settings-icon bg-danger-light">
+                        <i class="fas fa-trash-alt text-danger"></i>
+                    </div>
+                    <div class="settings-content">
+                        <div class="settings-title">حذف الحساب نهائياً</div>
+                        <div class="settings-description">حذف جميع البيانات بشكل نهائي</div>
+                    </div>
+                    <i class="fas fa-chevron-left settings-arrow text-danger"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Version Info -->
+        <div class="text-center mt-8 mb-4 text-gray">
+            <div class="mb-2">Sudan Pay</div>
+            <div class="text-sm">الإصدار 1.0.0</div>
+            <div class="text-xs mt-2">© 2024 جميع الحقوق محفوظة</div>
+        </div>
     </div>
 
-    <a href="dashboard.html" class="block text-center text-teal-600 mt-8 text-lg">العودة للمحفظة</a>
-  </div>
+    <script type="module">
+        import { showAlert } from './app.js';
+
+        // دالة تحميل الإعدادات من التخزين المحلي
+        function loadSettings() {
+            // تحميل إعدادات الإشعارات
+            const emailNotifications = localStorage.getItem('emailNotifications') !== 'false';
+            const smsNotifications = localStorage.getItem('smsNotifications') === 'true';
+            document.getElementById('emailNotifications').checked = emailNotifications;
+            document.getElementById('smsNotifications').checked = smsNotifications;
+            
+            // تحميل إعدادات الأمان
+            const twoFactorAuth = localStorage.getItem('twoFactorAuth') === 'true';
+            const biometricLogin = localStorage.getItem('biometricLogin') === 'true';
+            document.getElementById('twoFactorAuth').checked = twoFactorAuth;
+            document.getElementById('biometricLogin').checked = biometricLogin;
+            
+            // تحميل إعدادات التطبيق
+            const darkMode = localStorage.getItem('darkMode') === 'true';
+            const hapticFeedback = localStorage.getItem('hapticFeedback') !== 'false';
+            const soundEffects = localStorage.getItem('soundEffects') !== 'false';
+            document.getElementById('darkMode').checked = darkMode;
+            document.getElementById('hapticFeedback').checked = hapticFeedback;
+            document.getElementById('soundEffects').checked = soundEffects;
+            
+            // تطبيق الوضع الليلي إذا كان مفعلاً
+            if (darkMode) {
+                document.body.classList.add('dark-mode');
+                document.body.style.backgroundColor = '#0f172a';
+                document.body.style.color = '#f8fafc';
+            }
+        }
+
+        // دالة تبديل الإعدادات
+        function toggleSetting(settingId) {
+            const checkbox = document.getElementById(settingId);
+            const isChecked = checkbox.checked;
+            
+            // حفظ الإعداد في التخزين المحلي
+            localStorage.setItem(settingId, isChecked);
+            
+            // تطبيق التغييرات فوراً للإعدادات الخاصة
+            switch(settingId) {
+                case 'darkMode':
+                    if (isChecked) {
+                        document.body.classList.add('dark-mode');
+                        document.body.style.backgroundColor = '#0f172a';
+                        document.body.style.color = '#f8fafc';
+                    } else {
+                        document.body.classList.remove('dark-mode');
+                        document.body.style.backgroundColor = '';
+                        document.body.style.color = '';
+                    }
+                    break;
+                    
+                case 'twoFactorAuth':
+                    if (isChecked) {
+                        showAlert('تم تفعيل المصادقة الثنائية', 'success');
+                        // هنا يمكنك إضافة منطق تفعيل المصادقة الثنائية
+                    } else {
+                        showAlert('تم تعطيل المصادقة الثنائية', 'warning');
+                    }
+                    break;
+                    
+                case 'biometricLogin':
+                    if (isChecked) {
+                        // التحقق من دعم البصمة
+                        if ('credentials' in navigator) {
+                            showAlert('تم تفعيل الدخول بالبصمة', 'success');
+                        } else {
+                            showAlert('جهازك لا يدخل الدخول بالبصمة', 'error');
+                            checkbox.checked = false;
+                            localStorage.setItem(settingId, false);
+                        }
+                    }
+                    break;
+            }
+            
+            showAlert(`تم ${isChecked ? 'تفعيل' : 'تعطيل'} الإعداد`, 'success');
+        }
+
+        // دالة تغيير كلمة المرور
+        function changePassword() {
+            showAlert('سيتم توجيهك إلى صفحة تغيير كلمة المرور قريباً', 'info');
+        }
+
+        // دالة إدارة الجلسات
+        function showSessionManagement() {
+            showAlert('ميزة إدارة الجلسات قريباً', 'info');
+        }
+
+        // دالة تغيير اللغة
+        function changeLanguage() {
+            showAlert('حالياً اللغة العربية هي اللغة الوحيدة المدعومة', 'info');
+        }
+
+        // دالة مسح الذاكرة المؤقتة
+        function clearCache() {
+            if (confirm('هل أنت متأكد من مسح الذاكرة المؤقتة؟')) {
+                localStorage.removeItem('cachedData');
+                sessionStorage.clear();
+                showAlert('تم مسح الذاكرة المؤقتة بنجاح', 'success');
+            }
+        }
+
+        // دالة تصدير البيانات
+        function exportData() {
+            showAlert('ميزة تصدير البيانات قريباً', 'info');
+        }
+
+        // دالة عرض سياسة الخصوصية
+        function showPrivacyPolicy() {
+            const privacyPolicy = `
+                <div class="privacy-content">
+                    <h3>سياسة الخصوصية - Sudan Pay</h3>
+                    <p>نحن في Sudan Pay نحمي خصوصيتك. هذه السياسة توضح كيفية جمع واستخدام بياناتك.</p>
+                    
+                    <h4>البيانات التي نجمعها:</h4>
+                    <ul>
+                        <li>الاسم والبريد الإلكتروني</li>
+                        <li>رقم الهاتف (اختياري)</li>
+                        <li>بيانات المعاملات المالية</li>
+                        <li>سجل العمليات</li>
+                    </ul>
+                    
+                    <h4>كيف نستخدم بياناتك:</h4>
+                    <ul>
+                        <li>توفير خدمات المحفظة الرقمية</li>
+                        <li>تحسين تجربة المستخدم</li>
+                        <li>الالتزام باللوائح القانونية</li>
+                        <li>منع الاحتيال والأنشطة غير المشروعة</li>
+                    </ul>
+                    
+                    <h4>حماية البيانات:</h4>
+                    <ul>
+                        <li>تشفير البيانات بنسبة 100%</li>
+                        <li>خوادم آمنة في مواقع موثوقة</li>
+                        <li>مراجعات أمنية دورية</li>
+                    </ul>
+                </div>
+            `;
+            
+            showModal('سياسة الخصوصية', privacyPolicy);
+        }
+
+        // دالة عرض الشروط والأحكام
+        function showTermsOfService() {
+            const terms = `
+                <div class="terms-content">
+                    <h3>الشروط والأحكام - Sudan Pay</h3>
+                    <p>باستخدامك لتطبيق Sudan Pay، فإنك توافق على الالتزام بهذه الشروط.</p>
+                    
+                    <h4>شروط الاستخدام:</h4>
+                    <ul>
+                        <li>يجب أن تكون عمرك 18 سنة أو أكثر</li>
+                        <li>توفير معلومات صحيحة ودقيقة</li>
+                        <li>عدم استخدام التطبيق لأغراض غير قانونية</li>
+                        <li>المحافظة على سرية بيانات الدخول</li>
+                    </ul>
+                    
+                    <h4>المعاملات المالية:</h4>
+                    <ul>
+                        <li>المعاملات لا يمكن التراجع عنها</li>
+                        <li>الرسوم تخصم تلقائياً من المبلغ المحول</li>
+                        <li>المسؤولية على المستخدم في التأكد من بيانات المرسل إليه</li>
+                    </ul>
+                    
+                    <h4>التعويضات والمسؤولية:</h4>
+                    <ul>
+                        <li>Sudan Pay غير مسؤول عن الأخطاء في بيانات المستلم</li>
+                        <li>المستخدم يتحمل مسؤولية تأمين جهازه</li>
+                        <li>نحتفظ بالحق في تعليق الحساب في حالة المخالفة</li>
+                    </ul>
+                </div>
+            `;
+            
+            showModal('الشروط والأحكام', terms);
+        }
+
+        // دالة تعطيل الحساب
+        function deactivateAccount() {
+            if (confirm('هل أنت متأكد من تعطيل حسابك؟ يمكنك استعادته لاحقاً.')) {
+                showAlert('ميزة تعطيل الحساب قريباً', 'info');
+            }
+        }
+
+        // دالة حذف الحساب
+        function deleteAccount() {
+            if (confirm('تحذير: حذف الحساب نهائي ولا يمكن استرجاعه. هل أنت متأكد؟')) {
+                showAlert('ميزة حذف الحساب قريباً', 'info');
+            }
+        }
+
+        // دالة عرض نافذة منبثقة
+        function showModal(title, content) {
+            const modal = document.createElement('div');
+            modal.className = 'modal-overlay';
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>${title}</h3>
+                        <button class="modal-close" onclick="this.parentElement.parentElement.parentElement.remove()">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        ${content}
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" onclick="this.parentElement.parentElement.parentElement.remove()">
+                            فهمت
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+        }
+
+        // دالة الميزات القادمة
+        function showComingSoon(feature) {
+            showAlert(`ميزة "${feature}" قريباً`, 'info');
+        }
+
+        // تحميل الإعدادات عند بدء التشغيل
+        document.addEventListener('DOMContentLoaded', loadSettings);
+
+        // جعل الدوال متاحة عالمياً
+        window.toggleSetting = toggleSetting;
+        window.changePassword = changePassword;
+        window.showSessionManagement = showSessionManagement;
+        window.changeLanguage = changeLanguage;
+        window.clearCache = clearCache;
+        window.exportData = exportData;
+        window.showPrivacyPolicy = showPrivacyPolicy;
+        window.showTermsOfService = showTermsOfService;
+        window.deactivateAccount = deactivateAccount;
+        window.deleteAccount = deleteAccount;
+        window.showComingSoon = showComingSoon;
+    </script>
+
+    <style>
+        .settings-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+        }
+        
+        .settings-item {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            background: white;
+            border-bottom: 1px solid var(--border);
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .settings-item:hover {
+            background: #f8fafc;
+            transform: translateX(-5px);
+        }
+        
+        .settings-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 15px;
+            font-size: 1.3rem;
+            background: #f0f9ff;
+            color: var(--primary);
+        }
+        
+        .settings-content {
+            flex: 1;
+        }
+        
+        .settings-title {
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 5px;
+            font-size: 1.1rem;
+        }
+        
+        .settings-description {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+        
+        .settings-arrow {
+            color: var(--gray);
+            font-size: 1.1rem;
+            margin-right: 10px;
+        }
+        
+        .switch {
+            margin-right: 10px;
+        }
+        
+        .border-danger {
+            border: 2px solid var(--danger);
+        }
+        
+        .bg-danger-light {
+            background: var(--danger-light);
+        }
+        
+        .text-danger {
+            color: var(--danger);
+        }
+        
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow: hidden;
+            animation: modalSlideIn 0.3s ease;
+        }
+        
+        @keyframes modalSlideIn {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-header h3 {
+            margin: 0;
+            color: var(--primary);
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--gray);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 5px;
+        }
+        
+        .modal-body {
+            padding: 20px;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+        
+        .modal-footer {
+            padding: 20px;
+            border-top: 1px solid var(--border);
+            text-align: center;
+        }
+        
+        .privacy-content h4,
+        .terms-content h4 {
+            margin-top: 20px;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+        
+        .privacy-content ul,
+        .terms-content ul {
+            padding-right: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .privacy-content li,
+        .terms-content li {
+            margin-bottom: 8px;
+        }
+        
+        .dark-mode .settings-item {
+            background: #1e293b;
+            border-bottom-color: #334155;
+        }
+        
+        .dark-mode .settings-item:hover {
+            background: #334155;
+        }
+        
+        .dark-mode .settings-title {
+            color: #f8fafc;
+        }
+        
+        .dark-mode .settings-description {
+            color: #94a3b8;
+        }
+        
+        .dark-mode .modal-content {
+            background: #1e293b;
+            color: #f8fafc;
+        }
+        
+        .dark-mode .modal-header {
+            border-bottom-color: #334155;
+        }
+        
+        .dark-mode .modal-footer {
+            border-top-color: #334155;
+        }
+    </style>
 </body>
-</html>
+                      </html>
