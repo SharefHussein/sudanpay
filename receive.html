@@ -7,620 +7,318 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div class="container">
-        <!-- Header -->
-        <nav class="navbar">
-            <a href="dashboard.html" class="navbar-brand">
-                <i class="fas fa-arrow-right"></i>
-                العودة
-            </a>
-            <div class="navbar-menu">
-                <span class="text-primary font-bold">استلام أموال</span>
-            </div>
-        </nav>
-
-        <!-- Balance Info -->
-        <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">
-                    <i class="fas fa-wallet"></i>
-                    رصيدك الحالي
-                </h3>
-            </div>
-            
-            <div class="text-center p-4">
-                <div class="text-gray mb-2">الإجمالي المتاح للاستقبال</div>
-                <div class="text-3xl font-bold text-primary" id="currentBalance">0.00 SDG</div>
-                <div class="text-lg text-gray mt-1" id="currentBalanceUSD">0.00 USDT</div>
-            </div>
-        </div>
-
-        <!-- Receive Methods -->
-        <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">
-                    <i class="fas fa-qrcode"></i>
-                    طرق الاستقبال
-                </h3>
-            </div>
-            
-            <!-- Method Tabs -->
-            <div class="tabs mb-6">
-                <button class="tab-btn active" onclick="showTab('qr')">
-                    <i class="fas fa-qrcode"></i> رمز QR
-                </button>
-                <button class="tab-btn" onclick="showTab('account')">
-                    <i class="fas fa-id-card"></i> رقم الحساب
-                </button>
-                <button class="tab-btn" onclick="showTab('link')">
-                    <i class="fas fa-link"></i> رابط سريع
-                </button>
-            </div>
-            
-            <!-- QR Code Tab -->
-            <div id="qr-tab" class="tab-content active">
-                <div class="qr-container">
-                    <div class="qr-code" id="qrCode">
-                        <!-- QR code will be generated here -->
-                        <div class="loading">
-                            <i class="fas fa-spinner fa-spin"></i>
-                        </div>
-                    </div>
-                    
-                    <div class="qr-info mt-4">
-                        <h4 class="qr-title">شارك هذا الرمز لاستقبال الأموال</h4>
-                        <div class="qr-account" id="qrAccount">جاري التحميل...</div>
-                        
-                        <div class="btn-group mt-6">
-                            <button class="btn btn-primary" onclick="downloadQR()">
-                                <i class="fas fa-download"></i> تحميل الرمز
-                            </button>
-                            <button class="btn btn-secondary" onclick="shareQR()">
-                                <i class="fas fa-share-alt"></i> مشاركة
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="mt-6">
-                    <h4 class="font-bold mb-3">
-                        <i class="fas fa-info-circle"></i>
-                        طريقة الاستخدام
-                    </h4>
-                    <ol class="space-y-3" style="padding-right: 20px;">
-                        <li class="flex items-start gap-3">
-                            <span class="badge badge-primary">1</span>
-                            <span>اطلب من المرسل مسح الرمز QR بكاميرا هاتفه</span>
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <span class="badge badge-primary">2</span>
-                            <span>سيتم فتح تطبيق Sudan Pay تلقائياً مع بياناتك</span>
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <span class="badge badge-primary">3</span>
-                            <span>يقوم المرسل بإدخال المبلغ وتأكيد الإرسال</span>
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <span class="badge badge-primary">4</span>
-                            <span>ستصل الأموال إلى حسابك فورياً</span>
-                        </li>
-                    </ol>
-                </div>
-            </div>
-            
-            <!-- Account Number Tab -->
-            <div id="account-tab" class="tab-content">
-                <div class="text-center p-6">
-                    <div class="text-gray mb-4">رقم حسابك الخاص</div>
-                    <div class="text-3xl font-bold text-primary mb-6" id="accountNumber">جاري التحميل...</div>
-                    
-                    <div class="btn-group">
-                        <button class="btn btn-primary" onclick="copyAccountNumber()">
-                            <i class="fas fa-copy"></i> نسخ الرقم
-                        </button>
-                        <button class="btn btn-secondary" onclick="shareAccountNumber()">
-                            <i class="fas fa-share-alt"></i> مشاركة
-                        </button>
-                    </div>
-                    
-                    <div class="mt-8">
-                        <h4 class="font-bold mb-3">
-                            <i class="fas fa-shield-alt"></i>
-                            نصائح أمنية
-                        </h4>
-                        <ul class="space-y-2 text-sm text-gray" style="padding-right: 20px;">
-                            <li><i class="fas fa-check-circle text-success"></i> شارك رقم حسابك مع الأشخاص الموثوقين فقط</li>
-                            <li><i class="fas fa-check-circle text-success"></i> لا تشارك رقم حسابك على وسائل التواصل العام</li>
-                            <li><i class="fas fa-check-circle text-success"></i> يمكنك إنشاء رموز QR جديدة في أي وقت</li>
-                            <li><i class="fas fa-check-circle text-success"></i> تأكد من هوية المرسل قبل استقبال الأموال</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Quick Link Tab -->
-            <div id="link-tab" class="tab-content">
-                <div class="text-center p-6">
-                    <div class="text-gray mb-4">رابط الاستقبال السريع</div>
-                    <div class="p-4 bg-gray rounded-lg mb-6">
-                        <div class="text-lg font-mono break-all" id="receiveLink">جاري التحميل...</div>
-                    </div>
-                    
-                    <div class="btn-group">
-                        <button class="btn btn-primary" onclick="copyReceiveLink()">
-                            <i class="fas fa-copy"></i> نسخ الرابط
-                        </button>
-                        <button class="btn btn-secondary" onclick="shareReceiveLink()">
-                            <i class="fas fa-share-alt"></i> مشاركة
-                        </button>
-                    </div>
-                    
-                    <div class="mt-8">
-                        <h4 class="font-bold mb-3">
-                            <i class="fas fa-bolt"></i>
-                            ميزات الرابط السريع
-                        </h4>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div class="text-center p-4 bg-gray rounded-lg">
-                                <i class="fas fa-magic text-2xl text-primary mb-2"></i>
-                                <div class="font-bold">سهل الاستخدام</div>
-                            </div>
-                            <div class="text-center p-4 bg-gray rounded-lg">
-                                <i class="fas fa-lock text-2xl text-success mb-2"></i>
-                                <div class="font-bold">آمن ومشفر</div>
-                            </div>
-                            <div class="text-center p-4 bg-gray rounded-lg">
-                                <i class="fas fa-sync text-2xl text-info mb-2"></i>
-                                <div class="font-bold">محدث تلقائياً</div>
-                            </div>
-                            <div class="text-center p-4 bg-gray rounded-lg">
-                                <i class="fas fa-expand text-2xl text-warning mb-2"></i>
-                                <div class="font-bold">يعمل على جميع الأجهزة</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Recent Received -->
-        <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">
-                    <i class="fas fa-history"></i>
-                    آخر التحويلات المستلمة
-                </h3>
-                <button class="btn btn-outline btn-sm" onclick="refreshTransactions()">
-                    <i class="fas fa-sync-alt"></i>
-                </button>
-            </div>
-            
-            <div id="receivedTransactions" class="transactions-list">
-                <div class="loading">
-                    <i class="fas fa-spinner fa-spin"></i>
-                    <p>جاري تحميل التحويلات...</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script type="module">
-        import { auth, db, showAlert } from './app.js';
-        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-        let userData = null;
-        let qrCodeInstance = null;
-
-        // دالة تحميل بيانات المستخدم
-        async function loadUserData() {
-            const user = auth.currentUser;
-            if (!user) {
-                window.location.href = 'index.html';
-                return;
-            }
-
-            try {
-                const userDoc = await getDoc(doc(db, 'users', user.uid));
-                if (userDoc.exists()) {
-                    userData = userDoc.data();
-                    
-                    // تحديث الرصيد
-                    document.getElementById('currentBalance').textContent = 
-                        `${userData.balanceSDG?.toFixed(2) || '0.00'} SDG`;
-                    document.getElementById('currentBalanceUSD').textContent = 
-                        `${userData.balanceUSDT?.toFixed(2) || '0.00'} USDT`;
-                    
-                    // تحديث رقم الحساب
-                    const accountNumber = userData.accountID || 'غير متوفر';
-                    document.getElementById('accountNumber').textContent = accountNumber;
-                    document.getElementById('qrAccount').textContent = accountNumber;
-                    
-                    // تحديث الرابط السريع
-                    const receiveLink = `https://sudanpay.app/receive/${accountNumber}`;
-                    document.getElementById('receiveLink').textContent = receiveLink;
-                    
-                    // إنشاء رمز QR
-                    await generateQRCode(accountNumber);
-                    
-                    // تحميل التحويلات المستلمة
-                    await loadReceivedTransactions();
-                }
-            } catch (error) {
-                console.error('خطأ في تحميل البيانات:', error);
-                showAlert('حدث خطأ في تحميل البيانات');
-            }
-        }
-
-        // دالة إنشاء رمز QR
-        async function generateQRCode(accountNumber) {
-            const qrCodeElement = document.getElementById('qrCode');
-            qrCodeElement.innerHTML = '';
-            
-            // استخدام مكتبة QR Code عبر CDN
-            const qrScript = document.createElement('script');
-            qrScript.src = 'https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js';
-            qrScript.onload = function() {
-                try {
-                    qrCodeInstance = new QRCode(qrCodeElement, {
-                        text: `sudanpay:${accountNumber}`,
-                        width: 250,
-                        height: 250,
-                        colorDark: "#0d9488",
-                        colorLight: "#ffffff",
-                        correctLevel: QRCode.CorrectLevel.H
-                    });
-                } catch (error) {
-                    console.error('خطأ في إنشاء QR Code:', error);
-                    qrCodeElement.innerHTML = `
-                        <div class="empty-state">
-                            <i class="fas fa-exclamation-triangle"></i>
-                            <p>تعذر إنشاء رمز QR</p>
-                        </div>
-                    `;
-                }
-            };
-            
-            document.head.appendChild(qrScript);
-        }
-
-        // دالة تبديل التبويبات
-        function showTab(tabName) {
-            // إخفاء جميع التبويبات
-            document.querySelectorAll('.tab-content').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            
-            // إظهار التبويب المحدد
-            document.getElementById(`${tabName}-tab`).classList.add('active');
-            event.target.classList.add('active');
-        }
-
-        // دالة تحميل QR
-        function downloadQR() {
-            const qrCanvas = document.querySelector('#qrCode canvas');
-            if (qrCanvas) {
-                const link = document.createElement('a');
-                link.download = `sudanpay-qr-${userData.accountID}.png`;
-                link.href = qrCanvas.toDataURL('image/png');
-                link.click();
-                showAlert('تم تحميل رمز QR بنجاح', 'success');
-            } else {
-                showAlert('الرجاء الانتظار حتى يتم إنشاء رمز QR', 'warning');
-            }
-        }
-
-        // دالة مشاركة QR
-        function shareQR() {
-            if (navigator.share) {
-                navigator.share({
-                    title: 'رقم حسابي على Sudan Pay',
-                    text: `استخدم هذا الرمز لإرسال أموال لي: ${userData.accountID}`,
-                    url: window.location.href
-                }).then(() => {
-                    showAlert('تمت المشاركة بنجاح', 'success');
-                }).catch(error => {
-                    console.error('خطأ في المشاركة:', error);
-                });
-            } else {
-                // Fallback لنسخ الرابط
-                copyAccountNumber();
-            }
-        }
-
-        // دالة نسخ رقم الحساب
-        function copyAccountNumber() {
-            const accountNumber = userData.accountID;
-            navigator.clipboard.writeText(accountNumber).then(() => {
-                showAlert('تم نسخ رقم الحساب بنجاح', 'success');
-            }).catch(error => {
-                console.error('خطأ في النسخ:', error);
-                showAlert('تعذر نسخ رقم الحساب', 'error');
-            });
-        }
-
-        // دالة مشاركة رقم الحساب
-        function shareAccountNumber() {
-            const accountNumber = userData.accountID;
-            const shareText = `رقم حسابي على Sudan Pay: ${accountNumber}\nيمكنك استخدامه لإرسال الأموال لي`;
-            
-            if (navigator.share) {
-                navigator.share({
-                    title: 'رقم حساب Sudan Pay',
-                    text: shareText
-                });
-            } else {
-                // Fallback لنسخ النص
-                navigator.clipboard.writeText(shareText).then(() => {
-                    showAlert('تم نسخ معلومات الحساب بنجاح', 'success');
-                });
-            }
-        }
-
-        // دالة نسخ رابط الاستقبال
-        function copyReceiveLink() {
-            const receiveLink = document.getElementById('receiveLink').textContent;
-            navigator.clipboard.writeText(receiveLink).then(() => {
-                showAlert('تم نسخ الرابط بنجاح', 'success');
-            }).catch(error => {
-                console.error('خطأ في النسخ:', error);
-                showAlert('تعذر نسخ الرابط', 'error');
-            });
-        }
-
-        // دالة مشاركة رابط الاستقبال
-        function shareReceiveLink() {
-            const receiveLink = document.getElementById('receiveLink').textContent;
-            const shareText = `رابط استقبال الأموال على Sudan Pay:\n${receiveLink}`;
-            
-            if (navigator.share) {
-                navigator.share({
-                    title: 'رابط استقبال الأموال - Sudan Pay',
-                    text: shareText,
-                    url: receiveLink
-                });
-            } else {
-                navigator.clipboard.writeText(shareText).then(() => {
-                    showAlert('تم نسخ الرابط بنجاح', 'success');
-                });
-            }
-        }
-
-        // دالة تحميل التحويلات المستلمة
-        async function loadReceivedTransactions() {
-            const transactionsList = document.getElementById('receivedTransactions');
-            
-            try {
-                // في الحقيقة، تحتاج لجلب التحويلات من Firestore
-                // هذا مثال محاكاة للبيانات
-                const mockTransactions = [
-                    {
-                        type: 'receive',
-                        amount: 500,
-                        description: 'تحويل من أحمد',
-                        timestamp: { seconds: Date.now() / 1000 - 3600 }
-                    },
-                    {
-                        type: 'receive',
-                        amount: 1000,
-                        description: 'سداد دين',
-                        timestamp: { seconds: Date.now() / 1000 - 7200 }
-                    }
-                ];
-                
-                if (mockTransactions.length === 0) {
-                    transactionsList.innerHTML = `
-                        <div class="empty-state">
-                            <i class="fas fa-inbox"></i>
-                            <p>لا توجد تحويلات مستلمة</p>
-                        </div>
-                    `;
-                    return;
-                }
-                
-                let html = '';
-                mockTransactions.forEach(transaction => {
-                    const amount = transaction.amount || 0;
-                    const description = transaction.description || 'تحويل مستلم';
-                    const date = transaction.timestamp?.seconds 
-                        ? new Date(transaction.timestamp.seconds * 1000)
-                        : new Date();
-                    
-                    const formattedDate = date.toLocaleDateString('ar-SA', {
-                        month: 'short',
-                        day: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit'
-                    });
-                    
-                    html += `
-                        <div class="transaction-item">
-                            <div class="transaction-icon receive">
-                                <i class="fas fa-money-bill-wave"></i>
-                            </div>
-                            <div class="transaction-details">
-                                <div class="transaction-title">${description}</div>
-                                <div class="transaction-date">${formattedDate}</div>
-                            </div>
-                            <div class="transaction-amount positive">
-                                +${amount.toFixed(2)} SDG
-                            </div>
-                        </div>
-                    `;
-                });
-                
-                transactionsList.innerHTML = html;
-                
-            } catch (error) {
-                console.error('خطأ في تحميل التحويلات:', error);
-                transactionsList.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-exclamation-triangle"></i>
-                        <p>حدث خطأ في تحميل البيانات</p>
-                    </div>
-                `;
-            }
-        }
-
-        // دالة تحديث التحويلات
-        function refreshTransactions() {
-            loadReceivedTransactions();
-            showAlert('تم تحديث البيانات', 'success');
-        }
-
-        // مراقبة حالة المصادقة
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                loadUserData();
-            } else {
-                window.location.href = 'index.html';
-            }
-        });
-
-        // ربط الأحداث
-        document.addEventListener('DOMContentLoaded', () => {
-            // تحميل مكتبة QR Code تلقائياً
-            const existingScript = document.querySelector('script[src*="qrcode"]');
-            if (!existingScript) {
-                const script = document.createElement('script');
-                script.src = 'https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js';
-                document.head.appendChild(script);
-            }
-        });
-
-        // جعل الدوال متاحة عالمياً
-        window.showTab = showTab;
-        window.downloadQR = downloadQR;
-        window.shareQR = shareQR;
-        window.copyAccountNumber = copyAccountNumber;
-        window.shareAccountNumber = shareAccountNumber;
-        window.copyReceiveLink = copyReceiveLink;
-        window.shareReceiveLink = shareReceiveLink;
-        window.refreshTransactions = refreshTransactions;
-    </script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
+        :root {
+            --primary: #0d9488;
+            --primary-dark: #0f766e;
+            --secondary: #0891b2;
+            --dark: #0f172a;
+            --light: #f8fafc;
+            --gray: #94a3b8;
+            --success: #10b981;
+            --border: #e2e8f0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
+
+        body {
+            background: #f1f5f9;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container { max-width: 480px; margin: 0 auto; }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: white;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .navbar-brand { text-decoration: none; color: var(--dark); font-weight: 700; display: flex; align-items: center; gap: 10px; }
+
+        .card {
+            background: white;
+            border-radius: 24px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+
         .tabs {
             display: flex;
             gap: 10px;
-            margin-bottom: 20px;
-            border-bottom: 2px solid var(--border);
-            padding-bottom: 10px;
+            margin-bottom: 25px;
+            background: #f1f5f9;
+            padding: 5px;
+            border-radius: 15px;
         }
-        
+
         .tab-btn {
             flex: 1;
             padding: 12px;
-            background: #f8fafc;
             border: none;
-            border-radius: 10px;
-            font-size: 1rem;
-            font-weight: 600;
-            color: var(--gray-dark);
+            border-radius: 12px;
             cursor: pointer;
+            font-weight: 700;
             transition: all 0.3s;
+            color: var(--gray);
+            background: transparent;
+        }
+
+        .tab-btn.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 12px rgba(13, 148, 136, 0.2);
+        }
+
+        .tab-content { display: none; text-align: center; }
+        .tab-content.active { display: block; animation: fadeIn 0.4s ease-out; }
+
+        .qr-wrapper {
+            background: white;
+            padding: 20px;
+            border-radius: 25px;
+            display: inline-block;
+            border: 1px solid var(--border);
+            margin-bottom: 20px;
+        }
+
+        #qrcode img { margin: 0 auto; }
+
+        .account-badge {
+            background: #f0fdfa;
+            color: var(--primary);
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-weight: 800;
+            font-size: 1.3rem;
+            display: inline-block;
+            margin: 15px 0;
+            border: 2px dashed var(--primary);
+            letter-spacing: 1px;
+        }
+
+        .method-card {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+        }
+
+        .btn-group { display: flex; gap: 12px; margin-top: 20px; }
+
+        .btn {
+            flex: 1;
+            padding: 14px;
+            border-radius: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+            transition: 0.3s;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
         }
-        
-        .tab-btn:hover {
-            background: var(--primary-light);
-            color: var(--primary);
-        }
-        
-        .tab-btn.active {
-            background: var(--primary);
-            color: white;
-        }
-        
-        .tab-content {
-            display: none;
-            animation: fadeIn 0.5s ease;
-        }
-        
-        .tab-content.active {
-            display: block;
-        }
-        
-        .space-y-2 > * + * {
-            margin-top: 0.5rem;
-        }
-        
-        .space-y-3 > * + * {
-            margin-top: 0.75rem;
-        }
-        
-        .space-y-4 > * + * {
-            margin-top: 1rem;
-        }
-        
-        .grid {
-            display: grid;
-        }
-        
-        .grid-cols-2 {
-            grid-template-columns: repeat(2, 1fr);
-        }
-        
-        .gap-4 {
-            gap: 1rem;
-        }
-        
-        .font-mono {
-            font-family: monospace;
-        }
-        
-        .break-all {
-            word-break: break-all;
-        }
-        
-        .btn-sm {
-            padding: 8px 16px;
-            font-size: 0.9rem;
-        }
-        
-        .badge {
-            display: inline-flex;
+
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-outline { background: white; border: 1px solid var(--primary); color: var(--primary); }
+
+        .transaction-item {
+            display: flex;
+            justify-content: space-between;
             align-items: center;
-            justify-content: center;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            font-weight: bold;
-            font-size: 0.9rem;
+            padding: 15px 0;
+            border-bottom: 1px solid var(--border);
         }
-        
-        .badge-primary {
-            background: var(--primary);
-            color: white;
-        }
-        
-        .badge-success {
-            background: var(--success);
-            color: white;
-        }
-        
-        .badge-warning {
-            background: var(--warning);
-            color: white;
-        }
-        
-        .badge-info {
-            background: var(--info);
-            color: white;
-        }
-        
+
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar">
+            <a href="dashboard.html" class="navbar-brand">
+                <i class="fas fa-arrow-right"></i> العودة للرئيسية
+            </a>
+            <div class="navbar-menu">
+                <span style="color: var(--primary); font-weight: 800;">استلام</span>
+            </div>
+        </nav>
+
+        <div class="card">
+            <div style="text-align: center;">
+                <p style="color: var(--gray); font-size: 0.9rem; margin-bottom: 5px;">رصيدك الحالي</p>
+                <h2 id="currentBalance" style="color: var(--primary); font-size: 1.8rem; font-weight: 800;">0.00 SDG</h2>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="tabs">
+                <button class="tab-btn active" id="btn-qr" onclick="showTab('qr')">رمز QR</button>
+                <button class="tab-btn" id="btn-account" onclick="showTab('account')">رقم الحساب</button>
+            </div>
+            
+            <div id="qr-tab" class="tab-content active">
+                <div class="qr-wrapper">
+                    <div id="qrcode"></div>
+                </div>
+                <p style="color: var(--gray); font-size: 0.9rem;">امسح الكود أدناه للتحويل فوراً</p>
+                <div class="account-badge" id="qrAccountID">...</div>
+                
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="downloadQR()">
+                        <i class="fas fa-download"></i> حفظ الصورة
+                    </button>
+                    <button class="btn btn-outline" onclick="shareData()">
+                        <i class="fas fa-share-alt"></i> مشاركة
+                    </button>
+                </div>
+            </div>
+            
+            <div id="account-tab" class="tab-content">
+                <div class="method-card">
+                    <p style="color: var(--gray); margin-bottom: 10px;">رقم حسابك الخاص للتحويل المباشر</p>
+                    <div class="account-badge" id="fullAccountID">...</div>
+                    <button class="btn btn-outline" onclick="copyText()" style="margin: 10px auto; max-width: 200px;">
+                        <i class="fas fa-copy"></i> نسخ الرقم
+                    </button>
+                </div>
+                <div style="text-align: right; margin-top: 15px; font-size: 0.85rem; color: #64748b;">
+                    <p style="margin-bottom: 5px;"><i class="fas fa-info-circle"></i> يمكن لأي مستخدم آخر إرسال الأموال لك عبر هذا الرقم.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 15px;">آخر مبالغ استلمتها</h3>
+            <div id="receivedList">
+                <p style="text-align: center; color: var(--gray); padding: 20px;">جاري تحميل العمليات...</p>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { auth, db, getUserData, showAlert } from './app.js';
+        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+        let myAccountID = "";
+
+        // توليد رمز QR
+        function generateQR(accountID) {
+            const qrContainer = document.getElementById("qrcode");
+            qrContainer.innerHTML = ""; 
+            new QRCode(qrContainer, {
+                text: accountID,
+                width: 200,
+                height: 200,
+                colorDark : "#0d9488",
+                colorLight : "#ffffff",
+                correctLevel : QRCode.CorrectLevel.H
+            });
+        }
+
+        // جلب البيانات من السيرفر
+        async function loadData() {
+            const user = auth.currentUser;
+            if (!user) return;
+
+            try {
+                const data = await getUserData(user.uid);
+                if (data) {
+                    myAccountID = data.accountID || "غير متوفر";
+                    document.getElementById('currentBalance').textContent = (data.balanceSDG || 0).toLocaleString() + " SDG";
+                    document.getElementById('qrAccountID').textContent = myAccountID;
+                    document.getElementById('fullAccountID').textContent = myAccountID;
+                    
+                    generateQR(myAccountID);
+                    renderReceived(data.transactions || []);
+                }
+            } catch (error) {
+                console.error("خطأ في جلب البيانات:", error);
+            }
+        }
+
+        // عرض العمليات المستلمة فقط
+        function renderReceived(list) {
+            const container = document.getElementById('receivedList');
+            const received = list.filter(t => t.type === 'receive');
+            
+            if (received.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: var(--gray); padding: 20px;">لا توجد مبالغ مستلمة بعد</p>';
+                return;
+            }
+
+            container.innerHTML = received.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp)).slice(0, 5).map(t => `
+                <div class="transaction-item">
+                    <div>
+                        <div style="font-weight: 700; font-size: 0.95rem;">من: ${t.description}</div>
+                        <div style="font-size: 0.8rem; color: var(--gray);">${new Date(t.timestamp).toLocaleDateString('ar-EG')}</div>
+                    </div>
+                    <div style="color: var(--success); font-weight: 800;">+ ${t.amount.toFixed(2)}</div>
+                </div>
+            `).join('');
+        }
+
+        // تبديل التبويبات
+        window.showTab = (tabName) => {
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            
+            document.getElementById(tabName + '-tab').classList.add('active');
+            if(tabName === 'qr') document.getElementById('btn-qr').classList.add('active');
+            else document.getElementById('btn-account').classList.add('active');
+        };
+
+        // نسخ النص
+        window.copyText = () => {
+            navigator.clipboard.writeText(myAccountID);
+            showAlert('تم نسخ رقم الحساب', 'success');
+        };
+
+        // مشاركة البيانات
+        window.shareData = () => {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'حساب Sudan Pay',
+                    text: `حول لي عبر تطبيق سودان بي، رقم حسابي هو: ${myAccountID}`
+                });
+            } else {
+                window.copyText();
+            }
+        };
+
+        // تنزيل الـ QR كصورة
+        window.downloadQR = () => {
+            const img = document.querySelector('#qrcode img');
+            if (img) {
+                const link = document.createElement('a');
+                link.href = img.src;
+                link.download = `SudanPay-QR-${myAccountID}.png`;
+                link.click();
+                showAlert('جاري تحميل الصورة...', 'success');
+            }
+        };
+
+        // فحص الدخول عند تشغيل الصفحة
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                loadData();
+            } else {
+                window.location.href = 'index.html';
+            }
+        });
+    </script>
 </body>
-  </html>
+</html>
+
