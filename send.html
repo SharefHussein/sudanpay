@@ -7,330 +7,323 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
+    <style>
+        :root {
+            --primary: #0d9488;
+            --primary-dark: #0f766e;
+            --danger: #ef4444;
+            --success: #22c55e;
+        }
+
+        body {
+            background-color: #f1f5f9;
+            font-family: 'Cairo', sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            padding: 15px 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .navbar-brand {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .balance-card {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 25px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+            box-shadow: 0 10px 20px rgba(13, 148, 136, 0.2);
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #475569;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            outline: none;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+        }
+
+        /* تنسيق صندوق المستلم */
+        .recipient-info {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            padding: 15px;
+            border-radius: 12px;
+            margin-top: 15px;
+            display: none;
+            text-align: center;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .recipient-name {
+            color: #166534;
+            font-weight: 800;
+            font-size: 1.1rem;
+        }
+
+        .error-msg {
+            color: var(--danger);
+            font-size: 0.85rem;
+            margin-top: 8px;
+            display: none;
+            text-align: center;
+        }
+
+        .loading-user {
+            font-size: 0.9rem;
+            color: var(--primary);
+            display: none;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .btn-send {
+            width: 100%;
+            padding: 16px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-send:disabled {
+            background: #94a3b8;
+            cursor: not-allowed;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 </head>
 <body>
     <div class="container">
         <nav class="navbar">
             <a href="dashboard.html" class="navbar-brand">
-                <i class="fas fa-arrow-right"></i>
-                العودة
+                <i class="fas fa-arrow-right"></i> العودة
             </a>
-            <div class="navbar-menu">
-                <span class="text-primary font-bold">إرسال أموال</span>
-            </div>
+            <span style="font-weight: 800; color: var(--primary);">إرسال مالي</span>
         </nav>
 
-        <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">
-                    <i class="fas fa-wallet"></i>
-                    رصيدك الحالي
-                </h3>
-            </div>
-            
-            <div class="text-center p-4">
-                <div class="text-gray mb-2">الإجمالي المتاح</div>
-                <div class="text-3xl font-bold text-primary" id="currentBalance">0.00 SDG</div>
-                <div class="text-lg text-gray mt-1" id="currentBalanceUSD">0.00 USDT</div>
-            </div>
+        <div class="balance-card">
+            <p style="font-size: 0.9rem; margin-bottom: 5px; opacity: 0.9;">رصيدك المتاح</p>
+            <h2 id="myBalance" style="font-size: 2rem; margin: 0;">0.00 SDG</h2>
         </div>
 
         <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">
-                    <i class="fas fa-paper-plane"></i>
-                    بيانات التحويل
-                </h3>
+            <div class="form-group">
+                <label class="form-label">رقم حساب المستلم</label>
+                <input type="text" id="recipientID" class="form-control" placeholder="مثلاً: 123456" maxlength="6">
+                
+                <div id="loadingUser" class="loading-user">
+                    <i class="fas fa-spinner fa-spin"></i> جاري البحث عن الحساب...
+                </div>
+                
+                <div id="recipientBox" class="recipient-info">
+                    <div class="recipient-name" id="foundUserName">...</div>
+                    <div style="font-size: 0.8rem; color: #15803d; margin-top: 5px;">
+                        <i class="fas fa-check-circle"></i> حساب نشط وجاهز للاستلام
+                    </div>
+                </div>
+                
+                <div id="errorMsg" class="error-msg"></div>
             </div>
-            
-            <form id="sendForm">
-                <div class="form-group">
-                    <label class="form-label" for="recipientType">
-                        <i class="fas fa-user-friends"></i>
-                        نوع المستلم
-                    </label>
-                    <select class="form-control" id="recipientType" onchange="toggleRecipientField()">
-                        <option value="account">حساب Sudan Pay</option>
-                        <option value="phone">رقم هاتف (قريباً)</option>
-                        <option value="email">بريد إلكتروني (قريباً)</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label" id="recipientLabel" for="recipient">
-                        <i class="fas fa-user"></i>
-                        رقم حساب المستلم
-                    </label>
-                    <div class="relative">
-                        <input type="text" 
-                               class="form-control" 
-                               id="recipient" 
-                               placeholder="أدخل رقم الحساب (مثال: SP-123456)"
-                               required>
-                        <button type="button" class="password-toggle" onclick="scanQR()">
-                            <i class="fas fa-qrcode"></i>
-                        </button>
-                    </div>
-                    <div class="form-helper">
-                        <a href="#" onclick="showRecentContacts()" class="text-primary">
-                            <i class="fas fa-history"></i> جهات الاتصال الأخيرة
-                        </a>
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label" for="amount">
-                        <i class="fas fa-money-bill-wave"></i>
-                        المبلغ
-                    </label>
-                    <div class="relative">
-                        <input type="number" 
-                               class="form-control" 
-                               id="amount" 
-                               placeholder="0.00"
-                               min="1"
-                               max="100000"
-                               step="0.01"
-                               required
-                               oninput="calculateFee()">
-                        <span class="form-icon">SDG</span>
-                    </div>
-                    <div class="form-helper">
-                        الحد الأدنى: 1 SDG | الحد الأقصى: 100,000 SDG
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label" for="description">
-                        <i class="fas fa-comment-alt"></i>
-                        الوصف (اختياري)
-                    </label>
-                    <textarea class="form-control" 
-                              id="description" 
-                              rows="3"
-                              placeholder="أضف وصفاً للعملية"></textarea>
-                </div>
-                
-                <div class="card bg-gray mt-4 mb-6">
-                    <div class="p-4">
-                        <h4 class="font-bold mb-4">
-                            <i class="fas fa-calculator"></i>
-                            ملخص العملية
-                        </h4>
-                        
-                        <div class="flex justify-between items-center mb-3">
-                            <span class="text-gray-dark">المبلغ:</span>
-                            <span class="font-bold" id="summaryAmount">0.00 SDG</span>
-                        </div>
-                        
-                        <div class="flex justify-between items-center mb-3">
-                            <span class="text-gray-dark">الرسوم (1%):</span>
-                            <span class="font-bold text-warning" id="summaryFee">0.00 SDG</span>
-                        </div>
-                        
-                        <div class="flex justify-between items-center mb-3">
-                            <span class="text-gray-dark">إجمالي المبلغ:</span>
-                            <span class="font-bold text-primary" id="summaryTotal">0.00 SDG</span>
-                        </div>
-                        
-                        <hr class="my-4 border-gray-light">
-                        
-                        <div class="flex justify-between items-center">
-                            <span class="text-gray-dark">الرصيد بعد التحويل:</span>
-                            <span class="font-bold text-success" id="summaryRemaining">0.00 SDG</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label" for="securityCode">
-                        <i class="fas fa-shield-alt"></i>
-                        رمز التحقق
-                    </label>
-                    <input type="text" 
-                           class="form-control" 
-                           id="securityCode"
-                           placeholder="أدخل رمز التحقق"
-                           required>
-                    <div class="form-helper">
-                        <button type="button" class="btn btn-outline btn-sm" onclick="sendVerificationCode()">
-                            <i class="fas fa-paper-plane"></i> إرسال رمز التحقق
-                        </button>
-                        <span id="codeTimer" class="text-danger" style="display: none;"></span>
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label class="flex items-center gap-3 cursor-pointer">
-                        <input type="checkbox" id="termsAgreement" required>
-                        <span class="text-sm">
-                            أوافق على الشروط والأحكام وأقر بصحة البيانات
-                        </span>
-                    </label>
-                </div>
-                
-                <button type="button" class="btn btn-primary mt-4" onclick="sendMoney()" id="sendButton">
-                    <i class="fas fa-paper-plane"></i>
-                    تأكيد وإرسال
-                </button>
-            </form>
-        </div>
 
-        <div id="contactsModal" class="hidden">
-            <div class="modal-overlay" onclick="closeModal()"></div>
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h3 class="modal-title"><i class="fas fa-users"></i> جهات الاتصال</h3>
-                    <button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
-                </div>
-                <div class="modal-body">
-                    <div id="contactsList">
-                        <div class="empty-state"><p>لا توجد جهات اتصال سابقة</p></div>
-                    </div>
-                </div>
+            <div class="form-group">
+                <label class="form-label">المبلغ المراد تحويله</label>
+                <input type="number" id="amount" class="form-control" placeholder="0.00" step="any">
             </div>
+
+            <div class="form-group">
+                <label class="form-label">ملاحظة للعملية (اختياري)</label>
+                <input type="text" id="note" class="form-control" placeholder="اكتب غرض التحويل" style="font-weight: 400;">
+            </div>
+
+            <button class="btn-send" id="sendBtn" disabled onclick="processTransfer()">
+                <i class="fas fa-paper-plane"></i> تأكيد وإرسال
+            </button>
         </div>
     </div>
 
     <script type="module">
-        import { auth, db, showAlert, getUserData, transferByAccountID } from './app.js';
+        import { auth, db, getUserData, showAlert } from './app.js';
         import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { collection, query, where, getDocs, doc, updateDoc, arrayUnion, increment } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-        let userData = null;
-        let verificationCode = null;
-        let codeTimerInterval = null;
+        let senderData = null;
+        let recipientData = null;
 
-        // تحميل بيانات المستخدم الحقيقية
-        async function loadUserData() {
+        // تحميل بيانات المرسل والرصيد
+        async function fetchSenderInfo() {
             const user = auth.currentUser;
-            if (!user) return;
-
-            try {
-                userData = await getUserData(user.uid);
-                if (userData) {
-                    document.getElementById('currentBalance').textContent = 
-                        `${userData.balanceSDG?.toFixed(2) || '0.00'} SDG`;
-                    document.getElementById('currentBalanceUSD').textContent = 
-                        `${userData.balanceUSDT?.toFixed(2) || '0.00'} USDT`;
-                    calculateFee();
+            if (user) {
+                senderData = await getUserData(user.uid);
+                if (senderData) {
+                    document.getElementById('myBalance').textContent = senderData.balanceSDG.toLocaleString() + " SDG";
                 }
-            } catch (error) {
-                showAlert('فشل في تحديث الرصيد');
             }
         }
 
-        // إرسال الأموال الحقيقي
-        async function sendMoney() {
-            const recipientID = document.getElementById('recipient').value.trim();
-            const amount = parseFloat(document.getElementById('amount').value);
-            const securityCode = document.getElementById('securityCode').value.trim();
-            const termsAgreed = document.getElementById('termsAgreement').checked;
-            const sendButton = document.getElementById('sendButton');
-            
-            if (!recipientID) return showAlert('يرجى إدخال رقم الحساب');
-            if (!amount || amount <= 0) return showAlert('المبلغ غير صحيح');
-            if (securityCode !== verificationCode?.toString()) return showAlert('رمز التحقق غير صحيح');
-            if (!termsAgreed) return showAlert('يجب الموافقة على الشروط');
+        // مراقبة إدخال رقم الحساب
+        document.getElementById('recipientID').addEventListener('input', async (e) => {
+            const id = e.target.value.trim();
+            const box = document.getElementById('recipientBox');
+            const error = document.getElementById('errorMsg');
+            const loading = document.getElementById('loadingUser');
+            const btn = document.getElementById('sendBtn');
 
-            // حساب الإجمالي مع الرسوم (1%)
-            const fee = amount * 0.01;
-            const total = amount + fee;
-
-            if (total > userData.balanceSDG) return showAlert('رصيدك غير كافي (شاملاً الرسوم)');
-
-            try {
-                sendButton.disabled = true;
-                sendButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري التحويل...';
-
-                // استدعاء الدالة من app.js
-                const result = await transferByAccountID(recipientID, amount, 'SDG');
-
-                if (result.success) {
-                    showAlert(`تم التحويل بنجاح إلى ${result.receiverName}`, 'success');
-                    document.getElementById('sendForm').reset();
-                    setTimeout(() => window.location.href = 'dashboard.html', 2500);
-                }
-            } catch (error) {
-                showAlert(error.message);
-                sendButton.disabled = false;
-                sendButton.innerHTML = '<i class="fas fa-paper-plane"></i> تأكيد وإرسال';
-            }
-        }
-
-        // إرسال رمز التحقق (محاكاة للأمان)
-        function sendVerificationCode() {
-            const btn = document.querySelector('[onclick="sendVerificationCode()"]');
-            verificationCode = Math.floor(100000 + Math.random() * 900000);
-            
-            showAlert(`رمز التحقق الخاص بك هو: ${verificationCode}`, 'success');
-            
+            // تصفير الحالة
+            box.style.display = 'none';
+            error.style.display = 'none';
             btn.disabled = true;
-            let timeLeft = 60;
-            const timerDisplay = document.getElementById('codeTimer');
-            timerDisplay.style.display = 'inline';
 
-            codeTimerInterval = setInterval(() => {
-                timeLeft--;
-                timerDisplay.textContent = ` (${timeLeft} ثانية)`;
-                if (timeLeft <= 0) {
-                    clearInterval(codeTimerInterval);
-                    btn.disabled = false;
-                    timerDisplay.style.display = 'none';
+            if (id.length === 6) {
+                loading.style.display = 'block';
+                try {
+                    const q = query(collection(db, "users"), where("accountID", "==", id));
+                    const snap = await getDocs(q);
+
+                    if (!snap.empty) {
+                        const targetDoc = snap.docs[0];
+                        recipientData = { uid: targetDoc.id, ...targetDoc.data() };
+
+                        if (recipientData.uid === auth.currentUser.uid) {
+                            error.textContent = "لا يمكنك التحويل لحسابك الخاص!";
+                            error.style.display = 'block';
+                        } else {
+                            document.getElementById('foundUserName').textContent = recipientData.name;
+                            box.style.display = 'block';
+                            btn.disabled = false;
+                        }
+                    } else {
+                        error.textContent = "عذراً، رقم الحساب غير مسجل في نظامنا.";
+                        error.style.display = 'block';
+                    }
+                } catch (err) {
+                    console.error(err);
+                } finally {
+                    loading.style.display = 'none';
                 }
-            }, 1000);
-        }
-
-        // حساب الرسوم والملخص
-        function calculateFee() {
-            const amount = parseFloat(document.getElementById('amount').value) || 0;
-            const fee = amount * 0.01;
-            const total = amount + fee;
-            
-            document.getElementById('summaryAmount').textContent = amount.toFixed(2) + ' SDG';
-            document.getElementById('summaryFee').textContent = fee.toFixed(2) + ' SDG';
-            document.getElementById('summaryTotal').textContent = total.toFixed(2) + ' SDG';
-            
-            if (userData) {
-                const remaining = userData.balanceSDG - total;
-                const remDisplay = document.getElementById('summaryRemaining');
-                remDisplay.textContent = remaining.toFixed(2) + ' SDG';
-                remDisplay.className = remaining >= 0 ? 'font-bold text-success' : 'font-bold text-danger';
             }
-        }
-
-        function toggleRecipientField() {
-            const type = document.getElementById('recipientType').value;
-            if (type !== 'account') {
-                showAlert('هذا الخيار سيتوفر قريباً، استخدم رقم الحساب حالياً', 'info');
-                document.getElementById('recipientType').value = 'account';
-            }
-        }
-
-        // مراقبة الدخول
-        onAuthStateChanged(auth, (user) => {
-            if (user) loadUserData();
-            else window.location.href = 'index.html';
         });
 
-        // جعل الدوال متاحة للـ HTML
-        window.toggleRecipientField = toggleRecipientField;
-        window.calculateFee = calculateFee;
-        window.sendVerificationCode = sendVerificationCode;
-        window.sendMoney = sendMoney;
-        window.closeModal = () => document.getElementById('contactsModal').classList.add('hidden');
-        window.scanQR = () => showAlert('ميزة QR ستتوفر قريباً', 'info');
-        window.showRecentContacts = () => showAlert('لا توجد جهات اتصال حالياً', 'info');
-    </script>
+        // تنفيذ عملية التحويل
+        window.processTransfer = async () => {
+            const amount = parseFloat(document.getElementById('amount').value);
+            const note = document.getElementById('note').value || "تحويل مالي";
 
-    <style>
-        .relative { position: relative; }
-        .hidden { display: none !important; }
-        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1000; }
-        .modal-content { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; border-radius: 15px; width: 90%; max-width: 400px; z-index: 1001; overflow: hidden; }
-        .modal-header { padding: 15px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
-        .modal-body { padding: 20px; text-align: center; }
-        .btn-sm { padding: 5px 10px; font-size: 0.8rem; }
-    </style>
+            if (!amount || amount <= 0) return showAlert('يرجى إدخال مبلغ صحيح', 'error');
+            if (amount > senderData.balanceSDG) return showAlert('رصيدك الحالي لا يكفي!', 'error');
+
+            if (confirm(`هل أنت متأكد من تحويل ${amount} SDG إلى ${recipientData.name}؟`)) {
+                const btn = document.getElementById('sendBtn');
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري المعالجة...';
+
+                try {
+                    const timestamp = new Date().toISOString();
+
+                    // 1. تحديث حساب المرسل (خصم)
+                    const senderRef = doc(db, "users", auth.currentUser.uid);
+                    await updateDoc(senderRef, {
+                        balanceSDG: increment(-amount),
+                        transactions: arrayUnion({
+                            type: 'send',
+                            amount: amount,
+                            description: `إلى ${recipientData.name}`,
+                            timestamp: timestamp,
+                            note: note
+                        })
+                    });
+
+                    // 2. تحديث حساب المستلم (إضافة)
+                    const recipientRef = doc(db, "users", recipientData.uid);
+                    await updateDoc(recipientRef, {
+                        balanceSDG: increment(amount),
+                        transactions: arrayUnion({
+                            type: 'receive',
+                            amount: amount,
+                            description: `من ${senderData.name}`,
+                            timestamp: timestamp,
+                            note: note
+                        })
+                    });
+
+                    showAlert('تمت عملية التحويل بنجاح', 'success');
+                    setTimeout(() => window.location.href = 'dashboard.html', 1500);
+
+                } catch (err) {
+                    console.error(err);
+                    showAlert('حدث خطأ أثناء التحويل، حاول ثانية');
+                    btn.disabled = false;
+                    btn.textContent = 'تأكيد وإرسال';
+                }
+            }
+        };
+
+        // فحص حالة الدخول
+        onAuthStateChanged(auth, (user) => {
+            if (user) fetchSenderInfo();
+            else window.location.href = 'index.html';
+        });
+    </script>
 </body>
 </html>
- 
+
