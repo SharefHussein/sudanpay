@@ -10,343 +10,209 @@
         :root {
             --primary: #0d9488;
             --primary-dark: #0f766e;
-            --secondary: #0891b2;
-            --accent: #10b981;
             --dark: #0f172a;
-            --dark-light: #1e293b;
             --light: #f8fafc;
             --gray: #94a3b8;
             --success: #10b981;
-            --danger: #ef4444;
-            --warning: #f59e0b;
-            --border: #e2e8f0;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Cairo', sans-serif;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
 
-        body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
+        body { background: #f1f5f9; min-height: 100vh; padding: 20px; }
 
-        .dashboard-container {
-            max-width: 480px;
-            margin: 0 auto;
-        }
+        .dashboard-container { max-width: 500px; margin: 0 auto; }
 
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            color: white;
-            font-size: 1.5rem;
-            font-weight: 700;
-        }
-
-        .user-menu {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .user-avatar {
-            width: 45px;
-            height: 45px;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 700;
-            font-size: 1.2rem;
-            cursor: pointer;
-        }
-
-        .logout-btn {
-            background: rgba(239, 68, 68, 0.2);
-            color: white;
-            border: 1px solid rgba(239, 68, 68, 0.4);
-            padding: 10px 15px;
-            border-radius: 12px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s;
-            font-size: 0.9rem;
-        }
-
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        
+        /* كرت الرصيد الأخضر مثل تصميمك */
         .balance-card {
-            background: linear-gradient(135deg, #0d9488, #08977f);
-            color: white;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             border-radius: 24px;
             padding: 30px;
-            margin-bottom: 30px;
-            text-align: center;
-            box-shadow: 0 15px 30px rgba(13, 148, 136, 0.3);
-        }
-
-        .balance-amount {
-            font-size: 3rem;
-            font-weight: 800;
-            margin: 10px 0;
-            direction: ltr;
-        }
-
-        .account-id-badge {
-            display: inline-block;
-            background: rgba(255, 255, 255, 0.2);
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            margin-top: 10px;
-            letter-spacing: 1px;
-        }
-
-        .balance-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 25px;
-        }
-
-        .balance-btn {
-            flex: 1;
-            background: rgba(255, 255, 255, 0.15);
-            border: 1px solid rgba(255, 255, 255, 0.3);
             color: white;
-            padding: 12px;
-            border-radius: 14px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s;
-            font-size: 0.9rem;
+            text-align: center;
+            box-shadow: 0 15px 30px rgba(13, 148, 136, 0.2);
+            position: relative;
+            overflow: hidden;
         }
 
-        .balance-btn:hover { background: rgba(255,255,255,0.25); }
+        .balance-label { font-size: 1rem; opacity: 0.9; margin-bottom: 10px; }
+        .balance-amount { font-size: 2.5rem; font-weight: 800; margin-bottom: 5px; }
+        .balance-usdt { font-size: 1.1rem; opacity: 0.8; }
 
-        .quick-actions, .recent-transactions {
-            background: white;
-            border-radius: 24px;
-            padding: 25px;
-            margin-bottom: 25px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        }
-
-        .section-title {
-            font-size: 1.2rem;
-            color: var(--dark);
-            margin-bottom: 20px;
-            font-weight: 700;
+        .address-box {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            padding: 15px;
+            margin-top: 25px;
+            font-size: 0.85rem;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            flex-direction: column;
+            gap: 8px;
         }
 
-        .section-title a { color: var(--primary); font-size: 0.9rem; text-decoration: none; }
+        .address-text { font-family: monospace; word-break: break-all; font-weight: bold; color: #fff; }
 
         .actions-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(2, 1fr);
             gap: 15px;
+            margin-top: 30px;
         }
 
-        .action-item { text-align: center; cursor: pointer; }
-
-        .action-icon {
-            width: 50px;
-            height: 50px;
-            background: #f0f9ff;
-            border-radius: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 10px;
-            color: var(--primary);
-            font-size: 1.4rem;
+        .action-btn {
+            background: white;
+            padding: 20px;
+            border-radius: 18px;
+            text-align: center;
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 700;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: 0.3s;
         }
 
-        .action-label { font-size: 0.85rem; font-weight: 600; color: var(--dark); }
+        .action-btn i { font-size: 1.5rem; color: var(--primary); margin-bottom: 10px; display: block; }
+        .action-btn:hover { transform: translateY(-5px); box-shadow: 0 8px 15px rgba(0,0,0,0.1); }
 
-        .transaction-item {
-            display: flex;
-            align-items: center;
-            padding: 15px 0;
-            border-bottom: 1px solid var(--border);
+        .logout-btn {
+            margin-top: 40px;
+            width: 100%;
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid var(--gray);
+            background: transparent;
+            color: var(--gray);
+            font-weight: bold;
+            cursor: pointer;
         }
-
-        .transaction-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-left: 12px;
-        }
-
-        .transaction-icon.send { background: #fee2e2; color: var(--danger); }
-        .transaction-icon.receive { background: #dcfce7; color: var(--success); }
-
-        .transaction-details { flex: 1; }
-        .transaction-title { font-weight: 600; font-size: 0.95rem; }
-        .transaction-date { font-size: 0.8rem; color: var(--gray); }
-        .transaction-amount { font-weight: 700; direction: ltr; }
-
-        .positive { color: var(--success); }
-        .negative { color: var(--danger); }
-
-        .loading, .empty-state { text-align: center; padding: 20px; color: var(--gray); }
     </style>
 </head>
 <body>
-    <div class="dashboard-container">
-        <div class="header">
-            <div class="logo">
-                <i class="fas fa-wallet"></i>
-                <span>Sudan Pay</span>
-            </div>
-            <div class="user-menu">
-                <div class="user-avatar" id="userAvatar" onclick="window.location.href='profile.html'">
-                    <i class="fas fa-user"></i>
-                </div>
-                <button class="logout-btn" onclick="logout()">خروج</button>
-            </div>
-        </div>
 
-        <div class="balance-card">
-            <div style="opacity: 0.9; font-size: 0.9rem;">رصيدك المتاح (SDG)</div>
-            <div class="balance-amount" id="balanceSDG">0.00</div>
-            <div style="opacity: 0.9;" id="balanceUSDT">0.00 USDT</div>
-            <div class="account-id-badge">
-                رقم الحساب: <span id="accountID">...</span>
-            </div>
-            
-            <div class="balance-actions">
-                <button class="balance-btn" onclick="window.location.href='send.html'"><i class="fas fa-paper-plane"></i> إرسال</button>
-                <button class="balance-btn" onclick="window.location.href='receive.html'"><i class="fas fa-qrcode"></i> استلام</button>
-                <button class="balance-btn" onclick="refreshData()"><i class="fas fa-sync-alt"></i></button>
-            </div>
+<div class="dashboard-container">
+    <div class="header">
+        <div>
+            <h2 id="user-name" style="font-size: 1.2rem; color: var(--dark);">مرحباً بك</h2>
+            <p style="font-size: 0.9rem; color: var(--gray);">رصيدك المحدث اليوم</p>
         </div>
+        <div class="logo" style="color: var(--primary); font-size: 1.5rem;"><i class="fas fa-wallet"></i></div>
+    </div>
 
-        <div class="quick-actions">
-            <h2 class="section-title">الخدمات السريعة</h2>
-            <div class="actions-grid">
-                <div class="action-item" onclick="window.location.href='send.html'">
-                    <div class="action-icon"><i class="fas fa-paper-plane"></i></div>
-                    <div class="action-label">إرسال</div>
-                </div>
-                <div class="action-item" onclick="window.location.href='receive.html'">
-                    <div class="action-icon"><i class="fas fa-qrcode"></i></div>
-                    <div class="action-label">استلام</div>
-                </div>
-                <div class="action-item" onclick="window.location.href='transactions.html'">
-                    <div class="action-icon"><i class="fas fa-history"></i></div>
-                    <div class="action-label">السجل</div>
-                </div>
-                <div class="action-item" onclick="window.location.href='profile.html'">
-                    <div class="action-icon"><i class="fas fa-user-cog"></i></div>
-                    <div class="action-label">الإعدادات</div>
-                </div>
-            </div>
-        </div>
+    <div class="balance-card">
+        <div class="balance-label">إجمالي الرصيد (SDG)</div>
+        <div class="balance-amount" id="balance-sdg">0.00</div>
+        <div class="balance-usdt" id="balance-usdt">USDT 0.00</div>
 
-        <div class="recent-transactions">
-            <h2 class="section-title">
-                آخر الحركات
-                <a href="transactions.html">عرض الكل</a>
-            </h2>
-            <div id="transactionsList">
-                <div class="loading"><i class="fas fa-spinner fa-spin"></i> جاري التحميل...</div>
-            </div>
+        <div class="address-box">
+            <span><i class="fas fa-link"></i> عنوان محفظة USDT (Tron):</span>
+            <div class="address-text" id="acc-address">جاري التوليد...</div>
+            <button onclick="copyAddress()" style="background:none; border:none; color:white; font-size:0.8rem; cursor:pointer; text-decoration:underline;">نسخ العنوان</button>
         </div>
     </div>
 
-    <script type="module">
-        import { auth, logoutUser, getUserData, showAlert } from './app.js';
-        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    <div class="actions-grid">
+        <a href="exchange.html" class="action-btn"><i class="fas fa-paper-plane"></i> إرسال</a>
+        <a href="exchange.html" class="action-btn"><i class="fas fa-qrcode"></i> استلام</a>
+        <a href="#" class="action-btn"><i class="fas fa-history"></i> السجل</a>
+        <a href="#" class="action-btn"><i class="fas fa-cog"></i> الإعدادات</a>
+    </div>
 
-        // تحديث البيانات عند فتح الصفحة
-        async function refreshData() {
-            const user = auth.currentUser;
-            if (user) {
-                try {
-                    const data = await getUserData(user.uid);
-                    if (data) {
-                        document.getElementById('balanceSDG').textContent = (data.balanceSDG || 0).toLocaleString('en-US', {minimumFractionDigits: 2});
-                        document.getElementById('balanceUSDT').textContent = (data.balanceUSDT || 0).toFixed(2) + " USDT";
-                        document.getElementById('accountID').textContent = data.accountID || "N/A";
-                        
-                        // أيقونة المستخدم (أول حرف من الاسم)
-                        if (data.name) {
-                            document.getElementById('userAvatar').textContent = data.name.charAt(0).toUpperCase();
-                        }
+    <button class="logout-btn" onclick="handleLogout()">تسجيل الخروج</button>
+</div>
 
-                        renderTransactions(data.transactions || []);
-                    }
-                } catch (e) {
-                    console.error(e);
-                }
-            }
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getFirestore, doc, onSnapshot, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyB3vxJu_et-P80ek30I3MRdC_lGhooCCsc",
+        authDomain: "sudanpay-e332a.firebaseapp.com",
+        projectId: "sudanpay-e332a",
+        storageBucket: "sudanpay-e332a.firebasestorage.app",
+        messagingSenderId: "699809447272",
+        appId: "1:699809447272:web:90f3780ed6c768c4322add"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // ==========================================
+    // ضع مفتاح Tatum API Key الخاص بك هنا 👇
+    // ==========================================
+    const TATUM_API_KEY = "t-695a0ea026858bd739f1595e-363e1ef7ec404868aebf73ed"; 
+
+    // دالة توليد محفظة USDT (Tron) وحفظها
+    async function generateAndSaveWallet(uid) {
+        try {
+            // 1. توليد المحفظة
+            const walletRes = await fetch('https://api.tatum.io/v3/tron/wallet', {
+                headers: { 'x-api-key': TATUM_API_KEY }
+            });
+            const wallet = await walletRes.json();
+
+            // 2. توليد العنوان من الـ xpub
+            const addressRes = await fetch(`https://api.tatum.io/v3/tron/address/${wallet.xpub}/0`, {
+                headers: { 'x-api-key': TATUM_API_KEY }
+            });
+            const addressData = await addressRes.json();
+
+            // 3. حفظ العنوان في Firestore
+            await updateDoc(doc(db, "users", uid), {
+                usdtAddress: addressData.address
+            });
+
+            return addressData.address;
+        } catch (error) {
+            console.error("فشل توليد المحفظة:", error);
+            return "حدث خطأ في التوليد";
         }
+    }
 
-        // عرض سجل العمليات
-        function renderTransactions(list) {
-            const container = document.getElementById('transactionsList');
-            if (list.length === 0) {
-                container.innerHTML = '<div class="empty-state">لا توجد عمليات بعد</div>';
-                return;
-            }
-
-            // ترتيب من الأحدث للأقدم وعرض آخر 4 فقط
-            const latest = list.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)).slice(0, 4);
+    // مراقبة حالة المستخدم وتحديث البيانات
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            const userRef = doc(db, "users", user.uid);
             
-            container.innerHTML = latest.map(tx => `
-                <div class="transaction-item">
-                    <div class="transaction-icon ${tx.type === 'send' ? 'send' : 'receive'}">
-                        <i class="fas fa-${tx.type === 'send' ? 'arrow-up' : 'arrow-down'}"></i>
-                    </div>
-                    <div class="transaction-details">
-                        <div class="transaction-title">${tx.description}</div>
-                        <div class="transaction-date">${new Date(tx.timestamp).toLocaleDateString('ar-EG')}</div>
-                    </div>
-                    <div class="transaction-amount ${tx.type === 'send' ? 'negative' : 'positive'}">
-                        ${tx.type === 'send' ? '-' : '+'} ${tx.amount.toFixed(2)}
-                    </div>
-                </div>
-            `).join('');
+            // تحديث لحظي للبيانات
+            onSnapshot(userRef, async (snap) => {
+                if (snap.exists()) {
+                    const data = snap.data();
+                    
+                    // تحديث الرصيد
+                    const sdg = data.balanceSDG || 0;
+                    document.getElementById('balance-sdg').innerText = sdg.toLocaleString();
+                    document.getElementById('balance-usdt').innerText = "USDT " + (sdg / 2600).toFixed(2);
+                    
+                    // تحديث العنوان أو توليده إذا كان N/A
+                    if (!data.usdtAddress) {
+                        document.getElementById('acc-address').innerText = "جاري إنشاء محفظة فريدة...";
+                        const newAddress = await generateAndSaveWallet(user.uid);
+                        document.getElementById('acc-address').innerText = newAddress;
+                    } else {
+                        document.getElementById('acc-address').innerText = data.usdtAddress;
+                    }
+                }
+            });
+        } else {
+            window.location.href = "index.html"; // العودة لصفحة الدخول
         }
+    });
 
-        // خروج
-        window.logout = async () => {
-            await logoutUser();
-            window.location.href = 'index.html';
-        };
+    // دالة النسخ
+    window.copyAddress = () => {
+        const addr = document.getElementById('acc-address').innerText;
+        navigator.clipboard.writeText(addr);
+        alert("تم نسخ العنوان بنجاح");
+    };
 
-        window.refreshData = refreshData;
-
-        // التحقق من حالة الدخول
-        onAuthStateChanged(auth, (user) => {
-            if (user) refreshData();
-            else window.location.href = 'index.html';
-        });
-    </script>
+    // تسجيل الخروج
+    window.handleLogout = () => {
+        signOut(auth).then(() => window.location.href = "index.html");
+    };
+</script>
 </body>
 </html>
- 
+
