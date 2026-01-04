@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>لوحة الإدارة - SudanPay</title>
+    <style>
+        body { font-family: sans-serif; background: #2c3e50; color: white; padding: 20px; }
+        .user-card { background: white; color: #333; padding: 20px; border-radius: 10px; margin-bottom: 20px; display: flex; flex-wrap: wrap; gap: 20px; }
+        .kyc-img { width: 200px; height: 150px; object-fit: cover; border-radius: 5px; cursor: pointer; }
+        .btn-approve { background: #27ae60; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; }
+        .btn-reject { background: #c0392b; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>إدارة طلبات التحقق (KYC)</h1>
+    <div id="users-list">جاري تحميل الطلبات...</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getFirestore, collection, query, where, onSnapshot, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const firebaseConfig = { /* ضع إعداداتك هنا */ };
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // جلب المستخدمين الذين حالتهم "pending" فقط
+    const q = query(collection(db, "users"), where("kycStatus", "==", "pending"));
+
+    onSnapshot(q, (snapshot) => {
+        const list = document.getElementById('users-list');
+        list.innerHTML = "";
+        snapshot.forEach((userDoc) => {
+            const data = userDoc.data();
+            const div = document.createElement('div');
+            div.className = "user-card";
+            div.innerHTML = `
+                <div style="flex: 1;">
+                    p><b>الإيميل:</b> ${data.email}</p>
+                    <p><b>التاريخ:</b> ${data.createdAt.toDate().toLocaleString()}</p>
+                    <button class="btn-approve" onclick="updateStatus('${userDoc.id}', 'verified')">قبول التفعيل</button>
+                    <button class="btn-reject" onclick="updateStatus('${userDoc.id}', 'rejected')">رفض</button>
+                </div>
+                <div>
+                    <p>البطاقة:</p>
+                    <img src="${data.idUrl}" class="kyc-img" onclick="window.open(this.src)">
+                </div>
+                <div>
+                    <p>السيلفي:</p>
+                    <img src="${data.selfieUrl}" class="kyc-img" onclick="window.open(this.src)">
+                </div>
+            `;
+            list.appendChild(div);
+        });
+    });
+
+    window.updateStatus = async (uid, newStatus) => {
+        await updateDoc(doc(db, "users", uid), { kycStatus: newStatus });
+        alert("تم تحديث الحالة بنجاح");
+    };
+</script>
+</body>
+</html>
