@@ -7,559 +7,197 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
+    <style>
+        .filter-section { background: white; border-radius: 20px; padding: 15px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+        .stat-card { padding: 15px; border-radius: 15px; text-align: center; }
+        .stat-card.sent { background: #fef2f2; border: 1px solid #fee2e2; }
+        .stat-card.received { background: #f0fdf4; border: 1px solid #dcfce7; }
+        
+        .transaction-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #f1f5f9;
+            transition: background 0.2s;
+        }
+        .transaction-item:hover { background: #f8fafc; }
+        .transaction-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 15px;
+        }
+        .icon-send { background: #fee2e2; color: #ef4444; }
+        .icon-receive { background: #dcfce7; color: #22c55e; }
+        
+        .pagination { display: flex; justify-content: center; align-items: center; gap: 15px; padding: 20px; }
+        .page-btn { padding: 8px 16px; border-radius: 8px; border: 1px solid var(--primary); background: white; color: var(--primary); cursor: pointer; }
+        .page-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    </style>
 </head>
 <body>
     <div class="container">
-        <!-- Header -->
         <nav class="navbar">
             <a href="dashboard.html" class="navbar-brand">
-                <i class="fas fa-arrow-right"></i>
-                العودة
+                <i class="fas fa-arrow-right"></i> العودة
             </a>
             <div class="navbar-menu">
                 <span class="text-primary font-bold">سجل العمليات</span>
             </div>
         </nav>
 
-        <!-- Filters -->
-        <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">
-                    <i class="fas fa-filter"></i>
-                    تصفية النتائج
-                </h3>
+        <div class="stats-grid">
+            <div class="stat-card sent">
+                <div class="text-gray mb-1" style="font-size: 0.8rem;">إجمالي المرسل</div>
+                <div class="text-xl font-bold text-danger" id="totalSent">0.00 SDG</div>
             </div>
-            
-            <div class="grid grid-cols-2 gap-4 mb-4">
-                <div class="form-group">
-                    <label class="form-label">نوع العملية</label>
-                    <select class="form-control" id="filterType" onchange="filterTransactions()">
-                        <option value="all">جميع العمليات</option>
-                        <option value="send">إرسال</option>
-                        <option value="receive">استلام</option>
-                        <option value="payment">دفع</option>
-                        <option value="withdraw">سحب</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">الفترة</label>
-                    <select class="form-control" id="filterPeriod" onchange="filterTransactions()">
-                        <option value="all">الكل</option>
-                        <option value="today">اليوم</option>
-                        <option value="week">أسبوع</option>
-                        <option value="month">شهر</option>
-                        <option value="year">سنة</option>
-                    </select>
-                </div>
+            <div class="stat-card received">
+                <div class="text-gray mb-1" style="font-size: 0.8rem;">إجمالي المستلم</div>
+                <div class="text-xl font-bold text-success" id="totalReceived">0.00 SDG</div>
             </div>
-            
-            <div class="grid grid-cols-2 gap-4">
-                <div class="form-group">
-                    <label class="form-label">من تاريخ</label>
-                    <input type="date" class="form-control" id="filterFrom" onchange="filterTransactions()">
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">إلى تاريخ</label>
-                    <input type="date" class="form-control" id="filterTo" onchange="filterTransactions()">
-                </div>
-            </div>
-            
-            <div class="mt-4">
-                <button class="btn btn-outline w-full" onclick="resetFilters()">
-                    <i class="fas fa-redo"></i> إعادة تعيين الفلاتر
+        </div>
+
+        <div class="filter-section">
+            <div style="display: flex; gap: 10px;">
+                <select class="form-control" id="filterType" onchange="filterTransactions()" style="flex: 1;">
+                    <option value="all">كل العمليات</option>
+                    <option value="send">المرسلة فقط</option>
+                    <option value="receive">المستلمة فقط</option>
+                </select>
+                <button class="btn btn-outline" onclick="exportToCSV()" style="padding: 10px;">
+                    <i class="fas fa-file-export"></i>
                 </button>
             </div>
         </div>
 
-        <!-- Stats -->
-        <div class="grid grid-cols-2 gap-4 mb-6">
-            <div class="card text-center">
-                <div class="text-gray mb-2">إجمالي الإرسال</div>
-                <div class="text-2xl font-bold text-danger" id="totalSent">0.00 SDG</div>
-            </div>
-            
-            <div class="card text-center">
-                <div class="text-gray mb-2">إجمالي الاستلام</div>
-                <div class="text-2xl font-bold text-success" id="totalReceived">0.00 SDG</div>
-            </div>
-        </div>
-
-        <!-- Transactions List -->
-        <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">
-                    <i class="fas fa-list"></i>
-                    قائمة العمليات
-                </h3>
-                <div class="flex items-center gap-2">
-                    <button class="btn btn-outline btn-sm" onclick="refreshTransactions()">
-                        <i class="fas fa-sync-alt"></i>
-                    </button>
-                    <button class="btn btn-outline btn-sm" onclick="exportTransactions()">
-                        <i class="fas fa-download"></i>
-                    </button>
-                </div>
-            </div>
-            
+        <div class="card" style="padding: 0;">
             <div id="transactionsContainer">
-                <div class="loading">
-                    <i class="fas fa-spinner fa-spin"></i>
-                    <p>جاري تحميل العمليات...</p>
-                </div>
+                <div class="text-center p-5 text-gray">جاري التحميل...</div>
             </div>
             
-            <!-- Pagination -->
-            <div class="pagination mt-6" id="pagination" style="display: none;">
-                <button class="page-btn" onclick="previousPage()">
-                    <i class="fas fa-chevron-right"></i>
-                </button>
-                <span class="page-info" id="pageInfo">صفحة 1 من 1</span>
-                <button class="page-btn" onclick="nextPage()">
-                    <i class="fas fa-chevron-left"></i>
-                </button>
+            <div class="pagination" id="paginationControls" style="display: none;">
+                <button class="page-btn" id="prevBtn" onclick="changePage(-1)">السابق</button>
+                <span id="pageNumber" class="font-bold">1</span>
+                <button class="page-btn" id="nextBtn" onclick="changePage(1)">التالي</button>
             </div>
         </div>
-
-        <!-- Empty State Template -->
-        <template id="emptyTemplate">
-            <div class="empty-state">
-                <i class="fas fa-inbox"></i>
-                <p>لا توجد عمليات مطابقة للبحث</p>
-                <button class="btn btn-outline mt-4" onclick="resetFilters()">
-                    عرض جميع العمليات
-                </button>
-            </div>
-        </template>
     </div>
 
     <script type="module">
-        import { auth, db, showAlert } from './app.js';
+        import { auth, db, getUserData, showAlert } from './app.js';
         import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
         let allTransactions = [];
-        let filteredTransactions = [];
+        let filteredData = [];
         let currentPage = 1;
-        const transactionsPerPage = 10;
+        const limit = 10;
 
-        // دالة تحميل جميع العمليات
-        async function loadAllTransactions() {
+        async function loadTransactions() {
             const user = auth.currentUser;
-            if (!user) {
-                window.location.href = 'index.html';
+            if (!user) return;
+
+            const data = await getUserData(user.uid);
+            if (data && data.transactions) {
+                allTransactions = data.transactions.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+                calculateStats();
+                filterTransactions();
+            } else {
+                document.getElementById('transactionsContainer').innerHTML = `
+                    <div class="text-center p-5 text-gray">لا توجد عمليات مسجلة</div>
+                `;
+            }
+        }
+
+        function calculateStats() {
+            let sent = 0, received = 0;
+            allTransactions.forEach(t => {
+                if (t.type === 'send') sent += t.amount;
+                else if (t.type === 'receive') received += t.amount;
+            });
+            document.getElementById('totalSent').textContent = sent.toLocaleString() + " SDG";
+            document.getElementById('totalReceived').textContent = received.toLocaleString() + " SDG";
+        }
+
+        window.filterTransactions = () => {
+            const type = document.getElementById('filterType').value;
+            filteredData = type === 'all' ? allTransactions : allTransactions.filter(t => t.type === type);
+            currentPage = 1;
+            renderList();
+        };
+
+        function renderList() {
+            const container = document.getElementById('transactionsContainer');
+            const start = (currentPage - 1) * limit;
+            const end = start + limit;
+            const pageItems = filteredData.slice(start, end);
+
+            if (pageItems.length === 0) {
+                container.innerHTML = '<div class="text-center p-5 text-gray">لا توجد نتائج</div>';
+                document.getElementById('paginationControls').style.display = 'none';
                 return;
             }
 
-            try {
-                const userDoc = await getDoc(doc(db, 'users', user.uid));
-                if (userDoc.exists()) {
-                    const userData = userDoc.data();
-                    allTransactions = userData.transactions || [];
-                    
-                    // تحديث الإحصائيات
-                    updateStatistics();
-                    
-                    // تطبيق الفلاتر الحالية
-                    filterTransactions();
-                    
-                    // تحديث واجهة المستخدم
-                    updateTransactionsList();
-                    updatePagination();
-                }
-            } catch (error) {
-                console.error('خطأ في تحميل العمليات:', error);
-                showAlert('حدث خطأ في تحميل العمليات');
-            }
-        }
+            container.innerHTML = pageItems.map(t => `
+                <div class="transaction-item">
+                    <div class="transaction-icon ${t.type === 'send' ? 'icon-send' : 'icon-receive'}">
+                        <i class="fas ${t.type === 'send' ? 'fa-arrow-up' : 'fa-arrow-down'}"></i>
+                    </div>
+                    <div style="flex: 1;">
+                        <div style="font-weight: 700; font-size: 0.95rem;">${t.description}</div>
+                        <div style="font-size: 0.75rem; color: #94a3b8;">${new Date(t.timestamp).toLocaleString('ar-EG')}</div>
+                    </div>
+                    <div style="text-align: left;">
+                        <div style="font-weight: 800; color: ${t.type === 'send' ? '#ef4444' : '#22c55e'};">
+                            ${t.type === 'send' ? '-' : '+'}${t.amount.toFixed(2)}
+                        </div>
+                        <div style="font-size: 0.7rem; color: #94a3b8;">SDG</div>
+                    </div>
+                </div>
+            `).join('');
 
-        // دالة تحديث الإحصائيات
-        function updateStatistics() {
-            let totalSent = 0;
-            let totalReceived = 0;
-            
-            allTransactions.forEach(transaction => {
-                if (transaction.type === 'send') {
-                    totalSent += transaction.amount || 0;
-                } else if (transaction.type === 'receive') {
-                    totalReceived += transaction.amount || 0;
-                }
-            });
-            
-            document.getElementById('totalSent').textContent = totalSent.toFixed(2) + ' SDG';
-            document.getElementById('totalReceived').textContent = totalReceived.toFixed(2) + ' SDG';
-        }
-
-        // دالة تصفية العمليات
-        function filterTransactions() {
-            const typeFilter = document.getElementById('filterType').value;
-            const periodFilter = document.getElementById('filterPeriod').value;
-            const fromFilter = document.getElementById('filterFrom').value;
-            const toFilter = document.getElementById('filterTo').value;
-            
-            filteredTransactions = allTransactions.filter(transaction => {
-                // فلترة النوع
-                if (typeFilter !== 'all' && transaction.type !== typeFilter) {
-                    return false;
-                }
-                
-                // فلترة الفترة
-                if (periodFilter !== 'all') {
-                    const transactionDate = transaction.timestamp?.seconds 
-                        ? new Date(transaction.timestamp.seconds * 1000)
-                        : new Date();
-                    const now = new Date();
-                    
-                    switch (periodFilter) {
-                        case 'today':
-                            if (!isSameDay(transactionDate, now)) return false;
-                            break;
-                        case 'week':
-                            const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-                            if (transactionDate < weekAgo) return false;
-                            break;
-                        case 'month':
-                            const monthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
-                            if (transactionDate < monthAgo) return false;
-                            break;
-                        case 'year':
-                            const yearAgo = new Date(now.getTime() - 365 * 24 * 60 * 60 * 1000);
-                            if (transactionDate < yearAgo) return false;
-                            break;
-                    }
-                }
-                
-                // فلترة التواريخ
-                if (fromFilter) {
-                    const fromDate = new Date(fromFilter);
-                    const transactionDate = transaction.timestamp?.seconds 
-                        ? new Date(transaction.timestamp.seconds * 1000)
-                        : new Date();
-                    if (transactionDate < fromDate) return false;
-                }
-                
-                if (toFilter) {
-                    const toDate = new Date(toFilter);
-                    const transactionDate = transaction.timestamp?.seconds 
-                        ? new Date(transaction.timestamp.seconds * 1000)
-                        : new Date();
-                    if (transactionDate > toDate) return false;
-                }
-                
-                return true;
-            });
-            
-            // ترتيب من الأحدث إلى الأقدم
-            filteredTransactions.sort((a, b) => {
-                const timeA = a.timestamp?.seconds || 0;
-                const timeB = b.timestamp?.seconds || 0;
-                return timeB - timeA;
-            });
-            
-            currentPage = 1;
-            updateTransactionsList();
             updatePagination();
         }
 
-        // دالة التحقق من نفس اليوم
-        function isSameDay(date1, date2) {
-            return date1.getDate() === date2.getDate() &&
-                   date1.getMonth() === date2.getMonth() &&
-                   date1.getFullYear() === date2.getFullYear();
-        }
-
-        // دالة إعادة تعيين الفلاتر
-        function resetFilters() {
-            document.getElementById('filterType').value = 'all';
-            document.getElementById('filterPeriod').value = 'all';
-            document.getElementById('filterFrom').value = '';
-            document.getElementById('filterTo').value = '';
-            filterTransactions();
-            showAlert('تم إعادة تعيين الفلاتر', 'success');
-        }
-
-        // دالة تحديث قائمة العمليات
-        function updateTransactionsList() {
-            const container = document.getElementById('transactionsContainer');
-            
-            if (filteredTransactions.length === 0) {
-                const emptyTemplate = document.getElementById('emptyTemplate');
-                const emptyClone = emptyTemplate.content.cloneNode(true);
-                container.innerHTML = '';
-                container.appendChild(emptyClone);
-                return;
-            }
-            
-            // حساب العمليات للصفحة الحالية
-            const startIndex = (currentPage - 1) * transactionsPerPage;
-            const endIndex = startIndex + transactionsPerPage;
-            const pageTransactions = filteredTransactions.slice(startIndex, endIndex);
-            
-            let html = '<div class="transactions-list">';
-            
-            pageTransactions.forEach(transaction => {
-                const type = transaction.type || 'unknown';
-                const amount = transaction.amount || 0;
-                const description = transaction.description || 'عملية غير معروفة';
-                const date = transaction.timestamp?.seconds 
-                    ? new Date(transaction.timestamp.seconds * 1000)
-                    : new Date();
-                
-                const formattedDate = date.toLocaleDateString('ar-SA', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit'
-                });
-                
-                // تحديد الأيقونة واللون حسب نوع العملية
-                let iconClass = '';
-                let amountClass = '';
-                let icon = '';
-                
-                switch (type) {
-                    case 'send':
-                        iconClass = 'send';
-                        amountClass = 'negative';
-                        icon = 'fa-paper-plane';
-                        break;
-                    case 'receive':
-                        iconClass = 'receive';
-                        amountClass = 'positive';
-                        icon = 'fa-money-bill-wave';
-                        break;
-                    case 'payment':
-                        iconClass = 'payment';
-                        amountClass = 'negative';
-                        icon = 'fa-credit-card';
-                        break;
-                    case 'withdraw':
-                        iconClass = 'withdraw';
-                        amountClass = 'negative';
-                        icon = 'fa-university';
-                        break;
-                    default:
-                        iconClass = 'payment';
-                        amountClass = 'negative';
-                        icon = 'fa-exchange-alt';
-                }
-                
-                html += `
-                    <div class="transaction-item">
-                        <div class="transaction-icon ${iconClass}">
-                            <i class="fas ${icon}"></i>
-                        </div>
-                        <div class="transaction-details">
-                            <div class="transaction-title">${description}</div>
-                            <div class="transaction-description">
-                                <span class="badge ${iconClass === 'send' ? 'badge-danger' : 'badge-success'}">
-                                    ${type === 'send' ? 'إرسال' : 
-                                      type === 'receive' ? 'استلام' : 
-                                      type === 'payment' ? 'دفع' : 'سحب'}
-                                </span>
-                            </div>
-                            <div class="transaction-date">${formattedDate}</div>
-                        </div>
-                        <div class="transaction-amount ${amountClass}">
-                            ${type === 'send' || type === 'payment' || type === 'withdraw' ? '-' : '+'}
-                            ${amount.toFixed(2)} SDG
-                        </div>
-                    </div>
-                `;
-            });
-            
-            html += '</div>';
-            container.innerHTML = html;
-        }
-
-        // دالة تحديث الترقيم
         function updatePagination() {
-            const pagination = document.getElementById('pagination');
-            const totalPages = Math.ceil(filteredTransactions.length / transactionsPerPage);
-            
-            if (totalPages <= 1) {
-                pagination.style.display = 'none';
-                return;
-            }
-            
-            pagination.style.display = 'flex';
-            document.getElementById('pageInfo').textContent = `صفحة ${currentPage} من ${totalPages}`;
-            
-            // تعطيل أزرار التصفح عند الحاجة
-            document.querySelector('[onclick="previousPage()"]').disabled = currentPage === 1;
-            document.querySelector('[onclick="nextPage()"]').disabled = currentPage === totalPages;
+            const controls = document.getElementById('paginationControls');
+            controls.style.display = filteredData.length > limit ? 'flex' : 'none';
+            document.getElementById('pageNumber').textContent = currentPage;
+            document.getElementById('prevBtn').disabled = currentPage === 1;
+            document.getElementById('nextBtn').disabled = currentPage * limit >= filteredData.length;
         }
 
-        // دالة الصفحة السابقة
-        function previousPage() {
-            if (currentPage > 1) {
-                currentPage--;
-                updateTransactionsList();
-                updatePagination();
-            }
-        }
+        window.changePage = (dir) => {
+            currentPage += dir;
+            renderList();
+            window.scrollTo(0, 0);
+        };
 
-        // دالة الصفحة التالية
-        function nextPage() {
-            const totalPages = Math.ceil(filteredTransactions.length / transactionsPerPage);
-            if (currentPage < totalPages) {
-                currentPage++;
-                updateTransactionsList();
-                updatePagination();
-            }
-        }
-
-        // دالة تحديث العمليات
-        function refreshTransactions() {
-            loadAllTransactions();
-            showAlert('تم تحديث العمليات', 'success');
-        }
-
-        // دالة تصدير العمليات
-        function exportTransactions() {
-            if (filteredTransactions.length === 0) {
-                showAlert('لا توجد عمليات للتصدير', 'warning');
-                return;
-            }
+        window.exportToCSV = () => {
+            if (filteredData.length === 0) return showAlert('لا توجد بيانات لتصديرها', 'error');
             
-            let csvContent = "data:text/csv;charset=utf-8,";
-            csvContent += "التاريخ,النوع,الوصف,المبلغ (SDG),الحالة\n";
-            
-            filteredTransactions.forEach(transaction => {
-                const date = transaction.timestamp?.seconds 
-                    ? new Date(transaction.timestamp.seconds * 1000).toLocaleDateString('ar-SA')
-                    : new Date().toLocaleDateString('ar-SA');
-                
-                const type = transaction.type === 'send' ? 'إرسال' : 
-                            transaction.type === 'receive' ? 'استلام' : 
-                            transaction.type === 'payment' ? 'دفع' : 'سحب';
-                
-                const description = transaction.description || '';
-                const amount = transaction.amount || 0;
-                const status = transaction.status || 'مكتمل';
-                
-                csvContent += `${date},${type},"${description}",${amount.toFixed(2)},${status}\n`;
+            let csv = 'التاريخ,الوصف,النوع,المبلغ\n';
+            filteredData.forEach(t => {
+                csv += `${new Date(t.timestamp).toLocaleDateString('ar-EG')},${t.description},${t.type === 'send' ? 'إرسال' : 'استلام'},${t.amount}\n`;
             });
-            
-            const encodedUri = encodeURI(csvContent);
+
+            const blob = new Blob(["\ufeff" + csv], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", `sudanpay-transactions-${new Date().toISOString().split('T')[0]}.csv`);
+            link.href = URL.createObjectURL(blob);
+            link.setAttribute("download", `SudanPay_Report_${new Date().toLocaleDateString()}.csv`);
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-            
-            showAlert('تم تصدير العمليات بنجاح', 'success');
-        }
+        };
 
-        // مراقبة حالة المصادقة
         onAuthStateChanged(auth, (user) => {
-            if (user) {
-                loadAllTransactions();
-            } else {
-                window.location.href = 'index.html';
-            }
+            if (user) loadTransactions();
+            else window.location.href = 'index.html';
         });
-
-        // ربط الأحداث
-        document.addEventListener('DOMContentLoaded', () => {
-            // تعيين تاريخ اليوم كقيمة افتراضية
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('filterTo').value = today;
-            
-            // تعيين تاريخ قبل شهر
-            const monthAgo = new Date();
-            monthAgo.setMonth(monthAgo.getMonth() - 1);
-            document.getElementById('filterFrom').value = monthAgo.toISOString().split('T')[0];
-        });
-
-        // جعل الدوال متاحة عالمياً
-        window.filterTransactions = filterTransactions;
-        window.resetFilters = resetFilters;
-        window.previousPage = previousPage;
-        window.nextPage = nextPage;
-        window.refreshTransactions = refreshTransactions;
-        window.exportTransactions = exportTransactions;
     </script>
-
-    <style>
-        .pagination {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 20px;
-            padding: 15px;
-            border-top: 1px solid var(--border);
-        }
-        
-        .page-btn {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            border: 2px solid var(--border);
-            background: white;
-            color: var(--dark);
-            font-size: 1.2rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s;
-        }
-        
-        .page-btn:hover:not(:disabled) {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-        }
-        
-        .page-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-        
-        .page-info {
-            font-weight: 600;
-            color: var(--dark);
-        }
-        
-        .badge-danger {
-            background: var(--danger-light);
-            color: var(--danger);
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 0.8rem;
-        }
-        
-        .badge-success {
-            background: var(--success-light);
-            color: var(--success);
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 0.8rem;
-        }
-        
-        .badge-warning {
-            background: var(--warning-light);
-            color: var(--warning);
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 0.8rem;
-        }
-        
-        .badge-info {
-            background: var(--info-light);
-            color: var(--info);
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 0.8rem;
-        }
-        
-        .transaction-description {
-            margin: 5px 0;
-        }
-    </style>
 </body>
-                                                   </html>
+</html>
+
