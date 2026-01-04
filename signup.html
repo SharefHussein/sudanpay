@@ -1,89 +1,118 @@
-<div class="registration-form">
-    <input type="email" id="email" placeholder="البريد الإلكتروني" required>
-    
-    <input type="password" id="password" placeholder="كلمة المرور القوية" onkeyup="checkPasswordStrength()">
-    <input type="password" id="confirm-password" placeholder="تأكيد كلمة المرور">
-    <div id="password-error" style="color:red; font-size:12px;"></div>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SudanPay - فتح حساب جديد</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root { --main-bg: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%); --glass: rgba(255, 255, 255, 0.95); }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--main-bg); min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; margin: 0; }
+        .signup-card { background: var(--glass); padding: 30px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.2); width: 100%; max-width: 450px; }
+        .logo-area { text-align: center; margin-bottom: 20px; }
+        .logo-area h2 { color: #2575fc; margin: 0; }
+        .input-group { position: relative; margin-bottom: 15px; }
+        .input-group i { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: #666; }
+        input[type="email"], input[type="password"] { width: 100%; padding: 12px 45px 12px 15px; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; font-size: 16px; }
+        .kyc-section { background: #f8f9fa; padding: 15px; border-radius: 12px; border: 1px dashed #2575fc; margin: 20px 0; }
+        .kyc-section h4 { margin: 0 0 10px 0; color: #333; font-size: 14px; }
+        label { display: block; font-size: 12px; color: #666; margin-top: 10px; }
+        input[type="file"] { font-size: 12px; margin-top: 5px; }
+        .btn-submit { background: #2575fc; color: white; border: none; padding: 15px; border-radius: 10px; width: 100%; font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .btn-submit:hover { background: #1a5bc4; transform: translateY(-2px); }
+        #status-msg { text-align: center; margin-top: 15px; font-size: 14px; font-weight: bold; }
+    </style>
+</head>
+<body>
 
-    <hr>
-    <h3>تحقق الهوية (KYC)</h3>
-    <p>ارفع صورة واضحة للهوية وصورة سيلفي وأنت تحملها</p>
-    
-    <label>صورة البطاقة أو الجواز:</label>
-    <input type="file" id="id-card" accept="image/*">
-    
-    <label>صورة سيلفي للتأكيد:</label>
-    <input type="file" id="selfie" accept="image/*">
+<div class="signup-card">
+    <div class="logo-area">
+        <i class="fas fa-wallet fa-3x" style="color: #2575fc;"></i>
+        <h2>SudanPay</h2>
+        <p style="color: #666; font-size: 14px;">سجل بياناتك بدقة لتفعيل حسابك</p>
+    </div>
 
-    <button onclick="handleSignUp()">إنشاء حساب وتدقيق الهوية</button>
+    <div class="input-group">
+        <i class="fas fa-envelope"></i>
+        <input type="email" id="email" placeholder="البريد الإلكتروني">
+    </div>
+    <div class="input-group">
+        <i class="fas fa-lock"></i>
+        <input type="password" id="password" placeholder="كلمة المرور (كبير، صغير، رقم، رمز)">
+    </div>
+    <div class="input-group">
+        <i class="fas fa-check-double"></i>
+        <input type="password" id="confirmPass" placeholder="تأكيد كلمة المرور">
+    </div>
+
+    <div class="kyc-section">
+        <h4><i class="fas fa-id-card"></i> توثيق الهوية (KYC)</h4>
+        <label>صورة البطاقة الشخصية (وجه):</label>
+        <input type="file" id="idFile" accept="image/*">
+        <label>صورة سيلفي:</label>
+        <input type="file" id="selfieFile" accept="image/*">
+    </div>
+
+    <button class="btn-submit" onclick="handleRegister()">إنشاء حساب وإرسال للتدقيق</button>
+    <div id="status-msg"></div>
 </div>
 
 <script type="module">
-    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
-    import { getAuth, createUserWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
     import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
-    const auth = getAuth();
-    const db = getFirestore();
-    const storage = getStorage();
-
-    // 1. وظيفة نسيان كلمة المرور
-    window.forgotPassword = (email) => {
-        sendPasswordResetEmail(auth, email)
-            .then(() => alert("تم إرسال رابط إعادة تعيين كلمة المرور لبريدك"))
-            .catch(err => alert(err.message));
+    // بيانات فايربيس الخاصة بك
+    const firebaseConfig = {
+        apiKey: "AIzaSyB3vxJu_et-P80ek30I3MRdC_lGhooCCsc",
+        authDomain: "sudanpay-e332a.firebaseapp.com",
+        projectId: "sudanpay-e332a",
+        storageBucket: "sudanpay-e332a.firebasestorage.app",
+        messagingSenderId: "699809447272",
+        appId: "1:699809447272:web:90f3780ed6c768c4322add"
     };
 
-    // 2. التحقق من قوة كلمة المرور
-    function isPasswordStrong(pw) {
-        const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-        return regex.test(pw);
-    }
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const storage = getStorage(app);
 
-    // 3. عملية التسجيل الكاملة
-    async function handleSignUp() {
+    window.handleRegister = async () => {
         const email = document.getElementById('email').value;
         const pass = document.getElementById('password').value;
-        const confirmPass = document.getElementById('confirm-password').value;
-        const idFile = document.getElementById('id-card').files[0];
-        const selfieFile = document.getElementById('selfie').files[0];
+        const confirm = document.getElementById('confirmPass').value;
+        const idImg = document.getElementById('idFile').files[0];
+        const selfieImg = document.getElementById('selfieFile').files[0];
+        const msg = document.getElementById('status-msg');
 
-        // الفحوصات الصارمة
-        if (pass !== confirmPass) { alert("كلمات المرور غير متطابقة!"); return; }
-        if (!isPasswordStrong(pass)) { alert("كلمة المرور ضعيفة! يجب أن تحتوي على حرف كبير، صغير، رقم، ورمز (8 خانات)"); return; }
-        if (!idFile || !selfieFile) { alert("يرجى رفع صور الهوية والسيلفي أولاً"); return; }
+        // فحص قوة كلمة المرور
+        const strongRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/;
+        if(!strongRegex.test(pass)) { msg.style.color="red"; msg.innerText="كلمة المرور ضعيفة جداً!"; return; }
+        if(pass !== confirm) { msg.style.color="red"; msg.innerText="كلمات المرور غير متطابقة!"; return; }
+        if(!idImg || !selfieImg) { msg.style.color="red"; msg.innerText="يرجى رفع صور التوثيق!"; return; }
 
         try {
-            // إنشاء المستخدم في Auth
-            const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
-            const user = userCredential.user;
+            msg.style.color="blue"; msg.innerText="جاري إنشاء الحساب ورفع الصور...";
+            const userCred = await createUserWithEmailAndPassword(auth, email, pass);
+            const uid = userCred.user.uid;
 
-            // رفع الصور إلى Firebase Storage
-            const idRef = ref(storage, `kyc/${user.uid}/id_card.jpg`);
-            const selfieRef = ref(storage, `kyc/${user.uid}/selfie.jpg`);
+            const idRef = ref(storage, `kyc/${uid}/id.jpg`);
+            const selfieRef = ref(storage, `kyc/${uid}/selfie.jpg`);
+            await uploadBytes(idRef, idImg); await uploadBytes(selfieRef, selfieImg);
             
-            await uploadBytes(idRef, idFile);
-            await uploadBytes(selfieRef, selfieFile);
-
             const idUrl = await getDownloadURL(idRef);
             const selfieUrl = await getDownloadURL(selfieRef);
 
-            // حفظ بيانات المستخدم مع حالة الـ KYC
-            await setDoc(doc(db, "users", user.uid), {
-                email: email,
-                kycStatus: "pending", // الحالة: قيد المراجعة
-                idCardUrl: idUrl,
-                selfieUrl: selfieUrl,
-                balanceSDG: 0,
-                createdAt: new Date()
+            await setDoc(doc(db, "users", uid), {
+                email, kycStatus: "pending", idUrl, selfieUrl, balanceSDG: 0, createdAt: new Date()
             });
 
-            alert("تم التسجيل! حسابك قيد المراجعة الآن، سنقوم بتفعيله بعد تدقيق الصور.");
-            window.location.href = "dashboard.html";
-
-        } catch (error) {
-            alert("خطأ في التسجيل: " + error.message);
-        }
-    }
-    window.handleSignUp = handleSignUp;
+            alert("تم التسجيل! حسابك تحت المراجعة حالياً.");
+            window.location.href = "login.html";
+        } catch (err) { msg.style.color="red"; msg.innerText = "خطأ: " + err.message; }
+    };
 </script>
+</body>
+</html>
+
