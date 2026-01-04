@@ -3,34 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>إيداع USDT - SudanPay</title>
+    <title>SudanPay - إيداع USDT</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; text-align: center; padding: 20px; color: #333; }
-        .container { background: white; max-width: 450px; margin: auto; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        h2 { color: #1a73e8; }
-        .wallet-box { background: #e8f0fe; padding: 15px; border-radius: 8px; margin: 20px 0; word-break: break-all; font-weight: bold; border: 1px dashed #1a73e8; }
-        button { background-color: #28a745; color: white; border: none; padding: 12px 25px; border-radius: 8px; cursor: pointer; font-size: 18px; width: 100%; transition: 0.3s; }
-        button:hover { background-color: #218838; }
-        #status { margin-top: 20px; font-size: 14px; min-height: 40px; }
-        .loader { color: #1a73e8; font-weight: bold; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #f4f7f6; text-align: center; padding: 20px; direction: rtl; }
+        .container { background: white; max-width: 400px; margin: auto; padding: 25px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        h2 { color: #2c3e50; margin-bottom: 10px; }
+        .info-text { color: #7f8c8d; font-size: 14px; margin-bottom: 20px; }
+        .wallet-card { background: #f8f9fa; border: 2px dashed #3498db; padding: 15px; border-radius: 10px; margin-bottom: 20px; word-break: break-all; font-family: monospace; color: #2980b9; font-size: 16px; font-weight: bold; }
+        .btn-verify { background-color: #27ae60; color: white; border: none; padding: 15px; border-radius: 8px; cursor: pointer; font-size: 18px; width: 100%; font-weight: bold; transition: 0.3s; }
+        .btn-verify:hover { background-color: #2ecc71; }
+        #status-msg { margin-top: 15px; font-size: 14px; color: #e67e22; font-weight: bold; }
+        .price-tag { background: #34495e; color: white; padding: 5px 10px; border-radius: 5px; font-size: 12px; margin-bottom: 10px; display: inline-block; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>إيداع USDT (TRC20)</h2>
-    <p>قم بتحويل مبلغ الإيداع إلى عنوان محفظتك أدناه:</p>
+    <h2>إيداع الرقمي</h2>
+    <div class="price-tag">1 USDT = 2600 SDG</div>
+    <p class="info-text">حول USDT (TRC20) لعنوانك الشخصي أدناه:</p>
     
-    <div id="wallet-address" class="wallet-box">جاري تحميل عنوانك...</div>
+    <div id="wallet-display" class="wallet-card">جاري تجهيز محفظتك...</div>
 
-    <button onclick="verifyDeposit()">تأكيد وصول الإيداع</button>
+    <button class="btn-verify" onclick="verifyMyDeposit()">تأكيد وصول المبلغ</button>
 
-    <div id="status">اضغط على الزر بعد إتمام التحويل من محفظتك.</div>
+    <div id="status-msg">يرجى الانتظار حتى يتم تحميل البيانات...</div>
 </div>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getFirestore, doc, getDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    import { getFirestore, doc, getDoc, updateDoc, increment, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
     // إعدادات Firebase الخاصة بك
@@ -48,67 +50,89 @@
     const db = getFirestore(app);
     const auth = getAuth(app);
 
-    // مفتاح Tatum المين نت (تأكد من وضعه هنا)
-    const TATUM_API_KEY = "t-695a0ea026858bd739f1595e-363e1ef7ec404868aebf73ed"; 
+    // مفتاح Tatum المين نت (ضعه هنا)
+    const TATUM_KEY = "t-695a0ea026858bd739f1595e-363e1ef7ec404868aebf73ed"; 
 
-    let currentUserAddress = "";
+    let userWalletAddress = "";
 
-    // التأكد من تسجيل الدخول وجلب عنوان المحفظة
+    // 1. وظيفة الحصول على محفظة أو إنشائها
+    async function setupUserWallet(uid) {
+        const userRef = doc(db, "users", uid);
+        const userSnap = await getDoc(userRef);
+
+        if (userSnap.exists() && userSnap.data().usdtAddress) {
+            return userSnap.data().usdtAddress;
+        } else {
+            document.getElementById('status-msg').innerText = "جاري إنشاء محفظة بلوكشين خاصة بك...";
+            try {
+                // توليد محفظة من تاتوم
+                const wRes = await fetch('https://api.tatum.io/v3/tron/wallet', { headers: {'x-api-key': TATUM_KEY}});
+                const wallet = await wRes.json();
+                // توليد العنوان
+                const aRes = await fetch(`https://api.tatum.io/v3/tron/address/${wallet.xpub}/0`, { headers: {'x-api-key': TATUM_KEY}});
+                const addrData = await aRes.json();
+                
+                // حفظ البيانات في فايربيس
+                await setDoc(userRef, { 
+                    usdtAddress: addrData.address,
+                    balanceSDG: userSnap.exists() ? userSnap.data().balanceSDG : 0 
+                }, { merge: true });
+
+                return addrData.address;
+            } catch (err) {
+                console.error(err);
+                return "خطأ في إنشاء المحفظة";
+            }
+        }
+    }
+
+    // 2. مراقبة حالة المستخدم
     onAuthStateChanged(auth, async (user) => {
         if (user) {
-            const userRef = doc(db, "users", user.uid);
-            const userSnap = await getDoc(userRef);
-            if (userSnap.exists()) {
-                currentUserAddress = userSnap.data().usdtAddress;
-                document.getElementById('wallet-address').innerText = currentUserAddress;
-            }
+            userWalletAddress = await setupUserWallet(user.uid);
+            document.getElementById('wallet-display').innerText = userWalletAddress;
+            document.getElementById('status-msg').innerText = "جاهز لفحص الإيداع";
         } else {
-            document.getElementById('wallet-address').innerText = "يرجى تسجيل الدخول أولاً";
+            document.getElementById('wallet-display').innerText = "سجل دخولك أولاً";
         }
     });
 
-    // دالة فحص البلوكشين وتحديث الرصيد
-    async function verifyDeposit() {
-        const statusDiv = document.getElementById('status');
-        if (!currentUserAddress) { alert("لم يتم العثور على عنوان محفظة!"); return; }
-
-        statusDiv.innerHTML = '<span class="loader">جاري فحص البلوكشين... قد يستغرق ذلك دقيقة.</span>';
+    // 3. وظيفة فحص الإيداع
+    async function verifyMyDeposit() {
+        if (!userWalletAddress || userWalletAddress.includes("خطأ")) return;
+        
+        const status = document.getElementById('status-msg');
+        status.innerText = "جاري فحص رصيد البلوكشين الآن...";
 
         try {
-            // الاتصال بـ Tatum لفحص الرصيد
-            const response = await fetch(`https://api.tatum.io/v3/tron/account/${currentUserAddress}`, {
-                method: 'GET',
-                headers: { 'x-api-key': TATUM_API_KEY }
+            const res = await fetch(`https://api.tatum.io/v3/tron/account/${userWalletAddress}`, {
+                headers: {'x-api-key': TATUM_KEY}
             });
-            const data = await response.json();
+            const data = await res.json();
+            
+            // البحث عن USDT TRC20
+            const usdt = data.trc20.find(t => t.tokenAddress === "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t");
+            const balanceInWallet = usdt ? parseFloat(usdt.value) : 0;
 
-            // البحث عن رصيد USDT (عقد USDT على شبكة ترون ثابت)
-            const usdtToken = data.trc20.find(t => t.tokenAddress === "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t");
-            const balance = usdtToken ? parseFloat(usdtToken.value) : 0;
-
-            if (balance > 0) {
-                // تحديث رصيد المستخدم في Firebase (تحويل USDT لجنيه سوداني)
-                const amountInSDG = balance * 2600; // سعر الصرف الخاص بك
+            if (balanceInWallet > 0) {
+                const amountInSDG = balanceInWallet * 2600;
                 const userRef = doc(db, "users", auth.currentUser.uid);
                 
                 await updateDoc(userRef, {
                     balanceSDG: increment(amountInSDG),
-                    lastDeposit: balance,
-                    status: "active"
+                    lastCheckBalance: balanceInWallet
                 });
 
-                statusDiv.innerHTML = `<b style="color:green;">✅ تم الإيداع بنجاح! تم إضافة ${amountInSDG} جنيه لرصيدك.</b>`;
-                alert("تم تحديث رصيدك بنجاح!");
+                status.innerHTML = `<span style="color:green">✅ مبروك! تم تأكيد وصول ${balanceInWallet} USDT وإضافتها لرصيدك.</span>`;
             } else {
-                statusDiv.innerHTML = '<b style="color:red;">❌ لم يتم العثور على رصيد جديد في المحفظة بعد.</b>';
+                status.innerHTML = `<span style="color:red">❌ لم يصل أي رصيد جديد لعنوانك بعد.</span>`;
             }
         } catch (error) {
-            console.error(error);
-            statusDiv.innerText = "خطأ في الاتصال بالشبكة، حاول مرة أخرى.";
+            status.innerText = "حدث خطأ أثناء الفحص، تأكد من مفتاح Tatum";
         }
     }
 
-    window.verifyDeposit = verifyDeposit;
+    window.verifyMyDeposit = verifyMyDeposit;
 </script>
 
 </body>
