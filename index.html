@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sudan Pay - تسجيل الدخول</title>
+    <title>Sudan Pay - تسجيل الدخول الآمن</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -22,12 +22,7 @@
             --border: #e2e8f0;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Cairo', sans-serif;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
 
         body {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -48,30 +43,13 @@
             text-align: center;
         }
 
-        .logo {
-            font-size: 4rem;
-            color: var(--primary);
-            margin-bottom: 25px;
-        }
+        .logo { font-size: 4rem; color: var(--primary); margin-bottom: 25px; }
 
-        h1 {
-            font-size: 2rem;
-            color: var(--dark);
-            margin-bottom: 10px;
-            font-weight: 800;
-        }
+        h1 { font-size: 2rem; color: var(--dark); margin-bottom: 10px; font-weight: 800; }
 
-        .subtitle {
-            color: var(--gray);
-            margin-bottom: 40px;
-            font-size: 1.1rem;
-            line-height: 1.6;
-        }
+        .subtitle { color: var(--gray); margin-bottom: 40px; font-size: 1.1rem; line-height: 1.6; }
 
-        .input-group {
-            margin-bottom: 25px;
-            position: relative;
-        }
+        .input-group { margin-bottom: 25px; position: relative; }
 
         .input-icon {
             position: absolute;
@@ -90,6 +68,7 @@
             font-size: 1.1rem;
             transition: all 0.3s;
             background: #f8fafc;
+            text-align: right;
         }
 
         input:focus {
@@ -136,59 +115,9 @@
             box-shadow: 0 12px 25px rgba(13, 148, 136, 0.4);
         }
 
-        .btn-primary:disabled {
-            opacity: 0.7;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .divider {
-            display: flex;
-            align-items: center;
-            margin: 30px 0;
-            color: var(--gray);
-            font-size: 0.95rem;
-        }
-
-        .divider::before,
-        .divider::after {
-            content: '';
-            flex: 1;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .divider span {
-            padding: 0 20px;
-        }
-
-        .btn-google {
-            background: white;
-            color: var(--dark);
-            border: 2px solid var(--border);
-            padding: 18px;
-            border-radius: 14px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            margin-bottom: 30px;
-        }
-
-        .btn-google:hover {
-            background: #f8fafc;
-            border-color: #cbd5e1;
-            transform: translateY(-2px);
-        }
-
-        .btn-google:disabled {
-            opacity: 0.7;
-            cursor: not-allowed;
-        }
+        .divider { display: flex; align-items: center; margin: 30px 0; color: var(--gray); font-size: 0.95rem; }
+        .divider::before, .divider::after { content: ''; flex: 1; border-bottom: 1px solid var(--border); }
+        .divider span { padding: 0 20px; }
 
         .auth-footer {
             text-align: center;
@@ -198,17 +127,7 @@
             border-top: 1px solid var(--border);
         }
 
-        .auth-footer a {
-            color: var(--primary);
-            text-decoration: none;
-            font-weight: 700;
-            transition: color 0.3s;
-        }
-
-        .auth-footer a:hover {
-            color: var(--primary-dark);
-            text-decoration: underline;
-        }
+        .auth-footer a { color: var(--primary); text-decoration: none; font-weight: 700; }
 
         .loading {
             display: inline-block;
@@ -220,38 +139,30 @@
             animation: spin 1s ease-in-out infinite;
         }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
-        @media (max-width: 480px) {
-            .login-container {
-                padding: 40px 25px;
-                margin: 10px;
-            }
-            
-            .logo {
-                font-size: 3.5rem;
-            }
-            
-            h1 {
-                font-size: 1.8rem;
-            }
-            
-            input, .btn-primary, .btn-google {
-                padding: 16px;
-            }
+        #alert-box {
+            display: none;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
         }
+        .alert-error { background: #fee2e2; color: #b91c1c; border: 1px solid #fecaca; }
+        .alert-success { background: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; }
+        .alert-warning { background: #ffedd5; color: #9a3412; border: 1px solid #fed7aa; }
+
     </style>
 </head>
 <body>
     <div class="login-container">
-        <div class="logo">
-            <i class="fas fa-wallet"></i>
-        </div>
+        <div class="logo"><i class="fas fa-wallet"></i></div>
         
-        <h1>مرحباً بك في Sudan Pay</h1>
+        <h1>Sudan Pay</h1>
         <p class="subtitle">سجل دخولك للوصول إلى محفظتك الرقمية الآمنة</p>
+
+        <div id="alert-box"></div>
         
         <div class="input-group">
             <i class="fas fa-envelope input-icon"></i>
@@ -261,133 +172,122 @@
         <div class="input-group">
             <i class="fas fa-lock input-icon"></i>
             <button type="button" class="password-toggle" onclick="togglePassword()">
-                <i class="fas fa-eye"></i>
+                <i class="fas fa-eye" id="eye-icon"></i>
             </button>
             <input type="password" id="password" placeholder="كلمة المرور" required>
         </div>
         
         <button id="login-btn" class="btn-primary">
-            <i class="fas fa-sign-in-alt"></i> تسجيل الدخول
+            <i class="fas fa-sign-in-alt"></i> <span>تسجيل الدخول</span>
         </button>
         
-        <div class="divider">
-            <span>أو</span>
-        </div>
+        <div class="divider"><span>أو</span></div>
         
-        <button id="google-btn" class="btn-google">
-            <i class="fab fa-google"></i> الدخول بجوجل
+        <button id="google-btn" class="btn-primary" style="background: white; color: var(--dark); border: 2px solid var(--border); box-shadow: none;">
+            <i class="fab fa-google" style="color: #4285F4;"></i> الدخول بجوجل
         </button>
         
         <div class="auth-footer">
-            <p>ليس لديك حساب؟ <a href="auth.html" id="signup-link">إنشاء حساب جديد</a></p>
+            <p>ليس لديك حساب؟ <a href="signup.html">إنشاء حساب جديد</a></p>
+            <p style="margin-top: 10px;"><a href="#" onclick="resetPassword()" style="font-size: 0.9rem; color: var(--gray);">نسيت كلمة المرور؟</a></p>
         </div>
     </div>
 
     <script type="module">
-        import { loginWithEmail, loginWithGoogle, showAlert } from './app.js';
-        
-        // دالة تبديل كلمة المرور
-        function togglePassword() {
-            const passwordInput = document.getElementById('password');
-            const toggleIcon = document.querySelector('.password-toggle i');
-            
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                toggleIcon.className = 'fas fa-eye-slash';
-            } else {
-                passwordInput.type = 'password';
-                toggleIcon.className = 'fas fa-eye';
-            }
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyB3vxJu_et-P80ek30I3MRdC_lGhooCCsc",
+            authDomain: "sudanpay-e332a.firebaseapp.com",
+            projectId: "sudanpay-e332a",
+            storageBucket: "sudanpay-e332a.firebasestorage.app",
+            messagingSenderId: "699809447272",
+            appId: "1:699809447272:web:90f3780ed6c768c4322add"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // تنبيهات مخصصة
+        function showAlert(msg, type = 'error') {
+            const box = document.getElementById('alert-box');
+            box.innerText = msg;
+            box.className = type === 'error' ? 'alert-error' : (type === 'success' ? 'alert-success' : 'alert-warning');
+            box.style.display = 'block';
+            if(type === 'success') setTimeout(() => box.style.display = 'none', 3000);
         }
-        
-        // دالة تسجيل الدخول
+
+        // إظهار وإخفاء كلمة المرور
+        window.togglePassword = () => {
+            const passInput = document.getElementById('password');
+            const icon = document.getElementById('eye-icon');
+            if (passInput.type === 'password') {
+                passInput.type = 'text';
+                icon.className = 'fas fa-eye-slash';
+            } else {
+                passInput.type = 'password';
+                icon.className = 'fas fa-eye';
+            }
+        };
+
+        // دالة تسجيل الدخول والتحقق من KYC
         async function handleLogin() {
             const email = document.getElementById('email').value.trim();
-            const password = document.getElementById('password').value;
-            const loginBtn = document.getElementById('login-btn');
-            
-            if (!email || !password) {
-                showAlert('الرجاء إدخال البريد الإلكتروني وكلمة المرور');
-                return;
-            }
-            
+            const pass = document.getElementById('password').value;
+            const btn = document.getElementById('login-btn');
+
+            if (!email || !pass) { showAlert('يرجى ملء جميع الحقول'); return; }
+
             try {
-                loginBtn.innerHTML = '<div class="loading"></div> جاري تسجيل الدخول...';
-                loginBtn.disabled = true;
+                btn.disabled = true;
+                btn.innerHTML = '<div class="loading"></div> جاري التحقق...';
                 
-                await loginWithEmail(email, password);
-                showAlert('تم تسجيل الدخول بنجاح!', 'success');
+                const userCred = await signInWithEmailAndPassword(auth, email, pass);
+                const uid = userCred.user.uid;
+
+                // فحص حالة الحساب في Firestore
+                const userDoc = await getDoc(doc(db, "users", uid));
                 
-                setTimeout(() => {
-                    window.location.href = 'dashboard.html';
-                }, 1500);
-                
-            } catch (error) {
-                loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> تسجيل الدخول';
-                loginBtn.disabled = false;
-                
-                let errorMessage = 'حدث خطأ أثناء تسجيل الدخول';
-                if (error.code === 'auth/user-not-found') {
-                    errorMessage = 'البريد الإلكتروني غير مسجل';
-                } else if (error.code === 'auth/wrong-password') {
-                    errorMessage = 'كلمة المرور غير صحيحة';
-                } else if (error.code === 'auth/invalid-email') {
-                    errorMessage = 'البريد الإلكتروني غير صالح';
+                if (userDoc.exists()) {
+                    const userData = userDoc.data();
+                    const status = userData.kycStatus;
+
+                    if (status === "pending") {
+                        showAlert('⚠️ حسابك قيد المراجعة حالياً. سيتم تفعيله خلال 24 ساعة.', 'warning');
+                        await signOut(auth); // طرده من الجلسة حتى يتم التفعيل
+                    } else if (status === "rejected") {
+                        showAlert('❌ تم رفض طلب انضمامك. يرجى مراجعة الدعم الفني.', 'error');
+                        await signOut(auth);
+                    } else {
+                        showAlert('تم تسجيل الدخول بنجاح!', 'success');
+                        setTimeout(() => window.location.href = "dashboard.html", 1000);
+                    }
+                } else {
+                    showAlert('لم يتم العثور على بيانات الحساب.');
                 }
-                
-                showAlert(errorMessage);
+            } catch (error) {
+                console.error(error);
+                showAlert('خطأ: تأكد من صحة البريد الإلكتروني وكلمة المرور');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> تسجيل الدخول';
             }
         }
-        
-        // دالة تسجيل الدخول بجوجل
-        async function handleGoogleLogin() {
-            const googleBtn = document.getElementById('google-btn');
-            
-            try {
-                googleBtn.innerHTML = '<div class="loading"></div> جاري الاتصال بجوجل...';
-                googleBtn.disabled = true;
-                
-                await loginWithGoogle();
-                showAlert('تم تسجيل الدخول بجوجل بنجاح!', 'success');
-                
-                setTimeout(() => {
-                    window.location.href = 'dashboard.html';
-                }, 1500);
-                
-            } catch (error) {
-                googleBtn.innerHTML = '<i class="fab fa-google"></i> الدخول بجوجل';
-                googleBtn.disabled = false;
-                
-                let errorMessage = 'حدث خطأ أثناء تسجيل الدخول بجوجل';
-                if (error.code === 'auth/popup-closed-by-user') {
-                    errorMessage = 'تم إغلاق نافذة تسجيل الدخول';
-                }
-                
-                showAlert(errorMessage);
-            }
-        }
-        
-        // ربط الأحداث
-        document.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('login-btn').addEventListener('click', handleLogin);
-            document.getElementById('google-btn').addEventListener('click', handleGoogleLogin);
-            
-            // تسجيل الدخول بالضغط على Enter
-            document.getElementById('password').addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    handleLogin();
-                }
-            });
-            
-            // رابط إنشاء حساب
-            document.getElementById('signup-link').addEventListener('click', (e) => {
-                e.preventDefault();
-                window.location.href = 'auth.html';
-            });
-        });
-        
-        // جعل الدوال متاحة عالمياً
-        window.togglePassword = togglePassword;
+
+        // استعادة كلمة المرور
+        window.resetPassword = () => {
+            const email = document.getElementById('email').value;
+            if(!email) { showAlert('أدخل بريدك أولاً لإرسال رابط الاستعادة'); return; }
+            sendPasswordResetEmail(auth, email)
+                .then(() => showAlert('تم إرسال رابط الاستعادة لبريدك', 'success'))
+                .catch(err => showAlert('خطأ في إرسال الرابط'));
+        };
+
+        document.getElementById('login-btn').addEventListener('click', handleLogin);
     </script>
 </body>
-          </html> 
+</html>
+
