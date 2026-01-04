@@ -1,0 +1,89 @@
+<div class="registration-form">
+    <input type="email" id="email" placeholder="البريد الإلكتروني" required>
+    
+    <input type="password" id="password" placeholder="كلمة المرور القوية" onkeyup="checkPasswordStrength()">
+    <input type="password" id="confirm-password" placeholder="تأكيد كلمة المرور">
+    <div id="password-error" style="color:red; font-size:12px;"></div>
+
+    <hr>
+    <h3>تحقق الهوية (KYC)</h3>
+    <p>ارفع صورة واضحة للهوية وصورة سيلفي وأنت تحملها</p>
+    
+    <label>صورة البطاقة أو الجواز:</label>
+    <input type="file" id="id-card" accept="image/*">
+    
+    <label>صورة سيلفي للتأكيد:</label>
+    <input type="file" id="selfie" accept="image/*">
+
+    <button onclick="handleSignUp()">إنشاء حساب وتدقيق الهوية</button>
+</div>
+
+<script type="module">
+    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+    import { getAuth, createUserWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const auth = getAuth();
+    const db = getFirestore();
+    const storage = getStorage();
+
+    // 1. وظيفة نسيان كلمة المرور
+    window.forgotPassword = (email) => {
+        sendPasswordResetEmail(auth, email)
+            .then(() => alert("تم إرسال رابط إعادة تعيين كلمة المرور لبريدك"))
+            .catch(err => alert(err.message));
+    };
+
+    // 2. التحقق من قوة كلمة المرور
+    function isPasswordStrong(pw) {
+        const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        return regex.test(pw);
+    }
+
+    // 3. عملية التسجيل الكاملة
+    async function handleSignUp() {
+        const email = document.getElementById('email').value;
+        const pass = document.getElementById('password').value;
+        const confirmPass = document.getElementById('confirm-password').value;
+        const idFile = document.getElementById('id-card').files[0];
+        const selfieFile = document.getElementById('selfie').files[0];
+
+        // الفحوصات الصارمة
+        if (pass !== confirmPass) { alert("كلمات المرور غير متطابقة!"); return; }
+        if (!isPasswordStrong(pass)) { alert("كلمة المرور ضعيفة! يجب أن تحتوي على حرف كبير، صغير، رقم، ورمز (8 خانات)"); return; }
+        if (!idFile || !selfieFile) { alert("يرجى رفع صور الهوية والسيلفي أولاً"); return; }
+
+        try {
+            // إنشاء المستخدم في Auth
+            const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
+            const user = userCredential.user;
+
+            // رفع الصور إلى Firebase Storage
+            const idRef = ref(storage, `kyc/${user.uid}/id_card.jpg`);
+            const selfieRef = ref(storage, `kyc/${user.uid}/selfie.jpg`);
+            
+            await uploadBytes(idRef, idFile);
+            await uploadBytes(selfieRef, selfieFile);
+
+            const idUrl = await getDownloadURL(idRef);
+            const selfieUrl = await getDownloadURL(selfieRef);
+
+            // حفظ بيانات المستخدم مع حالة الـ KYC
+            await setDoc(doc(db, "users", user.uid), {
+                email: email,
+                kycStatus: "pending", // الحالة: قيد المراجعة
+                idCardUrl: idUrl,
+                selfieUrl: selfieUrl,
+                balanceSDG: 0,
+                createdAt: new Date()
+            });
+
+            alert("تم التسجيل! حسابك قيد المراجعة الآن، سنقوم بتفعيله بعد تدقيق الصور.");
+            window.location.href = "dashboard.html";
+
+        } catch (error) {
+            alert("خطأ في التسجيل: " + error.message);
+        }
+    }
+    window.handleSignUp = handleSignUp;
+</script>
