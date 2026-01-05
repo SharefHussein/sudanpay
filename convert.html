@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sudan Pay - تحويل USDT إلى SDG</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #0d9488;
+            --primary-dark: #0f766e;
+            --secondary: #0891b2;
+            --dark: #0f172a;
+            --light: #f8fafc;
+            --gray: #94a3b8;
+            --success: #10b981;
+            --border: #e2e8f0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
+
+        body {
+            background: #f1f5f9;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container { max-width: 500px; margin: 0 auto; }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: white;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .navbar-brand { text-decoration: none; color: var(--dark); font-weight: 700; display: flex; align-items: center; gap: 10px; }
+
+        .card {
+            background: white;
+            border-radius: 24px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        .balance-info {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .balance-label { font-size: 0.9rem; color: var(--gray); margin-bottom: 5px; }
+        .balance-amount { font-size: 2.2rem; font-weight: 800; color: var(--primary); }
+
+        .form-group { margin-bottom: 20px; }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 1rem;
+        }
+
+        .input-group {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-group input {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .currency-badge {
+            position: absolute;
+            left: 15px;
+            background: var(--primary);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-weight: 700;
+        }
+
+        .rate-display {
+            background: #f0fdfa;
+            border: 1px solid #a7f3d0;
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .rate-label { font-size: 0.9rem; color: var(--gray); margin-bottom: 5px; }
+        .rate-value { font-size: 1.3rem; font-weight: 800; color: var(--success); }
+
+        .result-box {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            border: 2px dashed var(--border);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border-radius: 12px;
+            border: none;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: var(--primary-dark); transform: translateY(-2px); }
+
+        .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar">
+            <a href="dashboard.html" class="navbar-brand">
+                <i class="fas fa-arrow-right"></i> العودة للرئيسية
+            </a>
+            <div class="navbar-menu">
+                <span style="color: var(--primary); font-weight: 800;">تحويل USDT إلى SDG</span>
+            </div>
+        </nav>
+
+        <div class="card">
+            <div class="balance-info">
+                <div class="balance-label">رصيد USDT المتاح</div>
+                <div class="balance-amount" id="usdtBalance">0.00</div>
+            </div>
+
+            <div class="rate-display">
+                <div class="rate-label">سعر الصرف الحالي</div>
+                <div class="rate-value">1 USDT = 2,600 SDG</div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">كمية USDT المراد تحويلها</label>
+                <div class="input-group">
+                    <input type="number" id="usdtAmount" placeholder="0.00" step="0.01" min="1">
+                    <div class="currency-badge">USDT</div>
+                </div>
+                <small style="color: var(--gray); font-size: 0.85rem;">الحد الأدنى للتحويل: 1 USDT</small>
+            </div>
+
+            <div class="result-box">
+                <div style="color: var(--gray); font-size: 0.9rem; margin-bottom: 5px;">ستحصل على:</div>
+                <div style="font-size: 1.8rem; font-weight: 800; color: var(--success);" id="sdgResult">0.00 SDG</div>
+            </div>
+
+            <button class="btn btn-primary" id="convertBtn" onclick="convertUSDT()">
+                <i class="fas fa-exchange-alt"></i> تحويل الآن
+            </button>
+        </div>
+
+        <div class="card">
+            <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 15px;">
+                <i class="fas fa-info-circle"></i> معلومات مهمة
+            </h3>
+            <ul style="color: var(--gray); font-size: 0.9rem; padding-right: 15px;">
+                <li>التحويل يتم فورياً بدون رسوم</li>
+                <li>سعر الصرف ثابت: 1 USDT = 2,600 SDG</li>
+                <li>يجب أن يكون لديك رصيد USDT كافٍ</li>
+                <li>يمكنك تحويل أي جزء من USDT</li>
+                <li>ستظهر العملية في سجل المعاملات</li>
+            </ul>
+        </div>
+    </div>
+
+    <script type="module">
+        import { auth, db, convertUSDTtoSDG, showAlert, getUserData } from './app.js';
+        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        let currentUserData = null;
+        const exchangeRate = 2600;
+
+        document.getElementById('usdtAmount').addEventListener('input', function() {
+            const usdtAmount = parseFloat(this.value) || 0;
+            const sdgAmount = usdtAmount * exchangeRate;
+            document.getElementById('sdgResult').textContent = sdgAmount.toLocaleString() + ' SDG';
+        });
+
+        async function convertUSDT() {
+            const usdtAmount = parseFloat(document.getElementById('usdtAmount').value);
+            const btn = document.getElementById('convertBtn');
+            
+            if (!usdtAmount || usdtAmount < 1) {
+                showAlert('الرجاء إدخال مبلغ صحيح (1 USDT كحد أدنى)', 'error');
+                return;
+            }
+            
+            if (!currentUserData) {
+                showAlert('يجب تسجيل الدخول أولاً', 'error');
+                return;
+            }
+            
+            if (currentUserData.balanceUSDT < usdtAmount) {
+                showAlert('رصيد USDT غير كافٍ', 'error');
+                return;
+            }
+            
+            if (!confirm(`هل أنت متأكد من تحويل ${usdtAmount} USDT إلى ${(usdtAmount * exchangeRate).toLocaleString()} SDG؟`)) {
+                return;
+            }
+            
+            try {
+                btn.disabled = true;
+                btn.innerHTML = '<div class="loading"></div> جاري التحويل...';
+                
+                const result = await convertUSDTtoSDG(auth.currentUser.uid, usdtAmount);
+                
+                showAlert(`تم التحويل بنجاح! تم إضافة ${result.sdgAmount.toLocaleString()} SDG إلى رصيدك`, 'success');
+                
+                document.getElementById('usdtAmount').value = '';
+                document.getElementById('sdgResult').textContent = '0.00 SDG';
+                
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 2000);
+                
+            } catch (error) {
+                showAlert(error.message || 'حدث خطأ أثناء التحويل', 'error');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-exchange-alt"></i> تحويل الآن';
+            }
+        }
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                const userRef = doc(db, "users", user.uid);
+                
+                onSnapshot(userRef, (snap) => {
+                    if (snap.exists()) {
+                        currentUserData = snap.data();
+                        document.getElementById('usdtBalance').textContent = (currentUserData.balanceUSDT || 0).toFixed(2);
+                    }
+                });
+            } else {
+                window.location.href = 'index.html';
+            }
+        });
+    </script>
+</body>
+</html>
