@@ -3,116 +3,448 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SudanPay - فتح حساب جديد</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>Sudan Pay - إنشاء حساب جديد</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --main-bg: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%); --glass: rgba(255, 255, 255, 0.95); }
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--main-bg); min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; margin: 0; }
-        .signup-card { background: var(--glass); padding: 30px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.2); width: 100%; max-width: 450px; }
-        .logo-area { text-align: center; margin-bottom: 20px; }
-        .logo-area h2 { color: #2575fc; margin: 0; }
-        .input-group { position: relative; margin-bottom: 15px; }
-        .input-group i { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: #666; }
-        input[type="email"], input[type="password"] { width: 100%; padding: 12px 45px 12px 15px; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; font-size: 16px; }
-        .kyc-section { background: #f8f9fa; padding: 15px; border-radius: 12px; border: 1px dashed #2575fc; margin: 20px 0; }
-        .kyc-section h4 { margin: 0 0 10px 0; color: #333; font-size: 14px; }
-        label { display: block; font-size: 12px; color: #666; margin-top: 10px; }
-        input[type="file"] { font-size: 12px; margin-top: 5px; }
-        .btn-submit { background: #2575fc; color: white; border: none; padding: 15px; border-radius: 10px; width: 100%; font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        .btn-submit:hover { background: #1a5bc4; transform: translateY(-2px); }
-        #status-msg { text-align: center; margin-top: 15px; font-size: 14px; font-weight: bold; }
+        :root {
+            --primary: #0d9488;
+            --primary-dark: #0f766e;
+            --secondary: #0891b2;
+            --accent: #10b981;
+            --dark: #0f172a;
+            --dark-light: #1e293b;
+            --light: #f8fafc;
+            --gray: #94a3b8;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --border: #e2e8f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .signup-container {
+            background: white;
+            width: 100%;
+            max-width: 500px;
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            padding: 40px 35px;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 4rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            color: var(--dark);
+            margin-bottom: 10px;
+            font-weight: 800;
+        }
+
+        .subtitle {
+            color: var(--gray);
+            margin-bottom: 30px;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+            font-size: 1.1rem;
+        }
+
+        input {
+            width: 100%;
+            padding: 16px 55px 16px 20px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            background: #f8fafc;
+        }
+
+        input:focus {
+            border-color: var(--primary);
+            outline: none;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(13, 148, 136, 0.1);
+        }
+
+        .kyc-section {
+            background: #f8fafc;
+            border: 2px dashed var(--primary);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 25px 0;
+            text-align: right;
+        }
+
+        .kyc-title {
+            font-size: 1.1rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .file-upload {
+            margin-bottom: 15px;
+        }
+
+        .file-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+            text-align: right;
+        }
+
+        .file-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            background: white;
+        }
+
+        .file-preview {
+            width: 100%;
+            height: 150px;
+            border-radius: 8px;
+            object-fit: cover;
+            margin-top: 10px;
+            border: 1px solid var(--border);
+            display: none;
+        }
+
+        .password-toggle {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--gray);
+            cursor: pointer;
+            font-size: 1.1rem;
+            padding: 5px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(to right, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            margin: 20px 0 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            box-shadow: 0 8px 20px rgba(13, 148, 136, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(13, 148, 136, 0.4);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .auth-footer {
+            text-align: center;
+            color: var(--gray);
+            font-size: 1rem;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        .auth-footer a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 700;
+            transition: color 0.3s;
+        }
+
+        .auth-footer a:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .terms {
+            font-size: 0.85rem;
+            color: var(--gray);
+            text-align: right;
+            margin-top: 15px;
+        }
+
+        .terms a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        @media (max-width: 480px) {
+            .signup-container {
+                padding: 30px 25px;
+                margin: 10px;
+            }
+            
+            .logo {
+                font-size: 3rem;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+            }
+            
+            input, .btn-primary {
+                padding: 14px;
+            }
+        }
     </style>
 </head>
 <body>
-
-<div class="signup-card">
-    <div class="logo-area">
-        <i class="fas fa-wallet fa-3x" style="color: #2575fc;"></i>
-        <h2>SudanPay</h2>
-        <p style="color: #666; font-size: 14px;">سجل بياناتك بدقة لتفعيل حسابك</p>
-    </div>
-
-    <div class="input-group">
-        <i class="fas fa-envelope"></i>
-        <input type="email" id="email" placeholder="البريد الإلكتروني">
-    </div>
-    <div class="input-group">
-        <i class="fas fa-lock"></i>
-        <input type="password" id="password" placeholder="كلمة المرور (كبير، صغير، رقم، رمز)">
-    </div>
-    <div class="input-group">
-        <i class="fas fa-check-double"></i>
-        <input type="password" id="confirmPass" placeholder="تأكيد كلمة المرور">
-    </div>
-
-    <div class="kyc-section">
-        <h4><i class="fas fa-id-card"></i> توثيق الهوية (KYC)</h4>
-        <label>صورة البطاقة الشخصية (وجه):</label>
-        <input type="file" id="idFile" accept="image/*">
-        <label>صورة سيلفي:</label>
-        <input type="file" id="selfieFile" accept="image/*">
-    </div>
-
-    <button class="btn-submit" onclick="handleRegister()">إنشاء حساب وإرسال للتدقيق</button>
-    <div id="status-msg"></div>
-</div>
-
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
-
-    // بيانات فايربيس الخاصة بك
-    const firebaseConfig = {
-        apiKey: "AIzaSyB3vxJu_et-P80ek30I3MRdC_lGhooCCsc",
-        authDomain: "sudanpay-e332a.firebaseapp.com",
-        projectId: "sudanpay-e332a",
-        storageBucket: "sudanpay-e332a.firebasestorage.app",
-        messagingSenderId: "699809447272",
-        appId: "1:699809447272:web:90f3780ed6c768c4322add"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-    const storage = getStorage(app);
-
-    window.handleRegister = async () => {
-        const email = document.getElementById('email').value;
-        const pass = document.getElementById('password').value;
-        const confirm = document.getElementById('confirmPass').value;
-        const idImg = document.getElementById('idFile').files[0];
-        const selfieImg = document.getElementById('selfieFile').files[0];
-        const msg = document.getElementById('status-msg');
-
-        // فحص قوة كلمة المرور
-        const strongRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/;
-        if(!strongRegex.test(pass)) { msg.style.color="red"; msg.innerText="كلمة المرور ضعيفة جداً!"; return; }
-        if(pass !== confirm) { msg.style.color="red"; msg.innerText="كلمات المرور غير متطابقة!"; return; }
-        if(!idImg || !selfieImg) { msg.style.color="red"; msg.innerText="يرجى رفع صور التوثيق!"; return; }
-
-        try {
-            msg.style.color="blue"; msg.innerText="جاري إنشاء الحساب ورفع الصور...";
-            const userCred = await createUserWithEmailAndPassword(auth, email, pass);
-            const uid = userCred.user.uid;
-
-            const idRef = ref(storage, `kyc/${uid}/id.jpg`);
-            const selfieRef = ref(storage, `kyc/${uid}/selfie.jpg`);
-            await uploadBytes(idRef, idImg); await uploadBytes(selfieRef, selfieImg);
+    <div class="signup-container">
+        <div class="logo">
+            <i class="fas fa-user-plus"></i>
+        </div>
+        
+        <h1>إنشاء حساب جديد</h1>
+        <p class="subtitle">انضم إلى Sudan Pay وابدأ رحلتك المالية الآمنة</p>
+        
+        <div class="input-group">
+            <i class="fas fa-user input-icon"></i>
+            <input type="text" id="name" placeholder="الاسم الكامل (مطلوب)" required>
+        </div>
+        
+        <div class="input-group">
+            <i class="fas fa-envelope input-icon"></i>
+            <input type="email" id="email" placeholder="البريد الإلكتروني" required>
+        </div>
+        
+        <div class="input-group">
+            <i class="fas fa-lock input-icon"></i>
+            <button type="button" class="password-toggle" onclick="togglePassword('password')">
+                <i class="fas fa-eye" id="password-eye"></i>
+            </button>
+            <input type="password" id="password" placeholder="كلمة المرور (8 أحرف على الأقل)" required minlength="8">
+        </div>
+        
+        <div class="input-group">
+            <i class="fas fa-lock input-icon"></i>
+            <button type="button" class="password-toggle" onclick="togglePassword('confirmPassword')">
+                <i class="fas fa-eye" id="confirm-password-eye"></i>
+            </button>
+            <input type="password" id="confirmPassword" placeholder="تأكيد كلمة المرور" required>
+        </div>
+        
+        <div class="kyc-section">
+            <div class="kyc-title">
+                <i class="fas fa-id-card"></i>
+                التحقق من الهوية (KYC)
+            </div>
             
-            const idUrl = await getDownloadURL(idRef);
-            const selfieUrl = await getDownloadURL(selfieRef);
+            <div class="file-upload">
+                <label class="file-label">صورة الهوية الشخصية:</label>
+                <input type="file" id="idImage" class="file-input" accept="image/*" required>
+                <img id="idPreview" class="file-preview" alt="معاينة صورة الهوية">
+            </div>
+            
+            <div class="file-upload">
+                <label class="file-label">صورة سيلفي مع الهوية:</label>
+                <input type="file" id="selfieImage" class="file-input" accept="image/*" required>
+                <img id="selfiePreview" class="file-preview" alt="معاينة صورة السيلفي">
+            </div>
+        </div>
+        
+        <div class="terms">
+            <input type="checkbox" id="agreeTerms" required>
+            <label for="agreeTerms">أوافق على <a href="#">الشروط والأحكام</a> و <a href="#">سياسة الخصوصية</a></label>
+        </div>
+        
+        <button id="signup-btn" class="btn-primary">
+            <i class="fas fa-user-plus"></i> إنشاء الحساب وإرسال للتحقق
+        </button>
+        
+        <div class="auth-footer">
+            <p>لديك حساب بالفعل؟ <a href="index.html">سجل الدخول الآن</a></p>
+        </div>
+    </div>
 
-            await setDoc(doc(db, "users", uid), {
-                email, kycStatus: "pending", idUrl, selfieUrl, balanceSDG: 0, createdAt: new Date()
+    <script type="module">
+        import { signUpWithKYC, showAlert } from './app.js';
+        
+        function previewImage(inputId, previewId) {
+            const input = document.getElementById(inputId);
+            const preview = document.getElementById(previewId);
+            
+            input.addEventListener('change', function() {
+                if (this.files && this.files[0]) {
+                    const reader = new FileReader();
+                    
+                    reader.onload = function(e) {
+                        preview.src = e.target.result;
+                        preview.style.display = 'block';
+                    }
+                    
+                    reader.readAsDataURL(this.files[0]);
+                }
             });
-
-            alert("تم التسجيل! حسابك تحت المراجعة حالياً.");
-            window.location.href = "login.html";
-        } catch (err) { msg.style.color="red"; msg.innerText = "خطأ: " + err.message; }
-    };
-</script>
+        }
+        
+        previewImage('idImage', 'idPreview');
+        previewImage('selfieImage', 'selfiePreview');
+        
+        function togglePassword(fieldId) {
+            const passwordInput = document.getElementById(fieldId);
+            const eyeIcon = document.getElementById(`${fieldId === 'password' ? 'password' : 'confirm-password'}-eye`);
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                eyeIcon.className = 'fas fa-eye-slash';
+            } else {
+                passwordInput.type = 'password';
+                eyeIcon.className = 'fas fa-eye';
+            }
+        }
+        
+        async function handleSignup() {
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const idImage = document.getElementById('idImage').files[0];
+            const selfieImage = document.getElementById('selfieImage').files[0];
+            const agreeTerms = document.getElementById('agreeTerms').checked;
+            const signupBtn = document.getElementById('signup-btn');
+            
+            if (!name || !email || !password || !confirmPassword) {
+                showAlert('الرجاء إكمال جميع الحقول الإلزامية');
+                return;
+            }
+            
+            if (password.length < 8) {
+                showAlert('كلمة المرور يجب أن تكون 8 أحرف على الأقل');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                showAlert('كلمات المرور غير متطابقة');
+                return;
+            }
+            
+            if (!idImage || !selfieImage) {
+                showAlert('الرجاء رفع صور التحقق من الهوية');
+                return;
+            }
+            
+            if (!agreeTerms) {
+                showAlert('يجب الموافقة على الشروط والأحكام');
+                return;
+            }
+            
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showAlert('البريد الإلكتروني غير صالح');
+                return;
+            }
+            
+            try {
+                signupBtn.innerHTML = '<div class="loading"></div> جاري إنشاء الحساب وإرسال للتحقق...';
+                signupBtn.disabled = true;
+                
+                const result = await signUpWithKYC(email, password, name, idImage, selfieImage);
+                
+                showAlert('تم إنشاء الحساب بنجاح وتم إرسال طلب التحقق! ستصلك رسالة تفعيل بعد مراجعة بياناتك.', 'success');
+                
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 3000);
+                
+            } catch (error) {
+                signupBtn.innerHTML = '<i class="fas fa-user-plus"></i> إنشاء الحساب وإرسال للتحقق';
+                signupBtn.disabled = false;
+                
+                let errorMessage = 'حدث خطأ أثناء إنشاء الحساب';
+                if (error.code === 'auth/email-already-in-use') {
+                    errorMessage = 'هذا البريد الإلكتروني مستخدم بالفعل';
+                } else if (error.code === 'auth/weak-password') {
+                    errorMessage = 'كلمة المرور ضعيفة جداً';
+                } else if (error.code === 'auth/invalid-email') {
+                    errorMessage = 'البريد الإلكتروني غير صالح';
+                } else if (error.code === 'auth/operation-not-allowed') {
+                    errorMessage = 'عملية التسجيل معطلة مؤقتاً';
+                }
+                
+                showAlert(errorMessage);
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('signup-btn').addEventListener('click', handleSignup);
+            
+            document.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    handleSignup();
+                }
+            });
+        });
+        
+        window.togglePassword = togglePassword;
+    </script>
 </body>
-</html>
-
+    </html>
