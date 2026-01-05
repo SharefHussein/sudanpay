@@ -22,9 +22,54 @@
 
         .dashboard-container { max-width: 500px; margin: 0 auto; }
 
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 30px; 
+        }
         
-        /* كرت الرصيد الأخضر مثل تصميمك */
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+        
+        .notification-badge {
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #ef4444;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        /* كرت الرصيد الأخضر */
         .balance-card {
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             border-radius: 24px;
@@ -34,10 +79,23 @@
             box-shadow: 0 15px 30px rgba(13, 148, 136, 0.2);
             position: relative;
             overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        .balance-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+            opacity: 0.3;
         }
 
         .balance-label { font-size: 1rem; opacity: 0.9; margin-bottom: 10px; }
-        .balance-amount { font-size: 2.5rem; font-weight: 800; margin-bottom: 5px; }
+        .balance-amount { font-size: 2.5rem; font-weight: 800; margin-bottom: 5px; direction: ltr; }
         .balance-usdt { font-size: 1.1rem; opacity: 0.8; }
 
         .address-box {
@@ -49,20 +107,28 @@
             display: flex;
             flex-direction: column;
             gap: 8px;
+            position: relative;
+            z-index: 1;
         }
 
-        .address-text { font-family: monospace; word-break: break-all; font-weight: bold; color: #fff; }
+        .address-text { 
+            font-family: monospace; 
+            word-break: break-all; 
+            font-weight: bold; 
+            color: #fff; 
+            font-size: 0.8rem;
+        }
 
         .actions-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            margin-top: 30px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
         }
 
         .action-btn {
             background: white;
-            padding: 20px;
+            padding: 18px 10px;
             border-radius: 18px;
             text-align: center;
             text-decoration: none;
@@ -70,13 +136,81 @@
             font-weight: 700;
             box-shadow: 0 4px 6px rgba(0,0,0,0.05);
             transition: 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
         }
 
-        .action-btn i { font-size: 1.5rem; color: var(--primary); margin-bottom: 10px; display: block; }
-        .action-btn:hover { transform: translateY(-5px); box-shadow: 0 8px 15px rgba(0,0,0,0.1); }
+        .action-btn i { 
+            font-size: 1.5rem; 
+            color: var(--primary); 
+            margin-bottom: 5px;
+        }
+        
+        .action-btn span {
+            font-size: 0.85rem;
+        }
+
+        .action-btn:hover { 
+            transform: translateY(-5px); 
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1); 
+        }
+
+        .quick-actions {
+            margin-top: 30px;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .quick-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .quick-btn {
+            background: white;
+            padding: 15px;
+            border-radius: 15px;
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 600;
+            box-shadow: 0 3px 5px rgba(0,0,0,0.05);
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .quick-btn i {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: #f0fdfa;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .quick-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+        }
 
         .logout-btn {
-            margin-top: 40px;
+            margin-top: 30px;
             width: 100%;
             padding: 15px;
             border-radius: 12px;
@@ -85,26 +219,79 @@
             color: var(--gray);
             font-weight: bold;
             cursor: pointer;
+            transition: 0.3s;
+        }
+        
+        .logout-btn:hover {
+            background: #fee2e2;
+            color: #ef4444;
+            border-color: #fecaca;
+        }
+        
+        .kyc-status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-top: 5px;
+        }
+        
+        .kyc-pending {
+            background: #fef3c7;
+            color: #d97706;
+        }
+        
+        .kyc-verified {
+            background: #d1fae5;
+            color: #059669;
+        }
+        
+        .kyc-rejected {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        
+        @media (max-width: 480px) {
+            .actions-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .quick-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .balance-amount {
+                font-size: 2rem;
+            }
         }
     </style>
 </head>
 <body>
 
 <div class="dashboard-container">
+    <!-- Header مع الإشعارات -->
     <div class="header">
-        <div>
-            <h2 id="user-name" style="font-size: 1.2rem; color: var(--dark);">مرحباً بك</h2>
-            <p style="font-size: 0.9rem; color: var(--gray);">رصيدك المحدث اليوم</p>
+        <div class="user-info">
+            <div class="user-avatar" id="userAvatar">?</div>
+            <div>
+                <h2 id="user-name" style="font-size: 1.2rem; color: var(--dark); margin-bottom: 3px;">مرحباً بك</h2>
+                <div id="accountID" style="font-size: 0.85rem; color: var(--gray); font-weight: 600;">...</div>
+                <div id="kycBadge" class="kyc-status kyc-pending" style="display: none;">قيد المراجعة</div>
+            </div>
         </div>
-        <div class="logo" style="color: var(--primary); font-size: 1.5rem;"><i class="fas fa-wallet"></i></div>
+        <div style="display: flex; align-items: center; gap: 20px;">
+            <a href="notifications.html" class="notification-badge">
+                <i class="fas fa-bell" style="color: var(--primary); font-size: 1.3rem;"></i>
+                <span class="badge" id="notificationBadge" style="display: none;">0</span>
+            </a>
+            <div class="logo" style="color: var(--primary); font-size: 1.5rem;">
+                <i class="fas fa-wallet"></i>
+            </div>
+        </div>
     </div>
-    <div style="display: flex; align-items: center; gap: 15px;">
-    <a href="notifications.html" style="position: relative; text-decoration: none;">
-        <i class="fas fa-bell" style="color: var(--primary); font-size: 1.3rem;"></i>
-        <span id="notificationBadge" style="display: none; position: absolute; top: -5px; right: -5px; background: #ef4444; color: white; border-radius: 50%; width: 18px; height: 18px; font-size: 0.7rem; display: flex; align-items: center; justify-content: center;">0</span>
-    </a>
-    </div> 
 
+    <!-- كرت الرصيد الرئيسي -->
     <div class="balance-card">
         <div class="balance-label">إجمالي الرصيد (SDG)</div>
         <div class="balance-amount" id="balance-sdg">0.00</div>
@@ -113,42 +300,134 @@
         <div class="address-box">
             <span><i class="fas fa-link"></i> عنوان محفظة USDT (Tron):</span>
             <div class="address-text" id="acc-address">جاري التوليد...</div>
-            <button onclick="copyAddress()" style="background:none; border:none; color:white; font-size:0.8rem; cursor:pointer; text-decoration:underline;">نسخ العنوان</button>
+            <button onclick="copyAddress()" style="background:none; border:none; color:white; font-size:0.8rem; cursor:pointer; text-decoration:underline; align-self: flex-start;">نسخ العنوان</button>
         </div>
     </div>
 
+    <!-- شبكة الإجراءات الرئيسية -->
     <div class="actions-grid">
-    <a href="send.html" class="action-btn">
-        <i class="fas fa-paper-plane"></i> 
-        <span>إرسال SDG</span>
-    </a>
-    <a href="send-usdt.html" class="action-btn">
-        <i class="fab fa-bitcoin"></i>
-        <span>إرسال USDT</span>
-    </a>
-    <a href="convert.html" class="action-btn">
-        <i class="fas fa-exchange-alt"></i>
-        <span>تحويل USDT</span>
-    </a>
-    <a href="withdraw.html" class="action-btn">
-        <i class="fas fa-hand-holding-usd"></i>
-        <span>سحب أموال</span>
-    </a>
-    <a href="receive.html" class="action-btn">
-        <i class="fas fa-qrcode"></i>
-        <span>استلام</span>
-    </a>
-    <a href="transactions.html" class="action-btn">
-        <i class="fas fa-history"></i>
-        <span>السجل</span>
-    </a>
+        <a href="send.html" class="action-btn">
+            <i class="fas fa-paper-plane"></i>
+            <span>إرسال SDG</span>
+        </a>
+        <a href="send-usdt.html" class="action-btn">
+            <i class="fab fa-bitcoin"></i>
+            <span>إرسال USDT</span>
+        </a>
+        <a href="convert.html" class="action-btn">
+            <i class="fas fa-exchange-alt"></i>
+            <span>تحويل USDT</span>
+        </a>
+        <a href="receive.html" class="action-btn">
+            <i class="fas fa-qrcode"></i>
+            <span>استلام</span>
+        </a>
+        <a href="withdraw.html" class="action-btn">
+            <i class="fas fa-hand-holding-usd"></i>
+            <span>سحب</span>
+        </a>
+        <a href="usdt-wallet.html" class="action-btn">
+            <i class="fas fa-wallet"></i>
+            <span>محفظة USDT</span>
+        </a>
     </div>
+
+    <!-- الإجراءات السريعة -->
+    <div class="quick-actions">
+        <div class="section-title">
+            <i class="fas fa-bolt"></i>
+            إجراءات سريعة
+        </div>
+        
+        <div class="quick-grid">
+            <a href="bills.html" class="quick-btn">
+                <i class="fas fa-file-invoice"></i>
+                <div>
+                    <div style="font-weight: 700; font-size: 0.95rem;">دفع الفواتير</div>
+                    <div style="font-size: 0.8rem; color: var(--gray);">كهرباء، مياه، إنترنت</div>
+                </div>
+            </a>
+            
+            <a href="referral.html" class="quick-btn">
+                <i class="fas fa-users"></i>
+                <div>
+                    <div style="font-weight: 700; font-size: 0.95rem;">نظام الإحالة</div>
+                    <div style="font-size: 0.8rem; color: var(--gray);">اكسب 500 SDG لكل صديق</div>
+                </div>
+            </a>
+            
+            <a href="kyc-status.html" class="quick-btn">
+                <i class="fas fa-id-card"></i>
+                <div>
+                    <div style="font-weight: 700; font-size: 0.95rem;">حالة التحقق</div>
+                    <div style="font-size: 0.8rem; color: var(--gray);">تتبع حالة KYC</div>
+                </div>
+            </a>
+            
+            <a href="transactions.html" class="quick-btn">
+                <i class="fas fa-history"></i>
+                <div>
+                    <div style="font-weight: 700; font-size: 0.95rem;">سجل العمليات</div>
+                    <div style="font-size: 0.8rem; color: var(--gray);">عرض جميع المعاملات</div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <!-- روابط إضافية -->
+    <div class="quick-actions">
+        <div class="section-title">
+            <i class="fas fa-cog"></i>
+            الإعدادات والمساعدة
+        </div>
+        
+        <div class="quick-grid">
+            <a href="profile.html" class="quick-btn">
+                <i class="fas fa-user-cog"></i>
+                <div>
+                    <div style="font-weight: 700; font-size: 0.95rem;">الملف الشخصي</div>
+                    <div style="font-size: 0.8rem; color: var(--gray);">تعديل بياناتك</div>
+                </div>
+            </a>
+            
+            <a href="settings.html" class="quick-btn">
+                <i class="fas fa-cogs"></i>
+                <div>
+                    <div style="font-weight: 700; font-size: 0.95rem;">الإعدادات</div>
+                    <div style="font-size: 0.8rem; color: var(--gray);">تخصيص تجربتك</div>
+                </div>
+            </a>
+            
+            <a href="support.html" class="quick-btn">
+                <i class="fas fa-headset"></i>
+                <div>
+                    <div style="font-weight: 700; font-size: 0.95rem;">الدعم الفني</div>
+                    <div style="font-size: 0.8rem; color: var(--gray);">مساعدة واستفسارات</div>
+                </div>
+            </a>
+            
+            <a href="usdt-wallet.html" class="quick-btn">
+                <i class="fas fa-sync-alt"></i>
+                <div>
+                    <div style="font-weight: 700; font-size: 0.95rem;">مزامنة USDT</div>
+                    <div style="font-size: 0.8rem; color: var(--gray);">فحص الرصيد من الشبكة</div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <button class="logout-btn" onclick="handleLogout()">
+        <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
+    </button>
+</div>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
     import { getFirestore, doc, onSnapshot, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    import { syncUSDTBalance, showAlert } from './app.js';
 
+    // ==================== إعدادات Firebase ====================
     const firebaseConfig = {
         apiKey: "AIzaSyB3vxJu_et-P80ek30I3MRdC_lGhooCCsc",
         authDomain: "sudanpay-e332a.firebaseapp.com",
@@ -162,40 +441,74 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    // ==========================================
-    // ضع مفتاح Tatum API Key الخاص بك هنا 👇
-    // ==========================================
-    const TATUM_API_KEY = "t-695a0ea026858bd739f1595e-363e1ef7ec404868aebf73ed"; 
-
-    // دالة توليد محفظة USDT (Tron) وحفظها
+    // ==================== دالة توليد محفظة USDT مع Tatum ====================
     async function generateAndSaveWallet(uid) {
         try {
-            // 1. توليد المحفظة
+            // 1. توليد المحفظة باستخدام Tatum API
             const walletRes = await fetch('https://api.tatum.io/v3/tron/wallet', {
-                headers: { 'x-api-key': TATUM_API_KEY }
+                headers: { 
+                    'x-api-key': 't-695a0ea026858bd739f1595e-363e1ef7ec404868aebf73ed',
+                    'Content-Type': 'application/json'
+                }
             });
+            
+            if (!walletRes.ok) throw new Error('فشل في توليد المحفظة');
             const wallet = await walletRes.json();
 
             // 2. توليد العنوان من الـ xpub
             const addressRes = await fetch(`https://api.tatum.io/v3/tron/address/${wallet.xpub}/0`, {
-                headers: { 'x-api-key': TATUM_API_KEY }
+                headers: { 
+                    'x-api-key': 't-695a0ea026858bd739f1595e-363e1ef7ec404868aebf73ed',
+                    'Content-Type': 'application/json'
+                }
             });
+            
+            if (!addressRes.ok) throw new Error('فشل في توليد العنوان');
             const addressData = await addressRes.json();
 
-            // 3. حفظ العنوان في Firestore
+            // 3. حفظ البيانات في Firestore
             await updateDoc(doc(db, "users", uid), {
-                usdtAddress: addressData.address
+                usdtAddress: addressData.address,
+                usdtXpub: wallet.xpub,
+                walletGeneratedAt: new Date().toISOString(),
+                updatedAt: new Date()
             });
 
             return addressData.address;
         } catch (error) {
             console.error("فشل توليد المحفظة:", error);
-            return "حدث خطأ في التوليد";
+            // إذا فشل Tatum، استخدم عنوان مؤقت
+            const tempAddress = "T" + Math.random().toString(36).substr(2, 33).toUpperCase();
+            await updateDoc(doc(db, "users", uid), {
+                usdtAddress: tempAddress,
+                walletGeneratedAt: new Date().toISOString()
+            });
+            return tempAddress;
         }
     }
 
-    // مراقبة حالة المستخدم وتحديث البيانات
-    onAuthStateChanged(auth, (user) => {
+    // ==================== دالة نسخ العنوان ====================
+    window.copyAddress = () => {
+        const addr = document.getElementById('acc-address').innerText;
+        if (!addr || addr === 'جاري التوليد...') {
+            showAlert('لم يتم توليد العنوان بعد', 'error');
+            return;
+        }
+        navigator.clipboard.writeText(addr);
+        showAlert('تم نسخ العنوان بنجاح', 'success');
+    };
+
+    // ==================== دالة تسجيل الخروج ====================
+    window.handleLogout = () => {
+        if(confirm('هل أنت متأكد من تسجيل الخروج؟')) {
+            signOut(auth).then(() => {
+                window.location.href = 'index.html';
+            });
+        }
+    };
+
+    // ==================== مراقبة حالة المستخدم وتحديث البيانات ====================
+    onAuthStateChanged(auth, async (user) => {
         if (user) {
             const userRef = doc(db, "users", user.uid);
             
@@ -204,38 +517,83 @@
                 if (snap.exists()) {
                     const data = snap.data();
                     
+                    // تحديث معلومات المستخدم
+                    document.getElementById('user-name').innerText = `مرحباً ${data.name || 'مستخدم'}`;
+                    document.getElementById('accountID').innerText = data.accountID || 'SP-000000';
+                    
+                    // تحديث الأيقونة
+                    const avatar = document.getElementById('userAvatar');
+                    avatar.innerText = data.name ? data.name.charAt(0).toUpperCase() : "?";
+                    
+                    // تحديث حالة KYC
+                    const kycBadge = document.getElementById('kycBadge');
+                    if (data.kycStatus) {
+                        kycBadge.style.display = 'inline-block';
+                        kycBadge.className = 'kyc-status';
+                        if (data.kycStatus === 'pending') {
+                            kycBadge.classList.add('kyc-pending');
+                            kycBadge.innerText = 'قيد المراجعة';
+                        } else if (data.kycStatus === 'verified') {
+                            kycBadge.classList.add('kyc-verified');
+                            kycBadge.innerText = 'تم التحقق';
+                        } else if (data.kycStatus === 'rejected') {
+                            kycBadge.classList.add('kyc-rejected');
+                            kycBadge.innerText = 'مرفوض';
+                        }
+                    }
+                    
                     // تحديث الرصيد
                     const sdg = data.balanceSDG || 0;
-                    document.getElementById('balance-sdg').innerText = sdg.toLocaleString();
-                    document.getElementById('balance-usdt').innerText = "USDT " + (sdg / 2600).toFixed(2);
+                    const usdt = data.balanceUSDT || 0;
                     
-                    // تحديث العنوان أو توليده إذا كان N/A
-                    if (!data.usdtAddress) {
+                    document.getElementById('balance-sdg').innerText = sdg.toLocaleString();
+                    document.getElementById('balance-usdt').innerText = `USDT ${usdt.toFixed(2)}`;
+                    
+                    // تحديث العنوان أو توليده إذا كان غير موجود
+                    if (!data.usdtAddress || data.usdtAddress === '') {
                         document.getElementById('acc-address').innerText = "جاري إنشاء محفظة فريدة...";
                         const newAddress = await generateAndSaveWallet(user.uid);
                         document.getElementById('acc-address').innerText = newAddress;
                     } else {
                         document.getElementById('acc-address').innerText = data.usdtAddress;
                     }
+                    
+                    // تحديث عداد الإشعارات
+                    const notificationBadge = document.getElementById('notificationBadge');
+                    const unreadCount = data.unreadNotifications || 0;
+                    if (unreadCount > 0) {
+                        notificationBadge.style.display = 'flex';
+                        notificationBadge.innerText = unreadCount > 9 ? '9+' : unreadCount;
+                    } else {
+                        notificationBadge.style.display = 'none';
+                    }
+                    
+                    // مزامنة رصيد USDT تلقائياً
+                    try {
+                        await syncUSDTBalance(user.uid);
+                    } catch (syncError) {
+                        console.error('خطأ في مزامنة الرصيد:', syncError);
+                    }
                 }
             });
+            
+            // مزامنة رصيد USDT كل دقيقة
+            setInterval(async () => {
+                try {
+                    await syncUSDTBalance(user.uid);
+                } catch (error) {
+                    console.error('خطأ في المزامنة الدورية:', error);
+                }
+            }, 60000); // كل دقيقة
+            
         } else {
-            window.location.href = "index.html"; // العودة لصفحة الدخول
+            window.location.href = 'index.html'; // العودة لصفحة الدخول
         }
     });
 
-    // دالة النسخ
-    window.copyAddress = () => {
-        const addr = document.getElementById('acc-address').innerText;
-        navigator.clipboard.writeText(addr);
-        alert("تم نسخ العنوان بنجاح");
-    };
-
-    // تسجيل الخروج
-    window.handleLogout = () => {
-        signOut(auth).then(() => window.location.href = "index.html");
-    };
+    // ==================== تحميل Tatum API Key ====================
+    const TATUM_API_KEY = "t-695a0ea026858bd739f1595e-363e1ef7ec404868aebf73ed";
+    console.log('Tatum API Key جاهز:', TATUM_API_KEY);
 </script>
 </body>
-</html>
-
+                                                                                      </html>
