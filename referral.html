@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sudan Pay - نظام الإحالة</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #0d9488;
+            --primary-dark: #0f766e;
+            --secondary: #0891b2;
+            --dark: #0f172a;
+            --light: #f8fafc;
+            --gray: #94a3b8;
+            --success: #10b981;
+            --border: #e2e8f0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
+
+        body {
+            background: #f1f5f9;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container { max-width: 500px; margin: 0 auto; }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: white;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .navbar-brand { text-decoration: none; color: var(--dark); font-weight: 700; display: flex; align-items: center; gap: 10px; }
+
+        .card {
+            background: white;
+            border-radius: 24px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            background: #f0fdfa;
+            border: 1px solid #a7f3d0;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .referral-code-box {
+            background: linear-gradient(135deg, #0d9488, #0891b2);
+            color: white;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .code-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+
+        .code-value {
+            font-family: monospace;
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            margin: 15px 0;
+            direction: ltr;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary { background: white; color: var(--primary); }
+        .btn-secondary { background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.3); }
+
+        .btn:hover { transform: translateY(-2px); }
+
+        .share-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .share-btn {
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: white;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .share-btn:hover {
+            transform: translateY(-3px);
+            border-color: var(--primary);
+        }
+
+        .share-icon {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .referrals-list {
+            margin-top: 20px;
+        }
+
+        .referral-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .referral-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-left: 15px;
+        }
+
+        .referral-info {
+            flex: 1;
+        }
+
+        .referral-name {
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+
+        .referral-date {
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+
+        .referral-bonus {
+            font-weight: 800;
+            color: var(--success);
+        }
+
+        .bonus-info {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 12px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+
+        .bonus-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #bbf7d0;
+        }
+
+        .bonus-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar">
+            <a href="dashboard.html" class="navbar-brand">
+                <i class="fas fa-arrow-right"></i> العودة
+            </a>
+            <div class="navbar-menu">
+                <span style="color: var(--primary); font-weight: 800;">نظام الإحالة</span>
+            </div>
+        </nav>
+
+        <div class="card">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="totalReferrals">0</div>
+                    <div class="stat-label">إجمالي الأحباء</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="totalEarnings">0 SDG</div>
+                    <div class="stat-label">إجمالي الأرباح</div>
+                </div>
+            </div>
+
+            <div class="referral-code-box">
+                <div class="code-label">كود الإحالة الخاص بك</div>
+                <div class="code-value" id="referralCode">SUD-XXXXXXX</div>
+                <div style="font-size: 0.9rem; opacity: 0.9; margin-bottom: 20px;">
+                    شارك هذا الكود مع أصدقائك واحصل على 500 SDG لكل صديق
+                </div>
+                
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="copyReferralCode()">
+                        <i class="fas fa-copy"></i> نسخ الكود
+                    </button>
+                    <button class="btn btn-secondary" onclick="shareReferral()">
+                        <i class="fas fa-share-alt"></i> مشاركة
+                    </button>
+                </div>
+            </div>
+
+            <div class="share-options">
+                <div class="share-btn" onclick="shareViaWhatsApp()">
+                    <div class="share-icon"><i class="fab fa-whatsapp"></i></div>
+                    <div style="font-size: 0.8rem;">واتساب</div>
+                </div>
+                <div class="share-btn" onclick="shareViaTelegram()">
+                    <div class="share-icon"><i class="fab fa-telegram"></i></div>
+                    <div style="font-size: 0.8rem;">تليجرام</div>
+                </div>
+                <div class="share-btn" onclick="shareViaMessage()">
+                    <div class="share-icon"><i class="fas fa-sms"></i></div>
+                    <div style="font-size: 0.8rem;">رسالة</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 15px;">
+                <i class="fas fa-gift"></i> مكافآت الإحالة
+            </h3>
+            
+            <div class="bonus-info">
+                <div class="bonus-item">
+                    <div>لك ولصديقك عند التسجيل:</div>
+                    <div style="font-weight: 700; color: var(--success);">500 SDG</div>
+                </div>
+                <div class="bonus-item">
+                    <div>لك عند إيداع صديقك الأول:</div>
+                    <div style="font-weight: 700; color: var(--success);">1,000 SDG</div>
+                </div>
+                <div class="bonus-item">
+                    <div>لك عند تحويل صديقك 10,000 SDG:</div>
+                    <div style="font-weight: 700; color: var(--success);">5,000 SDG</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 15px;">
+                <i class="fas fa-users"></i> أحباؤك
+            </h3>
+            
+            <div class="referrals-list" id="referralsList">
+                <div style="text-align: center; padding: 30px; color: var(--gray);">
+                    <i class="fas fa-user-plus" style="font-size: 2rem; margin-bottom: 15px;"></i>
+                    <p>لا توجد إحالات حتى الآن</p>
+                    <p style="font-size: 0.9rem; margin-top: 10px;">شارك كود الإحالة مع أصدقائك لبدء الكسب</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { auth, db, showAlert, getUserData } from './app.js';
+        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        let userData = null;
+
+        // ==================== تحميل بيانات الإحالة ====================
+        function loadReferralData() {
+            const user = auth.currentUser;
+            if (!user) return;
+
+            const userRef = doc(db, "users", user.uid);
+            
+            onSnapshot(userRef, (snap) => {
+                if (snap.exists()) {
+                    userData = snap.data();
+                    
+                    // تحديث الإحصائيات
+                    document.getElementById('totalReferrals').textContent = userData.referrals?.length || 0;
+                    
+                    // حساب الأرباح (500 SDG لكل إحالة)
+                    const totalEarnings = (userData.referrals?.length || 0) * 500;
+                    document.getElementById('totalEarnings').textContent = totalEarnings.toLocaleString() + ' SDG';
+                    
+                    // تحديث كود الإحالة
+                    document.getElementById('referralCode').textContent = userData.referralCode || 'SUD-XXXXXXX';
+                    
+                    // تحميل قائمة الأحباء
+                    loadReferralsList();
+                }
+            });
+        }
+
+        // ==================== تحميل قائمة الأحباء ====================
+        async function loadReferralsList() {
+            if (!userData || !userData.referrals || userData.referrals.length === 0) {
+                return;
+            }
+            
+            let html = '';
+            
+            // يمكنك هنا جلب بيانات كل مستخدم محال
+            // حالياً سنعرض البيانات الأساسية فقط
+            
+            userData.referrals.forEach((referral, index) => {
+                const date = referral.joinedAt ? new Date(referral.joinedAt.toDate()).toLocaleDateString('ar-EG') : '--';
+                
+                html += `
+                    <div class="referral-item">
+                        <div class="referral-avatar">
+                            ${index + 1}
+                        </div>
+                        <div class="referral-info">
+                            <div class="referral-name">${referral.email || 'مستخدم جديد'}</div>
+                            <div class="referral-date">انضم في: ${date}</div>
+                        </div>
+                        <div class="referral-bonus">+500 SDG</div>
+                    </div>
+                `;
+            });
+            
+            document.getElementById('referralsList').innerHTML = html;
+        }
+
+        // ==================== نسخ كود الإحالة ====================
+        function copyReferralCode() {
+            const code = document.getElementById('referralCode').textContent;
+            navigator.clipboard.writeText(code);
+            showAlert('تم نسخ كود الإحالة بنجاح', 'success');
+        }
+
+        // ==================== مشاركة الإحالة ====================
+        function shareReferral() {
+            const code = document.getElementById('referralCode').textContent;
+            const message = `انضم إلى Sudan Pay باستخدام كود الإحالة: ${code}\n\nاحصل على 500 SDG مجاناً عند التسجيل!\n\nرابط التسجيل: ${window.location.origin}/auth.html?ref=${code}`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: 'انضم إلى Sudan Pay واحصل على 500 SDG مجاناً!',
+                    text: message,
+                    url: window.location.origin + '/auth.html?ref=' + code
+                });
+            } else {
+                navigator.clipboard.writeText(message);
+                showAlert('تم نسخ رابط الإحالة بنجاح', 'success');
+            }
+        }
+
+        // ==================== مشاركة عبر واتساب ====================
+        function shareViaWhatsApp() {
+            const code = document.getElementById('referralCode').textContent;
+            const message = `انضم إلى Sudan Pay باستخدام كود الإحالة: ${code}\nاحصل على 500 SDG مجاناً!`;
+            const url = `https://wa.me/?text=${encodeURIComponent(message)}`;
+            window.open(url, '_blank');
+        }
+
+        // ==================== مشاركة عبر تليجرام ====================
+        function shareViaTelegram() {
+            const code = document.getElementById('referralCode').textContent;
+            const message = `انضم إلى Sudan Pay باستخدام كود الإحالة: ${code}\nاحصل على 500 SDG مجاناً!`;
+            const url = `https://t.me/share/url?url=${encodeURIComponent(window.location.origin)}&text=${encodeURIComponent(message)}`;
+            window.open(url, '_blank');
+        }
+
+        // ==================== مشاركة عبر رسالة ====================
+        function shareViaMessage() {
+            const code = document.getElementById('referralCode').textContent;
+            const message = `انضم إلى Sudan Pay باستخدام كود الإحالة: ${code}\nاحصل على 500 SDG مجاناً!\nرابط التسجيل: ${window.location.origin}/auth.html?ref=${code}`;
+            
+            if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+                window.open(`sms:?body=${encodeURIComponent(message)}`, '_blank');
+            } else {
+                navigator.clipboard.writeText(message);
+                showAlert('تم نسخ الرسالة بنجاح', 'success');
+            }
+        }
+
+        // ==================== جعل الدوال متاحة عالمياً ====================
+        window.copyReferralCode = copyReferralCode;
+        window.shareReferral = shareReferral;
+        window.shareViaWhatsApp = shareViaWhatsApp;
+        window.shareViaTelegram = shareViaTelegram;
+        window.shareViaMessage = shareViaMessage;
+
+        // ==================== تحميل البيانات عند تسجيل الدخول ====================
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                loadReferralData();
+            } else {
+                window.location.href = 'index.html';
+            }
+        });
+    </script>
+</body>
+</html>
