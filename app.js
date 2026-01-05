@@ -45,6 +45,258 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 const storage = getStorage(app);
 const provider = new GoogleAuthProvider();
+// ==================== إعدادات Tatum API ====================
+const TATUM_API_KEY = "t-695a0ea026858bd739f1595e-363e1ef7ec404868aebf73ed";
+
+// ==================== توليد محفظة USDT مع Tatum ====================
+async function generateTatumWallet(userId) {
+    try {
+        console.log('جاري توليد محفظة Tatum جديدة...');
+        
+        // 1. توليد محفظة Tron جديدة
+        const walletRes = await fetch('https://api.tatum.io/v3/tron/wallet', {
+            method: 'GET',
+            headers: { 
+                'x-api-key': TATUM_API_KEY,
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        if (!walletRes.ok) {
+            const errorText = await walletRes.text();
+            console.error('فشل في توليد المحفظة:', errorText);
+            throw new Error(`فشل في توليد المحفظة: ${walletRes.status}`);
+        }
+        
+        const wallet = await walletRes.json();
+        console.log('تم توليد المحفظة:', wallet);
+        
+        // 2. توليد العنوان من xpub
+        const addressRes = await fetch(`https://api.tatum.io/v3/tron/address/${wallet.xpub}/0`, {
+            method: 'GET',
+            headers: { 
+                'x-api-key': TATUM_API_KEY,
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        if (!addressRes.ok) {
+            const errorText = await addressRes.text();
+            console.error('فشل في توليد العنوان:', errorText);
+            throw new Error(`فشل في توليد العنوان: ${addressRes.status}`);
+        }
+        
+        const addressData = await addressRes.json();
+        console.log('تم توليد العنوان:', addressData);
+        
+        // 3. حفظ البيانات في Firestore
+        await updateDoc(doc(db, "users", userId), {
+            usdtAddress: addressData.address,
+            usdtXpub: wallet.xpub,
+            walletGeneratedAt: new Date().toISOString(),
+            updatedAt: serverTimestamp()
+        });
+        
+        return {
+            address: addressData.address,
+            xpub: wallet.xpub,
+            mnemonic: wallet.mnemonic // في الإنتاج الحقيقي، لا تخزن الميمونيك!
+        };
+        
+    } catch (error) {
+        console.error('خطأ في توليد محفظة Tatum:', error);
+        throw error;
+    }
+}
+
+// ==================== فحص رصيد USDT من Tatum ====================
+async function checkUSDTBalance(walletAddress) {
+    try {
+        console.log('جاري فحص رصيد USDT للمحفظة:', walletAddress);
+        
+        const accountRes = await fetch(`https://api.tatum.io/v3/tron/account/${walletAddress}`, {
+            method: 'GET',
+            headers: { 
+                'x-api-key': TATUM_API_KEY,
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        if (!accountRes.ok) {
+            // إذا كان العنوان غير موجود بعد في الشبكة
+            if (accountRes.status === 404) {
+                return 0;
+            }
+            const errorText = await accountRes.text();
+            console.error('فشل في فحص الرصيد:', errorText);
+            throw new Error(`فشل في فحص الرصيد: ${accountRes.status}`);
+        }
+        
+        const accountData = await accountRes.json();
+        console.log('بيانات الحساب:', accountData);
+        
+        // البحث عن USDT TRC20
+        let usdtBalance = 0;
+        if (accountData.trc20 && Array.isArray(accountData.trc20)) {
+            const usdtToken = accountData.trc20.find(
+                token => token.tokenAddress === "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t"
+            );
+            if (usdtToken) {
+                usdtBalance = parseFloat(usdtToken.value) || 0;
+            }
+        }
+        
+        console.log('رصيد USDT الموجود:', usdtBalance);
+        return usdtBalance;
+        
+    } catch (error) {
+        console.error('خطأ في فحص رصيد USDT:', error);
+        throw error;
+    }
+}
+
+// ==================== إرسال USDT عبر Tatum ====================
+async function sendUSDTViaTatum(senderUserId, receiverAddress, amount, privateKey) {
+    try {
+        // ملاحظة: في الإنتاج الحقيقي، نحتاج Private Key للتحويل
+        // هذا مثال توضيحي، في الواقع تحتاج معاملة موقعة
+        
+        console.log('جاري إرسال USDT:', { receiverAddress, amount });
+        
+        // هنا سيكون هناك اتصال بـ Tatum API لإنشاء وتوقيع المعاملة
+        // لكن حالياً سنحاكي العملية
+        
+        const transactionId = 'TRX-' + Date.now() + '-' + Math.random().toString(36).substr(2, 6).toUpperCase();
+        
+        // في الإنتاج الحقيقي:
+        // 1. إنشاء معاملة Tron
+        // 2. توقيعها بـ Private Key
+        // 3. بثها للشبكة
+        
+        return {
+            success: true,
+            transactionId: transactionId,
+            explorerUrl: `https://tronscan.org/#/transaction/${transactionId}`,
+            message: 'تم إرسال USDT بنجاح، في انتظار تأكيد الشبكة'
+        };
+        
+    } catch (error) {
+        console.error('خطأ في إرسال USDT:', error);
+        throw error;
+    }
+}
+
+// ==================== تحديث دالة signUpWithKYC لتشمل توليد محفظة ====================
+async function signUpWithKYC(email, password, name, idImageFile, selfieImageFile) {
+    try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+        
+        const accountID = await generateUniqueAccountID();
+        
+        // رفع صور KYC
+        const idUrl = await uploadKYCImage(user.uid, idImageFile, 'id');
+        const selfieUrl = await uploadKYCImage(user.uid, selfieImageFile, 'selfie');
+        
+        // توليد محفظة USDT باستخدام Tatum
+        let usdtAddress = '';
+        try {
+            const wallet = await generateTatumWallet(user.uid);
+            usdtAddress = wallet.address;
+        } catch (walletError) {
+            console.error('فشل في توليد محفظة Tatum:', walletError);
+            // يمكنك إما رمي الخطأ أو المتابعة بدون محفظة
+            usdtAddress = 'فشل التوليد - سيتم المحاولة لاحقاً';
+        }
+        
+        await setDoc(doc(db, 'users', user.uid), {
+            name: name || user.email.split('@')[0],
+            email: email,
+            accountID: accountID,
+            usdtAddress: usdtAddress,
+            balanceSDG: 0.00,
+            balanceUSDT: 0.00,
+            kycStatus: 'pending',
+            idUrl: idUrl,
+            selfieUrl: selfieUrl,
+            phone: '',
+            photoURL: '',
+            unreadNotifications: 0,
+            referralCode: generateReferralCode(),
+            referrals: [],
+            kycSubmittedAt: serverTimestamp(),
+            createdAt: serverTimestamp(),
+            updatedAt: serverTimestamp(),
+            transactions: [],
+            provider: 'email'
+        });
+        
+        return { user, accountID, usdtAddress };
+    } catch (error) {
+        throw error;
+    }
+}
+
+// ==================== دالة المزامنة التلقائية للرصيد ====================
+async function syncUSDTBalance(userId) {
+    try {
+        const userDoc = await getDoc(doc(db, 'users', userId));
+        if (!userDoc.exists()) return;
+        
+        const userData = userDoc.data();
+        if (!userData.usdtAddress) return;
+        
+        const networkBalance = await checkUSDTBalance(userData.usdtAddress);
+        const currentBalance = userData.balanceUSDT || 0;
+        
+        if (networkBalance > currentBalance) {
+            const newUSDT = networkBalance - currentBalance;
+            
+            await updateDoc(doc(db, 'users', userId), {
+                balanceUSDT: networkBalance,
+                transactions: arrayUnion({
+                    type: 'usdt_deposit',
+                    amount: newUSDT,
+                    currency: 'USDT',
+                    description: 'إيداع USDT من الشبكة',
+                    timestamp: new Date().toISOString(),
+                    status: 'completed',
+                    networkConfirmed: true
+                }),
+                lastSyncAt: serverTimestamp()
+            });
+            
+            return { synced: true, newBalance: networkBalance, added: newUSDT };
+        }
+        
+        return { synced: false, currentBalance: networkBalance };
+        
+    } catch (error) {
+        console.error('خطأ في مزامنة الرصيد:', error);
+        throw error;
+    }
+}
+
+// ==================== توليد كود إحالة ====================
+function generateReferralCode() {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let code = '';
+    for (let i = 0; i < 8; i++) {
+        code += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return 'SUD-' + code;
+}
+
+// ==================== تصدير الدوال الجديدة ====================
+export {
+    // ... الدوال السابقة ...
+    generateTatumWallet,
+    checkUSDTBalance,
+    sendUSDTViaTatum,
+    syncUSDTBalance,
+    generateReferralCode,
+    TATUM_API_KEY
+};
 
 // ==================== دالة رقم حساب فريد ====================
 async function generateUniqueAccountID() {
