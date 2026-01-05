@@ -20,8 +20,15 @@ import {
     collection,
     query,
     where,
-    getDocs
+    getDocs,
+    addDoc
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { 
+    getStorage,
+    ref,
+    uploadBytes,
+    getDownloadURL
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyB3vxJu_et-P80ek30I3MRdC_lGhooCCsc",
@@ -36,19 +43,398 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
+const storage = getStorage(app);
 const provider = new GoogleAuthProvider();
 
-// دالة لإنشاء رقم حساب فريد للموقع
-function generateAccountID() {
-    return 'SP-' + Math.floor(100000 + Math.random() * 900000);
+// ==================== دالة رقم حساب فريد ====================
+async function generateUniqueAccountID() {
+    let accountID;
+    let isUnique = false;
+    
+    while (!isUnique) {
+        accountID = 'SP' + Math.floor(100000 + Math.random() * 900000);
+        
+        const usersRef = collection(db, "users");
+        const q = query(usersRef, where("accountID", "==", accountID));
+        const querySnapshot = await getDocs(q);
+        
+        if (querySnapshot.empty) {
+            isUnique = true;
+        }
+    }
+    
+    return accountID;
 }
 
-// دالة مؤقتة لتوليد عنوان USDT (سيتم استبدالها لاحقاً بـ API Coinremitter)
-function generateUSDTAddressPlaceholder() {
-    return "T" + Math.random().toString(36).substr(2, 33).toUpperCase();
+// ==================== دالة KYC ====================
+async function uploadKYCImage(userId, file, type) {
+    try {
+        const storageRef = ref(storage, `kyc/${userId}/${type}_${Date.now()}`);
+        await uploadBytes(storageRef, file);
+        const downloadURL = await getDownloadURL(storageRef);
+        return downloadURL;
+    } catch (error) {
+        throw error;
+    }
 }
 
-// دالة لعرض التنبيهات
+// ==================== إنشاء حساب مع KYC ====================
+async function signUpWithKYC(email, password, name, idImageFile, selfieImageFile) {
+    try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+        
+        const accountID = await generateUniqueAccountID();
+        
+        const idUrl = await uploadKYCImage(user.uid, idImageFile, 'id');
+        const selfieUrl = await uploadKYCImage(user.uid, selfieImageFile, 'selfie');
+        
+        await setDoc(doc(db, 'users', user.uid), {
+            name: name || user.email.split('@')[0],
+            email: email,
+            accountID: accountID,
+            usdtAddress: '',
+            balanceSDG: 0.00,
+            balanceUSDT: 0.00,
+            kycStatus: 'pending',
+            idUrl: idUrl,
+            selfieUrl: selfieUrl,
+            phone: '',
+            photoURL: '',
+            unreadNotifications: 0,
+            createdAt: serverTimestamp(),
+            updatedAt: serverTimestamp(),
+            transactions: [],
+            provider: 'email'
+        });
+        
+        return { user, accountID };
+    } catch (error) {
+        throw error;
+    }
+}
+
+// ==================== توليد صورة الإشعار ====================
+async function generateNotificationImage(notificationData) {
+    return new Promise((resolve) => {
+        try {
+            const canvas = document.createElement('canvas');
+            canvas.width = 800;
+            canvas.height = 400;
+            const ctx = canvas.getContext('2d');
+
+            const gradient = ctx.createLinearGradient(0, 0, 800, 400);
+            gradient.addColorStop(0, '#0d9488');
+            gradient.addColorStop(1, '#0891b2');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, 800, 400);
+
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+            ctx.font = '40px "Cairo", Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('🇸🇩 Sudan Pay', 400, 60);
+
+            ctx.fillStyle = 'white';
+            ctx.font = 'bold 36px "Cairo", Arial';
+            ctx.fillText('تمت عملية التحويل بنجاح', 400, 120);
+
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(100, 150);
+            ctx.lineTo(700, 150);
+            ctx.stroke();
+
+            ctx.font = '28px "Cairo", Arial';
+            ctx.textAlign = 'right';
+            
+            ctx.fillText(`👤 إلى: ${notificationData.receiverName}`, 700, 200);
+            ctx.fillText(`📊 رقم الحساب: ${notificationData.receiverAccount}`, 700, 240);
+            ctx.fillText(`💰 المبلغ: ${notificationData.amount.toLocaleString()} ${notificationData.currency}`, 700, 280);
+            ctx.fillText(`📅 ${notificationData.date}`, 700, 320);
+            
+            if (notificationData.comment) {
+                ctx.fillText(`💬 ${notificationData.comment}`, 700, 360);
+            }
+
+            const imageUrl = canvas.toDataURL('image/png');
+            resolve(imageUrl);
+        } catch (error) {
+            console.error('خطأ في توليد صورة الإشعار:', error);
+            resolve(null);
+        }
+    });
+}
+
+// ==================== إرسال إشعار داخلي ====================
+async function sendInternalNotification(senderId, receiverId, notificationData) {
+    try {
+        const notificationImage = await generateNotificationImage(notificationData);
+        
+        const notificationRef = await addDoc(collection(db, 'notifications'), {
+            senderId: senderId,
+            receiverId: receiverId,
+            type: notificationData.type || 'transfer',
+            amount: notificationData.amount,
+            currency: notificationData.currency,
+            receiverName: notificationData.receiverName,
+            receiverAccount: notificationData.receiverAccount,
+            comment: notificationData.comment || '',
+            date: notificationData.date || new Date().toLocaleDateString('ar-EG'),
+            imageUrl: notificationImage,
+            isRead: false,
+            createdAt: serverTimestamp(),
+            readAt: null
+        });
+
+        await updateDoc(doc(db, 'users', receiverId), {
+            unreadNotifications: increment(1)
+        });
+
+        return {
+            success: true,
+            notificationId: notificationRef.id,
+            hasImage: !!notificationImage
+        };
+    } catch (error) {
+        console.error('خطأ في إرسال الإشعار:', error);
+        throw error;
+    }
+}
+
+// ==================== تحويل USDT إلى SDG ====================
+async function convertUSDTtoSDG(userId, usdtAmount) {
+    try {
+        const conversionRate = 2600;
+        const sdgAmount = usdtAmount * conversionRate;
+        
+        const userRef = doc(db, 'users', userId);
+        const userDoc = await getDoc(userRef);
+        
+        if (!userDoc.exists()) {
+            throw new Error('المستخدم غير موجود');
+        }
+        
+        const userData = userDoc.data();
+        
+        if (userData.balanceUSDT < usdtAmount) {
+            throw new Error('رصيد USDT غير كافٍ');
+        }
+        
+        await updateDoc(userRef, {
+            balanceUSDT: increment(-usdtAmount),
+            balanceSDG: increment(sdgAmount),
+            transactions: arrayUnion({
+                type: 'convert',
+                from: 'USDT',
+                to: 'SDG',
+                amount: usdtAmount,
+                convertedAmount: sdgAmount,
+                rate: conversionRate,
+                timestamp: new Date().toISOString(),
+                status: 'completed'
+            }),
+            updatedAt: serverTimestamp()
+        });
+        
+        return { success: true, sdgAmount };
+    } catch (error) {
+        throw error;
+    }
+}
+
+// ==================== تحويل SDG بين المستخدمين ====================
+async function transferSDG(senderUserId, receiverAccountID, amount, description = '', comment = '') {
+    try {
+        const usersRef = collection(db, "users");
+        const q = query(usersRef, where("accountID", "==", receiverAccountID));
+        const querySnapshot = await getDocs(q);
+        
+        if (querySnapshot.empty) {
+            throw new Error('رقم الحساب غير موجود');
+        }
+        
+        const receiverDoc = querySnapshot.docs[0];
+        const receiverId = receiverDoc.id;
+        const receiverData = receiverDoc.data();
+        
+        if (senderUserId === receiverId) {
+            throw new Error('لا يمكنك التحويل لنفسك');
+        }
+        
+        const senderDoc = await getDoc(doc(db, 'users', senderUserId));
+        const senderData = senderDoc.data();
+        
+        if (senderData.balanceSDG < amount) {
+            throw new Error('رصيدك غير كافٍ');
+        }
+        
+        const timestamp = new Date().toISOString();
+        
+        await updateDoc(doc(db, 'users', senderUserId), {
+            balanceSDG: increment(-amount),
+            transactions: arrayUnion({
+                type: 'send',
+                amount: amount,
+                currency: 'SDG',
+                to: receiverAccountID,
+                description: description || `تحويل إلى ${receiverData.name}`,
+                timestamp: timestamp,
+                status: 'completed'
+            })
+        });
+        
+        await updateDoc(doc(db, 'users', receiverId), {
+            balanceSDG: increment(amount),
+            transactions: arrayUnion({
+                type: 'receive',
+                amount: amount,
+                currency: 'SDG',
+                from: senderData.accountID,
+                description: description || `استلام من ${senderData.name}`,
+                timestamp: timestamp,
+                status: 'completed'
+            })
+        });
+        
+        const notificationData = {
+            type: 'receive',
+            amount: amount,
+            currency: 'SDG',
+            receiverName: senderData.name,
+            receiverAccount: senderData.accountID,
+            date: new Date().toLocaleDateString('ar-EG'),
+            comment: comment || description || 'تحويل ناجح'
+        };
+        
+        await sendInternalNotification(senderUserId, receiverId, notificationData);
+        
+        const senderNotificationData = {
+            type: 'send_confirmation',
+            amount: amount,
+            currency: 'SDG',
+            receiverName: receiverData.name,
+            receiverAccount: receiverAccountID,
+            date: new Date().toLocaleDateString('ar-EG'),
+            comment: 'تم إرسال التحويل بنجاح'
+        };
+        
+        await sendInternalNotification(senderUserId, senderUserId, senderNotificationData);
+        
+        return { 
+            success: true, 
+            receiverName: receiverData.name,
+            transactionId: `${senderData.accountID}-${timestamp}`
+        };
+    } catch (error) {
+        throw error;
+    }
+}
+
+// ==================== تحويل USDT عبر عنوان المحفظة ====================
+async function transferUSDT(senderUserId, receiverWalletAddress, amount, description = '') {
+    try {
+        const senderDoc = await getDoc(doc(db, 'users', senderUserId));
+        const senderData = senderDoc.data();
+        
+        if (senderData.balanceUSDT < amount) {
+            throw new Error('رصيد USDT غير كافٍ');
+        }
+        
+        const transactionId = 'TRX-' + Math.random().toString(36).substr(2, 9).toUpperCase();
+        
+        await updateDoc(doc(db, 'users', senderUserId), {
+            balanceUSDT: increment(-amount),
+            transactions: arrayUnion({
+                type: 'send_usdt',
+                amount: amount,
+                currency: 'USDT',
+                to: receiverWalletAddress,
+                description: description || `تحويل USDT`,
+                timestamp: new Date().toISOString(),
+                transactionId: transactionId,
+                status: 'pending'
+            })
+        });
+        
+        return { 
+            success: true, 
+            transactionId: transactionId,
+            message: 'تم إرسال USDT، في انتظار تأكيد الشبكة'
+        };
+    } catch (error) {
+        throw error;
+    }
+}
+
+// ==================== سحب الأموال ====================
+async function withdrawFunds(userId, amount, currency = 'SDG', method = 'bank') {
+    try {
+        const userRef = doc(db, 'users', userId);
+        const userDoc = await getDoc(userRef);
+        const userData = userDoc.data();
+        
+        const balanceField = currency === 'SDG' ? 'balanceSDG' : 'balanceUSDT';
+        
+        if (userData[balanceField] < amount) {
+            throw new Error('الرصيد غير كافٍ');
+        }
+        
+        const withdrawalRef = await addDoc(collection(db, 'withdrawals'), {
+            userId: userId,
+            accountID: userData.accountID,
+            amount: amount,
+            currency: currency,
+            method: method,
+            status: 'pending',
+            createdAt: serverTimestamp(),
+            processedAt: null
+        });
+        
+        await updateDoc(userRef, {
+            [balanceField]: increment(-amount),
+            transactions: arrayUnion({
+                type: 'withdrawal_request',
+                amount: amount,
+                currency: currency,
+                withdrawalId: withdrawalRef.id,
+                timestamp: new Date().toISOString(),
+                status: 'pending'
+            })
+        });
+        
+        return { 
+            success: true, 
+            withdrawalId: withdrawalRef.id,
+            message: 'تم تقديم طلب السحب بنجاح، سيتم معالجته خلال 24 ساعة'
+        };
+    } catch (error) {
+        throw error;
+    }
+}
+
+// ==================== البحث عن مستخدم برقم الحساب ====================
+async function getUserByAccountID(accountID) {
+    try {
+        const usersRef = collection(db, "users");
+        const q = query(usersRef, where("accountID", "==", accountID));
+        const querySnapshot = await getDocs(q);
+        
+        if (querySnapshot.empty) {
+            return null;
+        }
+        
+        const userDoc = querySnapshot.docs[0];
+        return {
+            id: userDoc.id,
+            ...userDoc.data()
+        };
+    } catch (error) {
+        throw error;
+    }
+}
+
+// ==================== الدوال الأساسية ====================
 function showAlert(message, type = 'error') {
     const existingAlert = document.querySelector('.custom-alert');
     if (existingAlert) {
@@ -85,7 +471,6 @@ function showAlert(message, type = 'error') {
     }, 5000);
 }
 
-// تسجيل الدخول بالبريد
 async function loginWithEmail(email, password) {
     try {
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
@@ -95,7 +480,6 @@ async function loginWithEmail(email, password) {
     }
 }
 
-// تسجيل الدخول بجوجل
 async function loginWithGoogle() {
     try {
         const result = await signInWithPopup(auth, provider);
@@ -108,8 +492,8 @@ async function loginWithGoogle() {
             await setDoc(userDocRef, {
                 name: user.displayName || user.email.split('@')[0],
                 email: user.email,
-                accountID: generateAccountID(),
-                usdtAddress: generateUSDTAddressPlaceholder(),
+                accountID: await generateUniqueAccountID(),
+                usdtAddress: '',
                 balanceSDG: 0.00,
                 balanceUSDT: 0.00,
                 photoURL: user.photoURL || '',
@@ -125,35 +509,6 @@ async function loginWithGoogle() {
     }
 }
 
-// إنشاء حساب جديد
-async function signUpWithEmail(email, password, name = '') {
-    try {
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        const user = userCredential.user;
-        const accountID = generateAccountID();
-        
-        await setDoc(doc(db, 'users', user.uid), {
-            name: name || user.email.split('@')[0],
-            email: email,
-            accountID: accountID,
-            usdtAddress: generateUSDTAddressPlaceholder(),
-            balanceSDG: 0.00,
-            balanceUSDT: 0.00,
-            phone: '',
-            photoURL: '',
-            createdAt: serverTimestamp(),
-            updatedAt: serverTimestamp(),
-            transactions: [],
-            provider: 'email'
-        });
-        
-        return { user, accountID };
-    } catch (error) {
-        throw error;
-    }
-}
-
-// تسجيل الخروج
 async function logoutUser() {
     try {
         await signOut(auth);
@@ -163,7 +518,6 @@ async function logoutUser() {
     }
 }
 
-// جلب بيانات المستخدم
 async function getUserData(userId) {
     try {
         const userDoc = await getDoc(doc(db, 'users', userId));
@@ -176,72 +530,25 @@ async function getUserData(userId) {
     }
 }
 
-// تحديث رصيد المستخدم
-async function updateUserBalance(userId, amount, currency = 'SDG', type = 'deposit', description = '') {
-    try {
-        const userRef = doc(db, 'users', userId);
-        const balanceField = currency === 'SDG' ? 'balanceSDG' : 'balanceUSDT';
-        
-        await updateDoc(userRef, {
-            [balanceField]: increment(type === 'send' ? -amount : amount),
-            transactions: arrayUnion({
-                type: type,
-                amount: amount,
-                currency: currency,
-                description: description,
-                timestamp: new Date().toISOString(),
-                status: 'completed'
-            }),
-            updatedAt: serverTimestamp()
-        });
-    } catch (error) {
-        throw error;
-    }
-}
+// ==================== تصدير الدوال ====================
+export { 
+    auth, db, storage, app, provider,
+    generateUniqueAccountID,
+    signUpWithKYC,
+    convertUSDTtoSDG,
+    transferSDG,
+    transferUSDT,
+    withdrawFunds,
+    getUserByAccountID,
+    sendInternalNotification,
+    loginWithEmail, 
+    loginWithGoogle, 
+    logoutUser, 
+    getUserData,
+    showAlert
+};
 
-// دالة التحويل بين المستخدمين باستخدام رقم الحساب (تُستخدم في صفحة send)
-async function transferByAccountID(receiverAccountID, amount, currency = 'SDG') {
-    try {
-        const currentUser = auth.currentUser;
-        if (!currentUser) throw new Error('يجب تسجيل الدخول أولاً');
-
-        // 1. البحث عن المستلم بواسطة accountID
-        const usersRef = collection(db, "users");
-        const q = query(usersRef, where("accountID", "==", receiverAccountID));
-        const querySnapshot = await getDocs(q);
-        
-        if (querySnapshot.empty) {
-            throw new Error('عذراً، رقم الحساب هذا غير موجود في النظام');
-        }
-
-        const receiverDoc = querySnapshot.docs[0];
-        const receiverId = receiverDoc.id;
-        const receiverData = receiverDoc.data();
-
-        if (currentUser.uid === receiverId) {
-            throw new Error('لا يمكنك التحويل إلى حسابك الشخصي');
-        }
-
-        // 2. التحقق من رصيد المرسل
-        const senderData = await getUserData(currentUser.uid);
-        const balanceField = currency === 'SDG' ? 'balanceSDG' : 'balanceUSDT';
-        if (senderData[balanceField] < amount) {
-            throw new Error('عذراً، رصيدك غير كافٍ لإتمام هذه العملية');
-        }
-
-        // 3. تنفيذ عملية الخصم من المرسل
-        await updateUserBalance(currentUser.uid, amount, currency, 'send', `تحويل إلى ${receiverAccountID}`);
-
-        // 4. تنفيذ عملية الإضافة للمستلم
-        await updateUserBalance(receiverId, amount, currency, 'receive', `استلام من ${senderData.accountID}`);
-
-        return { success: true, receiverName: receiverData.name };
-    } catch (error) {
-        throw error;
-    }
-}
-
-// إضافة أنماط التنبيهات
+// ==================== تهيئة التطبيق ====================
 function addAlertStyles() {
     if (document.querySelector('.alert-styles')) return;
     
@@ -279,7 +586,6 @@ function addAlertStyles() {
     document.head.appendChild(style);
 }
 
-// تهيئة التطبيق
 function initApp() {
     addAlertStyles();
     onAuthStateChanged(auth, (user) => {
@@ -289,27 +595,11 @@ function initApp() {
     });
 }
 
-// تصدير الدوال
-export { 
-    auth, db, app, provider,
-    generateAccountID,
-    loginWithEmail, 
-    loginWithGoogle, 
-    signUpWithEmail, 
-    logoutUser, 
-    getUserData,
-    updateUserBalance,
-    transferByAccountID,
-    showAlert,
-    initApp 
-};
-
-initApp();
-
-// جعل الدوال متاحة عالمياً لصفحة html
+// ==================== جعل الدوال متاحة عالمياً ====================
 window.loginWithEmail = loginWithEmail;
 window.loginWithGoogle = loginWithGoogle;
 window.logoutUser = logoutUser;
 window.showAlert = showAlert;
-window.transferByAccountID = transferByAccountID;
+window.transferSDG = transferSDG;
 
+initApp();
