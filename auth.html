@@ -41,17 +41,17 @@
         .signup-container {
             background: white;
             width: 100%;
-            max-width: 450px;
+            max-width: 500px;
             border-radius: 24px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-            padding: 50px 40px;
+            padding: 40px 35px;
             text-align: center;
         }
 
         .logo {
             font-size: 4rem;
             color: var(--primary);
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
 
         h1 {
@@ -63,13 +63,13 @@
 
         .subtitle {
             color: var(--gray);
-            margin-bottom: 40px;
-            font-size: 1.1rem;
+            margin-bottom: 30px;
+            font-size: 1rem;
             line-height: 1.6;
         }
 
         .input-group {
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             position: relative;
         }
 
@@ -79,15 +79,15 @@
             top: 50%;
             transform: translateY(-50%);
             color: var(--gray);
-            font-size: 1.2rem;
+            font-size: 1.1rem;
         }
 
         input {
             width: 100%;
-            padding: 18px 60px 18px 20px;
+            padding: 16px 55px 16px 20px;
             border: 2px solid var(--border);
-            border-radius: 14px;
-            font-size: 1.1rem;
+            border-radius: 12px;
+            font-size: 1rem;
             transition: all 0.3s;
             background: #f8fafc;
         }
@@ -99,6 +99,55 @@
             box-shadow: 0 0 0 4px rgba(13, 148, 136, 0.1);
         }
 
+        .kyc-section {
+            background: #f8fafc;
+            border: 2px dashed var(--primary);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 25px 0;
+            text-align: right;
+        }
+
+        .kyc-title {
+            font-size: 1.1rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .file-upload {
+            margin-bottom: 15px;
+        }
+
+        .file-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+            text-align: right;
+        }
+
+        .file-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            background: white;
+        }
+
+        .file-preview {
+            width: 100%;
+            height: 150px;
+            border-radius: 8px;
+            object-fit: cover;
+            margin-top: 10px;
+            border: 1px solid var(--border);
+            display: none;
+        }
+
         .password-toggle {
             position: absolute;
             left: 20px;
@@ -108,7 +157,7 @@
             border: none;
             color: var(--gray);
             cursor: pointer;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             padding: 5px;
         }
 
@@ -117,13 +166,13 @@
             color: white;
             border: none;
             padding: 18px;
-            border-radius: 14px;
+            border-radius: 12px;
             font-size: 1.2rem;
             font-weight: 700;
             cursor: pointer;
             transition: all 0.3s;
             width: 100%;
-            margin: 10px 0 25px;
+            margin: 20px 0 25px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -176,41 +225,34 @@
             to { transform: rotate(360deg); }
         }
 
-        .password-strength {
-            margin-top: 8px;
-            font-size: 0.9rem;
+        .terms {
+            font-size: 0.85rem;
             color: var(--gray);
             text-align: right;
+            margin-top: 15px;
         }
 
-        .password-strength.strong {
-            color: var(--success);
-        }
-
-        .password-strength.medium {
-            color: var(--warning);
-        }
-
-        .password-strength.weak {
-            color: var(--danger);
+        .terms a {
+            color: var(--primary);
+            text-decoration: none;
         }
 
         @media (max-width: 480px) {
             .signup-container {
-                padding: 40px 25px;
+                padding: 30px 25px;
                 margin: 10px;
             }
             
             .logo {
-                font-size: 3.5rem;
+                font-size: 3rem;
             }
             
             h1 {
-                font-size: 1.8rem;
+                font-size: 1.5rem;
             }
             
             input, .btn-primary {
-                padding: 16px;
+                padding: 14px;
             }
         }
     </style>
@@ -226,7 +268,7 @@
         
         <div class="input-group">
             <i class="fas fa-user input-icon"></i>
-            <input type="text" id="name" placeholder="الاسم الكامل (اختياري)">
+            <input type="text" id="name" placeholder="الاسم الكامل (مطلوب)" required>
         </div>
         
         <div class="input-group">
@@ -237,22 +279,45 @@
         <div class="input-group">
             <i class="fas fa-lock input-icon"></i>
             <button type="button" class="password-toggle" onclick="togglePassword('password')">
-                <i class="fas fa-eye"></i>
+                <i class="fas fa-eye" id="password-eye"></i>
             </button>
-            <input type="password" id="password" placeholder="كلمة المرور (6 أحرف على الأقل)" required minlength="6">
-            <div id="password-strength" class="password-strength"></div>
+            <input type="password" id="password" placeholder="كلمة المرور (8 أحرف على الأقل)" required minlength="8">
         </div>
         
         <div class="input-group">
             <i class="fas fa-lock input-icon"></i>
             <button type="button" class="password-toggle" onclick="togglePassword('confirmPassword')">
-                <i class="fas fa-eye"></i>
+                <i class="fas fa-eye" id="confirm-password-eye"></i>
             </button>
             <input type="password" id="confirmPassword" placeholder="تأكيد كلمة المرور" required>
         </div>
         
+        <div class="kyc-section">
+            <div class="kyc-title">
+                <i class="fas fa-id-card"></i>
+                التحقق من الهوية (KYC)
+            </div>
+            
+            <div class="file-upload">
+                <label class="file-label">صورة الهوية الشخصية:</label>
+                <input type="file" id="idImage" class="file-input" accept="image/*" required>
+                <img id="idPreview" class="file-preview" alt="معاينة صورة الهوية">
+            </div>
+            
+            <div class="file-upload">
+                <label class="file-label">صورة سيلفي مع الهوية:</label>
+                <input type="file" id="selfieImage" class="file-input" accept="image/*" required>
+                <img id="selfiePreview" class="file-preview" alt="معاينة صورة السيلفي">
+            </div>
+        </div>
+        
+        <div class="terms">
+            <input type="checkbox" id="agreeTerms" required>
+            <label for="agreeTerms">أوافق على <a href="#">الشروط والأحكام</a> و <a href="#">سياسة الخصوصية</a></label>
+        </div>
+        
         <button id="signup-btn" class="btn-primary">
-            <i class="fas fa-user-plus"></i> إنشاء الحساب
+            <i class="fas fa-user-plus"></i> إنشاء الحساب وإرسال للتحقق
         </button>
         
         <div class="auth-footer">
@@ -261,75 +326,59 @@
     </div>
 
     <script type="module">
-        import { signUpWithEmail, showAlert } from './app.js';
+        import { signUpWithKYC, showAlert } from './app.js';
         
-        // دالة تبديل كلمة المرور
+        function previewImage(inputId, previewId) {
+            const input = document.getElementById(inputId);
+            const preview = document.getElementById(previewId);
+            
+            input.addEventListener('change', function() {
+                if (this.files && this.files[0]) {
+                    const reader = new FileReader();
+                    
+                    reader.onload = function(e) {
+                        preview.src = e.target.result;
+                        preview.style.display = 'block';
+                    }
+                    
+                    reader.readAsDataURL(this.files[0]);
+                }
+            });
+        }
+        
+        previewImage('idImage', 'idPreview');
+        previewImage('selfieImage', 'selfiePreview');
+        
         function togglePassword(fieldId) {
             const passwordInput = document.getElementById(fieldId);
-            const toggleIcon = passwordInput.parentElement.querySelector('.password-toggle i');
+            const eyeIcon = document.getElementById(`${fieldId === 'password' ? 'password' : 'confirm-password'}-eye`);
             
             if (passwordInput.type === 'password') {
                 passwordInput.type = 'text';
-                toggleIcon.className = 'fas fa-eye-slash';
+                eyeIcon.className = 'fas fa-eye-slash';
             } else {
                 passwordInput.type = 'password';
-                toggleIcon.className = 'fas fa-eye';
+                eyeIcon.className = 'fas fa-eye';
             }
         }
         
-        // دالة التحقق من قوة كلمة المرور
-        function checkPasswordStrength(password) {
-            const strengthText = document.getElementById('password-strength');
-            
-            if (password.length === 0) {
-                strengthText.textContent = '';
-                strengthText.className = 'password-strength';
-                return;
-            }
-            
-            if (password.length < 6) {
-                strengthText.textContent = 'ضعيفة جداً';
-                strengthText.className = 'password-strength weak';
-                return 'weak';
-            }
-            
-            let score = 0;
-            if (password.length >= 8) score++;
-            if (/[A-Z]/.test(password)) score++;
-            if (/[0-9]/.test(password)) score++;
-            if (/[^A-Za-z0-9]/.test(password)) score++;
-            
-            if (score <= 1) {
-                strengthText.textContent = 'ضعيفة';
-                strengthText.className = 'password-strength weak';
-                return 'weak';
-            } else if (score <= 3) {
-                strengthText.textContent = 'متوسطة';
-                strengthText.className = 'password-strength medium';
-                return 'medium';
-            } else {
-                strengthText.textContent = 'قوية';
-                strengthText.className = 'password-strength strong';
-                return 'strong';
-            }
-        }
-        
-        // دالة إنشاء حساب
         async function handleSignup() {
             const name = document.getElementById('name').value.trim();
             const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value;
             const confirmPassword = document.getElementById('confirmPassword').value;
+            const idImage = document.getElementById('idImage').files[0];
+            const selfieImage = document.getElementById('selfieImage').files[0];
+            const agreeTerms = document.getElementById('agreeTerms').checked;
             const signupBtn = document.getElementById('signup-btn');
             
-            // التحقق من البيانات
-            if (!email || !password || !confirmPassword) {
+            if (!name || !email || !password || !confirmPassword) {
                 showAlert('الرجاء إكمال جميع الحقول الإلزامية');
                 return;
             }
             
-            if (password.length < 6) {
-                showAlert('كلمة المرور يجب أن تكون 6 أحرف على الأقل');
+            if (password.length < 8) {
+                showAlert('كلمة المرور يجب أن تكون 8 أحرف على الأقل');
                 return;
             }
             
@@ -338,7 +387,16 @@
                 return;
             }
             
-            // التحقق من صحة البريد الإلكتروني
+            if (!idImage || !selfieImage) {
+                showAlert('الرجاء رفع صور التحقق من الهوية');
+                return;
+            }
+            
+            if (!agreeTerms) {
+                showAlert('يجب الموافقة على الشروط والأحكام');
+                return;
+            }
+            
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(email)) {
                 showAlert('البريد الإلكتروني غير صالح');
@@ -346,18 +404,19 @@
             }
             
             try {
-                signupBtn.innerHTML = '<div class="loading"></div> جاري إنشاء الحساب...';
+                signupBtn.innerHTML = '<div class="loading"></div> جاري إنشاء الحساب وإرسال للتحقق...';
                 signupBtn.disabled = true;
                 
-                const result = await signUpWithEmail(email, password, name);
-                showAlert(`تم إنشاء الحساب بنجاح! رقم حسابك: ${result.accountID}`, 'success');
+                const result = await signUpWithKYC(email, password, name, idImage, selfieImage);
+                
+                showAlert('تم إنشاء الحساب بنجاح وتم إرسال طلب التحقق! ستصلك رسالة تفعيل بعد مراجعة بياناتك.', 'success');
                 
                 setTimeout(() => {
-                    window.location.href = 'dashboard.html';
-                }, 2000);
+                    window.location.href = 'index.html';
+                }, 3000);
                 
             } catch (error) {
-                signupBtn.innerHTML = '<i class="fas fa-user-plus"></i> إنشاء الحساب';
+                signupBtn.innerHTML = '<i class="fas fa-user-plus"></i> إنشاء الحساب وإرسال للتحقق';
                 signupBtn.disabled = false;
                 
                 let errorMessage = 'حدث خطأ أثناء إنشاء الحساب';
@@ -375,25 +434,17 @@
             }
         }
         
-        // ربط الأحداث
         document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('signup-btn').addEventListener('click', handleSignup);
             
-            // التحقق من قوة كلمة المرور أثناء الكتابة
-            document.getElementById('password').addEventListener('input', (e) => {
-                checkPasswordStrength(e.target.value);
-            });
-            
-            // إنشاء حساب بالضغط على Enter
-            document.getElementById('confirmPassword').addEventListener('keypress', (e) => {
+            document.addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') {
                     handleSignup();
                 }
             });
         });
         
-        // جعل الدوال متاحة عالمياً
         window.togglePassword = togglePassword;
     </script>
 </body>
-  </html>
+    </html>
