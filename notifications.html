@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sudan Pay - الإشعارات</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #0d9488;
+            --primary-dark: #0f766e;
+            --secondary: #0891b2;
+            --dark: #0f172a;
+            --light: #f8fafc;
+            --gray: #94a3b8;
+            --success: #10b981;
+            --border: #e2e8f0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
+
+        body {
+            background: #f1f5f9;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container { max-width: 500px; margin: 0 auto; }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: white;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .navbar-brand { 
+            text-decoration: none; 
+            color: var(--dark); 
+            font-weight: 700; 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+        }
+
+        .badge {
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .notifications-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .card.unread {
+            border-color: var(--primary);
+            background: #f0fdfa;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .notification-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .notification-type {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+        }
+
+        .notification-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .icon-receive { background: var(--success); }
+        .icon-send { background: var(--primary); }
+        .icon-system { background: var(--secondary); }
+
+        .notification-time {
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+
+        .notification-image {
+            width: 100%;
+            border-radius: 15px;
+            margin: 15px 0;
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .notification-image:hover {
+            transform: scale(1.02);
+        }
+
+        .notification-details {
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 12px;
+            margin-top: 15px;
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .detail-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .detail-label {
+            color: var(--gray);
+            font-weight: 600;
+        }
+
+        .detail-value {
+            color: var(--dark);
+            font-weight: 700;
+        }
+
+        .comment-box {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 10px;
+            padding: 12px;
+            margin-top: 15px;
+            color: #166534;
+        }
+
+        .no-notifications {
+            text-align: center;
+            padding: 50px 20px;
+            color: var(--gray);
+        }
+
+        .no-notifications i {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            color: var(--primary);
+            opacity: 0.5;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 10px;
+            border-radius: 10px;
+            border: none;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: 0.3s;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-outline {
+            background: white;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal.active {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            max-width: 600px;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .modal-image {
+            width: 100%;
+            max-height: 70vh;
+            object-fit: contain;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(0,0,0,0.5);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar">
+            <a href="dashboard.html" class="navbar-brand">
+                <i class="fas fa-arrow-right"></i> العودة
+            </a>
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <span style="color: var(--primary); font-weight: 800;">الإشعارات</span>
+                <span class="badge" id="unreadCount">0</span>
+            </div>
+        </nav>
+
+        <div class="notifications-header">
+            <h2 style="font-size: 1.3rem; color: var(--dark);">إشعاراتك</h2>
+            <button class="btn btn-outline" onclick="markAllAsRead()" style="padding: 8px 15px;">
+                <i class="fas fa-check-double"></i> تعيين الكل كمقروء
+            </button>
+        </div>
+
+        <div id="notificationsContainer">
+            <div class="no-notifications">
+                <i class="fas fa-bell"></i>
+                <h3>لا توجد إشعارات</h3>
+                <p>سيظهر هنا أي إشعارات جديدة تتلقاها</p>
+            </div>
+        </div>
+
+        <div class="modal" id="imageModal">
+            <button class="modal-close" onclick="closeModal()">×</button>
+            <div class="modal-content">
+                <img id="modalImage" class="modal-image" alt="صورة الإشعار">
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { auth, db, showAlert } from './app.js';
+        import { 
+            onAuthStateChanged 
+        } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { 
+            collection, 
+            query, 
+            where, 
+            orderBy, 
+            getDocs,
+            doc,
+            updateDoc,
+            onSnapshot
+        } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        let notifications = [];
+
+        async function loadNotifications() {
+            const user = auth.currentUser;
+            if (!user) return;
+
+            try {
+                const notificationsRef = collection(db, 'notifications');
+                const q = query(
+                    notificationsRef,
+                    where('receiverId', '==', user.uid),
+                    orderBy('createdAt', 'desc')
+                );
+
+                const unsubscribe = onSnapshot(q, (snapshot) => {
+                    notifications = [];
+                    const container = document.getElementById('notificationsContainer');
+                    
+                    if (snapshot.empty) {
+                        container.innerHTML = `
+                            <div class="no-notifications">
+                                <i class="fas fa-bell"></i>
+                                <h3>لا توجد إشعارات</h3>
+                                <p>سيظهر هنا أي إشعارات جديدة تتلقاها</p>
+                            </div>
+                        `;
+                        document.getElementById('unreadCount').textContent = '0';
+                        return;
+                    }
+
+                    let unreadCount = 0;
+                    let notificationsHTML = '';
+
+                    snapshot.forEach((docSnap) => {
+                        const data = docSnap.data();
+                        const notification = {
+                            id: docSnap.id,
+                            ...data,
+                            createdAt: data.createdAt?.toDate() || new Date()
+                        };
+                        notifications.push(notification);
+
+                        if (!data.isRead) unreadCount++;
+
+                        notificationsHTML += createNotificationHTML(notification);
+                    });
+
+                    container.innerHTML = notificationsHTML;
+                    document.getElementById('unreadCount').textContent = unreadCount;
+                });
+
+                return unsubscribe;
+            } catch (error) {
+                console.error('خطأ في تحميل الإشعارات:', error);
+                showAlert('حدث خطأ في تحميل الإشعارات', 'error');
+            }
+        }
+
+        function createNotificationHTML(notification) {
+            const iconClass = notification.type.includes('receive') ? 'icon-receive' : 
+                            notification.type.includes('send') ? 'icon-send' : 'icon-system';
+            
+            const icon = notification.type.includes('receive') ? 'fa-arrow-down' : 
+                        notification.type.includes('send') ? 'fa-arrow-up' : 'fa-info-circle';
+            
+            const typeText = notification.type.includes('receive') ? 'استلام أموال' :
+                           notification.type.includes('send') ? 'إرسال أموال' : 'إشعار نظام';
+
+            const timeAgo = getTimeAgo(notification.createdAt);
+            
+            return `
+                <div class="card ${notification.isRead ? '' : 'unread'}" data-id="${notification.id}">
+                    <div class="notification-header">
+                        <div class="notification-type">
+                            <div class="notification-icon ${iconClass}">
+                                <i class="fas ${icon}"></i>
+                            </div>
+                            <span>${typeText}</span>
+                        </div>
+                        <div class="notification-time">${timeAgo}</div>
+                    </div>
+
+                    ${notification.imageUrl ? `
+                        <img src="${notification.imageUrl}" 
+                             class="notification-image" 
+                             alt="إشعار التحويل"
+                             onclick="openImageModal('${notification.imageUrl}')">
+                    ` : ''}
+
+                    <div class="notification-details">
+                        <div class="detail-item">
+                            <span class="detail-label">المبلغ:</span>
+                            <span class="detail-value">${notification.amount.toLocaleString()} ${notification.currency}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">من/إلى:</span>
+                            <span class="detail-value">${notification.receiverName}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">رقم الحساب:</span>
+                            <span class="detail-value">${notification.receiverAccount}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">التاريخ:</span>
+                            <span class="detail-value">${notification.date}</span>
+                        </div>
+                    </div>
+
+                    ${notification.comment ? `
+                        <div class="comment-box">
+                            <i class="fas fa-comment"></i> ${notification.comment}
+                        </div>
+                    ` : ''}
+
+                    <div class="actions">
+                        ${!notification.isRead ? `
+                            <button class="btn btn-primary" onclick="markAsRead('${notification.id}')">
+                                <i class="fas fa-check"></i> تعيين كمقروء
+                            </button>
+                        ` : ''}
+                        <button class="btn btn-outline" onclick="shareNotification('${notification.id}')">
+                            <i class="fas fa-share-alt"></i> مشاركة
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function getTimeAgo(date) {
+            const now = new Date();
+            const diffMs = now - date;
+            const diffMins = Math.floor(diffMs / 60000);
+            const diffHours = Math.floor(diffMs / 3600000);
+            const diffDays = Math.floor(diffMs / 86400000);
+
+            if (diffMins < 1) return 'الآن';
+            if (diffMins < 60) return `قبل ${diffMins} دقيقة`;
+            if (diffHours < 24) return `قبل ${diffHours} ساعة`;
+            if (diffDays < 7) return `قبل ${diffDays} يوم`;
+            return date.toLocaleDateString('ar-EG');
+        }
+
+        async function markAsRead(notificationId) {
+            try {
+                await updateDoc(doc(db, 'notifications', notificationId), {
+                    isRead: true,
+                    readAt: new Date()
+                });
+
+                const user = auth.currentUser;
+                if (user) {
+                    const userRef = doc(db, 'users', user.uid);
+                    const userDoc = await getDoc(userRef);
+                    if (userDoc.exists()) {
+                        const currentCount = userDoc.data().unreadNotifications || 0;
+                        await updateDoc(userRef, {
+                            unreadNotifications: Math.max(0, currentCount - 1)
+                        });
+                    }
+                }
+
+                showAlert('تم تعيين الإشعار كمقروء', 'success');
+            } catch (error) {
+                console.error('خطأ في تعيين الإشعار كمقروء:', error);
+                showAlert('حدث خطأ', 'error');
+            }
+        }
+
+        async function markAllAsRead() {
+            if (notifications.length === 0) return;
+
+            if (!confirm('هل تريد تعيين جميع الإشعارات كمقروءة؟')) return;
+
+            try {
+                const user = auth.currentUser;
+                if (!user) return;
+
+                const updates = notifications
+                    .filter(n => !n.isRead)
+                    .map(n => updateDoc(doc(db, 'notifications', n.id), {
+                        isRead: true,
+                        readAt: new Date()
+                    }));
+
+                await Promise.all(updates);
+
+                await updateDoc(doc(db, 'users', user.uid), {
+                    unreadNotifications: 0
+                });
+
+                showAlert('تم تعيين جميع الإشعارات كمقروءة', 'success');
+            } catch (error) {
+                console.error('خطأ في تعيين جميع الإشعارات كمقروءة:', error);
+                showAlert('حدث خطأ', 'error');
+            }
+        }
+
+        async function shareNotification(notificationId) {
+            const notification = notifications.find(n => n.id === notificationId);
+            if (!notification) return;
+
+            const text = `💸 إشعار Sudan Pay\n\n` +
+                        `المبلغ: ${notification.amount.toLocaleString()} ${notification.currency}\n` +
+                        `من/إلى: ${notification.receiverName}\n` +
+                        `رقم الحساب: ${notification.receiverAccount}\n` +
+                        `التاريخ: ${notification.date}\n` +
+                        (notification.comment ? `التعليق: ${notification.comment}\n` : '') +
+                        `\n#SudanPay`;
+
+            if (navigator.share) {
+                try {
+                    await navigator.share({
+                        title: 'إشعار Sudan Pay',
+                        text: text,
+                        url: window.location.href
+                    });
+                } catch (error) {
+                }
+            } else {
+                navigator.clipboard.writeText(text);
+                showAlert('تم نسخ تفاصيل الإشعار', 'success');
+            }
+        }
+
+        function openImageModal(imageUrl) {
+            document.getElementById('modalImage').src = imageUrl;
+            document.getElementById('imageModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('imageModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        window.markAsRead = markAsRead;
+        window.markAllAsRead = markAllAsRead;
+        window.shareNotification = shareNotification;
+        window.openImageModal = openImageModal;
+        window.closeModal = closeModal;
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                loadNotifications();
+            } else {
+                window.location.href = 'index.html';
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
+        });
+
+        document.getElementById('imageModal').addEventListener('click', (e) => {
+            if (e.target.id === 'imageModal') closeModal();
+        });
+    </script>
+</body>
+          </html>
