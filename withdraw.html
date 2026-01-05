@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sudan Pay - سحب الأموال</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #0d9488;
+            --primary-dark: #0f766e;
+            --secondary: #0891b2;
+            --dark: #0f172a;
+            --light: #f8fafc;
+            --gray: #94a3b8;
+            --success: #10b981;
+            --border: #e2e8f0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
+
+        body {
+            background: #f1f5f9;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container { max-width: 500px; margin: 0 auto; }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: white;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .navbar-brand { text-decoration: none; color: var(--dark); font-weight: 700; display: flex; align-items: center; gap: 10px; }
+
+        .card {
+            background: white;
+            border-radius: 24px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        .balance-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            background: #f1f5f9;
+            padding: 5px;
+            border-radius: 15px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.3s;
+            color: var(--gray);
+            background: transparent;
+        }
+
+        .tab-btn.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 12px rgba(13, 148, 136, 0.2);
+        }
+
+        .balance-display {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .balance-label { font-size: 0.9rem; color: var(--gray); margin-bottom: 5px; }
+        .balance-amount { font-size: 2.5rem; font-weight: 800; color: var(--primary); }
+
+        .form-group { margin-bottom: 20px; }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 1rem;
+        }
+
+        .input-group {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-group input {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .currency-badge {
+            position: absolute;
+            left: 15px;
+            background: var(--primary);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-weight: 700;
+        }
+
+        .method-select {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .method-option {
+            padding: 20px;
+            border: 2px solid var(--border);
+            border-radius: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .method-option:hover {
+            border-color: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .method-option.selected {
+            border-color: var(--primary);
+            background: #f0fdfa;
+        }
+
+        .method-icon {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border-radius: 12px;
+            border: none;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: var(--primary-dark); transform: translateY(-2px); }
+
+        .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar">
+            <a href="dashboard.html" class="navbar-brand">
+                <i class="fas fa-arrow-right"></i> العودة للرئيسية
+            </a>
+            <div class="navbar-menu">
+                <span style="color: var(--primary); font-weight: 800;">سحب الأموال</span>
+            </div>
+        </nav>
+
+        <div class="card">
+            <div class="balance-tabs">
+                <button class="tab-btn active" onclick="showBalance('sdg')">جنيه سوداني (SDG)</button>
+                <button class="tab-btn" onclick="showBalance('usdt')">USDT</button>
+            </div>
+
+            <div class="balance-display">
+                <div class="balance-label">رصيد <span id="currencyLabel">SDG</span> المتاح للسحب</div>
+                <div class="balance-amount" id="balanceAmount">0.00</div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">المبلغ المراد سحبه</label>
+                <div class="input-group">
+                    <input type="number" id="withdrawAmount" placeholder="0.00" step="0.01" min="1">
+                    <div class="currency-badge" id="currencyBadge">SDG</div>
+                </div>
+                <small style="color: var(--gray); font-size: 0.85rem;">الحد الأدنى للسحب: 1,000 SDG / 1 USDT</small>
+            </div>
+
+            <div class="method-select">
+                <div class="method-option" onclick="selectMethod('bank')">
+                    <div class="method-icon"><i class="fas fa-university"></i></div>
+                    <div>تحويل بنكي</div>
+                </div>
+                <div class="method-option" onclick="selectMethod('wallet')">
+                    <div class="method-icon"><i class="fas fa-wallet"></i></div>
+                    <div>محفظة رقمية</div>
+                </div>
+            </div>
+
+            <button class="btn btn-primary" id="withdrawBtn" onclick="processWithdrawal()">
+                <i class="fas fa-hand-holding-usd"></i> تأكيد طلب السحب
+            </button>
+        </div>
+
+        <div class="card">
+            <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 15px;">
+                <i class="fas fa-info-circle"></i> تعليمات السحب
+            </h3>
+            <ul style="color: var(--gray); font-size: 0.9rem; padding-right: 15px;">
+                <li>الحد الأدنى للسحب: 1,000 SDG أو 1 USDT</li>
+                <li>يتم معالجة طلبات السحب خلال 24-48 ساعة</li>
+                <li>سحب USDT يتم إلى عنوان محفظتك المسجل</li>
+                <li>التحويل البنكي يتطلب رقم IBAN صحيح</li>
+                <li>سيتم خصم أي رسوم من المبلغ المسحوب</li>
+            </ul>
+        </div>
+    </div>
+
+    <script type="module">
+        import { auth, db, withdrawFunds, showAlert, getUserData } from './app.js';
+        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        let currentUserData = null;
+        let currentCurrency = 'SDG';
+        let selectedMethod = 'bank';
+
+        function showBalance(currency) {
+            currentCurrency = currency;
+            
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`.tab-btn[onclick="showBalance('${currency}')"]`).classList.add('active');
+            
+            document.getElementById('currencyLabel').textContent = currency === 'sdg' ? 'SDG' : 'USDT';
+            document.getElementById('currencyBadge').textContent = currency === 'sdg' ? 'SDG' : 'USDT';
+            
+            if (currentUserData) {
+                const balance = currency === 'sdg' ? currentUserData.balanceSDG : currentUserData.balanceUSDT;
+                document.getElementById('balanceAmount').textContent = (balance || 0).toLocaleString();
+            }
+        }
+
+        function selectMethod(method) {
+            selectedMethod = method;
+            document.querySelectorAll('.method-option').forEach(option => option.classList.remove('selected'));
+            event.target.closest('.method-option').classList.add('selected');
+        }
+
+        async function processWithdrawal() {
+            const amount = parseFloat(document.getElementById('withdrawAmount').value);
+            const btn = document.getElementById('withdrawBtn');
+            
+            if (!amount || amount <= 0) {
+                showAlert('الرجاء إدخال مبلغ صحيح', 'error');
+                return;
+            }
+            
+            if (!currentUserData) {
+                showAlert('يجب تسجيل الدخول أولاً', 'error');
+                return;
+            }
+            
+            const minAmount = currentCurrency === 'sdg' ? 1000 : 1;
+            if (amount < minAmount) {
+                showAlert(`الحد الأدنى للسحب هو ${minAmount} ${currentCurrency === 'sdg' ? 'SDG' : 'USDT'}`, 'error');
+                return;
+            }
+            
+            const balance = currentCurrency === 'sdg' ? currentUserData.balanceSDG : currentUserData.balanceUSDT;
+            if (balance < amount) {
+                showAlert('رصيدك غير كافٍ', 'error');
+                return;
+            }
+            
+            if (!confirm(`هل أنت متأكد من سحب ${amount.toLocaleString()} ${currentCurrency === 'sdg' ? 'SDG' : 'USDT'}؟`)) {
+                return;
+            }
+            
+            try {
+                btn.disabled = true;
+                btn.innerHTML = '<div class="loading"></div> جاري معالجة طلب السحب...';
+                
+                const result = await withdrawFunds(
+                    auth.currentUser.uid,
+                    amount,
+                    currentCurrency === 'sdg' ? 'SDG' : 'USDT',
+                    selectedMethod
+                );
+                
+                showAlert(result.message, 'success');
+                
+                document.getElementById('withdrawAmount').value = '';
+                
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 3000);
+                
+            } catch (error) {
+                showAlert(error.message || 'حدث خطأ أثناء معالجة طلب السحب', 'error');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-hand-holding-usd"></i> تأكيد طلب السحب';
+            }
+        }
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                const userRef = doc(db, "users", user.uid);
+                
+                onSnapshot(userRef, (snap) => {
+                    if (snap.exists()) {
+                        currentUserData = snap.data();
+                        showBalance(currentCurrency);
+                    }
+                });
+            } else {
+                window.location.href = 'index.html';
+            }
+        });
+    </script>
+</body>
+</html>
