@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sudan Pay - دفع الفواتير</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #0d9488;
+            --primary-dark: #0f766e;
+            --secondary: #0891b2;
+            --dark: #0f172a;
+            --light: #f8fafc;
+            --gray: #94a3b8;
+            --success: #10b981;
+            --border: #e2e8f0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
+
+        body {
+            background: #f1f5f9;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container { max-width: 500px; margin: 0 auto; }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: white;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .navbar-brand { text-decoration: none; color: var(--dark); font-weight: 700; display: flex; align-items: center; gap: 10px; }
+
+        .card {
+            background: white;
+            border-radius: 24px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        .balance-section {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .balance-label { font-size: 0.9rem; color: var(--gray); margin-bottom: 5px; }
+        .balance-amount { font-size: 2.2rem; font-weight: 800; color: var(--primary); }
+
+        .bill-categories {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .bill-category {
+            padding: 20px 10px;
+            border-radius: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid var(--border);
+            background: white;
+        }
+
+        .bill-category:hover {
+            transform: translateY(-3px);
+            border-color: var(--primary);
+            box-shadow: 0 5px 15px rgba(13, 148, 136, 0.1);
+        }
+
+        .bill-category.active {
+            border-color: var(--primary);
+            background: #f0fdfa;
+        }
+
+        .bill-icon {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .bill-name {
+            font-weight: 700;
+            color: var(--dark);
+            font-size: 0.9rem;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 1rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            outline: none;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+        }
+
+        .bill-details {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            display: none;
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .detail-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .detail-label {
+            color: var(--gray);
+            font-weight: 600;
+        }
+
+        .detail-value {
+            color: var(--dark);
+            font-weight: 700;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border-radius: 12px;
+            border: none;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: var(--primary-dark); transform: translateY(-2px); }
+
+        .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .recent-bills {
+            margin-top: 30px;
+        }
+
+        .bill-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .bill-item:last-child {
+            border-bottom: none;
+        }
+
+        .bill-icon-small {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: #f0fdfa;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            margin-left: 15px;
+        }
+
+        .bill-info {
+            flex: 1;
+        }
+
+        .bill-company {
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+
+        .bill-date {
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+
+        .bill-amount {
+            font-weight: 800;
+            color: #ef4444;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar">
+            <a href="dashboard.html" class="navbar-brand">
+                <i class="fas fa-arrow-right"></i> العودة
+            </a>
+            <div class="navbar-menu">
+                <span style="color: var(--primary); font-weight: 800;">دفع الفواتير</span>
+            </div>
+        </nav>
+
+        <div class="card">
+            <div class="balance-section">
+                <div class="balance-label">رصيدك المتاح للدفع</div>
+                <div class="balance-amount" id="availableBalance">0.00 SDG</div>
+            </div>
+
+            <div class="bill-categories">
+                <div class="bill-category active" onclick="selectCategory('electricity')">
+                    <div class="bill-icon"><i class="fas fa-bolt"></i></div>
+                    <div class="bill-name">كهرباء</div>
+                </div>
+                <div class="bill-category" onclick="selectCategory('water')">
+                    <div class="bill-icon"><i class="fas fa-tint"></i></div>
+                    <div class="bill-name">مياه</div>
+                </div>
+                <div class="bill-category" onclick="selectCategory('internet')">
+                    <div class="bill-icon"><i class="fas fa-wifi"></i></div>
+                    <div class="bill-name">إنترنت</div>
+                </div>
+                <div class="bill-category" onclick="selectCategory('phone')">
+                    <div class="bill-icon"><i class="fas fa-phone"></i></div>
+                    <div class="bill-name">هاتف</div>
+                </div>
+                <div class="bill-category" onclick="selectCategory('tv')">
+                    <div class="bill-icon"><i class="fas fa-tv"></i></div>
+                    <div class="bill-name">تلفزيون</div>
+                </div>
+                <div class="bill-category" onclick="selectCategory('other')">
+                    <div class="bill-icon"><i class="fas fa-file-invoice"></i></div>
+                    <div class="bill-name">أخرى</div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" id="accountLabel">رقم حساب الكهرباء</label>
+                <input type="text" id="accountNumber" class="form-control" placeholder="أدخل رقم الحساب">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">المبلغ (SDG)</label>
+                <input type="number" id="billAmount" class="form-control" placeholder="0.00" step="0.01" min="1">
+            </div>
+
+            <div class="bill-details" id="billDetails">
+                <div class="detail-item">
+                    <div class="detail-label">اسم المشترك:</div>
+                    <div class="detail-value" id="subscriberName">محمد أحمد</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">الفترة:</div>
+                    <div class="detail-value" id="billingPeriod">يناير 2024</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">الاستهلاك:</div>
+                    <div class="detail-value" id="consumption">250 ك.و.س</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">المبلغ المستحق:</div>
+                    <div class="detail-value" id="dueAmount" style="color: #ef4444; font-size: 1.2rem;">0.00 SDG</div>
+                </div>
+            </div>
+
+            <button class="btn btn-primary" id="payBtn" onclick="processPayment()">
+                <i class="fas fa-check-circle"></i> تأكيد ودفع الفاتورة
+            </button>
+        </div>
+
+        <div class="card">
+            <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 15px;">
+                <i class="fas fa-history"></i> فواتير مدفوعة حديثاً
+            </h3>
+            
+            <div class="recent-bills" id="recentBills">
+                <div style="text-align: center; padding: 30px; color: var(--gray);">
+                    <i class="fas fa-receipt" style="font-size: 2rem; margin-bottom: 15px;"></i>
+                    <p>لا توجد فواتير مدفوعة مؤخراً</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { auth, db, showAlert, getUserData } from './app.js';
+        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { doc, onSnapshot, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        let userData = null;
+        let selectedCategory = 'electricity';
+        let billDetails = {
+            subscriberName: '',
+            billingPeriod: '',
+            consumption: '',
+            dueAmount: 0
+        };
+
+        // ==================== اختيار فئة الفاتورة ====================
+        function selectCategory(category) {
+            selectedCategory = category;
+            
+            // إزالة النشط من جميع الفئات
+            document.querySelectorAll('.bill-category').forEach(cat => {
+                cat.classList.remove('active');
+            });
+            
+            // إضافة النشط للفئة المحددة
+            event.target.closest('.bill-category').classList.add('active');
+            
+            // تحديث نص الحقل
+            const labels = {
+                'electricity': 'رقم حساب الكهرباء',
+                'water': 'رقم حساب المياه',
+                'internet': 'رقم اشتراك الإنترنت',
+                'phone': 'رقم الهاتف',
+                'tv': 'رقم اشتراك التلفزيون',
+                'other': 'رقم المرجع'
+            };
+            
+            document.getElementById('accountLabel').textContent = labels[category] || 'رقم الحساب';
+            document.getElementById('accountNumber').placeholder = `أدخل ${labels[category] || 'رقم الحساب'}`;
+            
+            // تفريغ الحقول
+            document.getElementById('accountNumber').value = '';
+            document.getElementById('billAmount').value = '';
+            document.getElementById('billDetails').style.display = 'none';
+        }
+
+        // ==================== البحث عن فاتورة ====================
+        document.getElementById('accountNumber').addEventListener('input', function() {
+            const accountNumber = this.value.trim();
+            const amountInput = document.getElementById('billAmount');
+            
+            if (accountNumber.length >= 8) {
+                // محاكاة جلب بيانات الفاتورة من API
+                setTimeout(() => {
+                    // بيانات وهمية (في الواقع ستأتي من API الشركة)
+                    billDetails = {
+                        subscriberName: 'محمد أحمد',
+                        billingPeriod: new Date().toLocaleDateString('ar-EG', { month: 'long', year: 'numeric' }),
+                        consumption: '250 ك.و.س',
+                        dueAmount: parseFloat(amountInput.value) || 1500
+                    };
+                    
+                    // عرض تفاصيل الفاتورة
+                    document.getElementById('subscriberName').textContent = billDetails.subscriberName;
+                    document.getElementById('billingPeriod').textContent = billDetails.billingPeriod;
+                    document.getElementById('consumption').textContent = billDetails.consumption;
+                    document.getElementById('dueAmount').textContent = billDetails.dueAmount.toLocaleString() + ' SDG';
+                    
+                    document.getElementById('billDetails').style.display = 'block';
+                    
+                    // تعبئة المبلغ تلقائياً
+                    if (!amountInput.value) {
+                        amountInput.value = billDetails.dueAmount;
+                    }
+                }, 1000);
+            } else {
+                document.getElementById('billDetails').style.display = 'none';
+            }
+        });
+
+        // ==================== معالجة الدفع ====================
+        async function processPayment() {
+            const accountNumber = document.getElementById('accountNumber').value.trim();
+            const amount = parseFloat(document.getElementById('billAmount').value);
+            const btn = document.getElementById('payBtn');
+            
+            if (!accountNumber) {
+                showAlert('الرجاء إدخال رقم الحساب', 'error');
+                return;
+            }
+            
+            if (!amount || amount <= 0) {
+                showAlert('الرجاء إدخال مبلغ صحيح', 'error');
+                return;
+            }
+            
+            if (!userData) {
+                showAlert('يجب تسجيل الدخول أولاً', 'error');
+                return;
+            }
+            
+            if (userData.balanceSDG < amount) {
+                showAlert('رصيدك غير كافٍ', 'error');
+                return;
+            }
+            
+            const categoryNames = {
+                'electricity': 'كهرباء',
+                'water': 'مياه',
+                'internet': 'إنترنت',
+                'phone': 'هاتف',
+                'tv': 'تلفزيون',
+                'other': 'فاتورة أخرى'
+            };
+            
+            const billType = categoryNames[selectedCategory] || 'فاتورة';
+            
+            if (!confirm(`هل أنت متأكد من دفع ${amount.toLocaleString()} SDG لفاتورة ${billType}؟`)) {
+                return;
+            }
+            
+            try {
+                btn.disabled = true;
+                btn.innerHTML = '<div class="loading"></div> جاري معالجة الدفع...';
+                
+                // 1. خصم المبلغ من رصيد المستخدم
+                await updateDoc(doc(db, "users", auth.currentUser.uid), {
+                    balanceSDG: userData.balanceSDG - amount,
+                    transactions: arrayUnion({
+                        type: 'bill_payment',
+                        category: selectedCategory,
+                        amount: amount,
+                        currency: 'SDG',
+                        accountNumber: accountNumber,
+                        subscriberName: billDetails.subscriberName,
+                        description: `دفع فاتورة ${billType}`,
+                        timestamp: new Date().toISOString(),
+                        status: 'completed',
+                        reference: 'BILL-' + Date.now()
+                    }),
+                    updatedAt: new Date()
+                });
+                
+                showAlert(`تم دفع الفاتورة بنجاح! تم خصم ${amount.toLocaleString()} SDG`, 'success');
+                
+                // 2. تفريغ الحقول
+                document.getElementById('accountNumber').value = '';
+                document.getElementById('billAmount').value = '';
+                document.getElementById('billDetails').style.display = 'none';
+                
+                // 3. تحديث قائمة الفواتير الحديثة
+                loadRecentBills();
+                
+                setTimeout(() => {
+                    window.location.reload();
+                }, 2000);
+                
+            } catch (error) {
+                console.error('خطأ في معالجة الدفع:', error);
+                showAlert('حدث خطأ أثناء معالجة الدفع', 'error');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-check-circle"></i> تأكيد ودفع الفاتورة';
+            }
+        }
+
+        // ==================== تحميل الفواتير الحديثة ====================
+        function loadRecentBills() {
+            if (!userData || !userData.transactions) return;
+            
+            const billTransactions = userData.transactions
+                .filter(t => t.type === 'bill_payment')
+                .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+                .slice(0, 5);
+            
+            if (billTransactions.length === 0) return;
+            
+            const categoryIcons = {
+                'electricity': 'fa-bolt',
+                'water': 'fa-tint',
+                'internet': 'fa-wifi',
+                'phone': 'fa-phone',
+                'tv': 'fa-tv',
+                'other': 'fa-file-invoice'
+            };
+            
+            const categoryNames = {
+                'electricity': 'كهرباء',
+                'water': 'مياه',
+                'internet': 'إنترنت',
+                'phone': 'هاتف',
+                'tv': 'تلفزيون',
+                'other': 'أخرى'
+            };
+            
+            let html = '';
+            billTransactions.forEach(bill => {
+                const icon = categoryIcons[bill.category] || 'fa-file-invoice';
+                const categoryName = categoryNames[bill.category] || 'فاتورة';
+                const date = new Date(bill.timestamp).toLocaleDateString('ar-EG');
+                
+                html += `
+                    <div class="bill-item">
+                        <div class="bill-icon-small">
+                            <i class="fas ${icon}"></i>
+                        </div>
+                        <div class="bill-info">
+                            <div class="bill-company">فاتورة ${categoryName}</div>
+                            <div class="bill-date">${date} - ${bill.accountNumber}</div>
+                        </div>
+                        <div class="bill-amount">-${bill.amount.toLocaleString()}</div>
+                    </div>
+                `;
+            });
+            
+            document.getElementById('recentBills').innerHTML = html;
+        }
+
+        // ==================== تحميل بيانات المستخدم ====================
+        function loadUserData() {
+            const user = auth.currentUser;
+            if (!user) return;
+
+            const userRef = doc(db, "users", user.uid);
+            
+            onSnapshot(userRef, (snap) => {
+                if (snap.exists()) {
+                    userData = snap.data();
+                    document.getElementById('availableBalance').textContent = (userData.balanceSDG || 0).toLocaleString() + ' SDG';
+                    loadRecentBills();
+                }
+            });
+        }
+
+        // ==================== جعل الدوال متاحة عالمياً ====================
+        window.selectCategory = selectCategory;
+        window.processPayment = processPayment;
+
+        // ==================== تحميل البيانات عند تسجيل الدخول ====================
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                loadUserData();
+            } else {
+                window.location.href = 'index.html';
+            }
+        });
+    </script>
+</body>
+</html>
