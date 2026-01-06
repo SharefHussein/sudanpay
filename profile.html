@@ -6,107 +6,530 @@
     <title>Sudan Pay - الملف الشخصي</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
     <style>
+        :root {
+            --primary: #0d9488;
+            --primary-dark: #0f766e;
+            --secondary: #3b82f6;
+            --dark: #0f172a;
+            --light: #f8fafc;
+            --gray: #94a3b8;
+            --gray-light: #e2e8f0;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --card-bg: #ffffff;
+            --border-color: #e5e7eb;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        body {
+            background: #f1f5f9;
+            min-height: 100vh;
+            padding: 20px;
+            direction: rtl;
+            transition: all 0.3s ease;
+        }
+
+        body.dark-mode {
+            background: #0f172a;
+            color: #f1f5f9;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* Navbar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            margin-bottom: 20px;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: var(--primary);
+            font-weight: 600;
+            padding: 8px 15px;
+            border-radius: 10px;
+            background: rgba(13, 148, 136, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .navbar-brand:hover {
+            background: rgba(13, 148, 136, 0.2);
+            transform: translateX(-5px);
+        }
+
+        .navbar-menu {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .dark-mode .navbar-menu {
+            color: #f1f5f9;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .dark-mode .card {
+            background: #1e293b;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .dark-mode .card-header {
+            border-bottom-color: #374151;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .dark-mode .card-title {
+            color: #f1f5f9;
+        }
+
+        /* Profile Header */
         .profile-header {
             text-align: center;
             padding: 30px 20px;
-            background: white;
+            background: var(--card-bg);
             border-radius: 20px;
             margin-bottom: 20px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
         }
+
+        .dark-mode .profile-header {
+            background: #1e293b;
+        }
+
         .avatar {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             border-radius: 50%;
-            margin: 0 auto 15px;
+            margin: 0 auto 20px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 2rem;
+            font-size: 2.5rem;
             font-weight: 700;
+            border: 4px solid white;
+            box-shadow: 0 8px 20px rgba(13, 148, 136, 0.2);
         }
-        .profile-name { font-size: 1.4rem; font-weight: 700; color: var(--dark); margin-bottom: 5px; }
-        .profile-email { color: var(--gray); font-size: 0.9rem; }
-        
+
+        .dark-mode .avatar {
+            border-color: #1e293b;
+        }
+
+        .profile-name {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--dark);
+            margin-bottom: 8px;
+        }
+
+        .dark-mode .profile-name {
+            color: #f1f5f9;
+        }
+
+        .profile-email {
+            color: var(--gray);
+            font-size: 1rem;
+            margin-bottom: 15px;
+        }
+
+        /* Profile Info */
+        .profile-info {
+            padding: 10px 0;
+        }
+
         .info-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px;
-            border-bottom: 1px solid #eee;
+            padding: 18px 20px;
+            border-bottom: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            cursor: default;
         }
-        .info-item:last-child { border-bottom: none; }
-        .info-label { color: var(--gray); display: flex; align-items: center; gap: 10px; font-size: 0.9rem; }
-        .info-value { font-weight: 600; color: var(--dark); }
-        
-        .btn-group { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
-        
-        /* Switch Styling */
-        .switch { position: relative; display: inline-block; width: 40px; height: 20px; }
-        .switch input { opacity: 0; width: 0; height: 0; }
-        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 20px; }
-        .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 2px; bottom: 2px; background-color: white; transition: .4s; border-radius: 50%; }
-        input:checked + .slider { background-color: var(--primary); }
-        input:checked + .slider:before { transform: translateX(20px); }
 
-        .dark-mode-active { background: #0f172a !important; color: white !important; }
-        .dark-mode-active .card, .dark-mode-active .profile-header { background: #1e293b; color: white; }
-        .dark-mode-active .info-value { color: white; }
-        .dark-mode-active .profile-name { color: white; }
+        .info-item:last-child {
+            border-bottom: none;
+        }
+
+        .info-item.clickable {
+            cursor: pointer;
+        }
+
+        .info-item.clickable:hover {
+            background: rgba(13, 148, 136, 0.05);
+        }
+
+        .dark-mode .info-item.clickable:hover {
+            background: rgba(13, 148, 136, 0.1);
+        }
+
+        .dark-mode .info-item {
+            border-bottom-color: #374151;
+        }
+
+        .info-label {
+            color: var(--gray);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.95rem;
+            flex: 1;
+        }
+
+        .info-label i {
+            width: 20px;
+            text-align: center;
+        }
+
+        .info-value {
+            font-weight: 600;
+            color: var(--dark);
+            text-align: left;
+            flex: 1;
+            direction: ltr;
+        }
+
+        .dark-mode .info-value {
+            color: #f1f5f9;
+        }
+
+        .text-success {
+            color: var(--success) !important;
+            font-weight: 700;
+        }
+
+        .text-primary {
+            color: var(--primary) !important;
+        }
+
+        /* Buttons */
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .btn {
+            padding: 18px;
+            border-radius: 15px;
+            border: none;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(13, 148, 136, 0.3);
+        }
+
+        .btn-danger {
+            background: #fee2e2;
+            color: var(--danger);
+            border: 1px solid #fecaca;
+        }
+
+        .btn-danger:hover {
+            background: #fecaca;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(239, 68, 68, 0.2);
+        }
+
+        /* Switch Toggle */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 52px;
+            height: 26px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--gray-light);
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .dark-mode .slider {
+            background-color: #374151;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        input:checked + .slider {
+            background-color: var(--primary);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        /* Alert System */
+        .alert {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            left: 20px;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 16px 20px;
+            border-radius: 12px;
+            color: white;
+            font-weight: 600;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            animation: slideIn 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .alert-success {
+            background: var(--success);
+        }
+
+        .alert-error {
+            background: var(--danger);
+        }
+
+        .alert-info {
+            background: var(--primary);
+        }
+
+        .alert-warning {
+            background: var(--warning);
+        }
+
+        .alert-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.3rem;
+            cursor: pointer;
+            padding: 0;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.8;
+            transition: opacity 0.2s;
+        }
+
+        .alert-close:hover {
+            opacity: 1;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            body {
+                padding: 15px;
+            }
+            
+            .avatar {
+                width: 85px;
+                height: 85px;
+                font-size: 2rem;
+            }
+            
+            .profile-name {
+                font-size: 1.4rem;
+            }
+            
+            .info-item {
+                padding: 15px;
+            }
+            
+            .btn {
+                padding: 16px;
+                font-size: 0.95rem;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- Navigation -->
         <nav class="navbar">
             <a href="dashboard.html" class="navbar-brand">
-                <i class="fas fa-arrow-right"></i> العودة
+                <i class="fas fa-arrow-right"></i>
+                <span>العودة</span>
             </a>
             <div class="navbar-menu">
-                <span class="text-primary font-bold">الملف الشخصي</span>
+                <span>الملف الشخصي</span>
             </div>
         </nav>
 
+        <!-- Profile Header -->
         <div class="profile-header">
             <div class="avatar" id="userAvatar">?</div>
             <h2 class="profile-name" id="userName">...</h2>
             <p class="profile-email" id="userEmail">...</p>
         </div>
 
+        <!-- Account Information -->
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title"><i class="fas fa-info-circle"></i> معلومات الحساب</h3>
+                <h3 class="card-title">
+                    <i class="fas fa-info-circle"></i>
+                    معلومات الحساب
+                </h3>
             </div>
             <div class="profile-info">
                 <div class="info-item">
-                    <div class="info-label"><i class="fas fa-id-card"></i> رقم الحساب</div>
+                    <div class="info-label">
+                        <i class="fas fa-id-card"></i>
+                        <span>رقم الحساب</span>
+                    </div>
                     <div class="info-value" id="accountID">...</div>
                 </div>
                 <div class="info-item">
-                    <div class="info-label"><i class="fas fa-calendar"></i> تاريخ الإنضمام</div>
+                    <div class="info-label">
+                        <i class="fas fa-calendar"></i>
+                        <span>تاريخ الإنضمام</span>
+                    </div>
                     <div class="info-value" id="createdAt">...</div>
                 </div>
                 <div class="info-item">
-                    <div class="info-label"><i class="fas fa-shield-alt"></i> حالة الحساب</div>
-                    <div class="info-value"><span class="text-success">نشط</span></div>
+                    <div class="info-label">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>حالة الحساب</span>
+                    </div>
+                    <div class="info-value">
+                        <span class="text-success">نشط</span>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">
+                        <i class="fas fa-id-badge"></i>
+                        <span>حالة KYC</span>
+                    </div>
+                    <div class="info-value" id="kycStatus">
+                        <span id="kycStatusText" class="text-success">غير مفعل</span>
+                    </div>
                 </div>
             </div>
         </div>
 
+        <!-- Security & Settings -->
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title"><i class="fas fa-cog"></i> الإعدادات والأمان</h3>
+                <h3 class="card-title">
+                    <i class="fas fa-cog"></i>
+                    الإعدادات والأمان
+                </h3>
             </div>
             <div class="profile-info">
-                <div class="info-item" onclick="changePassword()" style="cursor: pointer;">
-                    <div class="info-label"><i class="fas fa-key"></i> تغيير كلمة المرور</div>
-                    <div class="info-value"><i class="fas fa-chevron-left"></i></div>
+                <div class="info-item clickable" onclick="changePassword()">
+                    <div class="info-label">
+                        <i class="fas fa-key"></i>
+                        <span>تغيير كلمة المرور</span>
+                    </div>
+                    <div class="info-value">
+                        <i class="fas fa-chevron-left" style="color: var(--gray);"></i>
+                    </div>
+                </div>
+                <div class="info-item clickable" onclick="window.location.href='kyc-status.html'">
+                    <div class="info-label">
+                        <i class="fas fa-user-check"></i>
+                        <span>التحقق من الهوية (KYC)</span>
+                    </div>
+                    <div class="info-value">
+                        <i class="fas fa-chevron-left" style="color: var(--gray);"></i>
+                    </div>
                 </div>
                 <div class="info-item">
-                    <div class="info-label"><i class="fas fa-moon"></i> الوضع الليلي</div>
+                    <div class="info-label">
+                        <i class="fas fa-moon"></i>
+                        <span>الوضع الليلي</span>
+                    </div>
                     <div class="info-value">
                         <label class="switch">
                             <input type="checkbox" id="darkModeToggle" onchange="toggleDarkMode()">
@@ -117,86 +540,227 @@
             </div>
         </div>
 
+        <!-- Buttons Group -->
         <div class="btn-group">
             <button class="btn btn-primary" onclick="window.location.href='support.html'">
-                <i class="fas fa-headset"></i> الدعم الفني
+                <i class="fas fa-headset"></i>
+                <span>الدعم الفني</span>
             </button>
             <button class="btn btn-danger" onclick="handleLogout()">
-                <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
+                <i class="fas fa-sign-out-alt"></i>
+                <span>تسجيل الخروج</span>
             </button>
         </div>
     </div>
 
+    <!-- Alert Container -->
+    <div id="alertContainer"></div>
+
     <script type="module">
-        import { auth, db, logoutUser, getUserData, showAlert } from './app.js';
-        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { 
+            getAuth, 
+            onAuthStateChanged, 
+            signOut,
+            sendPasswordResetEmail 
+        } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { 
+            getFirestore, 
+            doc, 
+            getDoc 
+        } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-        // تحميل البيانات
-        async function loadProfile() {
-            const user = auth.currentUser;
-            if (!user) return;
+        // إعداد Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyB3vxJu_et-P80ek30I3MRdC_lGhooCCsc",
+            authDomain: "sudanpay-e332a.firebaseapp.com",
+            projectId: "sudanpay-e332a",
+            storageBucket: "sudanpay-e332a.firebasestorage.app",
+            messagingSenderId: "699809447272",
+            appId: "1:699809447272:web:90f3780ed6c768c4322add"
+        };
 
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // دالة عرض الإشعارات
+        function showAlert(message, type = 'info', duration = 3000) {
+            const alertContainer = document.getElementById('alertContainer');
+            
+            // إزالة أي إشعارات سابقة
+            alertContainer.innerHTML = '';
+            
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type}`;
+            alertDiv.innerHTML = `
+                <span>${message}</span>
+                <button class="alert-close" onclick="this.parentElement.remove()">×</button>
+            `;
+            
+            alertContainer.appendChild(alertDiv);
+            
+            // إزالة تلقائية بعد المدة
+            setTimeout(() => {
+                if (alertDiv.parentElement) {
+                    alertDiv.remove();
+                }
+            }, duration);
+        }
+
+        // دالة تحميل بيانات الملف الشخصي
+        async function loadProfile(user) {
             try {
-                const data = await getUserData(user.uid);
-                if (data) {
-                    document.getElementById('userName').textContent = data.name || "مستخدم جديد";
-                    document.getElementById('userEmail').textContent = user.email;
-                    document.getElementById('accountID').textContent = data.accountID || "N/A";
+                const userRef = doc(db, "users", user.uid);
+                const userSnap = await getDoc(userRef);
+                
+                if (userSnap.exists()) {
+                    const data = userSnap.data();
                     
-                    // الأيقونة
-                    document.getElementById('userAvatar').textContent = data.name ? data.name.charAt(0).toUpperCase() : "?";
-
-                    // تاريخ الإنشاء
+                    // تحديث المعلومات الأساسية
+                    document.getElementById('userName').textContent = data.name || "مستخدم جديد";
+                    document.getElementById('userEmail').textContent = user.email || "لا يوجد بريد إلكتروني";
+                    document.getElementById('accountID').textContent = data.accountID || "غير محدد";
+                    
+                    // تحديث الأيقونة
+                    const avatar = document.getElementById('userAvatar');
+                    avatar.textContent = data.name ? data.name.charAt(0).toUpperCase() : "?";
+                    
+                    // تحديث تاريخ الإنشاء
                     if (data.createdAt) {
                         const date = new Date(data.createdAt);
-                        document.getElementById('createdAt').textContent = date.toLocaleDateString('ar-EG');
+                        const options = { 
+                            year: 'numeric', 
+                            month: 'long', 
+                            day: 'numeric' 
+                        };
+                        document.getElementById('createdAt').textContent = date.toLocaleDateString('ar-EG', options);
+                    } else {
+                        document.getElementById('createdAt').textContent = "غير محدد";
                     }
+                    
+                    // تحديث حالة KYC
+                    const kycStatusText = document.getElementById('kycStatusText');
+                    if (data.kycStatus) {
+                        switch(data.kycStatus) {
+                            case 'verified':
+                                kycStatusText.textContent = "✓ تم التحقق";
+                                kycStatusText.className = "text-success";
+                                break;
+                            case 'pending':
+                                kycStatusText.textContent = "⏳ قيد المراجعة";
+                                kycStatusText.className = "text-warning";
+                                break;
+                            case 'rejected':
+                                kycStatusText.textContent = "✗ مرفوض";
+                                kycStatusText.className = "text-danger";
+                                break;
+                            default:
+                                kycStatusText.textContent = "غير مفعل";
+                                kycStatusText.className = "text-primary";
+                        }
+                    }
+                    
+                    showAlert('تم تحميل بيانات الملف الشخصي', 'success', 2000);
+                } else {
+                    showAlert('لم يتم العثور على بيانات المستخدم', 'error');
                 }
             } catch (error) {
-                console.error(error);
-                showAlert('خطأ في تحميل البيانات');
+                console.error('خطأ في تحميل البيانات:', error);
+                showAlert('حدث خطأ في تحميل البيانات', 'error');
             }
         }
 
-        // تسجيل الخروج
-        window.handleLogout = async () => {
+        // دالة تسجيل الخروج
+        window.handleLogout = () => {
             if(confirm('هل أنت متأكد من تسجيل الخروج؟')) {
-                await logoutUser();
-                window.location.href = 'index.html';
+                signOut(auth).then(() => {
+                    showAlert('تم تسجيل الخروج بنجاح', 'success', 1500);
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 1500);
+                }).catch((error) => {
+                    console.error('خطأ في تسجيل الخروج:', error);
+                    showAlert('حدث خطأ أثناء تسجيل الخروج', 'error');
+                });
             }
         };
 
-        // الوضع الليلي البسيط
+        // دالة تفعيل/إلغاء الوضع الليلي
         window.toggleDarkMode = () => {
-            const isDark = document.getElementById('darkModeToggle').checked;
-            if (isDark) {
-                document.body.classList.add('dark-mode-active');
-                localStorage.setItem('theme', 'dark');
+            const isDarkMode = document.getElementById('darkModeToggle').checked;
+            
+            if (isDarkMode) {
+                document.body.classList.add('dark-mode');
+                localStorage.setItem('darkMode', 'enabled');
+                showAlert('تم تفعيل الوضع الليلي', 'info', 2000);
             } else {
-                document.body.classList.remove('dark-mode-active');
-                localStorage.setItem('theme', 'light');
+                document.body.classList.remove('dark-mode');
+                localStorage.setItem('darkMode', 'disabled');
+                showAlert('تم إلغاء الوضع الليلي', 'info', 2000);
             }
         };
 
-        // تغيير كلمة المرور
+        // دالة تغيير كلمة المرور
         window.changePassword = () => {
-            showAlert('سيتم إرسال رابط تعيين كلمة المرور لبريدك قريباً', 'info');
+            const user = auth.currentUser;
+            if (!user || !user.email) {
+                showAlert('لا يمكن تغيير كلمة المرور، يرجى تسجيل الدخول أولاً', 'error');
+                return;
+            }
+            
+            if (confirm('هل تريد إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني؟')) {
+                sendPasswordResetEmail(auth, user.email)
+                    .then(() => {
+                        showAlert('تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني', 'success', 5000);
+                    })
+                    .catch((error) => {
+                        console.error('خطأ في إرسال رابط إعادة التعيين:', error);
+                        showAlert('حدث خطأ في إرسال الرابط، يرجى المحاولة لاحقاً', 'error');
+                    });
+            }
         };
 
-        // فحص حالة الدخول
+        // مراقبة حالة المصادقة
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                loadProfile();
-                // استرجاع الوضع الليلي المفضل
-                if (localStorage.getItem('theme') === 'dark') {
+                // تحميل بيانات المستخدم
+                loadProfile(user);
+                
+                // استرجاع تفضيل الوضع الليلي
+                const darkMode = localStorage.getItem('darkMode');
+                if (darkMode === 'enabled') {
                     document.getElementById('darkModeToggle').checked = true;
-                    toggleDarkMode();
+                    document.body.classList.add('dark-mode');
                 }
             } else {
+                // إذا لم يكن المستخدم مسجلاً الدخول
                 window.location.href = 'index.html';
+            }
+        });
+
+        // معالجة أخطاء الشبكة
+        window.addEventListener('online', () => {
+            showAlert('تم استعادة الاتصال بالإنترنت', 'success', 2000);
+        });
+
+        window.addEventListener('offline', () => {
+            showAlert('تم فقد الاتصال بالإنترنت', 'warning', 0);
+        });
+
+        // تهيئة الوضع الليلي عند التحميل
+        document.addEventListener('DOMContentLoaded', () => {
+            const darkMode = localStorage.getItem('darkMode');
+            if (darkMode === 'enabled') {
+                document.getElementById('darkModeToggle').checked = true;
+                document.body.classList.add('dark-mode');
+            }
+            
+            // إضافة فئة للمتصفحات القديمة
+            if (!CSS.supports('display', 'grid')) {
+                document.body.classList.add('no-grid-support');
             }
         });
     </script>
 </body>
-</html>
-
+                            </html>
