@@ -22,7 +22,12 @@
             --border: #e2e8f0;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: 'Cairo', sans-serif; 
+        }
 
         body {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -31,6 +36,11 @@
             justify-content: center;
             align-items: center;
             padding: 20px;
+            transition: background 0.3s ease;
+        }
+
+        body.dark-mode {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
         }
 
         .login-container {
@@ -41,15 +51,47 @@
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
             padding: 50px 40px;
             text-align: center;
+            transition: all 0.3s ease;
         }
 
-        .logo { font-size: 4rem; color: var(--primary); margin-bottom: 25px; }
+        .dark-mode .login-container {
+            background: #1e293b;
+            color: #f1f5f9;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
 
-        h1 { font-size: 2rem; color: var(--dark); margin-bottom: 10px; font-weight: 800; }
+        .logo { 
+            font-size: 4rem; 
+            color: var(--primary); 
+            margin-bottom: 25px; 
+        }
 
-        .subtitle { color: var(--gray); margin-bottom: 40px; font-size: 1.1rem; line-height: 1.6; }
+        h1 { 
+            font-size: 2rem; 
+            color: var(--dark); 
+            margin-bottom: 10px; 
+            font-weight: 800; 
+        }
 
-        .input-group { margin-bottom: 25px; position: relative; }
+        .dark-mode h1 {
+            color: #f1f5f9;
+        }
+
+        .subtitle { 
+            color: var(--gray); 
+            margin-bottom: 40px; 
+            font-size: 1.1rem; 
+            line-height: 1.6; 
+        }
+
+        .dark-mode .subtitle {
+            color: #cbd5e1;
+        }
+
+        .input-group { 
+            margin-bottom: 25px; 
+            position: relative; 
+        }
 
         .input-icon {
             position: absolute;
@@ -58,6 +100,7 @@
             transform: translateY(-50%);
             color: var(--gray);
             font-size: 1.2rem;
+            z-index: 2;
         }
 
         input {
@@ -69,6 +112,13 @@
             transition: all 0.3s;
             background: #f8fafc;
             text-align: right;
+            direction: ltr;
+        }
+
+        .dark-mode input {
+            background: #334155;
+            border-color: #475569;
+            color: #f1f5f9;
         }
 
         input:focus {
@@ -76,6 +126,11 @@
             outline: none;
             background: white;
             box-shadow: 0 0 0 4px rgba(13, 148, 136, 0.1);
+        }
+
+        .dark-mode input:focus {
+            background: #475569;
+            box-shadow: 0 0 0 4px rgba(13, 148, 136, 0.2);
         }
 
         .password-toggle {
@@ -89,6 +144,11 @@
             cursor: pointer;
             font-size: 1.2rem;
             padding: 5px;
+            z-index: 2;
+        }
+
+        .password-toggle:hover {
+            color: var(--primary);
         }
 
         .btn-primary {
@@ -110,14 +170,60 @@
             box-shadow: 0 8px 20px rgba(13, 148, 136, 0.3);
         }
 
-        .btn-primary:hover {
+        .btn-primary:hover:not(:disabled) {
             transform: translateY(-3px);
             box-shadow: 0 12px 25px rgba(13, 148, 136, 0.4);
         }
 
-        .divider { display: flex; align-items: center; margin: 30px 0; color: var(--gray); font-size: 0.95rem; }
-        .divider::before, .divider::after { content: ''; flex: 1; border-bottom: 1px solid var(--border); }
-        .divider span { padding: 0 20px; }
+        .btn-primary:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .btn-google {
+            background: white;
+            color: var(--dark);
+            border: 2px solid var(--border);
+            box-shadow: none;
+        }
+
+        .btn-google:hover:not(:disabled) {
+            background: #f8fafc;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .dark-mode .btn-google {
+            background: #334155;
+            color: #f1f5f9;
+            border-color: #475569;
+        }
+
+        .divider { 
+            display: flex; 
+            align-items: center; 
+            margin: 30px 0; 
+            color: var(--gray); 
+            font-size: 0.95rem; 
+        }
+        .divider::before, .divider::after { 
+            content: ''; 
+            flex: 1; 
+            border-bottom: 1px solid var(--border); 
+        }
+        .divider span { 
+            padding: 0 20px; 
+            background: white; 
+        }
+
+        .dark-mode .divider span {
+            background: #1e293b;
+        }
+
+        .dark-mode .divider::before,
+        .dark-mode .divider::after {
+            border-bottom-color: #475569;
+        }
 
         .auth-footer {
             text-align: center;
@@ -127,7 +233,20 @@
             border-top: 1px solid var(--border);
         }
 
-        .auth-footer a { color: var(--primary); text-decoration: none; font-weight: 700; }
+        .dark-mode .auth-footer {
+            border-top-color: #475569;
+        }
+
+        .auth-footer a { 
+            color: var(--primary); 
+            text-decoration: none; 
+            font-weight: 700; 
+            transition: color 0.3s;
+        }
+
+        .auth-footer a:hover {
+            text-decoration: underline;
+        }
 
         .loading {
             display: inline-block;
@@ -139,36 +258,181 @@
             animation: spin 1s ease-in-out infinite;
         }
 
-        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes spin { 
+            to { 
+                transform: rotate(360deg); 
+            } 
+        }
 
+        /* Alert System */
         #alert-box {
-            display: none;
-            padding: 15px;
+            position: relative;
+            padding: 15px 20px;
             border-radius: 10px;
             margin-bottom: 20px;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             font-weight: 600;
+            display: none;
+            animation: slideDown 0.3s ease;
+            text-align: right;
         }
-        .alert-error { background: #fee2e2; color: #b91c1c; border: 1px solid #fecaca; }
-        .alert-success { background: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; }
-        .alert-warning { background: #ffedd5; color: #9a3412; border: 1px solid #fed7aa; }
 
+        .alert-error { 
+            background: #fee2e2; 
+            color: #b91c1c; 
+            border: 1px solid #fecaca; 
+        }
+
+        .alert-success { 
+            background: #d1fae5; 
+            color: #065f46; 
+            border: 1px solid #a7f3d0; 
+        }
+
+        .alert-warning { 
+            background: #ffedd5; 
+            color: #9a3412; 
+            border: 1px solid #fed7aa; 
+        }
+
+        .alert-info { 
+            background: #dbeafe; 
+            color: #1e40af; 
+            border: 1px solid #bfdbfe; 
+        }
+
+        .dark-mode .alert-error { 
+            background: #7f1d1d; 
+            color: #fecaca; 
+            border-color: #991b1b; 
+        }
+
+        .dark-mode .alert-success { 
+            background: #065f46; 
+            color: #a7f3d0; 
+            border-color: #047857; 
+        }
+
+        .dark-mode .alert-warning { 
+            background: #92400e; 
+            color: #fed7aa; 
+            border-color: #b45309; 
+        }
+
+        .dark-mode .alert-info { 
+            background: #1e40af; 
+            color: #bfdbfe; 
+            border-color: #1d4ed8; 
+        }
+
+        .alert-close {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: inherit;
+            cursor: pointer;
+            font-size: 1.2rem;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+
+        .alert-close:hover {
+            opacity: 1;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: var(--dark);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .dark-mode .theme-toggle {
+            background: rgba(30, 41, 59, 0.9);
+            color: #f1f5f9;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 30px 20px;
+            }
+            
+            .logo {
+                font-size: 3rem;
+            }
+            
+            h1 {
+                font-size: 1.7rem;
+            }
+            
+            input, .btn-primary {
+                padding: 16px;
+            }
+            
+            .theme-toggle {
+                top: 15px;
+                left: 15px;
+                width: 35px;
+                height: 35px;
+            }
+        }
     </style>
 </head>
 <body>
+    <!-- Theme Toggle Button -->
+    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">
+        <i class="fas fa-moon" id="themeIcon"></i>
+    </button>
+
     <div class="login-container">
         <div class="logo"><i class="fas fa-wallet"></i></div>
         
         <h1>Sudan Pay</h1>
         <p class="subtitle">سجل دخولك للوصول إلى محفظتك الرقمية الآمنة</p>
 
+        <!-- Alert Box -->
         <div id="alert-box"></div>
         
+        <!-- Email Input -->
         <div class="input-group">
             <i class="fas fa-envelope input-icon"></i>
             <input type="email" id="email" placeholder="البريد الإلكتروني" required>
         </div>
         
+        <!-- Password Input -->
         <div class="input-group">
             <i class="fas fa-lock input-icon"></i>
             <button type="button" class="password-toggle" onclick="togglePassword()">
@@ -177,27 +441,45 @@
             <input type="password" id="password" placeholder="كلمة المرور" required>
         </div>
         
+        <!-- Login Button -->
         <button id="login-btn" class="btn-primary">
             <i class="fas fa-sign-in-alt"></i> <span>تسجيل الدخول</span>
         </button>
         
+        <!-- Divider -->
         <div class="divider"><span>أو</span></div>
         
-        <button id="google-btn" class="btn-primary" style="background: white; color: var(--dark); border: 2px solid var(--border); box-shadow: none;">
+        <!-- Google Sign-In Button -->
+        <button id="google-btn" class="btn-primary btn-google">
             <i class="fab fa-google" style="color: #4285F4;"></i> الدخول بجوجل
         </button>
         
+        <!-- Footer Links -->
         <div class="auth-footer">
             <p>ليس لديك حساب؟ <a href="signup.html">إنشاء حساب جديد</a></p>
-            <p style="margin-top: 10px;"><a href="#" onclick="resetPassword()" style="font-size: 0.9rem; color: var(--gray);">نسيت كلمة المرور؟</a></p>
+            <p style="margin-top: 10px;">
+                <a href="#" onclick="resetPassword()" style="font-size: 0.9rem;">نسيت كلمة المرور؟</a>
+            </p>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { 
+            getAuth, 
+            signInWithEmailAndPassword, 
+            GoogleAuthProvider, 
+            signInWithPopup, 
+            sendPasswordResetEmail,
+            onAuthStateChanged 
+        } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { 
+            getFirestore, 
+            doc, 
+            getDoc 
+        } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+        // ==================== Firebase Configuration ====================
         const firebaseConfig = {
             apiKey: "AIzaSyB3vxJu_et-P80ek30I3MRdC_lGhooCCsc",
             authDomain: "sudanpay-e332a.firebaseapp.com",
@@ -207,87 +489,339 @@
             appId: "1:699809447272:web:90f3780ed6c768c4322add"
         };
 
+        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
+        const googleProvider = new GoogleAuthProvider();
 
-        // تنبيهات مخصصة
-        function showAlert(msg, type = 'error') {
-            const box = document.getElementById('alert-box');
-            box.innerText = msg;
-            box.className = type === 'error' ? 'alert-error' : (type === 'success' ? 'alert-success' : 'alert-warning');
-            box.style.display = 'block';
-            if(type === 'success') setTimeout(() => box.style.display = 'none', 3000);
+        // ==================== Alert System ====================
+        function showAlert(message, type = 'error', duration = 5000) {
+            const alertBox = document.getElementById('alert-box');
+            
+            // Clear previous alerts
+            alertBox.innerHTML = '';
+            
+            // Create alert content
+            alertBox.innerHTML = `
+                <span>${message}</span>
+                <button class="alert-close" onclick="this.parentElement.style.display='none'">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            
+            // Set type and display
+            alertBox.className = `alert-${type}`;
+            alertBox.style.display = 'block';
+            
+            // Auto-hide for success/info messages
+            if (type === 'success' || type === 'info') {
+                setTimeout(() => {
+                    alertBox.style.display = 'none';
+                }, duration);
+            }
         }
 
-        // إظهار وإخفاء كلمة المرور
+        // ==================== Password Visibility Toggle ====================
         window.togglePassword = () => {
-            const passInput = document.getElementById('password');
-            const icon = document.getElementById('eye-icon');
-            if (passInput.type === 'password') {
-                passInput.type = 'text';
-                icon.className = 'fas fa-eye-slash';
+            const passwordInput = document.getElementById('password');
+            const eyeIcon = document.getElementById('eye-icon');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                eyeIcon.className = 'fas fa-eye-slash';
+                eyeIcon.style.color = 'var(--primary)';
             } else {
-                passInput.type = 'password';
-                icon.className = 'fas fa-eye';
+                passwordInput.type = 'password';
+                eyeIcon.className = 'fas fa-eye';
+                eyeIcon.style.color = '';
             }
         };
 
-        // دالة تسجيل الدخول والتحقق من KYC
-        async function handleLogin() {
+        // ==================== Theme Toggle ====================
+        window.toggleTheme = () => {
+            const body = document.body;
+            const themeIcon = document.getElementById('themeIcon');
+            const isDarkMode = body.classList.contains('dark-mode');
+            
+            if (isDarkMode) {
+                body.classList.remove('dark-mode');
+                themeIcon.className = 'fas fa-moon';
+                localStorage.setItem('theme', 'light');
+                showAlert('تم تفعيل الوضع الفاتح', 'info', 2000);
+            } else {
+                body.classList.add('dark-mode');
+                themeIcon.className = 'fas fa-sun';
+                localStorage.setItem('theme', 'dark');
+                showAlert('تم تفعيل الوضع الليلي', 'info', 2000);
+            }
+        };
+
+        // ==================== Login with Email/Password ====================
+        async function handleEmailLogin() {
             const email = document.getElementById('email').value.trim();
-            const pass = document.getElementById('password').value;
-            const btn = document.getElementById('login-btn');
-
-            if (!email || !pass) { showAlert('يرجى ملء جميع الحقول'); return; }
-
+            const password = document.getElementById('password').value;
+            const loginBtn = document.getElementById('login-btn');
+            
+            // Validation
+            if (!email || !password) {
+                showAlert('يرجى ملء جميع الحقول المطلوبة', 'warning');
+                return;
+            }
+            
+            if (!validateEmail(email)) {
+                showAlert('يرجى إدخال بريد إلكتروني صحيح', 'warning');
+                return;
+            }
+            
             try {
-                btn.disabled = true;
-                btn.innerHTML = '<div class="loading"></div> جاري التحقق...';
+                // Disable button and show loading
+                loginBtn.disabled = true;
+                loginBtn.innerHTML = '<div class="loading"></div> جاري التحقق...';
                 
-                const userCred = await signInWithEmailAndPassword(auth, email, pass);
-                const uid = userCred.user.uid;
-
-                // فحص حالة الحساب في Firestore
-                const userDoc = await getDoc(doc(db, "users", uid));
+                // Sign in with Firebase
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+                
+                // Check user data in Firestore
+                const userDoc = await getDoc(doc(db, "users", user.uid));
                 
                 if (userDoc.exists()) {
                     const userData = userDoc.data();
-                    const status = userData.kycStatus;
-
-                    if (status === "pending") {
-                        showAlert('⚠️ حسابك قيد المراجعة حالياً. سيتم تفعيله خلال 24 ساعة.', 'warning');
-                        await signOut(auth); // طرده من الجلسة حتى يتم التفعيل
-                    } else if (status === "rejected") {
-                        showAlert('❌ تم رفض طلب انضمامك. يرجى مراجعة الدعم الفني.', 'error');
-                        await signOut(auth);
-                    } else {
-                        showAlert('تم تسجيل الدخول بنجاح!', 'success');
-                        setTimeout(() => window.location.href = "dashboard.html", 1000);
+                    const kycStatus = userData.kycStatus || 'not_submitted';
+                    
+                    // Handle KYC status
+                    switch (kycStatus) {
+                        case 'verified':
+                            showAlert('✅ تم تسجيل الدخول بنجاح!', 'success');
+                            setTimeout(() => {
+                                window.location.href = 'dashboard.html';
+                            }, 1500);
+                            break;
+                            
+                        case 'pending':
+                            showAlert('⏳ حسابك قيد المراجعة. يمكنك استخدام الخدمات الأساسية.', 'warning');
+                            setTimeout(() => {
+                                window.location.href = 'dashboard.html';
+                            }, 2000);
+                            break;
+                            
+                        case 'rejected':
+                            showAlert('❌ تم رفض طلب التحقق. يرجى التواصل مع الدعم الفني.', 'error');
+                            // Don't logout, let them access limited features
+                            setTimeout(() => {
+                                window.location.href = 'dashboard.html';
+                            }, 3000);
+                            break;
+                            
+                        default:
+                            showAlert('مرحباً بك! يرجى إكمال التحقق من الهوية.', 'info');
+                            setTimeout(() => {
+                                window.location.href = 'kyc-verification.html';
+                            }, 1500);
                     }
                 } else {
-                    showAlert('لم يتم العثور على بيانات الحساب.');
+                    // First-time user
+                    showAlert('مرحباً بك! يرجى إكمال ملفك الشخصي.', 'success');
+                    setTimeout(() => {
+                        window.location.href = 'profile-setup.html';
+                    }, 1500);
                 }
+                
             } catch (error) {
-                console.error(error);
-                showAlert('خطأ: تأكد من صحة البريد الإلكتروني وكلمة المرور');
+                console.error('Login error:', error);
+                
+                // User-friendly error messages
+                let errorMessage = 'حدث خطأ أثناء تسجيل الدخول';
+                
+                switch (error.code) {
+                    case 'auth/invalid-email':
+                        errorMessage = 'البريد الإلكتروني غير صحيح';
+                        break;
+                    case 'auth/user-disabled':
+                        errorMessage = 'هذا الحساب معطل';
+                        break;
+                    case 'auth/user-not-found':
+                        errorMessage = 'لا يوجد حساب مرتبط بهذا البريد';
+                        break;
+                    case 'auth/wrong-password':
+                        errorMessage = 'كلمة المرور غير صحيحة';
+                        break;
+                    case 'auth/too-many-requests':
+                        errorMessage = 'محاولات دخول كثيرة، حاول لاحقاً';
+                        break;
+                    case 'auth/network-request-failed':
+                        errorMessage = 'خطأ في الاتصال بالشبكة';
+                        break;
+                }
+                
+                showAlert(`❌ ${errorMessage}`, 'error');
+                
             } finally {
-                btn.disabled = false;
-                btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> تسجيل الدخول';
+                // Reset button state
+                loginBtn.disabled = false;
+                loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> <span>تسجيل الدخول</span>';
             }
         }
 
-        // استعادة كلمة المرور
-        window.resetPassword = () => {
-            const email = document.getElementById('email').value;
-            if(!email) { showAlert('أدخل بريدك أولاً لإرسال رابط الاستعادة'); return; }
-            sendPasswordResetEmail(auth, email)
-                .then(() => showAlert('تم إرسال رابط الاستعادة لبريدك', 'success'))
-                .catch(err => showAlert('خطأ في إرسال الرابط'));
+        // ==================== Google Sign-In ====================
+        async function handleGoogleLogin() {
+            const googleBtn = document.getElementById('google-btn');
+            
+            try {
+                // Disable button and show loading
+                googleBtn.disabled = true;
+                googleBtn.innerHTML = '<div class="loading"></div> جاري الاتصال...';
+                
+                // Sign in with Google
+                const result = await signInWithPopup(auth, googleProvider);
+                const user = result.user;
+                
+                // Check if user exists in Firestore
+                const userDoc = await getDoc(doc(db, "users", user.uid));
+                
+                if (userDoc.exists()) {
+                    const userData = userDoc.data();
+                    showAlert(`مرحباً ${userData.name || user.displayName}!`, 'success');
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 1500);
+                } else {
+                    // New Google user - redirect to complete profile
+                    showAlert('مرحباً! يرجى إكمال معلومات حسابك.', 'info');
+                    setTimeout(() => {
+                        window.location.href = 'complete-profile.html';
+                    }, 1500);
+                }
+                
+            } catch (error) {
+                console.error('Google sign-in error:', error);
+                
+                let errorMessage = 'فشل الدخول بحساب Google';
+                
+                if (error.code === 'auth/popup-closed-by-user') {
+                    errorMessage = 'تم إغلاق نافذة الدخول';
+                } else if (error.code === 'auth/account-exists-with-different-credential') {
+                    errorMessage = 'يوجد حساب بنفس البريد الإلكتروني بطريقة تسجيل أخرى';
+                }
+                
+                showAlert(`❌ ${errorMessage}`, 'error');
+                
+            } finally {
+                // Reset button state
+                googleBtn.disabled = false;
+                googleBtn.innerHTML = '<i class="fab fa-google" style="color: #4285F4;"></i> الدخول بجوجل';
+            }
+        }
+
+        // ==================== Password Reset ====================
+        window.resetPassword = async () => {
+            const email = document.getElementById('email').value.trim();
+            
+            if (!email) {
+                showAlert('يرجى إدخال البريد الإلكتروني أولاً', 'warning');
+                document.getElementById('email').focus();
+                return;
+            }
+            
+            if (!validateEmail(email)) {
+                showAlert('يرجى إدخال بريد إلكتروني صحيح', 'warning');
+                return;
+            }
+            
+            if (confirm(`هل تريد إرسال رابط إعادة تعيين كلمة المرور إلى:\n${email}`)) {
+                try {
+                    await sendPasswordResetEmail(auth, email);
+                    showAlert('✅ تم إرسال رابط إعادة التعيين إلى بريدك الإلكتروني', 'success');
+                } catch (error) {
+                    console.error('Password reset error:', error);
+                    showAlert('❌ فشل في إرسال الرابط، تأكد من صحة البريد', 'error');
+                }
+            }
         };
 
-        document.getElementById('login-btn').addEventListener('click', handleLogin);
+        // ==================== Helper Functions ====================
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+
+        function initializeTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            
+            if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+                document.body.classList.add('dark-mode');
+                document.getElementById('themeIcon').className = 'fas fa-sun';
+            }
+        }
+
+        function checkAutoFill() {
+            // Check if inputs are auto-filled and adjust styling
+            setTimeout(() => {
+                const emailInput = document.getElementById('email');
+                const passwordInput = document.getElementById('password');
+                
+                if (emailInput.value) {
+                    emailInput.style.background = '#f0fdf4';
+                }
+                
+                if (passwordInput.value) {
+                    passwordInput.style.background = '#f0fdf4';
+                }
+            }, 100);
+        }
+
+        // ==================== Event Listeners ====================
+        document.getElementById('login-btn').addEventListener('click', handleEmailLogin);
+        document.getElementById('google-btn').addEventListener('click', handleGoogleLogin);
+
+        // Enter key support
+        document.getElementById('password').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                handleEmailLogin();
+            }
+        });
+
+        // ==================== Initialize ====================
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize theme
+            initializeTheme();
+            
+            // Check for autofill
+            checkAutoFill();
+            
+            // Check if user is already logged in
+            onAuthStateChanged(auth, (user) => {
+                if (user) {
+                    // User is already logged in, redirect to dashboard
+                    window.location.href = 'dashboard.html';
+                }
+            });
+            
+            // Welcome message
+            setTimeout(() => {
+                if (!localStorage.getItem('welcomeShown')) {
+                    showAlert('مرحباً بك في Sudan Pay - المحفظة الرقمية الآمنة', 'info', 3000);
+                    localStorage.setItem('welcomeShown', 'true');
+                }
+            }, 1000);
+        });
+
+        // ==================== Error Handling ====================
+        window.addEventListener('error', (event) => {
+            console.error('Global error:', event.error);
+            showAlert('حدث خطأ غير متوقع، يرجى تحديث الصفحة', 'error');
+        });
+
+        // ==================== Network Status ====================
+        window.addEventListener('online', () => {
+            showAlert('تم استعادة الاتصال بالإنترنت', 'success', 2000);
+        });
+
+        window.addEventListener('offline', () => {
+            showAlert('تم فقد الاتصال بالإنترنت', 'warning', 0);
+        });
     </script>
 </body>
-</html>
-
+                                         </html>
