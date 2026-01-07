@@ -20,6 +20,7 @@
             --danger: #ef4444;
             --warning: #f59e0b;
             --border: #e2e8f0;
+            --border-radius: 14px;
         }
 
         * { 
@@ -37,6 +38,57 @@
             align-items: center;
             padding: 20px;
             transition: background 0.3s ease;
+            overflow-x: hidden;
+        }
+
+        /* خلفية متحركة متطورة */
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            overflow: hidden;
+        }
+
+        .gradient-bg {
+            background: linear-gradient(-45deg, 
+                #667eea, #764ba2, #0d9488, #0891b2);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* تأثيرات floating */
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+
+        @keyframes floating {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* تأثيرات دخول */
+        .fade-in-up {
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         body.dark-mode {
@@ -47,11 +99,14 @@
             background: white;
             width: 100%;
             max-width: 450px;
-            border-radius: 24px;
+            border-radius: var(--border-radius);
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
             padding: 50px 40px;
             text-align: center;
             transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+            animation: fadeInUp 0.8s ease-out;
         }
 
         .dark-mode .login-container {
@@ -64,6 +119,7 @@
             font-size: 4rem; 
             color: var(--primary); 
             margin-bottom: 25px; 
+            animation: floating 3s ease-in-out infinite;
         }
 
         h1 { 
@@ -88,180 +144,78 @@
             color: #cbd5e1;
         }
 
-        .input-group { 
-            margin-bottom: 25px; 
-            position: relative; 
-        }
-
-        .input-icon {
-            position: absolute;
-            right: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--gray);
-            font-size: 1.2rem;
-            z-index: 2;
-        }
-
-        input {
+        /* شريط التقدم */
+        .progress-container {
             width: 100%;
-            padding: 18px 60px 18px 20px;
-            border: 2px solid var(--border);
-            border-radius: 14px;
-            font-size: 1.1rem;
-            transition: all 0.3s;
-            background: #f8fafc;
-            text-align: right;
-            direction: ltr;
+            max-width: 400px;
+            margin: 0 auto 30px;
         }
 
-        .dark-mode input {
-            background: #334155;
-            border-color: #475569;
-            color: #f1f5f9;
+        .progress-bar {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
         }
 
-        input:focus {
-            border-color: var(--primary);
-            outline: none;
-            background: white;
-            box-shadow: 0 0 0 4px rgba(13, 148, 136, 0.1);
-        }
-
-        .dark-mode input:focus {
-            background: #475569;
-            box-shadow: 0 0 0 4px rgba(13, 148, 136, 0.2);
-        }
-
-        .password-toggle {
+        .progress-bar::before {
+            content: '';
             position: absolute;
-            left: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            color: var(--gray);
-            cursor: pointer;
-            font-size: 1.2rem;
-            padding: 5px;
+            top: 25px;
+            left: 10%;
+            right: 10%;
+            height: 3px;
+            background: var(--border);
+            z-index: 1;
+        }
+
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 25px;
+            left: 10%;
+            width: 33%;
+            height: 3px;
+            background: var(--primary);
             z-index: 2;
+            transition: width 0.5s ease;
         }
 
-        .password-toggle:hover {
-            color: var(--primary);
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 3;
+            position: relative;
         }
 
-        .btn-primary {
-            background: linear-gradient(to right, var(--primary), var(--primary-dark));
-            color: white;
-            border: none;
-            padding: 18px;
-            border-radius: 14px;
-            font-size: 1.2rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s;
-            width: 100%;
-            margin: 10px 0 25px;
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--border);
+            color: var(--gray);
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;
-            box-shadow: 0 8px 20px rgba(13, 148, 136, 0.3);
+            font-weight: 700;
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
         }
 
-        .btn-primary:hover:not(:disabled) {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 25px rgba(13, 148, 136, 0.4);
+        .progress-step.active .step-number {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 0 0 5px rgba(13, 148, 136, 0.2);
         }
 
-        .btn-primary:disabled {
-            opacity: 0.7;
-            cursor: not-allowed;
-        }
-
-        .btn-google {
-            background: white;
-            color: var(--dark);
-            border: 2px solid var(--border);
-            box-shadow: none;
-        }
-
-        .btn-google:hover:not(:disabled) {
-            background: #f8fafc;
-            transform: translateY(-3px);
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .dark-mode .btn-google {
-            background: #334155;
-            color: #f1f5f9;
-            border-color: #475569;
-        }
-
-        .divider { 
-            display: flex; 
-            align-items: center; 
-            margin: 30px 0; 
-            color: var(--gray); 
-            font-size: 0.95rem; 
-        }
-        .divider::before, .divider::after { 
-            content: ''; 
-            flex: 1; 
-            border-bottom: 1px solid var(--border); 
-        }
-        .divider span { 
-            padding: 0 20px; 
-            background: white; 
-        }
-
-        .dark-mode .divider span {
-            background: #1e293b;
-        }
-
-        .dark-mode .divider::before,
-        .dark-mode .divider::after {
-            border-bottom-color: #475569;
-        }
-
-        .auth-footer {
-            text-align: center;
+        .step-label {
+            font-size: 0.8rem;
             color: var(--gray);
-            font-size: 1rem;
-            padding-top: 20px;
-            border-top: 1px solid var(--border);
+            font-weight: 600;
         }
 
-        .dark-mode .auth-footer {
-            border-top-color: #475569;
-        }
-
-        .auth-footer a { 
-            color: var(--primary); 
-            text-decoration: none; 
-            font-weight: 700; 
-            transition: color 0.3s;
-        }
-
-        .auth-footer a:hover {
-            text-decoration: underline;
-        }
-
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255,255,255,0.3);
-            border-radius: 50%;
-            border-top-color: white;
-            animation: spin 1s ease-in-out infinite;
-        }
-
-        @keyframes spin { 
-            to { 
-                transform: rotate(360deg); 
-            } 
+        .progress-step.active .step-label {
+            color: var(--primary);
         }
 
         /* Alert System */
@@ -354,23 +308,343 @@
             }
         }
 
+        /* Input Groups */
+        .input-group { 
+            margin-bottom: 25px; 
+            position: relative;
+            perspective: 1000px;
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+            font-size: 1.2rem;
+            z-index: 2;
+            transition: color 0.3s;
+        }
+
+        input {
+            width: 100%;
+            padding: 18px 60px 18px 20px;
+            border: 2px solid var(--border);
+            border-radius: var(--border-radius);
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            background: #f8fafc;
+            text-align: right;
+            direction: ltr;
+            position: relative;
+        }
+
+        .dark-mode input {
+            background: #334155;
+            border-color: #475569;
+            color: #f1f5f9;
+        }
+
+        input:focus {
+            border-color: var(--primary);
+            outline: none;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(13, 148, 136, 0.1);
+        }
+
+        .dark-mode input:focus {
+            background: #475569;
+            box-shadow: 0 0 0 4px rgba(13, 148, 136, 0.2);
+        }
+
+        /* تأثير focus للـ input */
+        .input-focus-effect {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: width 0.4s ease;
+            border-radius: 0 0 var(--border-radius) var(--border-radius);
+        }
+
+        input:focus ~ .input-focus-effect {
+            width: 100%;
+        }
+
+        /* تأثير اهتزاز للخطأ */
+        .shake {
+            animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+        }
+
+        @keyframes shake {
+            10%, 90% { transform: translateX(-1px); }
+            20%, 80% { transform: translateX(2px); }
+            30%, 50%, 70% { transform: translateX(-3px); }
+            40%, 60% { transform: translateX(3px); }
+        }
+
+        .password-toggle {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--gray);
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 5px;
+            z-index: 2;
+            transition: color 0.3s;
+        }
+
+        .password-toggle:hover {
+            color: var(--primary);
+        }
+
+        /* Buttons */
+        .btn-primary {
+            background: linear-gradient(to right, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: var(--border-radius);
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin: 10px 0 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            box-shadow: 0 8px 20px rgba(13, 148, 136, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* تأثير ripple للأزرار */
+        .ripple {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ripple:after {
+            content: "";
+            display: block;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            background-image: radial-gradient(circle, #fff 10%, transparent 10.01%);
+            background-repeat: no-repeat;
+            background-position: 50%;
+            transform: scale(10, 10);
+            opacity: 0;
+            transition: transform .5s, opacity 1s;
+        }
+
+        .ripple:active:after {
+            transform: scale(0, 0);
+            opacity: .3;
+            transition: 0s;
+        }
+
+        /* تأثير pulse */
+        .pulse-effect {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pulse-effect:after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 5px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.5);
+            opacity: 0;
+            border-radius: 100%;
+            transform: scale(1, 1) translate(-50%);
+            transform-origin: 50% 50%;
+        }
+
+        .pulse-effect:focus:not(:active)::after {
+            animation: ripple 1s ease-out;
+        }
+
+        @keyframes ripple {
+            0% {
+                transform: scale(0, 0);
+                opacity: 0.5;
+            }
+            100% {
+                transform: scale(50, 50);
+                opacity: 0;
+            }
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(13, 148, 136, 0.4);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .btn-google {
+            background: white;
+            color: var(--dark);
+            border: 2px solid var(--border);
+            box-shadow: none;
+        }
+
+        .btn-google:hover:not(:disabled) {
+            background: #f8fafc;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .dark-mode .btn-google {
+            background: #334155;
+            color: #f1f5f9;
+            border-color: #475569;
+        }
+
+        /* Quick Login Buttons */
+        .quick-login-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .quick-login-btn {
+            background: transparent;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 15px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--dark);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .quick-login-btn i {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .quick-login-btn:hover {
+            background: rgba(13, 148, 136, 0.05);
+            border-color: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .dark-mode .quick-login-btn {
+            color: #f1f5f9;
+            border-color: #475569;
+        }
+
+        .dark-mode .quick-login-btn:hover {
+            background: rgba(13, 148, 136, 0.1);
+        }
+
+        .divider { 
+            display: flex; 
+            align-items: center; 
+            margin: 30px 0; 
+            color: var(--gray); 
+            font-size: 0.95rem; 
+        }
+        .divider::before, .divider::after { 
+            content: ''; 
+            flex: 1; 
+            border-bottom: 1px solid var(--border); 
+        }
+        .divider span { 
+            padding: 0 20px; 
+            background: white; 
+        }
+
+        .dark-mode .divider span {
+            background: #1e293b;
+        }
+
+        .dark-mode .divider::before,
+        .dark-mode .divider::after {
+            border-bottom-color: #475569;
+        }
+
+        .auth-footer {
+            text-align: center;
+            color: var(--gray);
+            font-size: 1rem;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        .dark-mode .auth-footer {
+            border-top-color: #475569;
+        }
+
+        .auth-footer a { 
+            color: var(--primary); 
+            text-decoration: none; 
+            font-weight: 700; 
+            transition: color 0.3s;
+        }
+
+        .auth-footer a:hover {
+            text-decoration: underline;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin { 
+            to { 
+                transform: rotate(360deg); 
+            } 
+        }
+
         /* Theme Toggle */
         .theme-toggle {
-            position: absolute;
+            position: fixed;
             top: 20px;
             left: 20px;
             background: rgba(255, 255, 255, 0.9);
             border: none;
             border-radius: 50%;
-            width: 40px;
-            height: 40px;
+            width: 50px;
+            height: 50px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             color: var(--dark);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
             z-index: 100;
         }
@@ -381,7 +655,174 @@
         }
 
         .theme-toggle:hover {
-            transform: scale(1.1);
+            transform: scale(1.1) rotate(15deg);
+        }
+
+        /* Notification Bell */
+        .notification-bell {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            color: var(--dark);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .notification-bell:hover {
+            transform: scale(1.1) rotate(-15deg);
+            color: var(--primary);
+        }
+
+        .notification-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--danger);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .dark-mode .notification-bell {
+            background: rgba(30, 41, 59, 0.9);
+            color: #f1f5f9;
+        }
+
+        /* Design Customization Panel */
+        .design-options {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 999;
+        }
+
+        .design-toggle {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 1.3rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .design-toggle:hover {
+            transform: scale(1.1) rotate(15deg);
+        }
+
+        .options-panel {
+            position: absolute;
+            bottom: 60px;
+            right: 0;
+            width: 280px;
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            display: none;
+        }
+
+        .dark-mode .options-panel {
+            background: #1e293b;
+        }
+
+        .options-panel h4 {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--dark);
+        }
+
+        .dark-mode .options-panel h4 {
+            color: #f1f5f9;
+        }
+
+        .option-group {
+            margin-bottom: 20px;
+        }
+
+        .option-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--gray);
+        }
+
+        .color-options {
+            display: flex;
+            gap: 10px;
+        }
+
+        .color-option {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 2px solid white;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .color-option:hover {
+            transform: scale(1.2);
+        }
+
+        .radius-options {
+            display: flex;
+            gap: 8px;
+        }
+
+        .radius-option {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .radius-option:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .option-group input[type="range"] {
+            width: 100%;
+            height: 6px;
+            background: var(--border);
+            border-radius: 3px;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .option-group input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
         }
 
         /* Responsive */
@@ -402,26 +843,95 @@
                 padding: 16px;
             }
             
-            .theme-toggle {
+            .theme-toggle,
+            .notification-bell {
                 top: 15px;
-                left: 15px;
-                width: 35px;
-                height: 35px;
+                width: 40px;
+                height: 40px;
+                font-size: 1.1rem;
             }
+            
+            .theme-toggle {
+                left: 15px;
+            }
+            
+            .notification-bell {
+                right: 15px;
+            }
+            
+            .design-toggle {
+                width: 40px;
+                height: 40px;
+                font-size: 1.1rem;
+            }
+            
+            .options-panel {
+                width: 260px;
+                padding: 15px;
+            }
+            
+            .quick-login-options {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* تأثير الكتابة للنص */
+        .typing-text {
+            overflow: hidden;
+            border-right: 2px solid var(--primary);
+            white-space: nowrap;
+            animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
+        }
+
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent; }
+            50% { border-color: var(--primary); }
         }
     </style>
 </head>
 <body>
+    <!-- الخلفية المتحركة -->
+    <div class="animated-bg gradient-bg"></div>
+    
     <!-- Theme Toggle Button -->
     <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">
         <i class="fas fa-moon" id="themeIcon"></i>
     </button>
 
-    <div class="login-container">
+    <!-- Notification Bell -->
+    <button class="notification-bell" id="notificationBell" onclick="toggleNotifications()">
+        <i class="fas fa-bell"></i>
+        <span class="notification-count" id="notificationCount">3</span>
+    </button>
+
+    <div class="login-container fade-in-up">
         <div class="logo"><i class="fas fa-wallet"></i></div>
         
         <h1>Sudan Pay</h1>
         <p class="subtitle">سجل دخولك للوصول إلى محفظتك الرقمية الآمنة</p>
+
+        <!-- Progress Bar -->
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress-step active">
+                    <div class="step-number">1</div>
+                    <div class="step-label">تسجيل الدخول</div>
+                </div>
+                <div class="progress-step">
+                    <div class="step-number">2</div>
+                    <div class="step-label">التحقق</div>
+                </div>
+                <div class="progress-step">
+                    <div class="step-number">3</div>
+                    <div class="step-label">لوحة التحكم</div>
+                </div>
+            </div>
+        </div>
 
         <!-- Alert Box -->
         <div id="alert-box"></div>
@@ -429,20 +939,22 @@
         <!-- Email Input -->
         <div class="input-group">
             <i class="fas fa-envelope input-icon"></i>
+            <button type="button" class="password-toggle" onclick="togglePassword()">
+                <i class="fas fa-eye" id="eye-icon"></i>
+            </button>
             <input type="email" id="email" placeholder="البريد الإلكتروني" required>
+            <div class="input-focus-effect"></div>
         </div>
         
         <!-- Password Input -->
         <div class="input-group">
             <i class="fas fa-lock input-icon"></i>
-            <button type="button" class="password-toggle" onclick="togglePassword()">
-                <i class="fas fa-eye" id="eye-icon"></i>
-            </button>
             <input type="password" id="password" placeholder="كلمة المرور" required>
+            <div class="input-focus-effect"></div>
         </div>
         
         <!-- Login Button -->
-        <button id="login-btn" class="btn-primary">
+        <button id="login-btn" class="btn-primary ripple pulse-effect" onclick="handleEmailLogin()">
             <i class="fas fa-sign-in-alt"></i> <span>تسجيل الدخول</span>
         </button>
         
@@ -450,9 +962,26 @@
         <div class="divider"><span>أو</span></div>
         
         <!-- Google Sign-In Button -->
-        <button id="google-btn" class="btn-primary btn-google">
+        <button id="google-btn" class="btn-primary btn-google ripple" onclick="handleGoogleLogin()">
             <i class="fab fa-google" style="color: #4285F4;"></i> الدخول بجوجل
         </button>
+
+        <!-- Alternative Login Options -->
+        <div class="alternative-login">
+            <div class="divider"><span>خيارات سريعة</span></div>
+            
+            <div class="quick-login-options">
+                <button class="quick-login-btn" onclick="quickLogin('demo')">
+                    <i class="fas fa-user-secret"></i>
+                    <span>تجربة Demo</span>
+                </button>
+                
+                <button class="quick-login-btn" onclick="quickLogin('guest')">
+                    <i class="fas fa-user-clock"></i>
+                    <span>الدخول كضيف</span>
+                </button>
+            </div>
+        </div>
         
         <!-- Footer Links -->
         <div class="auth-footer">
@@ -463,6 +992,182 @@
         </div>
     </div>
 
+    <!-- Design Customization Panel -->
+    <div class="design-options" id="designOptions">
+        <button class="design-toggle" onclick="toggleDesignOptions()">
+            <i class="fas fa-palette"></i>
+        </button>
+        
+        <div class="options-panel" id="optionsPanel">
+            <h4><i class="fas fa-sliders-h"></i> تخصيص التصميم</h4>
+            
+            <div class="option-group">
+                <label>اللون الأساسي</label>
+                <div class="color-options">
+                    <button class="color-option" style="background: #0d9488;" onclick="changePrimaryColor('#0d9488')"></button>
+                    <button class="color-option" style="background: #3b82f6;" onclick="changePrimaryColor('#3b82f6')"></button>
+                    <button class="color-option" style="background: #8b5cf6;" onclick="changePrimaryColor('#8b5cf6')"></button>
+                    <button class="color-option" style="background: #10b981;" onclick="changePrimaryColor('#10b981')"></button>
+                </div>
+            </div>
+            
+            <div class="option-group">
+                <label>نمط الزوايا</label>
+                <div class="radius-options">
+                    <button class="radius-option" onclick="changeBorderRadius('8px')">مربع</button>
+                    <button class="radius-option" onclick="changeBorderRadius('14px')">معتدل</button>
+                    <button class="radius-option" onclick="changeBorderRadius('24px')">دائري</button>
+                </div>
+            </div>
+            
+            <div class="option-group">
+                <label>كثافة الظل</label>
+                <input type="range" min="0" max="20" value="15" 
+                       oninput="changeShadowIntensity(this.value)">
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Center -->
+    <div id="notificationCenter" class="notification-center">
+        <div class="notification-header">
+            <i class="fas fa-bell"></i>
+            <span>الإشعارات</span>
+            <button class="notification-close" onclick="toggleNotifications()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="notification-list" id="notificationList">
+            <!-- سيتم تعبئة الإشعارات هنا -->
+        </div>
+    </div>
+
+    <!-- Notification Sound -->
+    <audio id="notificationSound" preload="auto">
+        <source src="https://assets.mixkit.co/sfx/preview/mixkit-correct-answer-tone-2870.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Notification Center CSS -->
+    <style>
+        .notification-center {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            width: 320px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            display: none;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .notification-center.show {
+            display: block;
+            transform: translateX(0);
+        }
+
+        .dark-mode .notification-center {
+            background: #1e293b;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .notification-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .dark-mode .notification-header {
+            color: #f1f5f9;
+            border-bottom-color: #475569;
+        }
+
+        .notification-header i {
+            color: var(--primary);
+            margin-right: 10px;
+        }
+
+        .notification-close {
+            background: none;
+            border: none;
+            color: var(--gray);
+            cursor: pointer;
+            font-size: 1.1rem;
+            padding: 5px;
+        }
+
+        .notification-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .notification-item {
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            transition: background 0.3s;
+        }
+
+        .notification-item:hover {
+            background: rgba(13, 148, 136, 0.05);
+        }
+
+        .dark-mode .notification-item:hover {
+            background: rgba(13, 148, 136, 0.1);
+        }
+
+        .notification-item.unread {
+            background: rgba(13, 148, 136, 0.1);
+        }
+
+        .notification-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: rgba(13, 148, 136, 0.1);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-title {
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 5px;
+            font-size: 0.95rem;
+        }
+
+        .dark-mode .notification-title {
+            color: #f1f5f9;
+        }
+
+        .notification-message {
+            color: var(--gray);
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
+
+        .notification-time {
+            font-size: 0.75rem;
+            color: var(--gray);
+            margin-top: 5px;
+        }
+    </style>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { 
@@ -471,7 +1176,8 @@
             GoogleAuthProvider, 
             signInWithPopup, 
             sendPasswordResetEmail,
-            onAuthStateChanged 
+            onAuthStateChanged,
+            signInAnonymously
         } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
         import { 
             getFirestore, 
@@ -494,6 +1200,37 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
         const googleProvider = new GoogleAuthProvider();
+
+        // نظام تتبع النشاط
+        class ActivityTracker {
+            constructor() {
+                this.sessionStart = Date.now();
+                this.clicks = 0;
+                this.errors = 0;
+                this.successes = 0;
+            }
+            
+            trackClick(element) {
+                this.clicks++;
+                console.log(`Click on: ${element}, Total clicks: ${this.clicks}`);
+            }
+            
+            trackError(type) {
+                this.errors++;
+                console.log(`Error: ${type}, Total errors: ${this.errors}`);
+            }
+            
+            trackSuccess(action) {
+                this.successes++;
+                console.log(`Success: ${action}, Total successes: ${this.successes}`);
+            }
+            
+            getSessionDuration() {
+                return Math.floor((Date.now() - this.sessionStart) / 1000);
+            }
+        }
+
+        const activityTracker = new ActivityTracker();
 
         // ==================== Alert System ====================
         function showAlert(message, type = 'error', duration = 5000) {
@@ -520,6 +1257,8 @@
                     alertBox.style.display = 'none';
                 }, duration);
             }
+            
+            activityTracker.trackSuccess('Alert shown');
         }
 
         // ==================== Password Visibility Toggle ====================
@@ -536,6 +1275,8 @@
                 eyeIcon.className = 'fas fa-eye';
                 eyeIcon.style.color = '';
             }
+            
+            activityTracker.trackClick('Password toggle');
         };
 
         // ==================== Theme Toggle ====================
@@ -555,6 +1296,152 @@
                 localStorage.setItem('theme', 'dark');
                 showAlert('تم تفعيل الوضع الليلي', 'info', 2000);
             }
+            
+            activityTracker.trackClick('Theme toggle');
+        };
+
+        // ==================== Design Customization ====================
+        window.toggleDesignOptions = () => {
+            const panel = document.getElementById('optionsPanel');
+            panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
+            activityTracker.trackClick('Design options toggle');
+        };
+
+        window.changePrimaryColor = (color) => {
+            document.documentElement.style.setProperty('--primary', color);
+            localStorage.setItem('primaryColor', color);
+            activityTracker.trackSuccess('Primary color changed');
+        };
+
+        window.changeBorderRadius = (radius) => {
+            document.documentElement.style.setProperty('--border-radius', radius);
+            document.querySelectorAll('.login-container, .btn-primary, input')
+                .forEach(el => el.style.borderRadius = radius);
+            localStorage.setItem('borderRadius', radius);
+            activityTracker.trackSuccess('Border radius changed');
+        };
+
+        window.changeShadowIntensity = (value) => {
+            const shadow = `0 ${value}px ${value*2}px rgba(0, 0, 0, 0.${value})`;
+            document.querySelector('.login-container').style.boxShadow = shadow;
+            localStorage.setItem('shadowIntensity', value);
+            activityTracker.trackSuccess('Shadow intensity changed');
+        };
+
+        // ==================== Notification System ====================
+        window.toggleNotifications = () => {
+            const center = document.getElementById('notificationCenter');
+            const isVisible = center.classList.contains('show');
+            
+            if (isVisible) {
+                center.classList.remove('show');
+                setTimeout(() => {
+                    center.style.display = 'none';
+                }, 300);
+            } else {
+                center.style.display = 'block';
+                setTimeout(() => {
+                    center.classList.add('show');
+                }, 10);
+                loadNotifications();
+            }
+            
+            activityTracker.trackClick('Notifications toggle');
+        };
+
+        async function loadNotifications() {
+            const notificationList = document.getElementById('notificationList');
+            
+            // إشعارات افتراضية
+            const notifications = [
+                {
+                    id: 1,
+                    title: 'مرحباً بك في Sudan Pay',
+                    message: 'نتمنى لك تجربة ممتعة مع محفظتنا الرقمية الآمنة',
+                    icon: 'fa-wallet',
+                    time: 'الآن',
+                    unread: true
+                },
+                {
+                    id: 2,
+                    title: 'أمان متطور',
+                    message: 'جميع معاملاتك محمية بتقنيات التشفير المتقدمة',
+                    icon: 'fa-shield-alt',
+                    time: 'منذ 5 دقائق',
+                    unread: true
+                },
+                {
+                    id: 3,
+                    title: 'ميزات جديدة',
+                    message: 'تم إضافة دعم العملات الرقمية إلى المحفظة',
+                    icon: 'fa-coins',
+                    time: 'منذ ساعة',
+                    unread: false
+                }
+            ];
+            
+            notificationList.innerHTML = notifications.map(notification => `
+                <div class="notification-item ${notification.unread ? 'unread' : ''}">
+                    <div class="notification-icon">
+                        <i class="fas ${notification.icon}"></i>
+                    </div>
+                    <div class="notification-content">
+                        <div class="notification-title">${notification.title}</div>
+                        <div class="notification-message">${notification.message}</div>
+                        <div class="notification-time">${notification.time}</div>
+                    </div>
+                </div>
+            `).join('');
+            
+            // تحديث العداد
+            const unreadCount = notifications.filter(n => n.unread).length;
+            document.getElementById('notificationCount').textContent = unreadCount;
+            
+            // تشغيل صوت الإشعار
+            if (unreadCount > 0) {
+                const sound = document.getElementById('notificationSound');
+                sound.currentTime = 0;
+                sound.play().catch(e => console.log('Sound play failed:', e));
+            }
+        }
+
+        // ==================== Quick Login Functions ====================
+        window.quickLogin = async (type) => {
+            try {
+                let email, password;
+                
+                if (type === 'demo') {
+                    // حساب تجريبي آمن
+                    email = 'demo@sudanpay.com';
+                    password = 'Demo@12345';
+                    
+                    document.getElementById('email').value = email;
+                    document.getElementById('password').value = password;
+                    
+                    showAlert(`تم تعبئة بيانات التجربة`, 'info', 2000);
+                    activityTracker.trackSuccess('Demo login loaded');
+                    
+                } else if (type === 'guest') {
+                    // إنشاء جلسة ضيف مؤقتة
+                    const loginBtn = document.getElementById('login-btn');
+                    loginBtn.disabled = true;
+                    loginBtn.innerHTML = '<div class="loading"></div> جاري الدخول...';
+                    
+                    await signInAnonymously(auth);
+                    showAlert('مرحباً بك كضيف!', 'success');
+                    activityTracker.trackSuccess('Guest login');
+                    
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 1500);
+                    return;
+                }
+                
+            } catch (error) {
+                console.error('Quick login error:', error);
+                showAlert('حدث خطأ في الدخول السريع', 'error');
+                activityTracker.trackError('Quick login failed');
+            }
         };
 
         // ==================== Login with Email/Password ====================
@@ -566,11 +1453,23 @@
             // Validation
             if (!email || !password) {
                 showAlert('يرجى ملء جميع الحقول المطلوبة', 'warning');
+                document.getElementById('email').classList.add('shake');
+                document.getElementById('password').classList.add('shake');
+                setTimeout(() => {
+                    document.getElementById('email').classList.remove('shake');
+                    document.getElementById('password').classList.remove('shake');
+                }, 500);
+                activityTracker.trackError('Empty fields');
                 return;
             }
             
             if (!validateEmail(email)) {
                 showAlert('يرجى إدخال بريد إلكتروني صحيح', 'warning');
+                document.getElementById('email').classList.add('shake');
+                setTimeout(() => {
+                    document.getElementById('email').classList.remove('shake');
+                }, 500);
+                activityTracker.trackError('Invalid email');
                 return;
             }
             
@@ -590,10 +1489,16 @@
                     const userData = userDoc.data();
                     const kycStatus = userData.kycStatus || 'not_submitted';
                     
+                    // تحديث شريط التقدم
+                    document.querySelector('.progress-bar::after').style.width = '66%';
+                    document.querySelectorAll('.progress-step')[1].classList.add('active');
+                    
                     // Handle KYC status
                     switch (kycStatus) {
                         case 'verified':
                             showAlert('✅ تم تسجيل الدخول بنجاح!', 'success');
+                            document.querySelector('.progress-bar::after').style.width = '100%';
+                            document.querySelectorAll('.progress-step')[2].classList.add('active');
                             setTimeout(() => {
                                 window.location.href = 'dashboard.html';
                             }, 1500);
@@ -608,7 +1513,6 @@
                             
                         case 'rejected':
                             showAlert('❌ تم رفض طلب التحقق. يرجى التواصل مع الدعم الفني.', 'error');
-                            // Don't logout, let them access limited features
                             setTimeout(() => {
                                 window.location.href = 'dashboard.html';
                             }, 3000);
@@ -628,8 +1532,18 @@
                     }, 1500);
                 }
                 
+                activityTracker.trackSuccess('Email login');
+                
             } catch (error) {
                 console.error('Login error:', error);
+                
+                // تأثير اهتزاز عند الخطأ
+                document.getElementById('email').classList.add('shake');
+                document.getElementById('password').classList.add('shake');
+                setTimeout(() => {
+                    document.getElementById('email').classList.remove('shake');
+                    document.getElementById('password').classList.remove('shake');
+                }, 500);
                 
                 // User-friendly error messages
                 let errorMessage = 'حدث خطأ أثناء تسجيل الدخول';
@@ -656,6 +1570,7 @@
                 }
                 
                 showAlert(`❌ ${errorMessage}`, 'error');
+                activityTracker.trackError(`Login error: ${error.code}`);
                 
             } finally {
                 // Reset button state
@@ -677,12 +1592,18 @@
                 const result = await signInWithPopup(auth, googleProvider);
                 const user = result.user;
                 
+                // تحديث شريط التقدم
+                document.querySelector('.progress-bar::after').style.width = '66%';
+                document.querySelectorAll('.progress-step')[1].classList.add('active');
+                
                 // Check if user exists in Firestore
                 const userDoc = await getDoc(doc(db, "users", user.uid));
                 
                 if (userDoc.exists()) {
                     const userData = userDoc.data();
                     showAlert(`مرحباً ${userData.name || user.displayName}!`, 'success');
+                    document.querySelector('.progress-bar::after').style.width = '100%';
+                    document.querySelectorAll('.progress-step')[2].classList.add('active');
                     setTimeout(() => {
                         window.location.href = 'dashboard.html';
                     }, 1500);
@@ -693,6 +1614,8 @@
                         window.location.href = 'complete-profile.html';
                     }, 1500);
                 }
+                
+                activityTracker.trackSuccess('Google login');
                 
             } catch (error) {
                 console.error('Google sign-in error:', error);
@@ -706,6 +1629,7 @@
                 }
                 
                 showAlert(`❌ ${errorMessage}`, 'error');
+                activityTracker.trackError(`Google login error: ${error.code}`);
                 
             } finally {
                 // Reset button state
@@ -721,11 +1645,13 @@
             if (!email) {
                 showAlert('يرجى إدخال البريد الإلكتروني أولاً', 'warning');
                 document.getElementById('email').focus();
+                activityTracker.trackError('Password reset - empty email');
                 return;
             }
             
             if (!validateEmail(email)) {
                 showAlert('يرجى إدخال بريد إلكتروني صحيح', 'warning');
+                activityTracker.trackError('Password reset - invalid email');
                 return;
             }
             
@@ -733,9 +1659,11 @@
                 try {
                     await sendPasswordResetEmail(auth, email);
                     showAlert('✅ تم إرسال رابط إعادة التعيين إلى بريدك الإلكتروني', 'success');
+                    activityTracker.trackSuccess('Password reset email sent');
                 } catch (error) {
                     console.error('Password reset error:', error);
                     showAlert('❌ فشل في إرسال الرابط، تأكد من صحة البريد', 'error');
+                    activityTracker.trackError('Password reset failed');
                 }
             }
         };
@@ -746,18 +1674,32 @@
             return re.test(email);
         }
 
-        function initializeTheme() {
+        function loadDesignPreferences() {
             const savedTheme = localStorage.getItem('theme');
-            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const savedColor = localStorage.getItem('primaryColor');
+            const savedRadius = localStorage.getItem('borderRadius');
+            const savedShadow = localStorage.getItem('shadowIntensity');
             
-            if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+            if (savedTheme === 'dark') {
                 document.body.classList.add('dark-mode');
                 document.getElementById('themeIcon').className = 'fas fa-sun';
+            }
+            
+            if (savedColor) {
+                document.documentElement.style.setProperty('--primary', savedColor);
+            }
+            
+            if (savedRadius) {
+                document.documentElement.style.setProperty('--border-radius', savedRadius);
+            }
+            
+            if (savedShadow) {
+                const shadow = `0 ${savedShadow}px ${savedShadow*2}px rgba(0, 0, 0, 0.${savedShadow})`;
+                document.querySelector('.login-container').style.boxShadow = shadow;
             }
         }
 
         function checkAutoFill() {
-            // Check if inputs are auto-filled and adjust styling
             setTimeout(() => {
                 const emailInput = document.getElementById('email');
                 const passwordInput = document.getElementById('password');
@@ -773,23 +1715,31 @@
         }
 
         // ==================== Event Listeners ====================
-        document.getElementById('login-btn').addEventListener('click', handleEmailLogin);
-        document.getElementById('google-btn').addEventListener('click', handleGoogleLogin);
+        // تتبع جميع النقرات
+        document.addEventListener('click', (e) => {
+            const element = e.target.tagName + (e.target.id ? `#${e.target.id}` : 
+                             e.target.className ? `.${e.target.className.split(' ')[0]}` : '');
+            activityTracker.trackClick(element);
+        });
 
         // Enter key support
         document.getElementById('password').addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
+                activityTracker.trackClick('Enter key on password');
                 handleEmailLogin();
             }
         });
 
         // ==================== Initialize ====================
         document.addEventListener('DOMContentLoaded', () => {
-            // Initialize theme
-            initializeTheme();
+            // Initialize design preferences
+            loadDesignPreferences();
             
             // Check for autofill
             checkAutoFill();
+            
+            // Load initial notifications
+            loadNotifications();
             
             // Check if user is already logged in
             onAuthStateChanged(auth, (user) => {
@@ -806,22 +1756,36 @@
                     localStorage.setItem('welcomeShown', 'true');
                 }
             }, 1000);
+            
+            console.log('Sudan Pay Login Page Initialized');
         });
 
-        // ==================== Error Handling ====================
+        // ==================== Global Error Handling ====================
         window.addEventListener('error', (event) => {
             console.error('Global error:', event.error);
             showAlert('حدث خطأ غير متوقع، يرجى تحديث الصفحة', 'error');
+            activityTracker.trackError('Global error');
         });
 
         // ==================== Network Status ====================
         window.addEventListener('online', () => {
             showAlert('تم استعادة الاتصال بالإنترنت', 'success', 2000);
+            activityTracker.trackSuccess('Network online');
         });
 
         window.addEventListener('offline', () => {
             showAlert('تم فقد الاتصال بالإنترنت', 'warning', 0);
+            activityTracker.trackError('Network offline');
+        });
+
+        // عند الخروج من الصفحة
+        window.addEventListener('beforeunload', () => {
+            const duration = activityTracker.getSessionDuration();
+            console.log(`Session ended after ${duration} seconds. 
+                         Clicks: ${activityTracker.clicks}, 
+                         Errors: ${activityTracker.errors}, 
+                         Successes: ${activityTracker.successes}`);
         });
     </script>
 </body>
-                                         </html>
+    </html>
