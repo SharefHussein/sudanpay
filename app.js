@@ -31,7 +31,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyB3vxJu_et-P80ek30I3MRdC_lGhooCCsc",
+    apiKey: "",
     authDomain: "sudanpay-e332a.firebaseapp.com",
     projectId: "sudanpay-e332a",
     storageBucket: "sudanpay-e332a.firebasestorage.app",
@@ -46,7 +46,7 @@ const db = getFirestore(app);
 const storage = getStorage(app);
 const provider = new GoogleAuthProvider();
 // ==================== إعدادات Tatum API ====================
-const TATUM_API_KEY = "t-695a0ea026858bd739f1595e-363e1ef7ec404868aebf73ed";
+const TATUM_API_KEY = "";
 
 // ==================== توليد محفظة USDT مع Tatum ====================
 async function generateTatumWallet(userId) {
